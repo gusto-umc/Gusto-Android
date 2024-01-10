@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.gusto"
+    namespace = "com.gst.gusto"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.gusto"
+        applicationId = "com.gst.gusto"
         minSdk = 27
         targetSdk = 34
         versionCode = 1

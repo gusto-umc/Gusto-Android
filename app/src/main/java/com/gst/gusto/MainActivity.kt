@@ -1,11 +1,11 @@
-package com.example.gusto
+package com.gst.gusto
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.gusto.databinding.ActivityMainBinding
+import com.gst.gusto.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
