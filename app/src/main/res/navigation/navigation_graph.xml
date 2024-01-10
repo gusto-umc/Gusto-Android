@@ -6,28 +6,28 @@
     app:startDestination="@id/fragment_map">
     <fragment
         android:id="@+id/fragment_map"
-        android:name="com.example.clock.Fragment.MapFragment"
+        android:name="com.gst.clock.Fragment.MapFragment"
         android:label="FragmentMap" >
     </fragment>
     <fragment
         android:id="@+id/fragment_review"
-        android:name="com.example.clock.Fragment.ReviewFragment"
+        android:name="com.gst.clock.Fragment.ReviewFragment"
         android:label="FragmentReview" >
     </fragment>
     <fragment
         android:id="@+id/fragment_list"
-        android:name="com.example.clock.Fragment.ListFragment"
+        android:name="com.gst.clock.Fragment.ListFragment"
         android:label="FragmentList" >
     </fragment>
     <fragment
         android:id="@+id/fragment_my"
-        android:name="com.example.clock.Fragment.MyFragment"
+        android:name="com.gst.clock.Fragment.MyFragment"
         android:label="FragmentMy" >
     </fragment>
 
     <fragment
         android:id="@+id/fragment_feed"
-        android:name="com.example.clock.Fragment.FeedFragment"
+        android:name="com.gst.clock.Fragment.FeedFragment"
         android:label="FragmentFeed" >
     </fragment>
 </navigation>

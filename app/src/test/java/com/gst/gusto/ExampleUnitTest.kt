@@ -1,4 +1,4 @@
-package com.example.gusto
+package com.gst.gusto
 
 import org.junit.Test
 

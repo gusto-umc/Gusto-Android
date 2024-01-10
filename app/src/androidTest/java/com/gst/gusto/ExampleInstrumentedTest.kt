@@ -1,4 +1,4 @@
-package com.example.gusto
+package com.gst.gusto
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
