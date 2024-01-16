@@ -5,17 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.gst.gusto.databinding.FragmentListBinding
+import com.gst.gusto.databinding.FragmentListGroupBinding
+import com.gst.gusto.databinding.FragmentMyListBinding
 
-class ListFragment : Fragment() {
+class ListGroupFragment : Fragment() {
 
-    lateinit var binding: FragmentListBinding
+    lateinit var binding: FragmentListGroupBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentListBinding.inflate(inflater, container, false)
+        binding = FragmentListGroupBinding.inflate(inflater, container, false)
 
         return binding.root
 
