@@ -1,16 +1,21 @@
 package com.gst.gusto.list
 
+import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.ColorFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentListBinding
+
 
 class ListFragment : Fragment() {
 
@@ -25,25 +30,29 @@ class ListFragment : Fragment() {
         val navHostFragment = childFragmentManager.findFragmentById(R.id.fl_list_container) as NavHostFragment
         val navController = navHostFragment.navController
 
+
+
         navController.navigate(R.id.fragment_list_group)
 
+        val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#FEB520"))
+        val colorStateOffList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
         binding.btnGroup.setOnClickListener {
-            binding.btnGroup.setBackgroundColor(Color.parseColor("#FEB520"))
+            ViewCompat.setBackgroundTintList(binding.btnGroup, colorStateOnList)
             binding.ivGroup.setColorFilter(Color.parseColor("#FFFFFF"))
             binding.tvGroup.setTextColor(Color.parseColor("#FFFFFF"))
 
-            binding.btnRoute.setBackgroundColor(Color.parseColor("#F3F3F3"))
+            ViewCompat.setBackgroundTintList(binding.btnRoute, colorStateOffList)
             binding.ivRoute.setColorFilter(Color.parseColor("#FFD704"))
             binding.tvRoute.setTextColor(Color.parseColor("#828282"))
             navController.navigate(R.id.fragment_list_group)
         }
 
         binding.btnRoute.setOnClickListener {
-            binding.btnRoute.setBackgroundColor(Color.parseColor("#FEB520"))
+            ViewCompat.setBackgroundTintList(binding.btnRoute, colorStateOnList)
             binding.ivRoute.setColorFilter(Color.parseColor("#FFFFFF"))
             binding.tvRoute.setTextColor(Color.parseColor("#FFFFFF"))
 
-            binding.btnGroup.setBackgroundColor(Color.parseColor("#F3F3F3"))
+            ViewCompat.setBackgroundTintList(binding.btnGroup, colorStateOffList)
             binding.ivGroup.setColorFilter(Color.parseColor("#FFD704"))
             binding.tvGroup.setTextColor(Color.parseColor("#828282"))
 
