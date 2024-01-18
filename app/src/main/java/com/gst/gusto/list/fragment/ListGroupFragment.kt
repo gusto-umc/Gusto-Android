@@ -35,7 +35,7 @@ class ListGroupFragment : Fragment() {
             return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
         }
 
-        val boardAdapter = ListGroupAdapter(itemList,callActivityFunction())
+        val boardAdapter = ListGroupAdapter(itemList,callActivityFunction(),0)
         boardAdapter.notifyDataSetChanged()
 
         rv_board.adapter = boardAdapter

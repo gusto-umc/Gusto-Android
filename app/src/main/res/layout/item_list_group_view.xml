@@ -54,7 +54,7 @@
                     android:textSize="10sp"
                     android:fontFamily="@font/pretendard_medium"
                     android:textColor="@color/main"
-                    android:text="5명" />
+                    android:text="" />
             </LinearLayout>
 
             <LinearLayout
