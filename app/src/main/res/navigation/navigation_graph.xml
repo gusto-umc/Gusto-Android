@@ -7,27 +7,57 @@
     <fragment
         android:id="@+id/fragment_map"
         android:name="com.gst.clock.Fragment.MapFragment"
-        android:label="FragmentMap" >
+        android:label="FragmentMap"
+        tools:layout="@layout/fragment_map">
     </fragment>
     <fragment
         android:id="@+id/fragment_review"
         android:name="com.gst.clock.Fragment.ReviewFragment"
-        android:label="FragmentReview" >
+        android:label="FragmentReview"
+        tools:layout="@layout/fragment_review">
     </fragment>
     <fragment
         android:id="@+id/fragment_list"
-        android:name="com.gst.clock.Fragment.ListFragment"
-        android:label="FragmentList" >
+        android:name="com.gst.gusto.list.ListFragment"
+        android:label="FragmentList"
+        tools:layout="@layout/fragment_list">
+        <action
+            android:id="@+id/action_listFragment_to_groupFragment"
+            app:destination="@id/fragment_group" />
     </fragment>
     <fragment
         android:id="@+id/fragment_my"
-        android:name="com.gst.clock.Fragment.MyFragment"
-        android:label="FragmentMy" >
+        android:name="com.gst.gusto.my.MyFragment"
+        android:label="FragmentMy"
+        tools:layout="@layout/fragment_my">
     </fragment>
-
     <fragment
         android:id="@+id/fragment_feed"
         android:name="com.gst.clock.Fragment.FeedFragment"
-        android:label="FragmentFeed" >
+        android:label="FragmentFeed"
+        tools:layout="@layout/fragment_feed">
+    </fragment>
+
+    <!-- List 화면의 프래그먼트들 -->
+    <fragment
+        android:id="@+id/fragment_list_group"
+        android:name="com.gst.clock.Fragment.ListGroupFragment"
+        android:label="FragmentListGroup"
+        tools:layout="@layout/fragment_list_group">
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_list_route"
+        android:name="com.gst.clock.Fragment.ListRouteFragment"
+        android:label="FragmentListRoute"
+        tools:layout="@layout/fragment_list_route">
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_group"
+        android:name="com.gst.gusto.list.fragment.GroupFragment"
+        android:label="FragmentGroup"
+        tools:layout="@layout/fragment_group">
+        <action
+            android:id="@+id/action_groupFragment_to_listFragment"
+            app:destination="@id/fragment_list" />
     </fragment>
 </navigation>
