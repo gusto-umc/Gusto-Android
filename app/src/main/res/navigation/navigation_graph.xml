@@ -12,7 +12,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragment_review"
-        android:name="com.gst.clock.Fragment.ReviewFragment"
+        android:name="com.gst.gusto.review.ReviewFragment"
         android:label="FragmentReview"
         tools:layout="@layout/fragment_review">
     </fragment>
