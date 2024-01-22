@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.databinding.FragmentGroupBinding
+import com.gst.gusto.databinding.FragmentListGroupMBinding
 import com.gst.gusto.list.adapter.GroupAdapter
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.ListGroupAdapter
@@ -18,13 +18,13 @@ import com.gst.gusto.list.adapter.RestItem
 
 class GroupFragment : Fragment() {
 
-    lateinit var binding: FragmentGroupBinding
+    lateinit var binding: FragmentListGroupMBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentGroupBinding.inflate(inflater, container, false)
+        binding = FragmentListGroupMBinding.inflate(inflater, container, false)
 
         binding.ivBack.setOnClickListener {
             findNavController().navigate(R.id.action_groupFragment_to_listFragment)

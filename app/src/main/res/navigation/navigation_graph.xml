@@ -20,7 +20,7 @@
         android:id="@+id/fragment_list"
         android:name="com.gst.gusto.list.ListFragment"
         android:label="FragmentList"
-        tools:layout="@layout/fragment_list">
+        tools:layout="@layout/fragment_list_main">
         <action
             android:id="@+id/action_listFragment_to_groupFragment"
             app:destination="@id/fragment_group" />
@@ -55,7 +55,7 @@
         android:id="@+id/fragment_group"
         android:name="com.gst.gusto.list.fragment.GroupFragment"
         android:label="FragmentGroup"
-        tools:layout="@layout/fragment_group">
+        tools:layout="@layout/fragment_list_group_m">
         <action
             android:id="@+id/action_groupFragment_to_listFragment"
             app:destination="@id/fragment_list" />
