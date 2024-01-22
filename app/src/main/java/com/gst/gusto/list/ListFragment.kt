@@ -14,18 +14,18 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.databinding.FragmentListBinding
+import com.gst.gusto.databinding.FragmentListMainBinding
 
 
 class ListFragment : Fragment() {
 
-    lateinit var binding: FragmentListBinding
+    lateinit var binding: FragmentListMainBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentListBinding.inflate(inflater, container, false)
+        binding = FragmentListMainBinding.inflate(inflater, container, false)
 
         val navHostFragment = childFragmentManager.findFragmentById(R.id.fl_list_container) as NavHostFragment
         val navController = navHostFragment.navController
