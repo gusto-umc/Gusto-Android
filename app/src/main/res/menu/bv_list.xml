@@ -3,21 +3,26 @@
     <item
         android:id="@+id/fragment_map"
         android:enabled="true"
+        android:icon="@drawable/marker_img"
         android:title="지도" />
     <item
         android:id="@+id/fragment_review"
         android:enabled="true"
+        android:icon="@drawable/review_img"
         android:title="리뷰" />
     <item
         android:id="@+id/fragment_list"
         android:enabled="true"
+        android:icon="@drawable/list_img"
         android:title="리스트" />
-    <item
-        android:id="@+id/fragment_my"
-        android:enabled="true"
-        android:title="마이" />
     <item
         android:id="@+id/fragment_feed"
         android:enabled="true"
+        android:icon="@drawable/feed_img"
         android:title="먹스또" />
+    <item
+        android:id="@+id/fragment_my"
+        android:enabled="true"
+        android:icon="@drawable/human_img"
+        android:title="마이" />
 </menu>
