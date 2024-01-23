@@ -12,7 +12,7 @@ class util {
         fun Int.dpToPx(scale : Float): Int {
             return (this * scale + 0.5f).toInt()
         }
-        //dp를 pixel 값으로
+        //dp를 pixel 값으로  ex) dpToPixels(1f,resources.displayMetrics)
         fun dpToPixels(dp: Float, metrics : DisplayMetrics): Float {
             return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics)
         }
