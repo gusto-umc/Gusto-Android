@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragment_map">
+    app:startDestination="@id/mapListViewFragment">
     <fragment
         android:id="@+id/fragment_map"
         android:name="com.gst.clock.Fragment.MapFragment"
@@ -30,4 +30,8 @@
         android:name="com.gst.clock.Fragment.FeedFragment"
         android:label="FragmentFeed" >
     </fragment>
+    <fragment
+        android:id="@+id/mapListViewFragment"
+        android:name="com.gst.gusto.ListView.view.MapListViewFragment"
+        android:label="MapListViewFragment" />
 </navigation>
