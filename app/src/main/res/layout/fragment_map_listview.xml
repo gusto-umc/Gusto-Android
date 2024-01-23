@@ -15,39 +15,57 @@
             app:contentInsetStart="0dp"
             android:background="@color/white"
             >
-            <ImageView
-                android:id="@+id/iv_map_listview_back"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:src="@drawable/arrow_left_2"
-                android:layout_marginLeft="10dp"
-                />
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="1dp"
+                app:cardElevation="2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/iv_map_listview_back"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:src="@drawable/arrow_left_2"
+                        android:layout_marginLeft="10dp"
+                        />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/map_listview1"
-                android:layout_marginLeft="10dp"
-                />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/map_listview1"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center_vertical"
+                        />
 
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/tv_map_listview_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="편집"
-                android:layout_gravity="end"
-                android:paddingEnd="32dp"
-                android:paddingLeft="20dp"
-                android:textColor="@color/main_C"
-                />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_map_listview_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="편집"
+                        android:layout_gravity="center_vertical"
+                        android:paddingEnd="32dp"
+                        android:paddingLeft="20dp"
+                        android:textColor="@color/main_C"
+                        />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
 
         </androidx.appcompat.widget.Toolbar>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white">
+            android:background="@drawable/background_review_add">
 
 
             <androidx.core.widget.NestedScrollView
@@ -61,7 +79,6 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/layout_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -88,6 +105,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="13dp"
                         android:layout_marginStart="24dp"
+                        android:visibility="gone"
                         >
                         <CheckBox
                             android:id="@+id/cb_map_listview_all"
@@ -111,7 +129,6 @@
 
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:visibility="gone"
                         android:id="@+id/rv_map_listview_category_show"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -120,6 +137,7 @@
                         android:layout_marginTop="8dp"
                         />
                     <androidx.recyclerview.widget.RecyclerView
+                        android:visibility="gone"
                         android:id="@+id/rv_map_listview_category_edit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -134,7 +152,6 @@
             </androidx.core.widget.NestedScrollView>
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/layout_map_listview_fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -151,6 +168,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/layout_map_listview_delete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
