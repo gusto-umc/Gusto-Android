@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.gst.clock.Fragment.MyListFragment
 import com.gst.clock.Fragment.MyReviewFragment
+import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentMyBinding
 
 class MyFragment : Fragment() {
@@ -39,6 +41,11 @@ class MyFragment : Fragment() {
                     super.onPageSelected(position)
                 }
             })
+        }
+
+        //임시 리뷰 추가 화면
+        binding.btnAddReviewTmp.setOnClickListener {
+            findNavController().navigate(R.id.action_myFragment_to_reviewAdd1Fragment)
         }
 
         //ViewPager, TabLayout 연결
