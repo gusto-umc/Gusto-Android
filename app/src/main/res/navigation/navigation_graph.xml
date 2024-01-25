@@ -148,5 +148,29 @@
         <action
             android:id="@+id/action_myFragment_to_reviewAdd1Fragment"
             app:destination="@id/fragment_review_add_1" />
+        <action
+            android:id="@+id/action_myFragment_to_myProfileFragment"
+            app:destination="@id/fragment_my_profile" />
+        <action
+            android:id="@+id/action_myFragment_to_followList"
+            app:destination="@id/fragment_follow_list" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_my_profile"
+        android:name="com.gst.gusto.my.fragment.MyProfileFragment"
+        android:label="FragmentMyProfile"
+        tools:layout="@layout/fragment_my_profile">
+        <action
+            android:id="@+id/action_myProfile_to_myFragment"
+            app:destination="@id/fragment_my" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_follow_list"
+        android:name="com.gst.clock.Fragment.MyFollowListFragment"
+        android:label="FragmentFollowList"
+        tools:layout="@layout/fragment_my_follow_list">
+        <action
+            android:id="@+id/action_followList_to_myFragment"
+            app:destination="@id/fragment_my" />
     </fragment>
 </navigation>
