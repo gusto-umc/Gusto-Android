@@ -49,10 +49,10 @@ class ReviewAdd3Fragment : Fragment() {
         }
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd3Fragment_to_myFragment)
+            findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd2Fragment,bundle)
         }
         binding.btnBack2.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd3Fragment_to_myFragment)
+            findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd2Fragment,bundle)
         }
         binding.btnNext.setOnClickListener {
             findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment,bundle)

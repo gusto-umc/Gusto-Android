@@ -56,6 +56,13 @@ class ReviewAdd4Fragment : Fragment() {
             findNavController().navigate(R.id.action_reviewAdd4Fragment_to_reviewAdd3Fragment,bundle)
         }
         binding.btnNext.setOnClickListener {
+            val textList = ArrayList<String>()
+
+            for (editText in menuList) {
+                val text = editText.text.toString()
+                textList.add(text)
+            }
+            Log.d("menuList",textList.toString())
             findNavController().navigate(R.id.action_reviewAdd4Fragment_to_reviewAdd5Fragment,bundle)
         }
 
