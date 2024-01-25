@@ -23,6 +23,18 @@ class MyFragment : Fragment() {
     ): View? {
         binding = FragmentMyBinding.inflate(inflater, container, false)
         initViewPager()
+
+        binding.btnOption.setOnClickListener {
+            findNavController().navigate(R.id.action_myFragment_to_myProfileFragment)
+        }
+        binding.btnFollowingList.setOnClickListener {
+            findNavController().navigate(R.id.action_myFragment_to_followList)
+        }
+        //임시 리뷰 추가 화면
+        binding.btnAddReviewTmp.setOnClickListener {
+            findNavController().navigate(R.id.action_myFragment_to_reviewAdd1Fragment)
+        }
+
         return binding.root
 
     }
@@ -43,10 +55,7 @@ class MyFragment : Fragment() {
             })
         }
 
-        //임시 리뷰 추가 화면
-        binding.btnAddReviewTmp.setOnClickListener {
-            findNavController().navigate(R.id.action_myFragment_to_reviewAdd1Fragment)
-        }
+
 
         //ViewPager, TabLayout 연결
         TabLayoutMediator(binding.tablayout, binding.viewpager) { tab, position ->
