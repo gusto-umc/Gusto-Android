@@ -1,22 +1,38 @@
 package com.gst.gusto.Util
 
+import android.content.Context
 import android.os.Handler
 import android.util.DisplayMetrics
 import android.util.TypedValue
+import android.widget.ImageView
 import android.widget.ProgressBar
+import com.bumptech.glide.Glide
+import com.gst.gusto.R
 
 class util {
 
     companion object {
-        //dp를 pixel(int) 값으로
-        fun Int.dpToPx(scale : Float): Int {
-            return (this * scale + 0.5f).toInt()
-        }
-        //dp를 pixel 값으로  ex) dpToPixels(1f,resources.displayMetrics)
+        /**
+         * 작업자 : 버루
+         * 이 메서드는 dp를 pixel 값을 변환 해준다
+         * 예시 ) dpToPixels(5f,resources.displayMetrics) => 5dp
+         * @param dp 원하는 dp 값
+         * @param metrics 해당 metrics
+         * @return 원하는 dp를 pixel 값으로 변환 후 반환
+         */
         fun dpToPixels(dp: Float, metrics : DisplayMetrics): Float {
             return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics)
         }
-        //프로그래스바 진행도 부드럽게 움직이기
+        //
+
+        /**
+         * 작업자 : 버루
+         * 이 메서드는 프로그래스바 진행도 부드럽게 움직인다
+         * @param progressBar 프로그래스 바
+         * @param progressPoint 프로그래스 바 진행도 (최대 600, 100 단위)
+         * @param handler 해당 handler
+         * @return null
+         */
         fun createUpdateProgressRunnable(progressBar: ProgressBar, progressPoint: Int,handler : Handler): Runnable {
             var delay = 4L
 
@@ -46,6 +62,18 @@ class util {
                     }
                 }
             }
+        }
+
+        /**
+         * 작업자 : 버루
+         * 이 메서드는 url에 있는 이미지를 imageView에 적용
+         * @param imageView 이미지 뷰
+         * @param url URL String 값
+         * @param context 해당 CONTEXT
+         * @return null
+         */
+        fun setImage(imageView: ImageView, url : String, context: Context) {
+            Glide.with(context).load(url).placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).into(imageView)
         }
 
 

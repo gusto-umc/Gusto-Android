@@ -105,77 +105,12 @@
                 android:textSize="14sp"/>
 
 
-            <LinearLayout
-                android:layout_marginTop="6dp"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_hows"
                 android:layout_marginHorizontal="88dp"
+                android:overScrollMode="never"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_name"
-                        android:gravity="center"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:text="맛슐랭"
-                        android:textColor="@color/main_C"
-                        android:textSize="10sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/iv_grade1"
-                        android:layout_width="42dp"
-                        android:layout_height="41dp"
-                        android:layout_weight="1"
-                        android:padding="11dp"
-                        android:src="@drawable/rice_img" />
-
-                    <ImageView
-                        android:id="@+id/iv_grade2"
-                        android:layout_width="42dp"
-                        android:layout_height="41dp"
-                        android:layout_weight="1"
-                        android:padding="11dp"
-                        android:src="@drawable/rice_img" />
-
-                    <ImageView
-                        android:id="@+id/iv_grade3"
-                        android:layout_width="42dp"
-                        android:layout_height="41dp"
-                        android:layout_weight="1"
-                        android:padding="11dp"
-                        android:src="@drawable/rice_img" />
-
-                    <ImageView
-                        android:id="@+id/iv_grade4"
-                        android:layout_width="42dp"
-                        android:layout_height="41dp"
-                        android:layout_weight="1"
-                        android:padding="11dp"
-                        android:src="@drawable/rice_img"
-                        app:tint="#B7B7B7" />
-
-                    <ImageView
-                        android:id="@+id/iv_grade5"
-                        android:layout_width="42dp"
-                        android:layout_height="41dp"
-                        android:layout_weight="1"
-                        android:padding="11dp"
-                        android:src="@drawable/rice_img"
-                        app:tint="#B7B7B7" />
-                </LinearLayout>
-            </LinearLayout>
+                android:layout_height="wrap_content"/>
 
 
             <TextView
@@ -194,7 +129,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="3dp"
                 android:fontFamily="@font/pretendard_medium"
                 android:text="아주 맛있었어 ㅎㅎ"
                 android:textColor="@color/black"
@@ -204,6 +138,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="50dp"
+                android:layout_marginBottom="43dp"
                 android:background="#ECECEC"/>
 
 

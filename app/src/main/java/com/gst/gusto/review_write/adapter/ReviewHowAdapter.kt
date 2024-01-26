@@ -8,23 +8,28 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.chip.Chip
 import com.gst.gusto.R
 
-data class HowItem(val name: String, val option: Int, val chip: Chip?)
+data class HowItem(val name: String, val option: Int)
 
-class ReviewHowAdapter(val itemList: ArrayList<HowItem>, val gradeList : MutableList<Int>):
+class ReviewHowAdapter(val gradeList : MutableList<Int>, val option : Int):
     RecyclerView.Adapter<ReviewHowAdapter.ReviewHowViewHolder>(){
 
+    private val itemList = arrayListOf(HowItem("맛슐랭",0),HowItem("맵기",1)
+        ,HowItem("분위기",3),HowItem("화장실",4),HowItem("주차장",5))
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewHowViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_review_howabout, parent, false)
+        val view =
+            if(option == 0) LayoutInflater.from(parent.context).inflate(R.layout.item_review_howabout, parent, false)
+            else if(option == 1) LayoutInflater.from(parent.context).inflate(R.layout.item_review_howabout_feed, parent, false)
+            else if(option == 2) LayoutInflater.from(parent.context).inflate(R.layout.item_review_howabout_review, parent, false)
+            else LayoutInflater.from(parent.context).inflate(R.layout.item_review_howabout_review_edit, parent, false)
         return ReviewHowViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ReviewHowViewHolder, position: Int) {
         val currentItem = itemList[position]
         holder.tv_name.text = currentItem.name
-
 
         val gradeViews = listOf(
             holder.tv_grade1,
@@ -42,15 +47,6 @@ class ReviewHowAdapter(val itemList: ArrayList<HowItem>, val gradeList : Mutable
             }
         }
 
-        if(currentItem.option==0) holder.btn_exit.visibility =View.GONE
-        if(currentItem.chip != null) {
-            holder.btn_exit.setOnClickListener {
-                itemList.removeAt(position)
-                currentItem.chip.isChecked = false
-                notifyItemRemoved(position)
-            }
-        }
-
     }
 
     override fun getItemCount(): Int {
@@ -64,7 +60,6 @@ class ReviewHowAdapter(val itemList: ArrayList<HowItem>, val gradeList : Mutable
         val tv_grade3 = itemView.findViewById<ImageView>(R.id.iv_grade3)
         val tv_grade4 = itemView.findViewById<ImageView>(R.id.iv_grade4)
         val tv_grade5 = itemView.findViewById<ImageView>(R.id.iv_grade5)
-        val btn_exit = itemView.findViewById<ImageView>(R.id.btn_exit)
     }
 
     private fun setGradeColors(gradeViews: List<ImageView>, selectedGrade: Int, selectedColor: Int) {
