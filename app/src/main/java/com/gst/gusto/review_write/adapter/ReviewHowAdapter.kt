@@ -59,11 +59,11 @@ class ReviewHowAdapter(val itemList: ArrayList<HowItem>, val gradeList : Mutable
 
     inner class ReviewHowViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tv_name = itemView.findViewById<TextView>(R.id.tv_name)
-        val tv_grade1 = itemView.findViewById<ImageView>(R.id.tv_grade1)
-        val tv_grade2 = itemView.findViewById<ImageView>(R.id.tv_grade2)
-        val tv_grade3 = itemView.findViewById<ImageView>(R.id.tv_grade3)
-        val tv_grade4 = itemView.findViewById<ImageView>(R.id.tv_grade4)
-        val tv_grade5 = itemView.findViewById<ImageView>(R.id.tv_grade5)
+        val tv_grade1 = itemView.findViewById<ImageView>(R.id.iv_grade1)
+        val tv_grade2 = itemView.findViewById<ImageView>(R.id.iv_grade2)
+        val tv_grade3 = itemView.findViewById<ImageView>(R.id.iv_grade3)
+        val tv_grade4 = itemView.findViewById<ImageView>(R.id.iv_grade4)
+        val tv_grade5 = itemView.findViewById<ImageView>(R.id.iv_grade5)
         val btn_exit = itemView.findViewById<ImageView>(R.id.btn_exit)
     }
 
