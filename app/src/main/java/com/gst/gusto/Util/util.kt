@@ -1,7 +1,9 @@
 package com.gst.gusto.Util
 
 import android.content.Context
+import android.os.Build
 import android.os.Handler
+import android.os.ext.SdkExtensions
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.widget.ImageView
@@ -64,6 +66,7 @@ class util {
             }
         }
 
+
         /**
          * 작업자 : 버루
          * 이 메서드는 url에 있는 이미지를 imageView에 적용
@@ -74,6 +77,22 @@ class util {
          */
         fun setImage(imageView: ImageView, url : String, context: Context) {
             Glide.with(context).load(url).placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).into(imageView)
+        }
+
+
+        /**
+         * 작업자 : 버루
+         * 이 메서드는 사진 선택창 불러오기 위한 휴대폰 버전 체크
+         * @return true or false
+         */
+        fun isPhotoPickerAvailable(): Boolean {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                true
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                SdkExtensions.getExtensionVersion(Build.VERSION_CODES.R) >= 2
+            } else {
+                false
+            }
         }
 
 

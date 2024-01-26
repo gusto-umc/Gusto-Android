@@ -74,7 +74,7 @@
                 android:layout_marginBottom="16dp"/>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/iv_rest"
+                android:id="@+id/btn_rest"
                 android:layout_width="match_parent"
                 android:layout_height="212dp"
                 android:layout_gravity="center"

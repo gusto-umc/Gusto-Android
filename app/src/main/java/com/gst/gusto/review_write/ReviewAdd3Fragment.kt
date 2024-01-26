@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
 import com.gst.gusto.Util.util.Companion.dpToPixels
+import com.gst.gusto.Util.util.Companion.isPhotoPickerAvailable
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.databinding.FragmentReviewAdd3Binding
 import java.text.SimpleDateFormat
@@ -95,6 +96,7 @@ class ReviewAdd3Fragment : Fragment() {
             // Callback is invoked after th user selects a media item or closes the photo picker.
             if (uri != null) {
                 if(!imagesOn) {
+                    imagesOn= true
                     binding.lyImgaes.visibility = View.VISIBLE
                     binding.ivImage.visibility = View.GONE
 
@@ -154,15 +156,7 @@ class ReviewAdd3Fragment : Fragment() {
     }
 
     // 사진 불러오기 위한 SDK 검수
-    private fun isPhotoPickerAvailable(): Boolean {
-         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                true
-         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            getExtensionVersion(Build.VERSION_CODES.R) >= 2
-         } else {
-            false
-         }
-    }
+
     // 이미지 적용
 
 
