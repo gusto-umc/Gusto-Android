@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
 import com.gst.gusto.Util.util.Companion.dpToPixels
+import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.databinding.FragmentReviewAdd3Binding
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -126,10 +127,10 @@ class ReviewAdd3Fragment : Fragment() {
                 }
 
                 for (j in 0 .. uri.size-1) {
-                    setImage(imageViews[j],uri[j].toString())
+                    setImage(imageViews[j],uri[j].toString(),requireContext())
                 }
                 for (j in uri.size .. 3) {
-                    setImage(imageViews[j],"")
+                    setImage(imageViews[j],"",requireContext())
                 }
             } else {
                 Log.d("PhotoPicker", "No media selected")
@@ -163,9 +164,7 @@ class ReviewAdd3Fragment : Fragment() {
          }
     }
     // 이미지 적용
-    private fun setImage(imageView: ImageView, url : String) {
-        Glide.with(this).load(url).placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).into(imageView)
-    }
+
 
 
     // 이미지 크기 조절 함수

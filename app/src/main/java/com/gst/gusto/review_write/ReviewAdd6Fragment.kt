@@ -24,7 +24,8 @@ class ReviewAdd6Fragment : Fragment() {
     private val menuList = ArrayList<EditText>()
     private val handler = Handler()
     private val progressPoint = 500
-    private val itemList = arrayListOf(HowItem("맛슐랭",0,null))
+    private val itemList = arrayListOf(HowItem("맛슐랭",0),HowItem("맵기",1)
+        ,HowItem("분위기",3),HowItem("화장실",4),HowItem("주차장",5))
     private val howList = mutableListOf(3,3,3,3,3)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,21 +59,9 @@ class ReviewAdd6Fragment : Fragment() {
         handler.post(updateProgressRunnable)
 
         val rv_board = binding.rvHows
-        val howAdapter = ReviewHowAdapter(itemList,howList)
+        val howAdapter = ReviewHowAdapter(howList,0)
         howAdapter.notifyDataSetChanged()
 
-        val chips = listOf(binding.chip1, binding.chip2, binding.chip3, binding.chip4)
-
-        chips.forEachIndexed { index, chip ->
-            chip.setOnClickListener {
-                if (chip.isChecked) {
-                    itemList.add(HowItem(getHowItemName(index), index+1,chip))
-                } else {
-                    itemList.remove(HowItem(getHowItemName(index), index+1,chip))
-                }
-                howAdapter.notifyDataSetChanged()
-            }
-        }
         rv_board.adapter = howAdapter
         rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
