@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import com.gst.clock.Fragment.MyListFragment
-import com.gst.clock.Fragment.MyReviewFragment
 import com.gst.gusto.databinding.FragmentMyBinding
 
 class MyFragment : Fragment() {
@@ -26,10 +24,10 @@ class MyFragment : Fragment() {
     }
     private fun initViewPager() {
         //ViewPager2 Adapter 셋팅
+        /*
         var viewPager2Adatper = MyViewpagerAdapter(requireActivity())
         viewPager2Adatper.addFragment(MyListFragment())
         viewPager2Adatper.addFragment(MyReviewFragment())
-
         //Adapter 연결
         binding.viewpager.apply {
             adapter = viewPager2Adatper
@@ -48,6 +46,7 @@ class MyFragment : Fragment() {
                 1 -> tab.text = "찜 리스트"
             }
         }.attach()
+        */
     }
 
 }

@@ -34,7 +34,9 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        dataBinding = true
         viewBinding = true
+
     }
 }
 
@@ -58,5 +60,10 @@ dependencies {
     // Circle ImageView
     implementation ("de.hdodenhof:circleimageview:3.1.0")
 
+    // 네이버 지도 SDK 의존성 선언
+    implementation("com.naver.maps:map-sdk:3.17.0")
+
+    //위치 권한 의존성 추가
+    implementation ("com.google.android.gms:play-services-location:20.0.0")
 
 }
