@@ -16,6 +16,15 @@
         android:label="FragmentReview"
         tools:layout="@layout/fragment_review">
     </fragment>
+
+    <fragment
+        android:id="@+id/fragment_feed"
+        android:name="com.gst.clock.Fragment.FeedFragment"
+        android:label="FragmentFeed"
+        tools:layout="@layout/fragment_feed">
+    </fragment>
+
+    <!-- List 화면의 프래그먼트들 -->
     <fragment
         android:id="@+id/fragment_list"
         android:name="com.gst.gusto.list.ListFragment"
@@ -25,20 +34,6 @@
             android:id="@+id/action_listFragment_to_groupFragment"
             app:destination="@id/fragment_group" />
     </fragment>
-    <fragment
-        android:id="@+id/fragment_my"
-        android:name="com.gst.gusto.my.MyFragment"
-        android:label="FragmentMy"
-        tools:layout="@layout/fragment_my">
-    </fragment>
-    <fragment
-        android:id="@+id/fragment_feed"
-        android:name="com.gst.clock.Fragment.FeedFragment"
-        android:label="FragmentFeed"
-        tools:layout="@layout/fragment_feed">
-    </fragment>
-
-    <!-- List 화면의 프래그먼트들 -->
     <fragment
         android:id="@+id/fragment_list_group"
         android:name="com.gst.clock.Fragment.ListGroupFragment"
@@ -59,5 +54,160 @@
         <action
             android:id="@+id/action_groupFragment_to_listFragment"
             app:destination="@id/fragment_list" />
+    </fragment>
+
+    <!-- Review 화면의 프래그먼트들 -->
+    <fragment
+        android:id="@+id/fragment_review_add_1"
+        android:name="com.gst.clock.Fragment.ReviewAdd1Fragment"
+        android:label="FragmentReviewAdd1"
+        tools:layout="@layout/fragment_review_add_1">
+        <action
+            android:id="@+id/action_reviewAdd1Fragment_to_myFragment"
+            app:destination="@id/fragment_my" />
+        <action
+            android:id="@+id/action_reviewAdd1Fragment_to_reviewAdd2Fragment"
+            app:destination="@id/fragment_review_add_2" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_review_add_2"
+        android:name="com.gst.clock.Fragment.ReviewAdd2Fragment"
+        android:label="FragmentReviewAdd2"
+        tools:layout="@layout/fragment_review_add_2">
+        <action
+            android:id="@+id/action_reviewAdd2Fragment_to_reviewAdd1Fragment"
+            app:destination="@id/fragment_review_add_1" />
+        <action
+            android:id="@+id/action_reviewAdd2Fragment_to_reviewAdd3Fragment"
+            app:destination="@id/fragment_review_add_3" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_review_add_3"
+        android:name="com.gst.clock.Fragment.ReviewAdd3Fragment"
+        android:label="FragmentReviewAdd3"
+        tools:layout="@layout/fragment_review_add_3">
+        <action
+            android:id="@+id/action_reviewAdd3Fragment_to_reviewAdd2Fragment"
+            app:destination="@id/fragment_review_add_2" />
+        <action
+            android:id="@+id/action_reviewAdd3Fragment_to_reviewAdd4Fragment"
+            app:destination="@id/fragment_review_add_4" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_review_add_4"
+        android:name="com.gst.clock.Fragment.ReviewAdd4Fragment"
+        android:label="FragmentReviewAdd4"
+        tools:layout="@layout/fragment_review_add_4">
+        <action
+            android:id="@+id/action_reviewAdd4Fragment_to_reviewAdd3Fragment"
+            app:destination="@id/fragment_review_add_3" />
+        <action
+            android:id="@+id/action_reviewAdd4Fragment_to_reviewAdd5Fragment"
+            app:destination="@id/fragment_review_add_5" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_review_add_5"
+        android:name="com.gst.clock.Fragment.ReviewAdd5Fragment"
+        android:label="FragmentReviewAdd5"
+        tools:layout="@layout/fragment_review_add_5">
+        <action
+            android:id="@+id/action_reviewAdd5Fragment_to_reviewAdd4Fragment"
+            app:destination="@id/fragment_review_add_4" />
+        <action
+            android:id="@+id/action_reviewAdd5Fragment_to_reviewAdd6Fragment"
+            app:destination="@id/fragment_review_add_6" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_review_add_6"
+        android:name="com.gst.clock.Fragment.ReviewAdd6Fragment"
+        android:label="FragmentReviewAdd6"
+        tools:layout="@layout/fragment_review_add_6">
+        <action
+            android:id="@+id/action_reviewAdd6Fragment_to_reviewAdd5Fragment"
+            app:destination="@id/fragment_review_add_5" />
+        <action
+            android:id="@+id/action_reviewAdd6Fragment_to_reviewAdd7Fragment"
+            app:destination="@id/fragment_review_add_7" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_review_add_7"
+        android:name="com.gst.clock.Fragment.ReviewAdd7Fragment"
+        android:label="FragmentReviewAdd7"
+        tools:layout="@layout/fragment_review_add_7">
+        <action
+            android:id="@+id/action_reviewAdd7Fragment_to_reviewAdd6Fragment"
+            app:destination="@id/fragment_review_add_6" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_review_detail"
+        android:name="com.gst.clock.Fragment.ReviewDetailFragment"
+        android:label="FragmentReviewDetail"
+        tools:layout="@layout/fragment_review_detail">
+        <action
+            android:id="@+id/action_reviewDetail_to_myFragment"
+            app:destination="@id/fragment_my"/>
+        <action
+            android:id="@+id/action_reviewDetail_to_reviewDetailEdit"
+            app:destination="@id/fragment_review_detail_edit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_review_detail_edit"
+        android:name="com.gst.clock.Fragment.ReviewDetailEditFragment"
+        android:label="FragmentReviewDetailEdit"
+        tools:layout="@layout/fragment_review_detail_edit">
+        <action
+            android:id="@+id/action_reviewDetailEdit_to_myFragment"
+            app:destination="@id/fragment_my"/>
+    </fragment>
+    <!-- Feed 화면의 프래그먼트들 -->
+    <fragment
+        android:id="@+id/fragment_feed_detail_review"
+        android:name="com.gst.clock.Fragment.FeedDetailReviewFragment"
+        android:label="FeedDetailReviewFragment"
+        tools:layout="@layout/fragment_feed_detail">
+        <action
+            android:id="@+id/action_feedDetailReview_to_myFragment"
+            app:destination="@id/fragment_my" />
+    </fragment>
+
+    <!-- My 화면의 프래그먼트들 -->
+    <fragment
+        android:id="@+id/fragment_my"
+        android:name="com.gst.gusto.my.MyFragment"
+        android:label="FragmentMy"
+        tools:layout="@layout/fragment_my">
+        <action
+            android:id="@+id/action_myFragment_to_reviewAdd1Fragment"
+            app:destination="@id/fragment_review_add_1" />
+        <action
+            android:id="@+id/action_myFragment_to_myProfileFragment"
+            app:destination="@id/fragment_my_profile" />
+        <action
+            android:id="@+id/action_myFragment_to_followList"
+            app:destination="@id/fragment_follow_list" />
+        <action
+            android:id="@+id/action_myFragment_to_feedDetail"
+            app:destination="@id/fragment_feed_detail_review" />
+        <action
+            android:id="@+id/action_myFragment_to_reviewDetail"
+            app:destination="@id/fragment_review_detail" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_my_profile"
+        android:name="com.gst.gusto.my.fragment.MyProfileFragment"
+        android:label="FragmentMyProfile"
+        tools:layout="@layout/fragment_my_profile">
+        <action
+            android:id="@+id/action_myProfile_to_myFragment"
+            app:destination="@id/fragment_my" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_follow_list"
+        android:name="com.gst.clock.Fragment.MyFollowListFragment"
+        android:label="FragmentFollowList"
+        tools:layout="@layout/fragment_my_follow_list">
+        <action
+            android:id="@+id/action_followList_to_myFragment"
+            app:destination="@id/fragment_my" />
     </fragment>
 </navigation>

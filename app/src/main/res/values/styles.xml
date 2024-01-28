@@ -9,6 +9,7 @@
     <!--Bottomnavigation 글자 설정-->
     <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/pretendard_black</item>
     </style>
     <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">10sp</item>

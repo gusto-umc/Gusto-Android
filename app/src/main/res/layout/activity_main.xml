@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fl_container"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -43,6 +44,5 @@
         app:itemTextColor="@drawable/bottomnavigation_colors"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bv_list" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
