@@ -8,6 +8,7 @@ import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.widget.ImageView
 import android.widget.ProgressBar
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.gst.gusto.R
 
@@ -94,7 +95,17 @@ class util {
                 false
             }
         }
-
+/*
+        *//**
+         * 작업자 : 버루
+         * 이 메서드는 바텀시트를 불러오는 함수이다
+         * @param 어떤 xml 파일을 불러올지 option을 주면 된다
+         * @return null
+         *//*
+        fun Fragment.showModalBottomSheet(option : Int) {
+            val modal = BottomSheet(option)
+            modal.show(requireFragmentManager(), BottomSheet.TAG)
+        }*/
 
     }
 }

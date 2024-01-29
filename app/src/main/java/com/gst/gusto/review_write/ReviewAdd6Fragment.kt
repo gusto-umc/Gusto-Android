@@ -24,8 +24,6 @@ class ReviewAdd6Fragment : Fragment() {
     private val menuList = ArrayList<EditText>()
     private val handler = Handler()
     private val progressPoint = 500
-    private val itemList = arrayListOf(HowItem("맛슐랭",0),HowItem("맵기",1)
-        ,HowItem("분위기",3),HowItem("화장실",4),HowItem("주차장",5))
     private val howList = mutableListOf(3,3,3,3,3)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,14 +64,4 @@ class ReviewAdd6Fragment : Fragment() {
         rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
     }
-    private fun getHowItemName(index: Int): String {
-        return when (index) {
-            0 -> "맵기"
-            1 -> "분위기"
-            2 -> "화장실"
-            3 -> "주차장"
-            else -> ""
-        }
-    }
-
 }

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.MainActivity
 import com.gst.gusto.databinding.FragmentListGroupBinding
 import com.gst.gusto.list.adapter.GroupItem
-import com.gst.gusto.list.adapter.ListGroupAdapter
+import com.gst.gusto.list.adapter.LisAdapter
 
 class ListGroupFragment : Fragment() {
 
@@ -39,7 +39,7 @@ class ListGroupFragment : Fragment() {
             return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
         }
 
-        val boardAdapter = ListGroupAdapter(itemList,callActivityFunction(),0)
+        val boardAdapter = LisAdapter(itemList, callActivityFunction(), 0)
         boardAdapter.notifyDataSetChanged()
 
         rv_board.adapter = boardAdapter

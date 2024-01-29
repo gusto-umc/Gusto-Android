@@ -76,23 +76,38 @@
                 android:textSize="16sp"
                 android:text="더 기억하고 싶은 내용이 있나요?" />
 
-            <EditText
-                android:id="@+id/et_content"
-                android:layout_marginHorizontal="27dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="top"
-                android:background="@drawable/background_radius_10_stroke_1"
-                android:backgroundTint="@color/main_C"
-                android:paddingHorizontal="13dp"
-                android:paddingVertical="17dp"
-                android:hint="리뷰를 작성해주세요!"
-                android:textSize="14sp"
-                android:fontFamily="@font/pretendard_medium"
-                android:textColorHint="#ECECEC"
-                android:text=""
-                 />
+                android:layout_marginHorizontal="27dp"
+                android:layout_weight="1">
+                <EditText
+                    android:id="@+id/et_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:maxLength="200"
+                    android:gravity="top"
+                    android:background="@drawable/background_radius_10_stroke_1"
+                    android:backgroundTint="@color/main_C"
+                    android:paddingHorizontal="13dp"
+                    android:paddingVertical="17dp"
+                    android:hint="리뷰를 작성해주세요!"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:textColorHint="#ECECEC"
+                    android:text="" />
+                <TextView
+                    android:id="@+id/tv_et_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_margin="10dp"
+                    android:text="0/200"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
             <TextView
                 android:id="@+id/btn_end"

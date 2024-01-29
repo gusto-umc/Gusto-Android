@@ -54,6 +54,33 @@
         <action
             android:id="@+id/action_groupFragment_to_listFragment"
             app:destination="@id/fragment_list" />
+        <action
+            android:id="@+id/action_groupFragment_to_groupMRoutEditFragment"
+            app:destination="@id/fragment_group_m_route_edit" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_group_m_route_stores"
+        android:name="com.gst.gusto.list.fragment.GroupRouteStoresFragment"
+        android:label="FragmentGroupMRoutesSotres"
+        tools:layout="@layout/fragment_list_group_m_route_stores">
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_group_m_route_routes"
+        android:name="com.gst.gusto.list.fragment.GroupRouteRoutesFragment"
+        android:label="FragmentGroupMRoutesRoutes"
+        tools:layout="@layout/fragment_list_group_m_route_routes">
+        <action
+            android:id="@+id/action_groupMRSFragment_to_groupMRRFragment"
+            app:destination="@id/fragment_group_m_route_stores" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_group_m_route_edit"
+        android:name="com.gst.gusto.list.fragment.GroupRouteMapFragment"
+        android:label="FragmentGroupMRouteMap"
+        tools:layout="@layout/fragment_list_group_m_route_edit">
+        <action
+            android:id="@+id/action_groupMRoutMapFragment_to_groupFragment"
+            app:destination="@id/fragment_group" />
     </fragment>
 
     <!-- Review 화면의 프래그먼트들 -->

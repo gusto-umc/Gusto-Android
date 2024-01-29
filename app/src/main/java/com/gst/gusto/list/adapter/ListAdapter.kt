@@ -3,7 +3,6 @@ package com.gst.gusto.list.adapter
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -14,13 +13,21 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 data class GroupItem (val title : String, val people : Int, val food : Int, val route : Int)
 
-class ListGroupAdapter(val itemList: ArrayList<GroupItem>, val nc: NavController,val option : Int):
-    RecyclerView.Adapter<ListGroupAdapter.ListGroupViewHolder>(){
+class LisAdapter(
+    val itemList: ArrayList<GroupItem>, val nc: NavController?,
+    val option: Int,
+):
+    RecyclerView.Adapter<LisAdapter.ListGroupViewHolder>(){
 
     val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
 
@@ -38,10 +45,7 @@ class ListGroupAdapter(val itemList: ArrayList<GroupItem>, val nc: NavController
         holder.tv_title.text = itemList[position].title
         if(option == 1) {
             holder.tv_food.text = "장소 : ${itemList[position].food}개"
-            if(itemList[position].route==0)
-                holder.tv_route.text = "그룹 : X"
-            else
-                holder.tv_route.text = "그룹 : O"
+            holder.ly_route.visibility = View.GONE
         } else {
             holder.tv_people.text = "${itemList[position].people}명"
             holder.tv_food.text = "맛집 : ${itemList[position].food}개"
@@ -85,9 +89,16 @@ class ListGroupAdapter(val itemList: ArrayList<GroupItem>, val nc: NavController
             // true를 반환하여 이벤트 소비
              false
         }
-        
         holder.item.setOnClickListener {
-            nc.navigate(R.id.action_listFragment_to_groupFragment)
+            if(option==0) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(50)
+                    nc?.navigate(R.id.action_listFragment_to_groupFragment)
+                }
+            } else {
+                Navigation.findNavController(holder.itemView).navigate(R.id.action_groupMRSFragment_to_groupMRRFragment)
+            }
+
         }
 
     }
@@ -101,6 +112,7 @@ class ListGroupAdapter(val itemList: ArrayList<GroupItem>, val nc: NavController
         val tv_people = itemView.findViewById<TextView>(R.id.tv_member_num)
         val tv_food = itemView.findViewById<TextView>(R.id.tv_food_num)
         val tv_route = itemView.findViewById<TextView>(R.id.tv_route_num)
+        val ly_route = itemView.findViewById<LinearLayout>(R.id.ly_route)
         val item = itemView.findViewById<LinearLayout>(R.id.item_list_group)
         val icon = itemView.findViewById<ImageView>(R.id.iv_icon)
         val btn = itemView.findViewById<TextView>(R.id.btn_tmp)

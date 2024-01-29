@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/sub_m"
+    android:background="@color/main"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/ly_group"
+        android:background="@color/sub_m"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="55dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -33,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:fontFamily="@font/pretendard_bold"
-                android:text="그룹별 리스트"
+                android:text="그룹 리스트&amp;루트"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
@@ -43,8 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_marginLeft="59dp"
-            android:layout_marginRight="33dp"
+            android:layout_marginLeft="41dp"
+            android:layout_marginRight="40dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -136,7 +138,7 @@
             android:paddingRight="33dp">
 
             <TextView
-                android:layout_marginLeft="59dp"
+                android:layout_marginLeft="41dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:background="@drawable/gradient_background_orange"
@@ -186,6 +188,16 @@
 
     </LinearLayout>
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="181dp"
+        android:orientation="horizontal"/>
+<!--
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_group"
         android:layout_width="match_parent"
@@ -195,6 +207,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="171dp"
         android:paddingTop="21dp"
-        android:background="@drawable/background_radius_top_30"/>
+        android:background="@drawable/background_radius_top_30"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
