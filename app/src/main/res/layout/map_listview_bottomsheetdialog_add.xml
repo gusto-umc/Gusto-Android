@@ -24,6 +24,7 @@
             />
         
         <ImageView
+            android:id="@+id/iv_bottomsheet_category_x"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/plus_img"
@@ -132,6 +133,7 @@
             />
         
         <Switch
+            android:id="@+id/switch_category_"
             android:layout_width="45dp"
             android:layout_height="22dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -142,6 +144,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:id="@+id/tv_category_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="저장"

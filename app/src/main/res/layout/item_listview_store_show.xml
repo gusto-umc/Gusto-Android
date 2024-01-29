@@ -3,43 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:weightSum="1">
-    <CheckBox
-        android:id="@+id/cb_item_listview_store_edit"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="20dp"
-        />
+    android:orientation="horizontal">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_item_store_edit"
+        android:id="@+id/cv_item_store_show"
         android:layout_width="match_parent"
         android:layout_height="51dp"
         android:layout_margin="6dp"
         app:cardCornerRadius="10dp"
-        app:cardElevation="5dp"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             >
             <ImageView
-                android:id="@+id/iv_item_store_edit_img"
-                android:layout_width="34dp"
-                android:layout_height="32dp"
+                android:id="@+id/iv_item_store_show_img"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:src="@drawable/sample_store_img"
                 android:clipToOutline="true"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginStart="11.73dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="7.06dp"
                 android:background="@drawable/background_radius_5"
                 />
 
             <TextView
-                android:id="@+id/tv_item_store_edit_title"
+                android:id="@+id/tv_item_store_show_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="구스또 레스토랑"
@@ -47,34 +38,34 @@
                 android:fontFamily="@font/pretendard_semibold"
                 android:textColor="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@id/iv_item_store_edit_img"
+                app:layout_constraintStart_toEndOf="@id/iv_item_store_show_img"
                 android:layout_marginTop="9.06dp"
-                android:layout_marginStart="12.8dp"
+                android:layout_marginStart="10dp"
                 />
 
             <TextView
-                android:id="@+id/tv_item_store_edit_location"
+                android:id="@+id/tv_item_store_show_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="메롱시 메로나동 바밤바 24-6 1층"
                 android:textSize="8sp"
-                android:fontFamily="@font/pretendard_regular"
+                android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/main_C"
-                app:layout_constraintTop_toBottomOf="@id/tv_item_store_edit_title"
-                app:layout_constraintStart_toStartOf="@id/tv_item_store_edit_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_item_store_show_title"
+                app:layout_constraintStart_toStartOf="@id/tv_item_store_show_title"
                 android:layout_marginTop="2dp"
                 />
             <TextView
-                android:id="@+id/tv_item_store_edit_count"
+                android:id="@+id/tv_item_store_show_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="n번 방문했어요"
                 android:textSize="8sp"
                 android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/sub_m"
-                app:layout_constraintTop_toTopOf="@id/tv_item_store_edit_title"
-                app:layout_constraintBottom_toBottomOf="@id/tv_item_store_edit_title"
-                app:layout_constraintStart_toEndOf="@id/tv_item_store_edit_title"
+                app:layout_constraintTop_toTopOf="@id/tv_item_store_show_title"
+                app:layout_constraintBottom_toBottomOf="@id/tv_item_store_show_title"
+                app:layout_constraintStart_toEndOf="@id/tv_item_store_show_title"
                 android:layout_marginStart="5dp"
                 />
 

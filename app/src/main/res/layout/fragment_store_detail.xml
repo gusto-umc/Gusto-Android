@@ -33,7 +33,10 @@
                         android:id="@+id/iv_store_detail_back"
                         android:layout_width="44dp"
                         android:layout_height="44dp"
-                        android:src="@drawable/arrow_left_2"
+                        android:layout_marginLeft="10dp"
+                        android:padding="12dp"
+                        android:src="@drawable/arrow_left_1"
+                        app:tint="@color/black"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         />
@@ -84,23 +87,18 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_store_detail_name"
                         />
-
-                    <TextView
-                        android:id="@+id/tv_store_detail_isopening"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="영업 중"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:textColor="@color/sub_m"
-                        app:layout_constraintTop_toTopOf="@id/tv_store_detail_name"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_store_detail_name"
-                        app:layout_constraintStart_toEndOf="@id/tv_store_detail_name"
-                        android:layout_marginStart="12dp"
-                        />
                     
                     <ImageView
-                        android:id="@+id/iv_store_detail_mark"
+                        android:id="@+id/iv_store_detail_saveo"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/list_img"
+                        app:layout_constraintTop_toTopOf="@id/tv_store_detail_name"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        />
+
+                    <ImageView
+                        android:id="@+id/iv_store_detail_savex"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/list_img"
