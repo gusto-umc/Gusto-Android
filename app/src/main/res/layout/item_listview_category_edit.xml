@@ -78,7 +78,7 @@
                         android:id="@+id/btn_item_category_edit_down"
                         android:layout_width="12dp"
                         android:layout_height="6dp"
-                        android:src="@drawable/arrow_down"
+                        android:src="@drawable/arrow_down_2_img"
                         android:layout_marginEnd="22.51dp"
                         android:layout_gravity="center_vertical"
                         />
@@ -87,7 +87,7 @@
                         android:visibility="gone"
                         android:layout_width="12dp"
                         android:layout_height="6dp"
-                        android:src="@drawable/arrow_down"
+                        android:src="@drawable/arrow_up_1_img"
                         android:layout_marginEnd="22.51dp"
                         android:layout_gravity="center_vertical"
                         />

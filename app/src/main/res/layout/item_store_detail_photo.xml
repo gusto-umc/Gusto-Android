@@ -9,7 +9,7 @@
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:clipToOutline="true"
-        android:src="@drawable/sample_store_image"
+        android:src="@drawable/sample_store_img"
         android:background="@drawable/background_radius_10"/>
 
 </LinearLayout>
