@@ -35,6 +35,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 }
 
@@ -61,6 +62,9 @@ dependencies {
     // glide library
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
+    //extended floating button
+    implementation ("com.google.android.material:material:1.3.0-alpha02")
 
 
 
