@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_radius_top_30"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="카테고리 선택"
+        android:textSize="16sp"
+        android:fontFamily="@font/pretendard_bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        />
+
+    <ImageView
+        android:id="@+id/iv_category_choose_x"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/plus_img"
+        app:tint="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="28dp"
+        />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollview_category_choose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_category_choose_x">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_category_choose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            />
+    </androidx.core.widget.NestedScrollView>
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        app:layout_constraintTop_toBottomOf="@id/scrollview_category_choose"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

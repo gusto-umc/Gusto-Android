@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:background="@drawable/background_radius_20">
+
+    <TextView
+        android:id="@+id/tv_dialog_two_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="카테고리를 저장하지 않고 \n 뒤로 돌아가시겠습니까?"
+        android:textSize="16sp"
+        android:fontFamily="@font/pretendard_regular"
+        android:textColor="@color/black"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:layout_marginHorizontal="56dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="24.5dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:id="@+id/btn_dialog_two_yes"
+            android:layout_width="128dp"
+            android:layout_height="40dp"
+            android:text="예"
+            android:gravity="center"
+            android:background="@drawable/background_radius_10"
+            android:backgroundTint="@color/main_C"
+            android:textSize="14sp"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textColor="@color/white"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:id="@+id/btn_dialog_two_no"
+            android:layout_width="128dp"
+            android:layout_height="40dp"
+            android:text="아니요"
+            android:gravity="center"
+            android:background="@drawable/background_radius_10"
+            android:backgroundTint="@color/gray_3"
+            android:textSize="14sp"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+
+</LinearLayout>
