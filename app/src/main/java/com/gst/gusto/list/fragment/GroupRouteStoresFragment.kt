@@ -28,13 +28,13 @@ class GroupRouteStoresFragment : Fragment() {
             fun callActivityFunction(): NavController {
                 return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
             }
-            callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutMapFragment)
+            callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutEditFragment)
         }
         binding.fabMap.setOnClickListener {
             fun callActivityFunction(): NavController {
                 return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
             }
-            callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutMapFragment)
+            //callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutMapFragment)
         }
         return binding.root
     }

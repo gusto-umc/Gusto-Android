@@ -16,6 +16,8 @@ import com.gst.gusto.Util.util
 import com.gst.gusto.databinding.FragmentListGroupMRouteMapBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
 import com.gst.gusto.list.adapter.RouteItem
+import com.gst.gusto.list.adapter.RouteMapDetailItem
+import com.gst.gusto.list.adapter.RouteViewPagerAdapter
 import com.gst.gusto.review_write.adapter.ImageViewPagerAdapter
 
 class GroupRouteMapFragment : Fragment() {
@@ -40,24 +42,18 @@ class GroupRouteMapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val itemList = ArrayList<RouteItem>()
+        val itemList = ArrayList<RouteMapDetailItem>()
 
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
+        itemList.add(RouteMapDetailItem("구스또 레스토랑","메롱시 메로나동 바밤바 24-6 1층", "매주 월요일 휴뮤, 08:~15:00","010-5338-8662",false))
+        itemList.add(RouteMapDetailItem("구스또 레스토랑2","메롱시 메로나동 바밤바 24-6 1층", "매주 월요일 휴뮤, 08:~15:00","010-5338-8662",false))
+        itemList.add(RouteMapDetailItem("구스또 레스토랑3","메롱시 메로나동 바밤바 24-6 1층", "매주 월요일 휴뮤, 08:~15:00","010-5338-8662",false))
+        itemList.add(RouteMapDetailItem("구스또 레스토랑4","메롱시 메로나동 바밤바 24-6 1층", "매주 월요일 휴뮤, 08:~15:00","010-5338-8662",false))
 
         val viewPager = binding.vpSlider
-        val imageList = listOf(
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_launcher_background
-            // Add more images as needed
-        )
 
 
         // 이미지 슬라이드
-        val adapter = ImageViewPagerAdapter(imageList)
+        val adapter = RouteViewPagerAdapter(itemList)
         viewPager.adapter = adapter
 
         //viewPager.offscreenPageLimit = 3
