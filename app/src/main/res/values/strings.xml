@@ -2,7 +2,4 @@
     <string name="app_name">Gusto</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <!--ㅡmap_listview-->
-    <string name="map_listview1">내 위치의 장소 보기</string>
 </resources>

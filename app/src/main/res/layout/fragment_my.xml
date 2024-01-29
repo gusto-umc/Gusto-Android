@@ -31,9 +31,29 @@
             android:fontFamily="@font/pretendard_bold"/>
         <ImageView
             android:id="@+id/btn_add_review_tmp"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:src="@color/sub_m"/>
+        <ImageView
+            android:id="@+id/btn_feed_detail_tmp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@color/sub1"/>
+        <ImageView
+            android:id="@+id/btn_review_detail_tmp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@color/black"/>
+        <ImageView
+            android:id="@+id/btn_option"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_marginRight="6dp"
+            android:padding="15dp"
+            android:src="@drawable/option_img"/>
     </LinearLayout>
 
     <LinearLayout
@@ -41,167 +61,148 @@
         android:layout_height="93dp"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="38" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
+        <androidx.cardview.widget.CardView
             android:id="@+id/iv_profile_image"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_marginLeft="38dp"
+            android:layout_marginRight="41dp"
+            android:layout_width="93dp"
+            android:layout_height="93dp"
             android:layout_gravity="center"
-            android:layout_weight="93"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_launcher_background" />
+            app:cardCornerRadius="50dp">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="48" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_launcher_background"/>
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="128"
+            android:layout_marginRight="47dp"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_nickname"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="구스또12"
-                    android:textColor="#000000"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/pretendard_semibold"/>
-
-                <TextView
-                    android:id="@+id/tv_tagname"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="\@gustto_"
-                    android:textColor="#CBCBCB"
-                    android:textSize="10sp"
-                    android:fontFamily="@font/pretendard_semibold" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/pretendard_semibold"
+                android:maxLines="1"
+                android:text="구스또12"
+                android:textColor="#000000"
+                android:textSize="14sp" />
 
             <LinearLayout
+                android:layout_marginTop="2dp"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                <LinearLayout
                     android:layout_weight="1"
-                    android:text="리뷰"
-                    android:textColor="#999999"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/pretendard_semibold" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="18dp"
-                    android:layout_marginVertical="1dp"
-                    android:background="#C1C1C1" />
-
-                <TextView
-                    android:id="@+id/tv_review_num"
-                    android:layout_width="0dp"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:gravity="center"
+                        android:text="리뷰"
+                        android:textColor="@color/gray_3"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tv_review_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:gravity="center"
+                        android:text="214"
+                        android:textColor="@color/gray_1"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_weight="1"
-                    android:text="214개"
-                    android:textColor="#999999"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/pretendard_semibold" />
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:gravity="center"
+                        android:text="찜"
+                        android:textColor="@color/gray_3"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tv_pin_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:gravity="center"
+                        android:text="53"
+                        android:textColor="@color/gray_1"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_following_list"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:gravity="center"
+                        android:text="팔로워"
+                        android:textColor="@color/gray_3"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tv_follower_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:gravity="center"
+                        android:text="260"
+                        android:textColor="@color/gray_1"
+                        android:textSize="15sp" />
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/btn_follow"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:layout_height="20dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/background_radius_5"
+                android:backgroundTint="@color/gray_6"
+                android:textColor="@color/gray_1"
+                android:textSize="10sp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:gravity="center"
+                android:text="팔로우"/>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="핀"
-                    android:textColor="#999999"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/pretendard_semibold" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="18dp"
-                    android:layout_marginVertical="1dp"
-                    android:background="#C1C1C1" />
-
-                <TextView
-                    android:id="@+id/tv_pin_num"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="53개"
-                    android:textColor="#999999"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/pretendard_semibold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="팔로워"
-                    android:textColor="#999999"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/pretendard_semibold" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="18dp"
-                    android:layout_marginVertical="1dp"
-                    android:background="#C1C1C1" />
-
-                <TextView
-                    android:id="@+id/tv_follower_num"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="260"
-                    android:textColor="#999999"
-                    android:textSize="12sp"
-                    
-                    android:fontFamily="@font/pretendard_semibold" />
-            </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="52" />
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout

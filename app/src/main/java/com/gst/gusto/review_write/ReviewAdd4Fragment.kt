@@ -28,7 +28,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
-import com.gst.gusto.Util.util.Companion.dpToPx
+import com.gst.gusto.Util.util.Companion.dpToPixels
 import com.gst.gusto.databinding.FragmentReviewAdd4Binding
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -56,6 +56,13 @@ class ReviewAdd4Fragment : Fragment() {
             findNavController().navigate(R.id.action_reviewAdd4Fragment_to_reviewAdd3Fragment,bundle)
         }
         binding.btnNext.setOnClickListener {
+            val textList = ArrayList<String>()
+
+            for (editText in menuList) {
+                val text = editText.text.toString()
+                textList.add(text)
+            }
+            Log.d("menuList",textList.toString())
             findNavController().navigate(R.id.action_reviewAdd4Fragment_to_reviewAdd5Fragment,bundle)
         }
 
@@ -83,10 +90,10 @@ class ReviewAdd4Fragment : Fragment() {
     private fun addMenu() {
         val newText = EditText(requireContext())
         val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, resources.getDimensionPixelSize(R.dimen.food_menu_text_size))
-        layoutParams.setMargins(0, 8.dpToPx(resources.displayMetrics.density), 0, 0)
+        layoutParams.setMargins(0,  dpToPixels(8f,resources.displayMetrics).toInt(), 0, 0)
         newText.layoutParams = layoutParams
 
-        newText.setPadding(13.dpToPx(resources.displayMetrics.density), 0, 0, 0)
+        newText.setPadding(dpToPixels(13f, resources.displayMetrics).toInt(), 0, 0, 0)
         newText.textSize = 14f // 14sp
         newText.setTextColor(resources.getColor(R.color.black))
         newText.typeface = resources.getFont(R.font.pretendard_medium)

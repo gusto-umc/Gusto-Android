@@ -70,100 +70,113 @@
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"/>
 
-        <LinearLayout
-            android:layout_marginHorizontal="23dp"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="match_parent" >
 
-            <com.google.android.material.chip.ChipGroup
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center">
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    app:iconStartPadding="2dp"
-                    app:chipStrokeColor="@color/chip_select_stroke_color"
-                    app:chipBackgroundColor="@color/white"
-                    app:chipStrokeWidth="1dp"
-                    android:checkable="true"
-                    android:text="맵기"
-                    android:textSize="10sp"
-                    android:fontFamily="@font/pretendard_medium"
-                    app:chipCornerRadius="41dp"
-                    app:chipIcon="@drawable/plus_img"
-                    app:chipIconTint="#515151"
-                    app:chipIconSize="8dp"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    app:iconStartPadding="2dp"
-                    app:chipStrokeColor="@color/chip_select_stroke_color"
-                    app:chipBackgroundColor="@color/white"
-                    app:chipStrokeWidth="1dp"
-                    android:checkable="true"
-                    android:text="분위기"
-                    android:textSize="10sp"
-                    android:fontFamily="@font/pretendard_medium"
-                    app:chipCornerRadius="41dp"
-                    app:chipIcon="@drawable/plus_img"
-                    app:chipIconTint="#515151"
-                    app:chipIconSize="8dp"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    app:iconStartPadding="2dp"
-                    app:chipStrokeColor="@color/chip_select_stroke_color"
-                    app:chipBackgroundColor="@color/white"
-                    app:chipStrokeWidth="1dp"
-                    android:checkable="true"
-                    android:text="화장실"
-                    android:textSize="10sp"
-                    android:fontFamily="@font/pretendard_medium"
-                    app:chipCornerRadius="41dp"
-                    app:chipIcon="@drawable/plus_img"
-                    app:chipIconTint="#515151"
-                    app:chipIconSize="8dp"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    app:iconStartPadding="2dp"
-                    app:chipStrokeColor="@color/chip_select_stroke_color"
-                    app:chipBackgroundColor="@color/white"
-                    app:chipStrokeWidth="1dp"
-                    android:checkable="true"
-                    android:text="주차장"
-                    android:textSize="10sp"
-                    android:fontFamily="@font/pretendard_medium"
-                    app:chipCornerRadius="41dp"
-                    app:chipIcon="@drawable/plus_img"
-                    app:chipIconTint="#515151"
-                    app:chipIconSize="8dp"/>
-            </com.google.android.material.chip.ChipGroup>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="23dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_hows"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
+                <com.google.android.material.chip.ChipGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center">
 
-        <TextView
-            android:layout_marginHorizontal="23dp"
-            android:layout_marginTop="32dp"
-            android:textColor="@color/white"
-            android:fontFamily="@font/pretendard_bold"
-            android:textSize="15sp"
-            android:gravity="center"
-            android:id="@+id/btn_next"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:backgroundTint="@color/main_C"
-            android:background="@drawable/background_radius_10"
-            android:layout_marginBottom="96dp"
-            android:text="다음으로 넘어가기" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:checkable="true"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="맵기"
+                        android:textSize="10sp"
+                        app:chipBackgroundColor="@color/white"
+                        app:chipCornerRadius="41dp"
+                        app:chipIcon="@drawable/plus_img"
+                        app:chipIconSize="8dp"
+                        app:chipIconTint="#515151"
+                        app:chipStrokeColor="@color/chip_select_stroke_color"
+                        app:chipStrokeWidth="1dp"
+                        app:iconStartPadding="2dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:checkable="true"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="분위기"
+                        android:textSize="10sp"
+                        app:chipBackgroundColor="@color/white"
+                        app:chipCornerRadius="41dp"
+                        app:chipIcon="@drawable/plus_img"
+                        app:chipIconSize="8dp"
+                        app:chipIconTint="#515151"
+                        app:chipStrokeColor="@color/chip_select_stroke_color"
+                        app:chipStrokeWidth="1dp"
+                        app:iconStartPadding="2dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:checkable="true"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="화장실"
+                        android:textSize="10sp"
+                        app:chipBackgroundColor="@color/white"
+                        app:chipCornerRadius="41dp"
+                        app:chipIcon="@drawable/plus_img"
+                        app:chipIconSize="8dp"
+                        app:chipIconTint="#515151"
+                        app:chipStrokeColor="@color/chip_select_stroke_color"
+                        app:chipStrokeWidth="1dp"
+                        app:iconStartPadding="2dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:checkable="true"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="주차장"
+                        android:textSize="10sp"
+                        app:chipBackgroundColor="@color/white"
+                        app:chipCornerRadius="41dp"
+                        app:chipIcon="@drawable/plus_img"
+                        app:chipIconSize="8dp"
+                        app:chipIconTint="#515151"
+                        app:chipStrokeColor="@color/chip_select_stroke_color"
+                        app:chipStrokeWidth="1dp"
+                        app:iconStartPadding="2dp" />
+                </com.google.android.material.chip.ChipGroup>
+
+                <TextView
+                    android:id="@+id/btn_next"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="96dp"
+                    android:background="@drawable/background_radius_10"
+                    android:backgroundTint="@color/main_C"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:gravity="center"
+                    android:text="다음으로 넘어가기"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
 
     </LinearLayout>
 

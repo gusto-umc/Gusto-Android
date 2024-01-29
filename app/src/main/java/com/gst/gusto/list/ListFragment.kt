@@ -119,7 +119,7 @@ class ListFragment : Fragment() {
     }
     private fun expandView() {
         val startHeight = fabBackground.height
-        val endHeight = startHeight + dpToPixels(132f, resources.displayMetrics)
+        val endHeight = startHeight + dpToPixels(128f, resources.displayMetrics)
 
         val animator = ValueAnimator.ofInt(startHeight, endHeight.toInt())
         animator.interpolator = DecelerateInterpolator()
@@ -135,7 +135,7 @@ class ListFragment : Fragment() {
     }
     private fun collapseView() {
         val startHeight = fabBackground.height
-        val endHeight = startHeight - dpToPixels(132f, resources.displayMetrics)
+        val endHeight = startHeight - dpToPixels(128f, resources.displayMetrics)
 
         val animator = ValueAnimator.ofInt(startHeight, endHeight.toInt())
         animator.interpolator = AccelerateInterpolator()

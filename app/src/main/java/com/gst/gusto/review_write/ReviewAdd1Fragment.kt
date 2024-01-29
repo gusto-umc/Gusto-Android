@@ -9,6 +9,7 @@ import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.gst.gusto.R
+import com.gst.gusto.Util.util.Companion.dpToPixels
 import com.gst.gusto.databinding.FragmentReviewAdd1Binding
 
 class ReviewAdd1Fragment : Fragment() {
@@ -47,7 +48,7 @@ class ReviewAdd1Fragment : Fragment() {
             override fun onPreDraw(): Boolean {
                 val width: Int = binding.lyRest.width
                 val height: Int = binding.lyRest.height
-                val marginInPixels = dpToPixels(8f)
+                val marginInPixels = dpToPixels(8f,resources.displayMetrics)
                 val length =
                     if (width > height) (height - marginInPixels).toInt() else (width - marginInPixels).toInt()
 
@@ -62,9 +63,5 @@ class ReviewAdd1Fragment : Fragment() {
 
     }
 
-    private fun dpToPixels(dp: Float): Float {
-        val metrics = resources.displayMetrics
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics)
-    }
 
 }

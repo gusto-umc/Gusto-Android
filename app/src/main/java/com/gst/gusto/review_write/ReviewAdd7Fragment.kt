@@ -3,6 +3,7 @@ package com.gst.clock.Fragment
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,10 @@ import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.createUpdateProgressRunnable
 import com.gst.gusto.Util.util.Companion.dpToPixels
 import com.gst.gusto.databinding.FragmentReviewAdd7Binding
+import com.gst.gusto.list.adapter.GroupItem
+import com.gst.gusto.list.adapter.ListGroupAdapter
+import com.gst.gusto.review_write.adapter.HowItem
+import com.gst.gusto.review_write.adapter.ReviewHowAdapter
 
 class ReviewAdd7Fragment : Fragment() {
 
@@ -38,8 +43,12 @@ class ReviewAdd7Fragment : Fragment() {
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.action_reviewAdd7Fragment_to_reviewAdd6Fragment,bundle)
         }
-
-
+        binding.btnBack2.setOnClickListener {
+            findNavController().navigate(R.id.action_reviewAdd7Fragment_to_reviewAdd6Fragment,bundle)
+        }
+        binding.btnEnd.setOnClickListener {
+            Log.d("contentList",binding.etContent.text.toString())
+        }
         return binding.root
 
     }
@@ -52,6 +61,9 @@ class ReviewAdd7Fragment : Fragment() {
         val updateProgressRunnable = createUpdateProgressRunnable(progressBar, progressPoint,handler)
         // 올릴 때 마다 부드럽게 움직이도록 시작
         handler.post(updateProgressRunnable)
+
+
+        binding
 
     }
 

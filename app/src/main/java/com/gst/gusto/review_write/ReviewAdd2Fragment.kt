@@ -32,15 +32,22 @@ class ReviewAdd2Fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentReviewAdd2Binding.inflate(inflater, container, false)
-
+        val bundle = Bundle().apply {
+            putInt("progress", progressPoint)
+        }
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd2Fragment_to_myFragment)
+            findNavController().navigate(R.id.action_reviewAdd2Fragment_to_reviewAdd1Fragment,bundle)
         }
         binding.btnNext.setOnClickListener {
-            val bundle = Bundle().apply {
-                putInt("progress", progressPoint)
+            val year = if(binding.etYear.text.toString()=="") binding.etYear.hint.toString().toInt() else binding.etYear.text.toString().toInt()
+            val month =  if(binding.etMonth.text.toString()=="") binding.etMonth.hint.toString().toInt() else binding.etMonth.text.toString().toInt()
+            val day =  if(binding.etDay.text.toString()=="") binding.etDay.hint.toString().toInt() else binding.etDay.text.toString().toInt()
+            if(year<2000 || month<1||month>12 || day<1 || day>31) {
+
+            } else {
+                Log.d("dayList","${year}-${month}-${day}")
+                findNavController().navigate(R.id.action_reviewAdd2Fragment_to_reviewAdd3Fragment,bundle)
             }
-            findNavController().navigate(R.id.action_reviewAdd2Fragment_to_reviewAdd3Fragment,bundle)
         }
 
 

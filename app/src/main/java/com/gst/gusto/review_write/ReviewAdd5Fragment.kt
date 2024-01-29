@@ -61,11 +61,22 @@ class ReviewAdd5Fragment : Fragment() {
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.action_reviewAdd5Fragment_to_reviewAdd4Fragment,bundle)
         }
+        chipGroup = binding.chipGroup
+
         binding.btnNext.setOnClickListener {
+            val checkedChipPositions = mutableListOf<Int>()
+
+            for (i in 0 until chipGroup.childCount) {
+                val chip = chipGroup.getChildAt(i) as Chip
+                if (chip.isChecked) {
+                    checkedChipPositions.add(i)
+                }
+            }
+            Log.d("chipList",checkedChipPositions.toString())
             findNavController().navigate(R.id.action_reviewAdd5Fragment_to_reviewAdd6Fragment,bundle)
         }
 
-        chipGroup = binding.chipGroup
+
 
         return binding.root
 
