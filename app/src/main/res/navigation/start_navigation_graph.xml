@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/start_nav_graph"
+    app:startDestination="@id/fragment_splash">
+    <fragment
+        android:id="@+id/fragment_splash"
+        android:name="com.gst.gusto.start.SplashFragment"
+        android:label="FragmentSplash"
+        tools:layout="@layout/start_fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/fragment_login" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_login"
+        android:name="com.gst.gusto.start.LoginFragment"
+        android:label="FragmentLogin"
+        tools:layout="@layout/start_fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_nameFragment"
+            app:destination="@id/fragment_name" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_name"
+        android:name="com.gst.gusto.start.NameFragment"
+        android:label="FragmentName"
+        tools:layout="@layout/start_fragment_name">
+        <action
+            android:id="@+id/action_nameFragment_to_ageFragment"
+            app:destination="@id/fragment_age" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_age"
+        android:name="com.gst.gusto.start.AgeFragment"
+        android:label="FragmentAge"
+        tools:layout="@layout/start_fragment_age">
+        <action
+            android:id="@+id/action_ageFragment_to_genderFragment"
+            app:destination="@id/fragment_gender" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_gender"
+        android:name="com.gst.gusto.start.GenderFragment"
+        android:label="FragmentGender"
+        tools:layout="@layout/start_fragment_gender">
+        <action
+            android:id="@+id/action_genderFragment_to_completeFragment"
+            app:destination="@id/fragment_complete" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_complete"
+        android:name="com.gst.gusto.start.CompleteFragment"
+        android:label="FragmentComplete"
+        tools:layout="@layout/start_fragment_complete">
+    </fragment>
+</navigation>

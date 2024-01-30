@@ -17,24 +17,27 @@ import com.gst.gusto.list.adapter.RouteItem
 class GroupRouteStoresFragment : Fragment() {
 
     lateinit var binding: FragmentListGroupMRouteStoresBinding
-
+    val itemList = ArrayList<RouteItem>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentListGroupMRouteStoresBinding.inflate(inflater, container, false)
 
+        val bundle = Bundle()
         binding.fabEdit.setOnClickListener {
             fun callActivityFunction(): NavController {
                 return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
             }
-            callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutEditFragment)
+            bundle.putSerializable("itemList",itemList)
+            callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutEditFragment,bundle)
         }
         binding.fabMap.setOnClickListener {
             fun callActivityFunction(): NavController {
                 return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
             }
-            //callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutMapFragment)
+            bundle.putSerializable("itemList",itemList)
+            callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutMapFragment,bundle)
         }
         return binding.root
     }
@@ -43,8 +46,6 @@ class GroupRouteStoresFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val rv_board = binding.rv
-
-        val itemList = ArrayList<RouteItem>()
 
         itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
         itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))

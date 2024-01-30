@@ -44,6 +44,18 @@ class GroupRouteMapFragment : Fragment() {
 
         val itemList = ArrayList<RouteMapDetailItem>()
 
+        val receivedBundle = arguments
+        if (receivedBundle != null) {
+            val tmpList = receivedBundle.getSerializable("itemList") as ArrayList<RouteItem>?
+            if (tmpList != null) {
+                for(data in tmpList) {
+                    //itemList.add(RouteMapDetailItem(data.name," ",""))
+                }
+            }
+        }
+
+
+
         itemList.add(RouteMapDetailItem("구스또 레스토랑","메롱시 메로나동 바밤바 24-6 1층", "매주 월요일 휴뮤, 08:~15:00","010-5338-8662",false))
         itemList.add(RouteMapDetailItem("구스또 레스토랑2","메롱시 메로나동 바밤바 24-6 1층", "매주 월요일 휴뮤, 08:~15:00","010-5338-8662",false))
         itemList.add(RouteMapDetailItem("구스또 레스토랑3","메롱시 메로나동 바밤바 24-6 1층", "매주 월요일 휴뮤, 08:~15:00","010-5338-8662",false))
@@ -56,7 +68,7 @@ class GroupRouteMapFragment : Fragment() {
         val adapter = RouteViewPagerAdapter(itemList)
         viewPager.adapter = adapter
 
-        //viewPager.offscreenPageLimit = 3
+        viewPager.offscreenPageLimit = 1
         viewPager.clipToPadding = false
         viewPager.clipChildren = false
         viewPager.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER)

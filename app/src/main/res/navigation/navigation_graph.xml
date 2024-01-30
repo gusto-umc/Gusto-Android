@@ -57,6 +57,9 @@
         <action
             android:id="@+id/action_groupFragment_to_groupMRoutEditFragment"
             app:destination="@id/fragment_group_m_route_edit" />
+        <action
+            android:id="@+id/action_groupFragment_to_groupMRoutMapFragment"
+            app:destination="@id/fragment_group_m_route_map" />
     </fragment>
     <fragment
         android:id="@+id/fragment_group_m_route_stores"
@@ -75,13 +78,23 @@
     </fragment>
     <fragment
         android:id="@+id/fragment_group_m_route_edit"
+        android:name="com.gst.gusto.list.fragment.GroupRouteEditFragment"
+        android:label="FragmentGroupMRouteEdit"
+        tools:layout="@layout/fragment_list_group_m_route_edit">
+        <action
+            android:id="@+id/action_groupMRoutEditFragment_to_groupFragment"
+            app:destination="@id/fragment_group" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_group_m_route_map"
         android:name="com.gst.gusto.list.fragment.GroupRouteMapFragment"
         android:label="FragmentGroupMRouteMap"
-        tools:layout="@layout/fragment_list_group_m_route_edit">
+        tools:layout="@layout/fragment_list_group_m_route_map">
         <action
             android:id="@+id/action_groupMRoutMapFragment_to_groupFragment"
             app:destination="@id/fragment_group" />
     </fragment>
+
 
     <!-- Review 화면의 프래그먼트들 -->
     <fragment

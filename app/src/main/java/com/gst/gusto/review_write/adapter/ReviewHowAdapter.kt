@@ -38,15 +38,15 @@ class ReviewHowAdapter(val gradeList : MutableList<Int>, val option : Int):
             holder.tv_grade4,
             holder.tv_grade5
         )
-
-        for(i in 0..4) {
-            gradeViews[i].setOnClickListener {
-                // Set color for tv_grade1
-                setGradeColors(gradeViews, i, R.color.main_C)
-                gradeList[currentItem.option] = i+1
+        if(option!=1) {
+            for(i in 0..4) {
+                gradeViews[i].setOnClickListener {
+                    // Set color for tv_grade1
+                    setGradeColors(gradeViews, i, R.color.main_C)
+                    gradeList[currentItem.option] = i+1
+                }
             }
         }
-
     }
 
     override fun getItemCount(): Int {

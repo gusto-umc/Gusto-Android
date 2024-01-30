@@ -72,7 +72,7 @@ class FeedDetailReviewFragment : Fragment() {
         val adapter = ImageViewPagerAdapter(imageList)
         viewPager.adapter = adapter
 
-        viewPager.offscreenPageLimit = 3
+        viewPager.offscreenPageLimit = 2
         viewPager.clipToPadding = false
         viewPager.clipChildren = false
         viewPager.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER)

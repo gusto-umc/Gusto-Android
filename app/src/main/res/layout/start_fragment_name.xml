@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
+        android:fontFamily="@font/pretendard_semibold"
+        android:gravity="center"
+        android:text="앱 내에서 사용하실 \n닉네임을 설정해 주세요."
+        android:textColor="@color/black"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/et_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="16sp"
+        android:textColor="@color/gray_1"
+        android:fontFamily="@font/pretendard_bold"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="249dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/background_radius_10_stroke_1"
+        android:backgroundTint="@color/gray_3"
+        android:ems="10"
+        android:hint="용맹한 파스타 21"
+        android:inputType="text"
+        android:maxLength="13"
+        android:paddingLeft="15dp"
+        android:textColorHint="@color/gray_3" />
+
+    <TextView
+        android:id="@+id/tv_num"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="307dp"
+        android:layout_marginRight="20dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:gravity="right"
+        android:text="(0/13)"
+        android:textColor="@color/gray_navi"
+        android:textSize="11sp" />
+
+
+    <TextView
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="93.5dp"
+        android:background="@drawable/background_radius_15"
+        android:backgroundTint="@color/main_C"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center"
+        android:text="완료하기"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

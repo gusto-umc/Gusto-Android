@@ -59,7 +59,7 @@
                     android:id="@+id/textView3"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
                     android:fontFamily="@font/pretendard_semibold"
                     android:textColor="@color/white"
                     android:gravity="center_vertical"
@@ -69,7 +69,7 @@
                     android:id="@+id/textView4"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:fontFamily="@font/pretendard_bold"
                     android:textColor="@color/white"
                     android:ellipsize="end"
@@ -82,7 +82,7 @@
                     android:id="@+id/textView6"
                     android:layout_width="match_parent"
                     android:layout_height="15dp"
-                    android:textSize="8sp"
+                    android:textSize="10sp"
                     android:fontFamily="@font/pretendard_regular"
                     android:textColor="@color/white"
                     android:gravity="center_vertical"
@@ -134,11 +134,11 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="59dp"
-            android:paddingRight="33dp">
+            android:layout_height="59dp">
 
             <TextView
                 android:layout_marginLeft="41dp"
+                android:layout_marginRight="40dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:background="@drawable/gradient_background_orange"
@@ -147,14 +147,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:gravity="center"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:textColor="#5B2424"
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="우리 21일날 구스또레스토랑 가는거임 불참 불가!!" />
 
             <LinearLayout
                 android:layout_marginTop="8dp"
-                android:layout_marginLeft="59dp"
+                android:layout_marginLeft="41dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="58dp"
@@ -178,7 +178,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/sub_m"
-                    android:textSize="8sp"
+                    android:textSize="10sp"
                     android:fontFamily="@font/pretendard_bold"
                     android:text="공지사항" />
             </LinearLayout>

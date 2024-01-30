@@ -6,7 +6,9 @@ import android.os.Handler
 import android.os.ext.SdkExtensions
 import android.util.DisplayMetrics
 import android.util.TypedValue
+import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -95,17 +97,21 @@ class util {
                 false
             }
         }
-/*
-        *//**
-         * 작업자 : 버루
-         * 이 메서드는 바텀시트를 불러오는 함수이다
-         * @param 어떤 xml 파일을 불러올지 option을 주면 된다
-         * @return null
-         *//*
-        fun Fragment.showModalBottomSheet(option : Int) {
-            val modal = BottomSheet(option)
-            modal.show(requireFragmentManager(), BottomSheet.TAG)
-        }*/
 
+        /**
+         * 작업자 : 버루(But 인터넷에 있는 코드)
+         * 이 메서드는 LinearLayout을 View.GONE 상태에서 View.VISIBLE 상태로 바뀔 때 애니메이션을 추가 해 준다
+         * @param isExpanded 펼칠 떄 true, 닫을 때 false
+         * @param layoutExpand 해당 LinearLayout
+         * @return true or false
+         */
+        fun toggleLayout(isExpanded: Boolean, layoutExpand: LinearLayout): Boolean {
+            if (isExpanded &&layoutExpand.visibility == View.GONE) {
+                ToggleAnimation.expand(layoutExpand)
+            } else if(!isExpanded &&layoutExpand.visibility == View.VISIBLE){
+                ToggleAnimation.collapse(layoutExpand)
+            }
+            return isExpanded
+        }
     }
 }
