@@ -2,6 +2,7 @@ package com.gst.gusto.ListView.adapter
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.Model.CategorySimple
 import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.R
-import com.gst.gusto.databinding.ItemListviewCategoryShowBinding
+import com.gst.gusto.databinding.ItemListviewCategoryEditBinding
 
-class ListViewCategoryAdapter(private var flag : String) : ListAdapter<CategorySimple, ListViewCategoryAdapter.ViewHolder>(
+class ListViewEditCategoryAdapter (private var flag : String) : ListAdapter<CategorySimple, ListViewEditCategoryAdapter.ViewHolder>(
     DiffCallback) {
 
 
@@ -35,22 +36,22 @@ class ListViewCategoryAdapter(private var flag : String) : ListAdapter<CategoryS
     }
 
 
-    inner class ViewHolder(private val binding : ItemListviewCategoryShowBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(private val binding : ItemListviewCategoryEditBinding) : RecyclerView.ViewHolder(binding.root){
         var data : CategorySimple? = null
 
         fun bind(simple: CategorySimple){
             data = simple
-            binding.ivItemCategoryShow.setImageResource(R.drawable.category_icon_1)
-            binding.tvItemCategoryShowTitle.text = simple.categoryName
-            binding.tvCategoryShowCount.text = "${simple.storeCount}개"
+            binding.ivItemCategoryEdit.setImageResource(R.drawable.category_icon_1)
+            binding.tvItemCategoryEditTitle.text = simple.categoryName
+            binding.tvItemCategoryEditCount.text = "${simple.storeCount}개"
         }
-        val updownLayout = binding.layoutItemCategoryShowUpdown
+        val updownLayout = binding.layoutItemCategoryEditUpdown
         val storeRv = binding.rvItemCategoryShowStore
-        val ivUpDown = binding.btnItemCategoryShowDown
+        val ivUpDown = binding.btnItemCategoryEditDown
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val viewHolder = ViewHolder(ItemListviewCategoryShowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        val viewHolder = ViewHolder(ItemListviewCategoryEditBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         return viewHolder
     }
 
@@ -78,7 +79,7 @@ class ListViewCategoryAdapter(private var flag : String) : ListAdapter<CategoryS
                         Store(id = 0, storeName = "구스토 레스토랑", location = "메롱시 메로나동 바밤바 24-6 3층", visitCount = 3, storePhoto = 1, serverCategory = null, isSaved = null),
                         Store(id = 1, storeName = "Gusto Restaurant", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = 7, storePhoto = 1, serverCategory = null, isSaved = null)
                     )
-                    val mStoreAdapter = ListViewStoreAdapter(flag)
+                    val mStoreAdapter = ListViewStoreAdapter("edit")
                     mStoreAdapter.submitList(sampleStoreData!!)
                     holder.storeRv.adapter = mStoreAdapter
                     holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
@@ -90,13 +91,11 @@ class ListViewCategoryAdapter(private var flag : String) : ListAdapter<CategoryS
         }
 
         if(holder.data?.storeCount!! <= 0) {
+            Log.d("0개", "체")
             holder.ivUpDown.imageTintList = ColorStateList.valueOf(Color.parseColor("#ECECEC"))
         }
 
-        holder.updownLayout.setOnLongClickListener {
-            //val categoryBottomSheetDialog :
-            true
-        }
+
 
 
     }

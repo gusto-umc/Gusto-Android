@@ -156,15 +156,17 @@
                         android:layout_marginStart="15.5dp"
                         android:layout_marginEnd="15.5dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="20dp"
                         />
                     <androidx.recyclerview.widget.RecyclerView
                         android:visibility="gone"
                         android:id="@+id/rv_map_listview_category_edit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="23dp"
                         android:layout_marginEnd="15dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginBottom="100dp"
                         />
 
 
@@ -179,13 +181,26 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 >
+
+
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fab_map_listview_add"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_marginEnd="28.18dp"
-                    android:layout_marginVertical="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="40dp"
+                    android:background="@color/sub_m"
+                    android:backgroundTint="@color/sub_m"
+                    app:fabCustomSize="60dp"
+                    android:src="@drawable/plus_img"
+                    android:elevation="4dp"
+                    app:maxImageSize="24dp"
+                    app:tint="@color/white"
+                    app:shapeAppearance="@style/Widget.MaterialComponents.FloatingActionButton"
+                    app:fabSize="normal"
+                    app:borderWidth="0dp"
                     />
+
             </LinearLayout>
 
             <LinearLayout

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.CategorySimple
 import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.ListView.adapter.ListViewCategoryAdapter
+import com.gst.gusto.ListView.adapter.ListViewEditCategoryAdapter
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentMapListviewBinding
 
@@ -25,12 +26,11 @@ class MapListViewFragment : Fragment() {
     private var orderFlag = 0
     // 0 : 최신순, 1 : 오래된 순, 2 : ㄱ 부터, 3: ㅎ부터, 4 : 방문횟수 높은 순, 5 : 방문회수 낮은 순
     private var sampleCategoryData = arrayListOf<CategorySimple>(
-        CategorySimple(0, "카페", 0, 3),
-        CategorySimple(1, "한식", 0, 0)
-    )
-    private var sampleStoreDataShow = arrayListOf<Store>(
-        Store(id = 0, storeName = "구스토 레스토랑", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = 3, storePhoto = 1, serverCategory = null, isSaved = null),
-        Store(id = 1, storeName = "Gusto Restaurant", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = 7, storePhoto = 1, serverCategory = null, isSaved = null)
+        CategorySimple(0, "카페", 0, 2),
+        CategorySimple(1, "한식", 0, 0),
+        CategorySimple(2, "일식", 0, 2),
+                CategorySimple(3, "양식", 0, 2)
+
     )
 
     private var sampleStoreDataSave = arrayListOf<Store>(
@@ -61,7 +61,7 @@ class MapListViewFragment : Fragment() {
          * 카테고리Show 연결
          * 아이템 클릭 리스너
          */
-        val cateShowAdapter = ListViewCategoryAdapter()
+        val cateShowAdapter = ListViewCategoryAdapter("show")
         cateShowAdapter.submitList(sampleCategoryData)
         categoryRvShow.adapter = cateShowAdapter
         categoryRvShow.layoutManager = LinearLayoutManager(this.requireActivity())
@@ -71,7 +71,7 @@ class MapListViewFragment : Fragment() {
          * 카테고리Edit 연결
          * 체크박스 리스너 처리
          */
-        val cateEditAdapter = ListViewCategoryAdapter()
+        val cateEditAdapter = ListViewEditCategoryAdapter("edit")
         cateEditAdapter.submitList(sampleCategoryData)
         categoryRvEdit.adapter = cateEditAdapter
         categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())
@@ -103,7 +103,6 @@ class MapListViewFragment : Fragment() {
          * 정렬 순서 클릭 리스너
          */
         binding.layoutListviewOrder.setOnClickListener {
-            Toast.makeText(this.requireContext(), "정렬순서 클릭", Toast.LENGTH_SHORT).show()
             // 0 : 최신순, 1 : 오래된 순, 2 : ㄱ 부터, 3: ㅎ 부터, 4 : 방문횟수 높은 순, 5 : 방문회수 낮은 순
             changeOrderFlag()
         }
