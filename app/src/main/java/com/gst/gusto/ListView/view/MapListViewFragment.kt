@@ -13,8 +13,10 @@ import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gst.gusto.ListView.Model.CategoryDetail
 import com.gst.gusto.ListView.Model.CategorySimple
 import com.gst.gusto.ListView.Model.Store
+import com.gst.gusto.ListView.adapter.CategoryBottomSheetDialog
 import com.gst.gusto.ListView.adapter.ListViewCategoryAdapter
 import com.gst.gusto.ListView.adapter.ListViewEditCategoryAdapter
 import com.gst.gusto.R
@@ -61,7 +63,7 @@ class MapListViewFragment : Fragment() {
          * 카테고리Show 연결
          * 아이템 클릭 리스너
          */
-        val cateShowAdapter = ListViewCategoryAdapter("show")
+        val cateShowAdapter = ListViewCategoryAdapter("show", requireFragmentManager())
         cateShowAdapter.submitList(sampleCategoryData)
         categoryRvShow.adapter = cateShowAdapter
         categoryRvShow.layoutManager = LinearLayoutManager(this.requireActivity())
@@ -118,7 +120,16 @@ class MapListViewFragment : Fragment() {
          * 추가fab 클릭 리스너
          */
         binding.fabMapListviewAdd.setOnClickListener {
-            Toast.makeText(this.requireContext(), "카테고리 추가 클릭", Toast.LENGTH_SHORT).show()
+            val categoryAddBottomSheetDialog = CategoryBottomSheetDialog(){
+                when(it){
+                    0 -> {
+                        Log.d("bottomsheet", "저장 click")
+                    }
+                }
+            }
+            categoryAddBottomSheetDialog.isAdd = true
+            categoryAddBottomSheetDialog.categoryEdiBottomSheetData = null
+            categoryAddBottomSheetDialog.show(requireFragmentManager(), categoryAddBottomSheetDialog.tag)
         }
 
         /**

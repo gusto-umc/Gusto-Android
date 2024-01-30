@@ -2,22 +2,25 @@ package com.gst.gusto.ListView.adapter
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.ListView.Model.CategoryDetail
 import com.gst.gusto.ListView.Model.CategorySimple
 import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.R
 import com.gst.gusto.databinding.ItemListviewCategoryShowBinding
 
-class ListViewCategoryAdapter(private var flag : String) : ListAdapter<CategorySimple, ListViewCategoryAdapter.ViewHolder>(
+class ListViewCategoryAdapter(private var flag : String, private val fragmentManager : FragmentManager) : ListAdapter<CategorySimple, ListViewCategoryAdapter.ViewHolder>(
     DiffCallback) {
 
-
+    private val mFragmentManager = fragmentManager
 
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<CategorySimple>(){
@@ -94,7 +97,16 @@ class ListViewCategoryAdapter(private var flag : String) : ListAdapter<CategoryS
         }
 
         holder.updownLayout.setOnLongClickListener {
-            //val categoryBottomSheetDialog :
+            val categoryBottomSheetDialog = CategoryBottomSheetDialog(){
+                when(it){
+                    0 -> {
+                        Log.d("bottomsheet", "저장 click")
+                    }
+                }
+            }
+            categoryBottomSheetDialog.isAdd = false
+            categoryBottomSheetDialog.categoryEdiBottomSheetData = CategoryDetail(id = holder.data!!.id, categoryName = holder.data!!.categoryName, categoryDesc = "냠냠", categoryIcon = 1, isPublic = true )
+            categoryBottomSheetDialog.show(mFragmentManager, categoryBottomSheetDialog.tag)
             true
         }
 
