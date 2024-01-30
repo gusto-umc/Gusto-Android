@@ -1,5 +1,8 @@
 package com.gst.gusto.ListView.view
 
+import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,9 +10,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.CategorySimple
+import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.ListView.adapter.ListViewCategoryAdapter
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentMapListviewBinding
@@ -17,9 +22,20 @@ import com.gst.gusto.databinding.FragmentMapListviewBinding
 class MapListViewFragment : Fragment() {
 
     private lateinit var binding : FragmentMapListviewBinding
+    private var orderFlag = 0
+    // 0 : 최신순, 1 : 오래된 순, 2 : ㄱ 부터, 3: ㅎ부터, 4 : 방문횟수 높은 순, 5 : 방문회수 낮은 순
     private var sampleCategoryData = arrayListOf<CategorySimple>(
         CategorySimple(0, "카페", 0, 3),
         CategorySimple(1, "한식", 0, 0)
+    )
+    private var sampleStoreDataShow = arrayListOf<Store>(
+        Store(id = 0, storeName = "구스토 레스토랑", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = 3, storePhoto = 1, serverCategory = null, isSaved = null),
+        Store(id = 1, storeName = "Gusto Restaurant", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = 7, storePhoto = 1, serverCategory = null, isSaved = null)
+    )
+
+    private var sampleStoreDataSave = arrayListOf<Store>(
+        Store(id = 0, storeName = "구스토 레스토랑", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = null, storePhoto = 1, serverCategory ="양식", isSaved = false),
+        Store(id = 1, storeName = "Gusto Restaurant", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = null, storePhoto = 1, serverCategory = "양식", isSaved = true)
     )
 
 
@@ -35,6 +51,7 @@ class MapListViewFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val categoryRvShow = binding.rvMapListviewCategoryShow
@@ -54,12 +71,24 @@ class MapListViewFragment : Fragment() {
          * 카테고리Edit 연결
          * 체크박스 리스너 처리
          */
+        val cateEditAdapter = ListViewCategoryAdapter()
+        cateEditAdapter.submitList(sampleCategoryData)
+        categoryRvEdit.adapter = cateEditAdapter
+        categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())
 
         /**
          * 뒤로가기 버튼, 시스템 뒤로가기 클릭리스너
          */
         binding.ivMapListviewBack.setOnClickListener {
             Toast.makeText(this.requireContext(), "뒤로가기 클릭", Toast.LENGTH_SHORT).show()
+
+        }
+
+        /**
+         * 편집 뒤로가기 클릭 리스
+         */
+        binding.ivMapListviewEditBack.setOnClickListener {
+            goShow()
         }
 
         /**
@@ -67,6 +96,7 @@ class MapListViewFragment : Fragment() {
          */
         binding.tvMapListviewEdit.setOnClickListener {
             Toast.makeText(this.requireContext(), "편집 클릭", Toast.LENGTH_SHORT).show()
+            goEdit()
         }
 
         /**
@@ -74,11 +104,16 @@ class MapListViewFragment : Fragment() {
          */
         binding.layoutListviewOrder.setOnClickListener {
             Toast.makeText(this.requireContext(), "정렬순서 클릭", Toast.LENGTH_SHORT).show()
+            // 0 : 최신순, 1 : 오래된 순, 2 : ㄱ 부터, 3: ㅎ 부터, 4 : 방문횟수 높은 순, 5 : 방문회수 낮은 순
+            changeOrderFlag()
         }
 
         /**
          * 전체선택 클릭 리스너
          */
+        binding.cbMapListviewAll.setOnCheckedChangeListener { buttonView, isChecked ->
+
+        }
 
         /**
          * 추가fab 클릭 리스너
@@ -90,7 +125,79 @@ class MapListViewFragment : Fragment() {
         /**
          * 삭제fab 클릭 리스너
          */
+        binding.fabMapListviewDelete.setOnClickListener {
+            Toast.makeText(this.requireContext(), "선택 삭제 클릭", Toast.LENGTH_SHORT).show()
 
+            //삭제 동작
+            //어댑터에 알리기
+            cateShowAdapter.notifyDataSetChanged()
+            categoryRvShow.adapter = cateShowAdapter
+            cateEditAdapter.notifyDataSetChanged()
+            categoryRvEdit.adapter = cateEditAdapter
+            goShow()
+        }
+
+
+
+    }
+    fun goShow(){
+        binding.layoutListviewOrder.visibility = View.VISIBLE
+        binding.layoutListviewSelect.visibility = View.GONE
+        binding.cbMapListviewAll.isChecked = false
+        binding.rvMapListviewCategoryShow.visibility = View.VISIBLE
+        binding.rvMapListviewCategoryEdit.visibility = View.GONE
+        binding.layoutMapListviewDelete.visibility = View.GONE
+        binding.tvMapListviewEdit.visibility = View.VISIBLE
+        binding.fabMapListviewAdd.visibility = View.VISIBLE
+        binding.ivMapListviewEditBack.visibility = View.GONE
+        binding.ivMapListviewBack.visibility = View.VISIBLE
+        binding.layoutMapListview.setBackgroundResource(R.drawable.background_review_add)
+    }
+    fun goEdit(){
+        binding.layoutListviewOrder.visibility = View.GONE
+        binding.layoutListviewSelect.visibility = View.VISIBLE
+        binding.rvMapListviewCategoryShow.visibility = View.GONE
+        binding.rvMapListviewCategoryEdit.visibility = View.VISIBLE
+        binding.layoutMapListviewDelete.visibility = View.VISIBLE
+        binding.tvMapListviewEdit.visibility = View.GONE
+        binding.fabMapListviewAdd.visibility = View.GONE
+        binding.layoutMapListview.setBackgroundResource(R.color.white)
+        binding.ivMapListviewBack.visibility = View.GONE
+        binding.ivMapListviewEditBack.visibility = View.VISIBLE
+    }
+    fun changeOrderFlag(){
+        when(orderFlag){
+            0 -> {
+                //리스트 정렬 변경(viewmodel)
+                binding.tvListviewOrder.text = "오래된순"
+                orderFlag = 1
+            }
+            1 -> {
+                //리스트 정렬 변경(viewmodel)
+                binding.tvListviewOrder.text = "ㄱ 부터"
+                orderFlag = 2
+            }
+            2 -> {
+                //리스트 정렬 변경(viewmodel)
+                binding.tvListviewOrder.text = "ㅎ 부터"
+                orderFlag = 3
+            }
+            3 -> {
+                //리스트 정렬 변경(viewmodel)
+                binding.tvListviewOrder.text = "방문횟수 ↑"
+                orderFlag = 4
+            }
+            4 -> {
+                //리스트 정렬 변경(viewmodel)
+                binding.tvListviewOrder.text = "방문횟수 ↓"
+                orderFlag = 5
+            }
+            else -> {
+                //리스트 정렬 변경(viewmodel)
+                binding.tvListviewOrder.text = "최신순"
+                orderFlag = 0
+            }
+        }
     }
 
 }
