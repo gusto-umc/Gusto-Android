@@ -22,6 +22,7 @@ class RouteAdapter(val itemList: ArrayList<RouteItem>):
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         holder.tv_rest_name.text = itemList[position].name
         holder.tv_rest_location.text = itemList[position].loc
+        holder.tv_route_order.text = (position+1).toString()
         if(position==0) holder.iv_line_up.visibility = View.INVISIBLE
         if(position+1>=itemList.count()) holder.iv_line_down.visibility = View.INVISIBLE
 
@@ -36,6 +37,7 @@ class RouteAdapter(val itemList: ArrayList<RouteItem>):
         val tv_rest_location = itemView.findViewById<TextView>(R.id.tv_rest_loc)
         val iv_line_up = itemView.findViewById<ImageView>(R.id.iv_line_up)
         val iv_line_down = itemView.findViewById<ImageView>(R.id.iv_line_down)
+        val tv_route_order = itemView.findViewById<TextView>(R.id.tv_route_order)
     }
 
 }

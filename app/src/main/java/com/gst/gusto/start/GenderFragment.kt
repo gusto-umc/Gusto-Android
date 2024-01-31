@@ -25,6 +25,9 @@ class GenderFragment : Fragment() {
         binding.btnNext.setOnClickListener {
             findNavController().navigate(R.id.action_genderFragment_to_completeFragment)
         }
+        binding.btnBack.setOnClickListener {
+            findNavController().navigate(R.id.action_genderFragment_to_ageFragment)
+        }
 
         return binding.root
 

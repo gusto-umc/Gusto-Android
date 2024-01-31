@@ -5,6 +5,17 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
+    
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="5dp"
+        android:paddingVertical="13dp"
+        android:src="@drawable/arrow_left_1"
+        app:tint="@color/black" />
 
     <TextView
         app:layout_constraintTop_toTopOf="parent"
@@ -70,7 +81,7 @@
         android:backgroundTint="@color/main_C"
         android:fontFamily="@font/pretendard_bold"
         android:gravity="center"
-        android:text="완료하기"
+        android:text="다음으로 넘어가기"
         android:textColor="@color/white"
         android:textSize="16sp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

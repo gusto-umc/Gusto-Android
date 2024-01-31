@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_nameFragment_to_ageFragment"
             app:destination="@id/fragment_age" />
+        <action
+            android:id="@+id/action_nameFragment_to_loginFragment"
+            app:destination="@id/fragment_login" />
     </fragment>
     <fragment
         android:id="@+id/fragment_age"
@@ -39,6 +42,9 @@
         <action
             android:id="@+id/action_ageFragment_to_genderFragment"
             app:destination="@id/fragment_gender" />
+        <action
+            android:id="@+id/action_ageFragment_to_nameFragment"
+            app:destination="@id/fragment_name" />
     </fragment>
     <fragment
         android:id="@+id/fragment_gender"
@@ -48,11 +54,17 @@
         <action
             android:id="@+id/action_genderFragment_to_completeFragment"
             app:destination="@id/fragment_complete" />
+        <action
+            android:id="@+id/action_genderFragment_to_ageFragment"
+            app:destination="@id/fragment_age" />
     </fragment>
     <fragment
         android:id="@+id/fragment_complete"
         android:name="com.gst.gusto.start.CompleteFragment"
         android:label="FragmentComplete"
         tools:layout="@layout/start_fragment_complete">
+        <action
+            android:id="@+id/action_completeFragment_to_genderFragment"
+            app:destination="@id/fragment_gender" />
     </fragment>
 </navigation>
