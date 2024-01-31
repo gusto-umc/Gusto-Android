@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/iv_item_store_detail"
+        android:id="@+id/iv_item_store_detail_photo"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:clipToOutline="true"

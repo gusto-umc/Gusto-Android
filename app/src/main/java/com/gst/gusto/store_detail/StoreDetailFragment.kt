@@ -22,6 +22,10 @@ class StoreDetailFragment : Fragment() {
         StoreDetailReview(reviewId = 0, visitedAt = "2024.01.03", nickname = "귀여운 바질페스토 12", liked = 1, comment = "goooooood", hashTageName = arrayListOf("맛있음", "분위기")),
         StoreDetailReview(reviewId = 1, visitedAt = "2024.01.02", nickname = "매콤한 통닭", liked = 3, comment = "맛있어요", hashTageName = arrayListOf("맛있음", "넓음"))
     )
+    private var samplePhotoDataArray = arrayListOf<Int>(
+        R.drawable.sample_store_img,
+
+    )
     private var sampleData = StoreDetail(0, "Gusto Restaurant", "양식", "메롱시 메로나동 바밤자 24-6 1츨", 1, 1, reviews = sampleReviewDataArray, reviewImg = arrayListOf(1, 2, 3))
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +56,7 @@ class StoreDetailFragment : Fragment() {
             binding.ivStoreDetailSave.imageTintList = ColorStateList.valueOf(Color.parseColor("#F27781"))
         }
         //리뷰사진 리사이클러뷰 연결
+
         //리뷰 리사이클러뷰 연결
 
 
