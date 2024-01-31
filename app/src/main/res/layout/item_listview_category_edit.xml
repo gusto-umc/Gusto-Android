@@ -26,7 +26,8 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/background_stroke_1"
+                    android:background="@drawable/checkbox_custom"
+                    android:button="@null"
                     />
                 <ImageView
                     android:id="@+id/iv_item_category_edit"
