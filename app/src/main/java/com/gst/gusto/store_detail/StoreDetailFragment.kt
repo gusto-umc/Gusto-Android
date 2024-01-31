@@ -9,11 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.StoreDetail
 import com.gst.gusto.ListView.Model.StoreDetailReview
 import com.gst.gusto.ListView.adapter.CategoryChooseBottomSheetDialog
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentStoreDetailBinding
+import com.gst.gusto.store_detail.adapter.StoreDetailPhotoAdapter
 
 class StoreDetailFragment : Fragment() {
 
@@ -24,9 +26,11 @@ class StoreDetailFragment : Fragment() {
     )
     private var samplePhotoDataArray = arrayListOf<Int>(
         R.drawable.sample_store_img,
-
+        R.drawable.sample_store_2_img,
+        R.drawable.sample_store_3_img,
+        R.drawable.sample_store_4_img
     )
-    private var sampleData = StoreDetail(0, "Gusto Restaurant", "양식", "메롱시 메로나동 바밤자 24-6 1츨", 1, 1, reviews = sampleReviewDataArray, reviewImg = arrayListOf(1, 2, 3))
+    private var sampleData = StoreDetail(0, "Gusto Restaurant", "양식", "메롱시 메로나동 바밤자 24-6 1층", 1, 1, reviews = sampleReviewDataArray, reviewImg = arrayListOf(1, 2, 3))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +52,7 @@ class StoreDetailFragment : Fragment() {
         /**
          * 데이터 적용
          */
-        binding.ivStoreDetailBanner.setImageResource(R.drawable.sample_store_img)
+        binding.ivStoreDetailBanner.setImageResource(R.drawable.sample_store_3_img)
         binding.tvStoreDetailCategory.text = sampleData.categoryName
         binding.tvStoreDetailName.text = sampleData.storeName
         binding.tvStoreDetailAddress.text = sampleData.address
@@ -56,7 +60,8 @@ class StoreDetailFragment : Fragment() {
             binding.ivStoreDetailSave.imageTintList = ColorStateList.valueOf(Color.parseColor("#F27781"))
         }
         //리뷰사진 리사이클러뷰 연결
-
+        val mStorePhotoAdapter = StoreDetailPhotoAdapter(samplePhotoDataArray)
+        binding.rvStoreDetailPhoto.adapter = mStorePhotoAdapter
         //리뷰 리사이클러뷰 연결
 
 
