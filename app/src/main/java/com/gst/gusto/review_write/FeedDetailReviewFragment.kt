@@ -72,7 +72,7 @@ class FeedDetailReviewFragment : Fragment() {
         val adapter = ImageViewPagerAdapter(imageList)
         viewPager.adapter = adapter
 
-        viewPager.offscreenPageLimit = 3
+        viewPager.offscreenPageLimit = 2
         viewPager.clipToPadding = false
         viewPager.clipChildren = false
         viewPager.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER)
@@ -130,7 +130,7 @@ class FeedDetailReviewFragment : Fragment() {
                 binding.ivHeart.setColorFilter(null)
                 it.startAnimation(scaleDownAnimation)
             } else {
-                val color = ContextCompat.getColor(requireContext(), android.R.color.holo_red_light)
+                val color = ContextCompat.getColor(requireContext(), R.color.main_C)
                 binding.ivHeart.setColorFilter(color)
                 it.startAnimation(scaleUpAnimation)
             }

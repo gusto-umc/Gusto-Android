@@ -6,8 +6,11 @@ import android.os.Handler
 import android.os.ext.SdkExtensions
 import android.util.DisplayMetrics
 import android.util.TypedValue
+import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.gst.gusto.R
 
@@ -95,6 +98,20 @@ class util {
             }
         }
 
-
+        /**
+         * 작업자 : 버루(But 인터넷에 있는 코드)
+         * 이 메서드는 LinearLayout을 View.GONE 상태에서 View.VISIBLE 상태로 바뀔 때 애니메이션을 추가 해 준다
+         * @param isExpanded 펼칠 떄 true, 닫을 때 false
+         * @param layoutExpand 해당 LinearLayout
+         * @return true or false
+         */
+        fun toggleLayout(isExpanded: Boolean, layoutExpand: LinearLayout): Boolean {
+            if (isExpanded &&layoutExpand.visibility == View.GONE) {
+                ToggleAnimation.expand(layoutExpand)
+            } else if(!isExpanded &&layoutExpand.visibility == View.VISIBLE){
+                ToggleAnimation.collapse(layoutExpand)
+            }
+            return isExpanded
+        }
     }
 }
