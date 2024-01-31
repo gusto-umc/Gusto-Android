@@ -214,4 +214,8 @@
         android:id="@+id/mapListViewFragment"
         android:name="com.gst.gusto.ListView.view.MapListViewFragment"
         android:label="MapListViewFragment" />
+    <fragment
+        android:id="@+id/storeDetailFragment"
+        android:name="com.gst.gusto.store_detail.StoreDetailFragment"
+        android:label="StoreDetailFragment" />
 </navigation>
