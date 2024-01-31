@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="135dp">
+
+    <!--<View
+        android:id="@+id/view2"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="32dp"
+        android:background="#F27781" />-->
+
+    <ImageView
+        android:id="@+id/view"
+        android:layout_width="wrap_content"
+        android:layout_height="143dp"
+        android:layout_marginLeft="32dp"
+        android:src="@drawable/list_review_item" />
+
+    <LinearLayout
+        android:layout_width="260dp"
+        android:layout_height="104dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/background_radius_5"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:layout_marginTop="1dp">
+
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/pretendard_medium"
+                android:text="12/03"
+                android:textColor="#F27781"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/nameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/pretendard_semibold"
+                android:text="구스또 레스토랑"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/visitTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="3번 방문"
+                android:textColor="#FEB520"
+                android:textSize="8sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageView1"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/background_radius_5_stroke_2"
+                android:clipToOutline="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/review_gallery_test" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageView2"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/background_radius_5_stroke_2"
+                android:clipToOutline="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/review_gallery_test2" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageView3"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/background_radius_5_stroke_2"
+                android:clipToOutline="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/review_gallery_test" />
+
+            <ImageView
+                android:id="@+id/list_review_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:padding="1dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/list_review_button" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
