@@ -81,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="15dp"
                     android:textSize="8sp"
-                    android:fontFamily="@font/pretendard_medium"
+                    android:fontFamily="@font/pretendard_regular"
                     android:textColor="@color/white"
                     android:gravity="center_vertical"
                     android:text="발랄한 에그인헬 님 외 3명" />

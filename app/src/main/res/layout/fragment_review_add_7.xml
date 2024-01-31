@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_review_add"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="10dp"
+            android:padding="12dp"
+            android:src="@drawable/arrow_left_1"
+            app:tint="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="리뷰 작성"
+            android:textColor="@color/black" 
+            android:textSize="16sp"
+            android:fontFamily="@font/pretendard_bold"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ProgressBar
+            android:id="@+id/pBar"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="91dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_marginHorizontal="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:max="600"
+            android:progressDrawable="@drawable/progressbar"
+            android:progress="200" />
+
+        <LinearLayout
+            android:layout_marginHorizontal="23dp"
+            android:layout_marginBottom="120dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_radius_20"
+            android:elevation="2dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_upload1"
+                android:layout_width="120dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:layout_marginTop="36dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/pretendard_bold"
+
+                android:layout_marginBottom="40dp"
+                android:textSize="16sp"
+                android:text="더 기억하고 싶은 내용이 있나요?" />
+
+            <EditText
+                android:id="@+id/et_content"
+                android:layout_marginHorizontal="27dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="top"
+                android:background="@drawable/background_radius_10_stroke_1"
+                android:backgroundTint="@color/main_C"
+                android:paddingHorizontal="13dp"
+                android:paddingVertical="17dp"
+                android:hint="리뷰를 작성해주세요!"
+                android:textSize="14sp"
+                android:fontFamily="@font/pretendard_medium"
+                android:textColorHint="#ECECEC"
+                android:text=""
+                 />
+
+            <TextView
+                android:id="@+id/btn_end"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="23dp"
+                android:layout_marginTop="27dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/background_radius_10"
+                android:backgroundTint="@color/main_C"
+                android:fontFamily="@font/pretendard_bold"
+                android:gravity="center"
+                android:text="리뷰작성 마무리하기"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/btn_back2"
+                android:textColor="@color/main_C"
+                android:layout_marginBottom="22dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:textSize="10sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_width="100dp"
+                android:layout_height="32dp"
+                android:text="뒤로가기" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

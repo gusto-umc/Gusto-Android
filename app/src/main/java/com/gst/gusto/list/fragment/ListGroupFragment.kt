@@ -30,6 +30,10 @@ class ListGroupFragment : Fragment() {
         itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
         itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
         itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
+        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
+        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
+        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
+        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
 
         fun callActivityFunction(): NavController {
             return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
