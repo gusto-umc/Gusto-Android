@@ -8,33 +8,24 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.R
-import com.gst.gusto.databinding.FragmentListGroupMRouteEditBinding
+import com.gst.gusto.databinding.FragmentListRouteStoresBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
 import com.gst.gusto.list.adapter.RouteItem
 
-class GroupRouteEditFragment : Fragment() {
+class RouteStoresFragment : Fragment() {
 
-    lateinit var binding: FragmentListGroupMRouteEditBinding
-    lateinit var page : String
+    lateinit var binding: FragmentListRouteStoresBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentListGroupMRouteEditBinding.inflate(inflater, container, false)
+        binding = FragmentListRouteStoresBinding.inflate(inflater, container, false)
 
-        binding.ivBack.setOnClickListener {
-            if(page == "route") {
-                findNavController().navigate(R.id.action_groupMRoutEditFragment_to_routeStoresFragment)
-            } else {
-                val bundle = Bundle()
-                bundle.putInt("viewpage",1)
-                findNavController().navigate(R.id.action_groupMRoutEditFragment_to_groupFragment,bundle)
-            }
-        }
-        val receivedBundle = arguments
-        if (receivedBundle != null) {
-            page = receivedBundle.getString("page") as String
+        binding.btnBack.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putInt("page",1)
+            findNavController().navigate(R.id.action_routeStoresFragment_to_listFragment,bundle)
         }
         return binding.root
 
@@ -52,18 +43,22 @@ class GroupRouteEditFragment : Fragment() {
 
         binding.rvRoutes
 
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute)
+        val boardAdapter = MapRoutesAdapter(itemList,binding.lyNull)
         boardAdapter.notifyDataSetChanged()
 
         binding.rvRoutes.adapter = boardAdapter
         binding.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        binding.btnPlus.setOnClickListener {
-            itemList.add(RouteItem(binding.tvRestName.text.toString(),""))
-            boardAdapter.notifyItemInserted(itemList.size-1)
-            if(itemList.size==6) {
-                binding.lyAddRoute.visibility = View.INVISIBLE
-            }
+        binding.fabEdit.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("page","route")
+            findNavController().navigate(R.id.action_routeStoresFragment_to_groupMREFragment,bundle)
+        }
+
+        binding.fabMap.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("page","route")
+            findNavController().navigate(R.id.action_routeStoresFragment_to_groupMRMFragment,bundle)
         }
 
     }

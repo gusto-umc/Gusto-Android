@@ -22,6 +22,12 @@ class ListRouteFragment : Fragment() {
     ): View? {
         binding = FragmentListRouteBinding.inflate(inflater, container, false)
 
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val rv_board = binding.rvListRoute
 
         val itemList = ArrayList<GroupItem>()
@@ -31,15 +37,13 @@ class ListRouteFragment : Fragment() {
         itemList.add(GroupItem("성수동 맛집 맵",0,2,0))
         itemList.add(GroupItem("성수동 맛집 맵",0,8,0))
 
-        val boardAdapter = LisAdapter(itemList, null, 1)
+        fun callActivityFunction(): NavController {
+            return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
+        }
+        val boardAdapter = LisAdapter(itemList, callActivityFunction(), 1)
         boardAdapter.notifyDataSetChanged()
 
         rv_board.adapter = boardAdapter
         rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-
-        return binding.root
-
     }
-
 }

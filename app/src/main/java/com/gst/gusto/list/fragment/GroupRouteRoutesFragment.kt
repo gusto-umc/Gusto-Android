@@ -35,7 +35,7 @@ class GroupRouteRoutesFragment : Fragment() {
         itemList.add(GroupItem("성수동 맛집 맵",0,2,0))
         itemList.add(GroupItem("성수동 맛집 맵",0,8,24))
 
-        val boardAdapter = LisAdapter(itemList,null,1)
+        val boardAdapter = LisAdapter(itemList,null,2)
         boardAdapter.notifyDataSetChanged()
 
         rv_board.adapter = boardAdapter

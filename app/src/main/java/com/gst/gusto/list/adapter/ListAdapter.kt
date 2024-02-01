@@ -95,7 +95,12 @@ class LisAdapter(
                     delay(50)
                     nc?.navigate(R.id.action_listFragment_to_groupFragment)
                 }
-            } else {
+            } else if(option == 1){
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(50)
+                    nc?.navigate(R.id.action_listFragment_to_routeStoresFragment)
+                }
+            } else if(option == 2){
                 Navigation.findNavController(holder.itemView).navigate(R.id.action_groupMRSFragment_to_groupMRRFragment)
             }
 

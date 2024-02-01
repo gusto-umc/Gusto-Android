@@ -8,33 +8,24 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.R
-import com.gst.gusto.databinding.FragmentListGroupMRouteEditBinding
+import com.gst.gusto.databinding.FragmentListRouteCreateBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
 import com.gst.gusto.list.adapter.RouteItem
 
-class GroupRouteEditFragment : Fragment() {
+class RouteCreateFragment : Fragment() {
 
-    lateinit var binding: FragmentListGroupMRouteEditBinding
-    lateinit var page : String
+    lateinit var binding: FragmentListRouteCreateBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentListGroupMRouteEditBinding.inflate(inflater, container, false)
+        binding = FragmentListRouteCreateBinding.inflate(inflater, container, false)
 
-        binding.ivBack.setOnClickListener {
-            if(page == "route") {
-                findNavController().navigate(R.id.action_groupMRoutEditFragment_to_routeStoresFragment)
-            } else {
-                val bundle = Bundle()
-                bundle.putInt("viewpage",1)
-                findNavController().navigate(R.id.action_groupMRoutEditFragment_to_groupFragment,bundle)
-            }
-        }
-        val receivedBundle = arguments
-        if (receivedBundle != null) {
-            page = receivedBundle.getString("page") as String
+        binding.btnBack.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putInt("page",1)
+            findNavController().navigate(R.id.action_routeCreateFragment_to_listFragment,bundle)
         }
         return binding.root
 
@@ -44,11 +35,13 @@ class GroupRouteEditFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val itemList = ArrayList<RouteItem>()
+/*
 
         itemList.add(RouteItem("성수동 맛집 맵"," "))
         itemList.add(RouteItem("성수동 맛집 맵"," "))
         itemList.add(RouteItem("성수동 맛집 맵"," "))
         itemList.add(RouteItem("성수동 맛집 맵"," "))
+*/
 
         binding.rvRoutes
 

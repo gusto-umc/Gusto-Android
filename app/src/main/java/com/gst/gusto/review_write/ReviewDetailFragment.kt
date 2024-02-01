@@ -17,6 +17,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
+import com.gst.gusto.Util.util.Companion.dpToPixels
 import com.gst.gusto.databinding.FragmentReviewDetailBinding
 import com.gst.gusto.review_write.adapter.ImageViewPagerAdapter
 import com.gst.gusto.review_write.adapter.ReviewHowAdapter
@@ -43,7 +44,6 @@ class ReviewDetailFragment : Fragment() {
         binding.btnRemove.setOnClickListener {
 
         }
-
         return binding.root
 
     }

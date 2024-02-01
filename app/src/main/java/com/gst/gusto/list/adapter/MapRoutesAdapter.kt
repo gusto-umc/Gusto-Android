@@ -28,6 +28,7 @@ class MapRoutesAdapter(val itemList: ArrayList<RouteItem>, val lyAddRoute: Const
         holder.tv_route_order.text = (position+1).toString()
         if(position==0) holder.iv_line_up.visibility = View.INVISIBLE
         if(lyAddRoute.visibility == View.INVISIBLE) holder.iv_line_down.visibility = View.INVISIBLE
+        else if(lyAddRoute.visibility == View.GONE && position == itemList.count()-1) holder.iv_line_down.visibility = View.INVISIBLE
         else holder.iv_line_down.visibility = View.VISIBLE
 
         holder.tv_rest_name.setOnClickListener {

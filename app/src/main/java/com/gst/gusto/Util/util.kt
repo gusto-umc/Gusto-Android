@@ -28,7 +28,7 @@ class util {
         fun dpToPixels(dp: Float, metrics : DisplayMetrics): Float {
             return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics)
         }
-        //
+
 
         /**
          * 작업자 : 버루

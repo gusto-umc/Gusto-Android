@@ -23,7 +23,7 @@ import com.gst.gusto.review_write.adapter.ImageViewPagerAdapter
 class GroupRouteMapFragment : Fragment() {
 
     lateinit var binding: FragmentListGroupMRouteMapBinding
-
+    lateinit var page : String
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,9 +31,17 @@ class GroupRouteMapFragment : Fragment() {
         binding = FragmentListGroupMRouteMapBinding.inflate(inflater, container, false)
 
         binding.ivBack.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putInt("viewpage",1)
-            findNavController().navigate(R.id.action_groupMRoutMapFragment_to_groupFragment,bundle)
+            if(page == "route") {
+                findNavController().navigate(R.id.action_groupMRoutMapFragment_to_routeStoresFragment)
+            } else {
+                val bundle = Bundle()
+                bundle.putInt("viewpage",1)
+                findNavController().navigate(R.id.action_groupMRoutMapFragment_to_groupFragment,bundle)
+            }
+        }
+        val receivedBundle = arguments
+        if (receivedBundle != null) {
+            page = receivedBundle.getString("page") as String
         }
         return binding.root
 
@@ -53,8 +61,6 @@ class GroupRouteMapFragment : Fragment() {
                 }
             }
         }
-
-
 
         itemList.add(RouteMapDetailItem("구스또 레스토랑","메롱시 메로나동 바밤바 24-6 1층", "매주 월요일 휴뮤, 08:~15:00","010-5338-8662",false))
         itemList.add(RouteMapDetailItem("구스또 레스토랑2","메롱시 메로나동 바밤바 24-6 1층", "매주 월요일 휴뮤, 08:~15:00","010-5338-8662",false))
