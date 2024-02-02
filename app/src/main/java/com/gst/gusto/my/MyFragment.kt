@@ -55,8 +55,8 @@ class MyFragment : Fragment() {
     private fun initViewPager() {
         //ViewPager2 Adapter 셋팅
         var viewPager2Adatper = MyViewpagerAdapter(requireActivity())
-        viewPager2Adatper.addFragment(MyListFragment())
         viewPager2Adatper.addFragment(MyReviewFragment())
+        viewPager2Adatper.addFragment(MyListFragment())
 
         //Adapter 연결
         binding.viewpager.apply {
