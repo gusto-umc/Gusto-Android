@@ -18,10 +18,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.dpToPixels
 import com.gst.gusto.databinding.FragmentListMainBinding
+import com.gst.gusto.list.adapter.RouteItem
 
 
 class ListFragment : Fragment() {
@@ -58,6 +60,8 @@ class ListFragment : Fragment() {
         }
 
         binding.btnRoute.setOnClickListener {
+            if(isFabOpen)
+                toggleFab()
             ViewCompat.setBackgroundTintList(binding.btnRoute, colorStateOnList)
             binding.ivRoute.setColorFilter(Color.parseColor("#FFFFFF"))
             binding.tvRoute.setTextColor(Color.parseColor("#FFFFFF"))
@@ -69,17 +73,28 @@ class ListFragment : Fragment() {
             navController.navigate(R.id.fragment_list_route)
         }
 
+        val receivedBundle = arguments
+        if (receivedBundle != null) {
+            val page = receivedBundle.getInt("page") as Int
+            if(page == 1) binding.btnRoute.callOnClick()
+        }
+
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setFABClickEvent()
+
     }
     private fun setFABClickEvent() {
         // 플로팅 버튼 클릭시 애니메이션 동작 기능
         binding.fabMain.setOnClickListener {
-            toggleFab()
+            if(binding.tvRoute.currentTextColor == Color.parseColor("#FFFFFF")) {
+                findNavController().navigate(R.id.action_listFragment_to_routeCreateFragment)
+            } else {
+                toggleFab()
+            }
         }
         binding.fabMain.backgroundTintList = colorStateOffList
 
