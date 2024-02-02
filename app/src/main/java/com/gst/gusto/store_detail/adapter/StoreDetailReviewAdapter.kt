@@ -103,7 +103,7 @@ class StoreDetailReviewAdapter () : ListAdapter<StoreDetailReview, StoreDetailRe
 
         //레이아웃 클릭 시 상세 리뷰 화면으로 이동
         holder.layoutItem.setOnClickListener {
-            //navigation 설정
+            itemClickListener.onClick(it, holder.data!!)
         }
 
         //photoRv 연결하기
@@ -119,9 +119,16 @@ class StoreDetailReviewAdapter () : ListAdapter<StoreDetailReview, StoreDetailRe
             holder.ivSwipe.visibility = View.GONE
         }
 
-
-
-
     }
+
+    interface OnItemClickListener {
+        fun onClick(v: View, dataSet: StoreDetailReview)
+    }
+    // (3) 외부에서 클릭 시 이벤트 설정
+    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.itemClickListener = onItemClickListener
+    }
+    // (4) setItemClickListener로 설정한 함수 실행
+    private lateinit var itemClickListener : OnItemClickListener
 
 }

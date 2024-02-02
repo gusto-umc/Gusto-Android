@@ -38,3 +38,10 @@ data class StoreDetail(
     var totalPage : Int? = 0,
     var totalElements : Int? = 0
 )
+
+data class StoreSearch(
+    val storeId : Int,
+    val storeName : String,
+    val categoryName : String,
+    val reviewImg : Int
+)

@@ -67,6 +67,13 @@ class StoreDetailFragment : Fragment() {
         binding.rvStoreDetailPhoto.adapter = mStorePhotoAdapter
         //리뷰 리사이클러뷰 연결
         val mReviewAdapter = StoreDetailReviewAdapter()
+        mReviewAdapter.setItemClickListener(object : StoreDetailReviewAdapter.OnItemClickListener{
+            override fun onClick(v: View, dataSet: StoreDetailReview) {
+                //데이터 넣기
+                Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_fragment_review_detail)
+            }
+
+        })
         mReviewAdapter.submitList(sampleReviewDataArray)
         binding.rvStoreDetailReview.adapter = mReviewAdapter
         binding.rvStoreDetailReview.layoutManager = LinearLayoutManager(this.requireActivity())
