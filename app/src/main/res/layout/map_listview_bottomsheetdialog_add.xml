@@ -12,6 +12,7 @@
         >
 
         <TextView
+            android:id="@+id/tv_category_bottomsheet_banner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="카테고리 추가"
@@ -24,9 +25,10 @@
             />
         
         <ImageView
+            android:id="@+id/iv_bottomsheet_category_x"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/plus_img"
+            android:src="@drawable/x_1_img"
             app:tint="@color/black"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -132,6 +134,7 @@
             />
         
         <Switch
+            android:id="@+id/switch_category_public"
             android:layout_width="45dp"
             android:layout_height="22dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -142,6 +145,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:id="@+id/tv_category_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="저장"

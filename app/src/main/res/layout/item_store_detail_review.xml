@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_store_review_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
@@ -38,20 +39,6 @@
             app:layout_constraintBottom_toBottomOf="@id/iv_store_detail_profile_img"
             app:layout_constraintStart_toEndOf="@id/iv_store_detail_profile_img"
             android:layout_marginStart="7dp"/>
-
-        <TextView
-            android:id="@+id/tv_store_detail_user_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\@id1234"
-            android:textSize="11sp"
-            android:fontFamily="@font/pretendard_regular"
-            android:textColor="@color/gray_3"
-            app:layout_constraintTop_toTopOf="@id/iv_store_detail_profile_img"
-            app:layout_constraintBottom_toBottomOf="@id/iv_store_detail_profile_img"
-            app:layout_constraintStart_toEndOf="@id/tv_store_detail_username"
-            android:layout_marginStart="4dp"
-            />
 
         <ImageView
             android:id="@+id/iv_store_detail_heart_on"
@@ -86,6 +73,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:id="@+id/tv_store_detail_review"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
@@ -96,6 +84,7 @@
         android:orientation="horizontal"
         >
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_store_detail_review_photo"
             android:layout_width="72dp"
             android:layout_height="wrap_content"
             />
