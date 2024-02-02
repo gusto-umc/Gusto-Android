@@ -292,5 +292,9 @@
     <fragment
         android:id="@+id/storeDetailFragment"
         android:name="com.gst.gusto.store_detail.StoreDetailFragment"
-        android:label="StoreDetailFragment" />
+        android:label="StoreDetailFragment" >
+        <action
+            android:id="@+id/action_storeDetailFragment_to_fragment_review_add_1"
+            app:destination="@id/fragment_review_add_1" />
+    </fragment>
 </navigation>

@@ -143,7 +143,7 @@
 
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/fab_map_listview_delete"
+                android:id="@+id/fab_store_detail_add"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="리뷰 작성하기"
@@ -156,6 +156,7 @@
                 android:backgroundTint="@color/sub_m"
                 android:layout_marginHorizontal="80dp"
                 android:layout_marginBottom="40dp"
+                android:onClick=""
                 />
         </LinearLayout>
 

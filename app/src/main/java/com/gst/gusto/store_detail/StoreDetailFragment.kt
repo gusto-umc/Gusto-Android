@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.StoreDetail
 import com.gst.gusto.ListView.Model.StoreDetailReview
@@ -102,10 +103,22 @@ class StoreDetailFragment : Fragment() {
                 mChooseBottomSheetDialog.show(requireFragmentManager(), mChooseBottomSheetDialog.tag)
             }
 
-            /**
-             * 더보기 클릭 시 페이징 처리
-             */
         }
+        /**
+         * 더보기 클릭 시 페이징 처리
+         */
+
+        /**
+         * 리뷰 추가 버튼 클릭 리스너
+         */
+        binding.fabStoreDetailAdd.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_fragment_review_add_1)
+        }
+
+
+        /**
+         * 리뷰 페이징
+         */
 
     }
 }
