@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_main"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="20dp"
+        app:fabCustomSize="60dp"
+        android:src="@drawable/plus_img"
+        android:elevation="4dp"
+        app:maxImageSize="24dp"
+        app:tint="@color/white"
+        app:shapeAppearance="@style/Widget.MaterialComponents.FloatingActionButton"
+        app:fabSize="normal"
+        app:borderWidth="0dp"
+        android:backgroundTint="@color/sub_m"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

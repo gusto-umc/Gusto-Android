@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.ext.SdkExtensions.getExtensionVersion
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
@@ -100,6 +101,7 @@ class ReviewAdd4Fragment : Fragment() {
         newText.setBackgroundResource(R.drawable.background_radius_10_stroke_1)
         newText.backgroundTintList = resources.getColorStateList(R.color.main_C)
         newText.hint = "예) 수타면 파수타"
+        newText.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(20))
 
         menuList.add(newText)
         binding.lyMenus.addView(newText)

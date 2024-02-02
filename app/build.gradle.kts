@@ -1,11 +1,18 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
 
+
 android {
     namespace = "com.gst.gusto"
     compileSdk = 34
+
+    val localProperties = Properties()
+    localProperties.load(project.rootProject.file("local.properties").inputStream())
+
 
     defaultConfig {
         applicationId = "com.gst.gusto"
@@ -15,6 +22,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "API_BASE", localProperties.getProperty("api_base"))
     }
 
     buildTypes {
@@ -34,6 +43,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         viewBinding = true
         dataBinding = true
     }
