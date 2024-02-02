@@ -19,7 +19,10 @@ data class StoreDetailReview(
     var nickname : String,
     var liked : Int,
     var comment : String,
-    var hashTageName : ArrayList<String>
+    var hashTageName : ArrayList<String>,
+    var date : String,
+    var photoArray : ArrayList<Int>? = null,
+    var profileImg : Int? = null
 )
 
 data class StoreDetail(

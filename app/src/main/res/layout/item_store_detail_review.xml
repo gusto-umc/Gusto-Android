@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/layout_review_item_all"
+    android:layout_marginTop="15dp">
 
     <TextView
         android:id="@+id/tv_store_review_date"
@@ -17,7 +19,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13.33dp">
+        android:layout_marginTop="10dp">
 
         <ImageView
             android:id="@+id/iv_store_detail_profile_img"
@@ -25,7 +27,11 @@
             android:layout_height="20dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="1dp"/>
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/background_radius_500"
+            android:src="@drawable/sample_store_4_img"
+            android:clipToOutline="true"
+            />
 
         <TextView
             android:id="@+id/tv_store_detail_username"
@@ -41,22 +47,15 @@
             android:layout_marginStart="7dp"/>
 
         <ImageView
-            android:id="@+id/iv_store_detail_heart_on"
-            android:layout_width="17dp"
-            android:layout_height="17dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tv_store_detail_heart_count"
-            android:layout_marginBottom="6dp"
-            />
-        <ImageView
             android:id="@+id/iv_store_detail_heart_off"
             android:layout_width="17dp"
             android:layout_height="17dp"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_store_detail_profile_img"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tv_store_detail_heart_count"
+            app:layout_constraintBottom_toBottomOf="@id/iv_store_detail_profile_img"
             android:layout_marginBottom="6dp"
+            android:src="@drawable/heart_img"
+            android:layout_marginEnd="10dp"
             />
 
         <TextView
@@ -67,33 +66,56 @@
             android:textSize="10sp"
             android:fontFamily="@font/pretendard_regular"
             android:textColor="#929292"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/iv_store_detail_heart_off"
+            app:layout_constraintEnd_toEndOf="@id/iv_store_detail_heart_off"
+            app:layout_constraintTop_toBottomOf="@id/iv_store_detail_heart_off"
+            />
+
+        <TextView
+            android:id="@+id/tv_store_detail_review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="맛있어용"
+            android:textSize="11sp"
+            android:fontFamily="@font/pretendard_bold"
+            android:textColor="@color/gray_1"
+            app:layout_constraintTop_toBottomOf="@id/tv_store_detail_username"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="15dp"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/tv_store_detail_review"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="16dp"
         >
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_store_detail_review_photo"
             android:layout_width="72dp"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="3dp"
             />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/iv_store_detail_review_swipe"
+            android:layout_width="12dp"
+            android:layout_height="48dp"
+            android:src="@drawable/arrow_right_2_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="10dp"
             />
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
