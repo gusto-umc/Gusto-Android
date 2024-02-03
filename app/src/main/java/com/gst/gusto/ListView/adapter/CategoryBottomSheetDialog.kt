@@ -26,17 +26,6 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        view?.findViewById<LinearLayout>(R.id.repeat_menu_delete_layout)?.setOnClickListener {
-//            //삭제
-//            itemClick(0)
-//            dialog?.dismiss()
-//        }
-//
-//        view?.findViewById<LinearLayout>(R.id.repeat_menu_edit_layout)?.setOnClickListener {
-//            //수정
-//            itemClick(1)
-//            dialog?.dismiss()
-//        }
         view?.findViewById<TextView>(R.id.tv_category_save)?.setOnClickListener {
             itemClick(0)
             dialog?.dismiss()

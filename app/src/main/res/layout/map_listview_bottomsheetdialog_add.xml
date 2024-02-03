@@ -135,11 +135,13 @@
         
         <Switch
             android:id="@+id/switch_category_public"
-            android:layout_width="45dp"
-            android:layout_height="22dp"
+            android:layout_width="32dp"
+            android:layout_height="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:track="@drawable/switch_custom"
+            android:thumb="@drawable/switch_custom_thumb"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
