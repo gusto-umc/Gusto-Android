@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.R
@@ -27,7 +28,11 @@ class ListReviewFragment : Fragment() {
 
        binding = FragmentListReviewBinding.inflate(inflater, container, false)
 
-        adapter = ListReviewAdapter()
+        // 클릭 리스너 부분
+        adapter = ListReviewAdapter(itemClickListener = {
+            it -> Toast.makeText(context,"테스트용",Toast.LENGTH_SHORT).show()
+        })
+
         binding.apply{
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(activity)

@@ -4,18 +4,19 @@ package com.gst.gusto.review.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.databinding.ItemReviewGalleryBinding
 
-class GalleryReviewAdapter(var imageList: Array<Int>, val context: Context?) : RecyclerView.Adapter<GalleryReviewAdapter.ViewHolder>() {
+class GalleryReviewAdapter(var imageList: Array<Int>, val context: Context?, private val itemClickListener: (Array<Int>) -> Unit) : RecyclerView.Adapter<GalleryReviewAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): GalleryReviewAdapter.ViewHolder {
         val binding: ItemReviewGalleryBinding = ItemReviewGalleryBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
 
-        return ViewHolder(binding)
+        return ViewHolder(binding, itemClickListener)
     }
 
     override fun onBindViewHolder(holder: GalleryReviewAdapter.ViewHolder, position: Int) {
@@ -27,7 +28,14 @@ class GalleryReviewAdapter(var imageList: Array<Int>, val context: Context?) : R
     override fun getItemCount(): Int = imageList.size
 
 
-    inner class ViewHolder(val binding: ItemReviewGalleryBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(val binding: ItemReviewGalleryBinding, private val itemClickListener: (Array<Int>) -> Unit) : RecyclerView.ViewHolder(binding.root){
         val imageview : ImageView = binding.imageView
+
+        init {
+            imageview.setOnClickListener{
+                itemClickListener.invoke(imageList)
+            }
+        }
+
     }
 }
