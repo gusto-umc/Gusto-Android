@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.databinding.ItemReviewListBinding
 import com.gst.gusto.databinding.ItemReviewListButtonBinding
 
-class ListReviewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ListReviewAdapter(private val itemClickListener: (ListReviewData) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items = ArrayList<ListReviewData>()
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -17,14 +17,14 @@ class ListReviewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 ItemReviewListBinding.inflate(
                     LayoutInflater.from(viewGroup.context),
                     viewGroup, false
-                )
+                ), itemClickListener
             )
         }
         return ListReviewBtnViewHolder(
             ItemReviewListButtonBinding.inflate(
                 LayoutInflater.from(viewGroup.context),
                 viewGroup, false
-            )
+            ), itemClickListener
         )
     }
 
@@ -35,7 +35,7 @@ class ListReviewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 (holder as ListReviewViewHolder).bind(items[position])
             }
             ListReviewType.LISTBUTTON -> {
-                (holder as ListReviewBtnViewHolder).bind(items[position].date)
+                (holder as ListReviewBtnViewHolder).bind(items[position])
             }
 
         }

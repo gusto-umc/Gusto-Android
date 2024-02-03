@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.R
@@ -30,7 +31,12 @@ class MyReviewFragment : Fragment() {
     ): View? {
         binding = FragmentMyReviewBinding.inflate(inflater, container, false)
 
-        adapter = GalleryReviewAdapter(testImageList, context)
+        // 클릭 리스너 부분
+
+        adapter = GalleryReviewAdapter(testImageList, context,
+            itemClickListener = {
+                it -> Toast.makeText(context,"테스트용", Toast.LENGTH_SHORT).show()
+        })
         binding.apply {
             recyclerView.adapter = adapter
             recyclerView.layoutManager = GridLayoutManager(activity, 3)
