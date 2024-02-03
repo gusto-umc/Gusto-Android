@@ -83,6 +83,7 @@
             android:scaleType="fitXY"
             app:maxImageSize="50dp"
             app:fabCustomSize="@dimen/cardview_default_radius"
+            android:visibility="invisible"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

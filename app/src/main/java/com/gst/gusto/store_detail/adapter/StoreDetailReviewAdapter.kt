@@ -54,7 +54,7 @@ class StoreDetailReviewAdapter () : ListAdapter<StoreDetailReview, StoreDetailRe
             //heartFlag = review.heart
             //방문일자
             val reviewDate = LocalDate.parse(review.date)
-            binding.tvStoreReviewDate.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth} 방문"
+            binding.tvStoreReviewDate.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
             //리뷰 사진들 -> 아직 없음.
 
         }

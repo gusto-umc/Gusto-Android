@@ -25,7 +25,7 @@ class StoreDetailFragment : Fragment() {
     private lateinit var binding : FragmentStoreDetailBinding
     private var sampleReviewDataArray = arrayListOf<StoreDetailReview>(
         StoreDetailReview(reviewId = 0, visitedAt = "2024-01-03", nickname = "귀여운 바질페스토 12", liked = 1, comment = "goooooood", hashTageName = arrayListOf("맛있음", "분위기"), date= "2024-01-04", photoArray = arrayListOf(R.drawable.sample_store_img, R.drawable.sample_store_2_img)),
-        StoreDetailReview(reviewId = 1, visitedAt = "2024-01-02", nickname = "매콤한 통닭", liked = 3, comment = "맛있어요", hashTageName = arrayListOf("맛있음", "넓음"), date = "2024-01-02")
+        StoreDetailReview(reviewId = 1, visitedAt = "2024-01-02", nickname = "매콤한 통닭", liked = 3, comment = "맛있어요", hashTageName = arrayListOf("맛있음", "넓음"), date = "2024-01-02", photoArray = arrayListOf(R.drawable.sample_store_img, R.drawable.sample_store_2_img))
     )
     private var samplePhotoDataArray = arrayListOf<Int>(
         R.drawable.sample_store_img,
@@ -100,7 +100,7 @@ class StoreDetailFragment : Fragment() {
                 //카테고리 선택 팝업창 노출
                 val mChooseBottomSheetDialog = CategoryChooseBottomSheetDialog(){
                     when(it){
-                        0 -> {
+                        1 -> {
                             Log.d("bottomsheet", "카테고리 선택 click")
                             binding.ivStoreDetailSave.setImageResource(R.drawable.save_o_img)
                             sampleData.pin = 1

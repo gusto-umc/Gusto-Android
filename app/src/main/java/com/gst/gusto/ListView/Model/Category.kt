@@ -4,7 +4,8 @@ data class CategorySimple(
     var id : Int,
     var categoryName : String,
     var categoryIcon : Int,
-    var storeCount : Int
+    var storeCount : Int,
+    var publishCategory : Boolean = false
 )
 
 data class CategoryDetail(

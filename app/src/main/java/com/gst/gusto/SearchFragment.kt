@@ -52,6 +52,7 @@ class SearchFragment : Fragment() {
             //공백 확인
             if (binding.edtSearchSearchbox.text.isNullOrBlank()) {
                 binding.rvSearchResult.visibility = View.GONE
+                binding.fabSearchMap.visibility = View.GONE
             } else {
                 // 서버 연결 후 검샥 결과 response
                 //데이터셋 저장 후 연결(공백일 때 동작 확인)
@@ -59,6 +60,8 @@ class SearchFragment : Fragment() {
                 mSearshResultAdapter.setItemClickListener(object :
                     SearchStoreAdapter.OnItemClickListener {
                     override fun onClick(v: View, dataSet: StoreSearch) {
+                        //fab visibility 설정
+                        binding.fabSearchMap.visibility = View.GONE
                         //데이터 넣기
                         //페이지 이동
                         Navigation.findNavController(view)
@@ -71,8 +74,11 @@ class SearchFragment : Fragment() {
                 binding.rvSearchResult.adapter = mSearshResultAdapter
                 binding.rvSearchResult.layoutManager = LinearLayoutManager(this.requireActivity())
                 //키보드 내리기
+                // fab visibility 설정
+                binding.fabSearchMap.visibility = View.VISIBLE
 
             }
+            binding.edtSearchSearchbox.text.clear()
         }
 
         /**
@@ -81,6 +87,7 @@ class SearchFragment : Fragment() {
         binding.fabSearchMap.setOnClickListener{
             //데이터 버장
             //페이지 이동
+            Navigation.findNavController(view).navigate(R.id.action_searchFragment_to_fragment_map)
         }
     }
 }

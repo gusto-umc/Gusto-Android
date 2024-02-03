@@ -35,7 +35,7 @@
                         android:layout_width="44dp"
                         android:layout_height="44dp"
                         android:layout_marginLeft="10dp"
-                        android:padding="12dp"
+                        android:padding="10dp"
                         android:src="@drawable/arrow_left_1"
                         app:tint="@color/black"
                         app:layout_constraintTop_toTopOf="parent"
@@ -128,7 +128,7 @@
                     />
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="100dp"
                     />
 
             </LinearLayout>
