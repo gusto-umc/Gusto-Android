@@ -10,6 +10,7 @@ import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.ListView.Model.StoreDetailReview
 import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.databinding.CardWxampleBinding
+import com.gst.gusto.databinding.ItemListviewStoreCardBinding
 import com.gst.gusto.databinding.ItemStoreCardBinding
 
 class SearchStoreAdapter() : ListAdapter<StoreSearch, SearchStoreAdapter.ViewHolder>(DiffCallback){
@@ -29,23 +30,23 @@ class SearchStoreAdapter() : ListAdapter<StoreSearch, SearchStoreAdapter.ViewHol
         }
     }
 
-    inner class ViewHolder(private val binding : CardWxampleBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(private val binding : ItemListviewStoreCardBinding) : RecyclerView.ViewHolder(binding.root){
         var data : StoreSearch? = null
 
         fun bind(result : StoreSearch){
             data = result
             //데이터 적용(가게명, 카테고리, 위치, 사진)
-            binding.tvItemStoreTitle.text = result.storeName
-            binding.tvItemStoreCount.text = result.categoryName
+            binding.tvItemListviewCardTitle.text = result.storeName
+            binding.tvItemListviewCardCount.text = result.categoryName
             //binding.tvItemStoreLocation.text =
-            binding.ivItemStoreImg.setImageResource(result.reviewImg)
+            binding.ivItemListviewCardImg.setImageResource(result.reviewImg)
         }
-        val cvItem = binding.cvItemStoreEdit
-        val ivPhoto = binding.ivItemStoreImg
+        val cvItem = binding.cvItemListviewCard
+        val ivPhoto = binding.ivItemListviewCardImg
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val viewHolder = ViewHolder(CardWxampleBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        val viewHolder = ViewHolder(ItemListviewStoreCardBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         return viewHolder
     }
 
