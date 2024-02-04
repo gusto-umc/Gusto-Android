@@ -55,7 +55,7 @@ class LisAdapter(
         holder.item.setOnTouchListener { view, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    // 버튼을 누를 때 처
+                    // 버튼을 누를 때 처리
                     ViewCompat.setBackgroundTintList(holder.item, null)
                     holder.tv_title.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
                     holder.tv_people.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
