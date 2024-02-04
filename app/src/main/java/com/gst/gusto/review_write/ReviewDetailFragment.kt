@@ -26,9 +26,6 @@ class ReviewDetailFragment : Fragment() {
 
     lateinit var binding: FragmentReviewDetailBinding
 
-    private lateinit var scaleUpAnimation: ScaleAnimation
-    private lateinit var scaleDownAnimation: ScaleAnimation
-    private lateinit var bounceInterpolator: BounceInterpolator
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,7 +33,7 @@ class ReviewDetailFragment : Fragment() {
         binding = FragmentReviewDetailBinding.inflate(inflater, container, false)
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewDetail_to_myFragment)
+            findNavController().navigate(R.id.action_reviewDetail_to_reviewFragment)
         }
         binding.btnEdit.setOnClickListener {
             findNavController().navigate(R.id.action_reviewDetail_to_reviewDetailEdit)
@@ -66,9 +63,9 @@ class ReviewDetailFragment : Fragment() {
         // 이미지 슬라이드
         val viewPager = binding.vpImgSlider
         val imageList = listOf(
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_launcher_background
+            R.drawable.review_gallery_test,
+            R.drawable.review_gallery_test2,
+            R.drawable.review_gallery_test
             // Add more images as needed
         )
 
@@ -96,38 +93,6 @@ class ReviewDetailFragment : Fragment() {
 
         binding.btnPopup.setOnClickListener {
             binding.lyEditRemove.visibility = View.VISIBLE
-        }
-
-        // 하트 클릭 리스너
-        bounceInterpolator = BounceInterpolator()
-
-        // 확대 애니메이션
-        scaleUpAnimation = ScaleAnimation(
-            1.0f, 1.2f, 1.0f, 1.2f,
-            Animation.RELATIVE_TO_SELF, 0.5f,
-            Animation.RELATIVE_TO_SELF, 0.5f
-        )
-        scaleUpAnimation.duration = 500
-        scaleUpAnimation.interpolator = bounceInterpolator
-
-        // 축소 애니메이션
-        scaleDownAnimation = ScaleAnimation(
-            1.2f, 1.0f, 1.2f, 1.0f,
-            Animation.RELATIVE_TO_SELF, 0.5f,
-            Animation.RELATIVE_TO_SELF, 0.5f
-        )
-        scaleDownAnimation.duration = 500
-        scaleDownAnimation.interpolator = bounceInterpolator
-        binding.btnHeart.setOnClickListener {
-            if (it.isSelected) {
-                binding.ivHeart.setColorFilter(null)
-                it.startAnimation(scaleDownAnimation)
-            } else {
-                val color = ContextCompat.getColor(requireContext(), R.color.main_C)
-                binding.ivHeart.setColorFilter(color)
-                it.startAnimation(scaleUpAnimation)
-            }
-            it.isSelected = !it.isSelected
         }
 
     }
