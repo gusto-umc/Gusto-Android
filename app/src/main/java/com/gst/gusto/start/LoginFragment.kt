@@ -65,11 +65,10 @@ class LoginFragment : Fragment() {
 
                 var url = request?.url.toString()
                 Log.d("url",url)
-                if (url.startsWith("http://gusto")) {
-                    val urlConnection: String = request?.url.toString()
+                if (url.startsWith("http://119")) {
                     GlobalScope.launch(Dispatchers.IO) {
                         try {
-                            val finalUrl = resolveRedirect(urlConnection)
+                            val finalUrl = resolveRedirect(url)
 
                             val url = URL(finalUrl)
                             val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
@@ -108,7 +107,7 @@ class LoginFragment : Fragment() {
 
         val redirectUrl: String = connection.getHeaderField("Location") ?: url
 
-        return if (redirectUrl.startsWith("http")) {
+        return if (redirectUrl.startsWith("http")|| redirectUrl.startsWith("https")) {
             // Absolute URL
             redirectUrl
         } else {
