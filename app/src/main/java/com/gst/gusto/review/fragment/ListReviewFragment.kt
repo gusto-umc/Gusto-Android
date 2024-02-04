@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentListReviewBinding
@@ -30,7 +31,9 @@ class ListReviewFragment : Fragment() {
 
         // 클릭 리스너 부분
         adapter = ListReviewAdapter(itemClickListener = {
-            it -> Toast.makeText(context,"테스트용",Toast.LENGTH_SHORT).show()
+            val bundle = Bundle()
+            bundle.putInt("reviewId",0)     //리뷰 아이디 넘겨 주면 됨
+            findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail,bundle)
         })
 
         binding.apply{
