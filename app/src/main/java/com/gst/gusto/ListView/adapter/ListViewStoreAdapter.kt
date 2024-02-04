@@ -16,7 +16,7 @@ import com.gst.gusto.R
 import com.gst.gusto.databinding.CardWxampleBinding
 import com.gst.gusto.databinding.ItemStoreCardBinding
 
-class ListViewStoreAdapter(private var flag : String) : ListAdapter<Store, ListViewStoreAdapter.ViewHolder>(DiffCallback) {
+class ListViewStoreAdapter(private var flag : String, private val parentView : View) : ListAdapter<Store, ListViewStoreAdapter.ViewHolder>(DiffCallback) {
 
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<Store>(){
@@ -66,6 +66,10 @@ class ListViewStoreAdapter(private var flag : String) : ListAdapter<Store, ListV
 
             holder.cbEdit.visibility = View.GONE
             holder.tvCountCategory.text = "${holder.data?.visitCount}번 방문했어요"
+
+            holder.cvStore.setOnClickListener {
+                Navigation.findNavController(parentView).navigate(R.id.action_mapListViewFragment_to_storeDetailFragment)
+            }
         }
         else if(flag == "edit"){
             // 글자크기 조정
