@@ -43,13 +43,7 @@
             android:layout_weight="1"
             android:text="피드에서 리뷰 보기"
             android:background="@color/sub1"/>
-        <TextView
-            android:id="@+id/btn_review_detail_tmp"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="자신 리뷰 보기"
-            android:background="@color/sub_m"/>
+
         <TextView
             android:id="@+id/btn_login"
             android:layout_width="0dp"
