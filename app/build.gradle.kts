@@ -84,6 +84,7 @@ dependencies {
 
 // Ted Permission - RxJava3
     implementation ("io.github.ParkSangGwon:tedpermission-rx3:3.3.0")
+
     //google play servies 종속성 추가
     implementation ("com.google.android.gms:play-services-location:17.1.0")
 
