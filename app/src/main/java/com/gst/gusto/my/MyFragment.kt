@@ -9,10 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import com.gst.clock.Fragment.MyListFragment
 import com.gst.clock.Fragment.MyReviewFragment
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentMyBinding
+import com.gst.gusto.my.activity.MyProfileEditActivity
+import com.gst.gusto.my.activity.MySettingActivity
+import com.gst.gusto.my.adapter.MyViewpagerAdapter
+import com.gst.gusto.my.fragment.MyListFragment
 import com.gst.gusto.start.StartActivity
 
 class MyFragment : Fragment() {
@@ -26,30 +29,41 @@ class MyFragment : Fragment() {
         binding = FragmentMyBinding.inflate(inflater, container, false)
         initViewPager()
 
-        binding.btnOption.setOnClickListener {
-            findNavController().navigate(R.id.action_myFragment_to_myProfileFragment)
-        }
-        binding.btnFollowingList.setOnClickListener {
-            findNavController().navigate(R.id.action_myFragment_to_followList)
-        }
-        //임시 리뷰 추가 화면
-        binding.btnAddReviewTmp.setOnClickListener {
-            findNavController().navigate(R.id.action_myFragment_to_reviewAdd1Fragment)
-        }
-        //임시 피드에서 리뷰 정보 보기
-        binding.btnFeedDetailTmp.setOnClickListener {
-            findNavController().navigate(R.id.action_myFragment_to_feedDetail)
-        }
-        //임시 로그인
-        binding.btnLogin.setOnClickListener {
-            val intent = Intent(requireContext(), StartActivity::class.java)
-            startActivity(intent)
+
+        binding.apply{
+            btnOption.setOnClickListener {
+                // findNavController().navigate(R.id.action_myFragment_to_myProfileFragment)
+                val intent = Intent(requireContext(), MySettingActivity::class.java)
+                startActivity(intent)
+            }
+            btnProfileEdit.setOnClickListener {
+                val intent = Intent(requireContext(), MyProfileEditActivity::class.java)
+                startActivity(intent)
+            }
+            btnFollowingList.setOnClickListener {
+                findNavController().navigate(R.id.action_myFragment_to_followList)
+            }
+            //임시 리뷰 추가 화면
+            btnAddReviewTmp.setOnClickListener {
+                findNavController().navigate(R.id.action_myFragment_to_reviewAdd1Fragment)
+            }
+            //임시 피드에서 리뷰 정보 보기
+            btnFeedDetailTmp.setOnClickListener {
+                findNavController().navigate(R.id.action_myFragment_to_feedDetail)
+            }
+            //임시 로그인
+            btnLogin.setOnClickListener {
+                val intent = Intent(requireContext(), StartActivity::class.java)
+                startActivity(intent)
+            }
         }
         return binding.root
 
     }
     private fun initViewPager() {
+
         //ViewPager2 Adapter 셋팅
+
         var viewPager2Adatper = MyViewpagerAdapter(requireActivity())
         viewPager2Adatper.addFragment(MyReviewFragment())
         viewPager2Adatper.addFragment(MyListFragment())
