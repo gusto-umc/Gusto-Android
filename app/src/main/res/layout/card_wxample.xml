@@ -34,15 +34,14 @@
             <ImageView
 
                 android:id="@+id/iv_item_store_img"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@drawable/sample_store_img"
                 android:clipToOutline="true"
                 android:layout_marginBottom="5dp"
                 android:layout_marginStart="11.73dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/background_radius_5"
-                android:layout_weight="1"
                 android:scaleType="fitXY"
                 />
 

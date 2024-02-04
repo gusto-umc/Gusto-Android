@@ -110,8 +110,8 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_map_save_place"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="15dp"
-                    android:layout_marginStart="20dp"
-                    android:textSize="20sp"
+                    android:layout_marginStart="24dp"
+                    android:textSize="15sp"
                     android:textColor="@color/black"
                     android:fontFamily="@font/pretendard_bold"
                     />
@@ -134,9 +134,9 @@
                     android:text="방문한 적 없는"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rv_map_save_visited"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="46dp"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:textColor="@color/black"
                     android:fontFamily="@font/pretendard_bold"
                     />

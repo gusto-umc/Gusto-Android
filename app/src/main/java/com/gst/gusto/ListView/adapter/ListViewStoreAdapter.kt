@@ -80,8 +80,8 @@ class ListViewStoreAdapter(private var flag : String) : ListAdapter<Store, ListV
         }
         else{
             // 글자크기 조정
-            val layoutParams = holder.layoutData.layoutParams as LinearLayout.LayoutParams
-            layoutParams.weight = 1.5f
+            //val layoutParams = holder.layoutData.layoutParams as LinearLayout.LayoutParams
+            //layoutParams.weight = 1.5f
 
             holder.cbEdit.visibility = View.GONE
             if(!holder.data!!.serverCategory.isNullOrBlank()){
