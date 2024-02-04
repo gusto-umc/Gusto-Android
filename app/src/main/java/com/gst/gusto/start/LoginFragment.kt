@@ -26,7 +26,7 @@ class LoginFragment : Fragment() {
 
         binding.btnNaver.setOnClickListener {
             binding.wv.visibility = View.VISIBLE
-            Log.d("안녕", BuildConfig.API_BASE)
+            //Log.d("안녕", BuildConfig.API_BASE)
             //binding.wv.loadUrl(BuildConfig.API_BASE+"oauth2/authorization/naver")
             findNavController().navigate(R.id.action_loginFragment_to_nameFragment)
         }

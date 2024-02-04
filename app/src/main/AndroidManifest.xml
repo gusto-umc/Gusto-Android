@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" >
+    <!-- 위치 권한 요청 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -19,8 +22,16 @@
             android:name=".my.activity.MySettingActivity"
             android:exported="false" />
         <activity
+            android:name=".MapInfoActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.naver.maps.map.3yu23i1pd1"
+            android:value="3yu23i1pd1" />
+
+        <activity
             android:name=".MainActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
