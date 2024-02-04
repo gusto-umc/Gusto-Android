@@ -38,7 +38,7 @@ class ReviewHowAdapter(val gradeList : MutableList<Int>, val option : Int):
             holder.tv_grade4,
             holder.tv_grade5
         )
-        if(option!=1) {
+        if(option!=1&&option!=2) {
             for(i in 0..4) {
                 gradeViews[i].setOnClickListener {
                     // Set color for tv_grade1
