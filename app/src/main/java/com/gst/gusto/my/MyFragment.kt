@@ -9,8 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
+import com.gst.clock.Fragment.MyReviewFragment
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentMyBinding
+import com.gst.gusto.my.adapter.MyViewpagerAdapter
+import com.gst.gusto.my.fragment.MyListFragment
 import com.gst.gusto.start.StartActivity
 
 class MyFragment : Fragment() {
