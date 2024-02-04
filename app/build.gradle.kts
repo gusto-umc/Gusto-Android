@@ -65,9 +65,6 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
 
-    // Circle ImageView
-    implementation("de.hdodenhof:circleimageview:3.1.0")
-
     // 네이버 지도 SDK 의존성 선언
     implementation("com.naver.maps:map-sdk:3.17.0")
 
