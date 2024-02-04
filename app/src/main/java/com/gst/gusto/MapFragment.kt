@@ -8,10 +8,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.gst.gusto.MapMainScreenFragment
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentMapBinding
 import com.naver.maps.geometry.LatLng
@@ -61,7 +64,51 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapBinding.inflate(inflater, container, false)
-        return binding.root
+        val view = binding.root
+
+        // BottomSheet 설정
+        val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+
+
+        // BottomSheet 상태 변화 감지
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        // BottomSheet가 숨겨진 경우 fragment_map_main_screen.xml을 보여줌
+                        showMainScreenFragment()
+                    }
+                    else -> {
+                        // 다른 상태에서는 fragment_map_main_screen.xml을 숨김
+                        hideMainScreenFragment()
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // 슬라이딩 중일 때 추가 작업이 필요하면 여기에 추가
+            }
+        })
+        return view
+    }
+
+    private fun showMainScreenFragment() {
+        // fragment_map_main_screen.xml을 보이게 하는 작업
+        val mainScreenFragment = MapMainScreenFragment()
+        childFragmentManager.beginTransaction()
+            .replace(R.id.fragment_map, mainScreenFragment)
+            .commit()
+    }
+
+    private fun hideMainScreenFragment() {
+        // fragment_map_main_screen.xml을 숨기는 작업
+        val mainScreenFragment =
+            childFragmentManager.findFragmentById(R.id.fragment_map) as? MapMainScreenFragment
+        mainScreenFragment?.let {
+            childFragmentManager.beginTransaction().remove(it).commit()
+        }
     }
 
     private fun initMapView() {
@@ -109,6 +156,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
         val marker = Marker()
         marker.position = initialPosition
         marker.map = naverMap
+
+        //MapMainScreenFragment 띄우기
+        val mainScreenFragment = MapMainScreenFragment()
+        childFragmentManager.beginTransaction()
+            .replace(R.id.fragment_map, mainScreenFragment)
+            .commit()
     }
 
     fun onMapClick(point: LatLng, coord: Point) {
