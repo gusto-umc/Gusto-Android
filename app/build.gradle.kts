@@ -72,7 +72,7 @@ dependencies {
     implementation("com.naver.maps:map-sdk:3.17.0")
 
     // 위치 권한 의존성 추가
-    implementation("com.google.android.gms:play-services-location:20.0.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
     // Glide library
     implementation("com.github.bumptech.glide:glide:4.12.0")
@@ -83,7 +83,4 @@ dependencies {
 
     // Ted Permission - RxJava3
     implementation("io.github.ParkSangGwon:tedpermission-rx3:3.3.0")
-
-    // Google Play Services 종속성 추가
-    implementation("com.google.android.gms:play-services-location:17.1.0")
 }
