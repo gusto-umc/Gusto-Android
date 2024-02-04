@@ -138,9 +138,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
 
-        naverMap.locationSource = locationSource
-        naverMap.uiSettings.isLocationButtonEnabled = true
-        naverMap.locationTrackingMode = LocationTrackingMode.Follow
+        naverMap.locationSource = locationSource //위치정보제공
+        naverMap.uiSettings.isLocationButtonEnabled = true //현재위치 나타내기
+        //naverMap.locationTrackingMode = LocationTrackingMode.Follow //위치트래킹
 
         // 위치 소스 상태 확인
         when (locationSource.isActivated) {
@@ -159,10 +159,13 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
 
         //MapMainScreenFragment 띄우기
         val mainScreenFragment = MapMainScreenFragment()
-        childFragmentManager.beginTransaction()
+
+        // Use activity's fragmentManager instead of childFragmentManager
+        requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_map, mainScreenFragment)
             .commit()
     }
+
 
     fun onMapClick(point: LatLng, coord: Point) {
         // 클릭한 위치에 마커 추가

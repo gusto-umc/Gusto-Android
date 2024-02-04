@@ -36,4 +36,15 @@
 
     </LinearLayout>
 
+    <!-- ImageButton -->
+    <ImageButton
+        android:id="@+id/list_view_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/list_view"
+        app:layout_anchor="@id/bottomSheet"
+        app:layout_anchorGravity="top|end"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
