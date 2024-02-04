@@ -64,7 +64,7 @@ class MapListViewFragment : Fragment() {
          * 카테고리Show 연결
          * 아이템 클릭 리스너
          */
-        val cateShowAdapter = ListViewCategoryAdapter("show", requireFragmentManager())
+        val cateShowAdapter = ListViewCategoryAdapter("show", requireFragmentManager(), view)
         cateShowAdapter.submitList(sampleCategoryData)
         categoryRvShow.adapter = cateShowAdapter
         categoryRvShow.layoutManager = LinearLayoutManager(this.requireActivity())
@@ -74,7 +74,7 @@ class MapListViewFragment : Fragment() {
          * 카테고리Edit 연결
          * 체크박스 리스너 처리
          */
-        val cateEditAdapter = ListViewEditCategoryAdapter("edit")
+        val cateEditAdapter = ListViewEditCategoryAdapter("edit", view)
         cateEditAdapter.submitList(sampleCategoryData)
         categoryRvEdit.adapter = cateEditAdapter
         categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())

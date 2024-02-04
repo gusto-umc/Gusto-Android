@@ -15,7 +15,7 @@ import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.R
 import com.gst.gusto.databinding.ItemListviewCategoryEditBinding
 
-class ListViewEditCategoryAdapter (private var flag : String) : ListAdapter<CategorySimple, ListViewEditCategoryAdapter.ViewHolder>(
+class ListViewEditCategoryAdapter (private var flag : String, private val parentView : View) : ListAdapter<CategorySimple, ListViewEditCategoryAdapter.ViewHolder>(
     DiffCallback) {
 
 
@@ -79,7 +79,7 @@ class ListViewEditCategoryAdapter (private var flag : String) : ListAdapter<Cate
                         Store(id = 0, storeName = "구스토 레스토랑", location = "메롱시 메로나동 바밤바 24-6 3층", visitCount = 3, storePhoto = 1, serverCategory = null, isSaved = null),
                         Store(id = 1, storeName = "Gusto Restaurant", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = 7, storePhoto = 1, serverCategory = null, isSaved = null)
                     )
-                    val mStoreAdapter = ListViewStoreAdapter("edit")
+                    val mStoreAdapter = ListViewStoreAdapter("edit", parentView)
                     mStoreAdapter.submitList(sampleStoreData!!)
                     holder.storeRv.adapter = mStoreAdapter
                     holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)

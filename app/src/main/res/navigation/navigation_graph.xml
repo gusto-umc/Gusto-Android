@@ -307,6 +307,9 @@
         <action
             android:id="@+id/action_mapListViewFragment_to_fragment_map"
             app:destination="@id/fragment_map" />
+        <action
+            android:id="@+id/action_mapListViewFragment_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/storeDetailFragment"

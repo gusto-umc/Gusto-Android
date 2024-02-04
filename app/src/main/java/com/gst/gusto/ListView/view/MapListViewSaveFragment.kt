@@ -40,7 +40,7 @@ class MapListViewSaveFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //방문 O Rv 연결
-        val mSaveOAdapter = ListViewStoreAdapter("save")
+        val mSaveOAdapter = ListViewStoreAdapter("save", view)
         mSaveOAdapter.submitList(sampleSaveOArray)
         mSaveOAdapter.setItemClickListener(object : ListViewStoreAdapter.OnItemClickListener{
             override fun onClick(v: View, dataSet: Store) {
@@ -52,7 +52,7 @@ class MapListViewSaveFragment : Fragment() {
         binding.rvMapSaveVisited.layoutManager = LinearLayoutManager(this.requireActivity())
 
         //방문 X Rv 연결
-        val mSaveXAdapter = ListViewStoreAdapter("save")
+        val mSaveXAdapter = ListViewStoreAdapter("save", view)
         mSaveXAdapter.submitList(sampleSaveOArray)
         mSaveXAdapter.setItemClickListener(object : ListViewStoreAdapter.OnItemClickListener{
             override fun onClick(v: View, dataSet: Store) {
