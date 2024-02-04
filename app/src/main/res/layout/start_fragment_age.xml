@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="5dp"
+        android:paddingVertical="13dp"
+        android:src="@drawable/arrow_left_1"
+        app:tint="@color/black" />
+    <LinearLayout
+        android:id="@+id/ly_ages"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/et_name"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_radius_10_stroke_1"
+        android:backgroundTint="@color/gray_3"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/btn_10"
+            android:paddingLeft="15dp"
+            android:layout_marginTop="46dp"
+            android:layout_width="match_parent"
+            android:gravity="bottom"
+            android:layout_height="30dp"
+            android:textColor="@color/gray_3"
+            android:textSize="16sp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="10대" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+        <TextView
+            android:id="@+id/btn_20"
+            android:paddingLeft="15dp"
+            android:layout_width="match_parent"
+            android:gravity="bottom"
+            android:layout_height="30dp"
+            android:textColor="@color/gray_3"
+            android:textSize="16sp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="20대" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+        <TextView
+            android:id="@+id/btn_30"
+            android:paddingLeft="15dp"
+            android:gravity="bottom"
+            android:layout_height="30dp"
+            android:layout_width="match_parent"
+            android:textColor="@color/gray_3"
+            android:textSize="16sp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="30대" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+        <TextView
+            android:id="@+id/btn_40"
+            android:paddingLeft="15dp"
+            android:gravity="bottom"
+            android:layout_height="30dp"
+            android:layout_width="match_parent"
+            android:textColor="@color/gray_3"
+            android:textSize="16sp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="40대" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+        <TextView
+            android:id="@+id/btn_50"
+            android:paddingLeft="15dp"
+            android:gravity="bottom"
+            android:layout_height="30dp"
+            android:layout_width="match_parent"
+            android:textColor="@color/gray_3"
+            android:textSize="16sp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="50대" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+        <TextView
+            android:id="@+id/btn_60"
+            android:paddingLeft="15dp"
+            android:gravity="bottom"
+            android:layout_height="30dp"
+            android:layout_width="match_parent"
+            android:textColor="@color/gray_3"
+            android:textSize="16sp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="60대 이상" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginTop="3dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+        <TextView
+            android:id="@+id/btn_no"
+            android:paddingLeft="15dp"
+            android:gravity="bottom"
+            android:layout_height="30dp"
+            android:layout_width="match_parent"
+            android:textColor="@color/gray_3"
+            android:textSize="16sp"
+            android:fontFamily="@font/pretendard_bold"
+            android:layout_marginBottom="10dp"
+            android:text="선택하지 않음" />
+
+    </LinearLayout>
+
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
+        android:fontFamily="@font/pretendard_semibold"
+        android:gravity="center"
+        android:text="_______님의\n나이를 선택해주세요."
+        android:textColor="@color/black"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/et_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="선택하지 않음"
+        android:textSize="16sp"
+        android:textColor="@color/gray_1"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="249dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/background_radius_10_stroke_1_fill_white"
+        android:paddingLeft="15dp" />
+
+
+    <TextView
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="93.5dp"
+        android:background="@drawable/background_radius_15"
+        android:backgroundTint="@color/main_C"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center"
+        android:text="다음으로 넘어가기"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

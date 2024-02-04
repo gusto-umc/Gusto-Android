@@ -29,24 +29,34 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:fontFamily="@font/pretendard_bold"/>
-        <ImageView
+        <TextView
             android:id="@+id/btn_add_review_tmp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@color/sub_m"/>
-        <ImageView
+            android:text="리뷰 작성"
+            android:background="@color/sub_m"/>
+        <TextView
             android:id="@+id/btn_feed_detail_tmp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@color/sub1"/>
-        <ImageView
+            android:text="피드에서 리뷰 보기"
+            android:background="@color/sub1"/>
+        <TextView
             android:id="@+id/btn_review_detail_tmp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@color/black"/>
+            android:text="자신 리뷰 보기"
+            android:background="@color/sub_m"/>
+        <TextView
+            android:id="@+id/btn_login"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="로그인"
+            android:background="@color/sub1"/>
         <ImageView
             android:id="@+id/btn_option"
             android:layout_width="54dp"

@@ -33,6 +33,12 @@
         <action
             android:id="@+id/action_listFragment_to_groupFragment"
             app:destination="@id/fragment_group" />
+        <action
+            android:id="@+id/action_listFragment_to_routeCreateFragment"
+            app:destination="@id/fragment_route_create" />
+        <action
+            android:id="@+id/action_listFragment_to_routeStoresFragment"
+            app:destination="@id/fragment_route_stores" />
     </fragment>
     <fragment
         android:id="@+id/fragment_list_group"
@@ -54,6 +60,75 @@
         <action
             android:id="@+id/action_groupFragment_to_listFragment"
             app:destination="@id/fragment_list" />
+        <action
+            android:id="@+id/action_groupFragment_to_groupMRoutEditFragment"
+            app:destination="@id/fragment_group_m_route_edit" />
+        <action
+            android:id="@+id/action_groupFragment_to_groupMRoutMapFragment"
+            app:destination="@id/fragment_group_m_route_map" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_group_m_route_stores"
+        android:name="com.gst.gusto.list.fragment.GroupRouteStoresFragment"
+        android:label="FragmentGroupMRoutesSotres"
+        tools:layout="@layout/fragment_list_group_m_route_stores">
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_group_m_route_routes"
+        android:name="com.gst.gusto.list.fragment.GroupRouteRoutesFragment"
+        android:label="FragmentGroupMRoutesRoutes"
+        tools:layout="@layout/fragment_list_group_m_route_routes">
+        <action
+            android:id="@+id/action_groupMRSFragment_to_groupMRRFragment"
+            app:destination="@id/fragment_group_m_route_stores" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_group_m_route_edit"
+        android:name="com.gst.gusto.list.fragment.GroupRouteEditFragment"
+        android:label="FragmentGroupMRouteEdit"
+        tools:layout="@layout/fragment_list_group_m_route_edit">
+        <action
+            android:id="@+id/action_groupMRoutEditFragment_to_groupFragment"
+            app:destination="@id/fragment_group" />
+        <action
+            android:id="@+id/action_groupMRoutEditFragment_to_routeStoresFragment"
+            app:destination="@id/fragment_route_stores" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_group_m_route_map"
+        android:name="com.gst.gusto.list.fragment.GroupRouteMapFragment"
+        android:label="FragmentGroupMRouteMap"
+        tools:layout="@layout/fragment_list_group_m_route_map">
+        <action
+            android:id="@+id/action_groupMRoutMapFragment_to_groupFragment"
+            app:destination="@id/fragment_group" />
+        <action
+            android:id="@+id/action_groupMRoutMapFragment_to_routeStoresFragment"
+            app:destination="@id/fragment_route_stores" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_route_create"
+        android:name="com.gst.gusto.list.fragment.RouteCreateFragment"
+        android:label="FragmentRouteCreate"
+        tools:layout="@layout/fragment_list_route_create">
+        <action
+            android:id="@+id/action_routeCreateFragment_to_listFragment"
+            app:destination="@id/fragment_list" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_route_stores"
+        android:name="com.gst.gusto.list.fragment.RouteStoresFragment"
+        android:label="FragmentRouteStores"
+        tools:layout="@layout/fragment_list_route_stores">
+        <action
+            android:id="@+id/action_routeStoresFragment_to_listFragment"
+            app:destination="@id/fragment_list" />
+        <action
+            android:id="@+id/action_routeStoresFragment_to_groupMREFragment"
+            app:destination="@id/fragment_group_m_route_edit" />
+        <action
+            android:id="@+id/action_routeStoresFragment_to_groupMRMFragment"
+            app:destination="@id/fragment_group_m_route_map" />
     </fragment>
 
     <!-- Review 화면의 프래그먼트들 -->

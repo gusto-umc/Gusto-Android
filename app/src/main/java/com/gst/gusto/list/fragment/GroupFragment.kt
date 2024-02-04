@@ -1,24 +1,25 @@
 package com.gst.gusto.list.fragment
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.gst.gusto.MainActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentListGroupMBinding
-import com.gst.gusto.list.adapter.GroupAdapter
-import com.gst.gusto.list.adapter.GroupItem
-import com.gst.gusto.list.adapter.ListGroupAdapter
-import com.gst.gusto.list.adapter.RestItem
+import com.gst.gusto.list.adapter.GroupViewpagerAdapter
+import java.lang.Math.abs
 
 class GroupFragment : Fragment() {
 
     lateinit var binding: FragmentListGroupMBinding
+    lateinit var mPager : ViewPager2
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,28 +28,72 @@ class GroupFragment : Fragment() {
         binding = FragmentListGroupMBinding.inflate(inflater, container, false)
 
         binding.ivBack.setOnClickListener {
-            findNavController().navigate(R.id.action_groupFragment_to_listFragment)
+            val adapter = mPager.adapter as GroupViewpagerAdapter
+
+            val frag = adapter.getCurrentFragment()
+            Log.d("hello1",frag.toString())
+            if(frag is GroupRoutesFragment ) {
+
+                if(frag.getCon().currentDestination !=null && frag.getCon().currentDestination!!.id == R.id.fragment_group_m_route_stores) {
+
+                    frag.getCon().navigate(R.id.fragment_group_m_route_routes)
+                } else findNavController().navigate(R.id.action_groupFragment_to_listFragment)
+            } else findNavController().navigate(R.id.action_groupFragment_to_listFragment)
         }
-
-        val rv_board = binding.rvGroup
-
-        val itemList = ArrayList<RestItem>()
-
-        itemList.add(RestItem("구스또 레스토랑","메롱시 메로나동 바밤바 24-6 1층",R.drawable.ic_launcher_background,R.drawable.ic_launcher_background))
-        itemList.add(RestItem("구스또 레스토랑","메롱시 메로나동 바밤바 24-6 1층",R.drawable.ic_launcher_background,R.drawable.ic_launcher_background))
-        itemList.add(RestItem("구스또 레스토랑","메롱시 메로나동 바밤바 24-6 1층",R.drawable.ic_launcher_background,R.drawable.ic_launcher_background))
-        itemList.add(RestItem("구스또 레스토랑","메롱시 메로나동 바밤바 24-6 1층",R.drawable.ic_launcher_background,R.drawable.ic_launcher_background))
-
-
-        val boardAdapter = GroupAdapter(itemList)
-        boardAdapter.notifyDataSetChanged()
-
-        rv_board.adapter = boardAdapter
-        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
 
         return binding.root
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val bundle = arguments
+
+        val data = bundle?.getInt("viewpage", 0)?: 0 // "key"에 해당하는 값을 가져옴
+
+        mPager = binding.vpGroup
+
+
+        var frag2 : Fragment
+        if(data == 1)  {
+            frag2 = GroupRoutesFragment(1)
+            binding.lyGroup.setBackgroundColor(Color.TRANSPARENT)
+        }
+        else frag2 = GroupRoutesFragment(0)
+
+        mPager.adapter = GroupViewpagerAdapter(requireActivity(),frag2,mPager,2)
+
+        mPager.setCurrentItem(data,false)
+
+
+
+        mPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                if(position==0) {
+                    var alpha = 1 - abs(positionOffset*1.3)
+                    if(alpha>1) alpha = 1.0
+                    else if (alpha<0) alpha = 0.0
+                    val mainColor = ContextCompat.getColor(requireContext(), R.color.sub_m)
+
+                    val backgroundColor = Color.argb(
+                        ((alpha) * 255).toInt(),
+                        Color.red(mainColor),
+                        Color.green(mainColor),
+                        Color.blue(mainColor)
+                    )
+
+                    binding.lyGroup.setBackgroundColor(backgroundColor)
+                }
+
+
+            }
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+            }
+        })
     }
 
 }

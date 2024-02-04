@@ -1,5 +1,6 @@
 package com.gst.gusto.my
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentMyBinding
+import com.gst.gusto.start.StartActivity
 
 class MyFragment : Fragment() {
 
@@ -40,7 +42,11 @@ class MyFragment : Fragment() {
         binding.btnReviewDetailTmp.setOnClickListener {
             findNavController().navigate(R.id.action_myFragment_to_reviewDetail)
         }
-
+        //임시 로그인
+        binding.btnLogin.setOnClickListener {
+            val intent = Intent(requireContext(), StartActivity::class.java)
+            startActivity(intent)
+        }
         return binding.root
 
     }
@@ -49,8 +55,8 @@ class MyFragment : Fragment() {
         //ViewPager2 Adapter 셋팅
 
         var viewPager2Adatper = MyViewpagerAdapter(requireActivity())
-        viewPager2Adatper.addFragment(MyListFragment())
         viewPager2Adatper.addFragment(MyReviewFragment())
+        viewPager2Adatper.addFragment(MyListFragment())
 
         //Adapter 연결
         binding.viewpager.apply {

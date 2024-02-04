@@ -16,7 +16,7 @@ class ReviewHowAdapter(val gradeList : MutableList<Int>, val option : Int):
     RecyclerView.Adapter<ReviewHowAdapter.ReviewHowViewHolder>(){
 
     private val itemList = arrayListOf(HowItem("맛슐랭",0),HowItem("맵기",1)
-        ,HowItem("분위기",3),HowItem("화장실",4),HowItem("주차장",5))
+        ,HowItem("분위기",2),HowItem("화장실",3),HowItem("주차장",4))
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewHowViewHolder {
         val view =
@@ -38,15 +38,15 @@ class ReviewHowAdapter(val gradeList : MutableList<Int>, val option : Int):
             holder.tv_grade4,
             holder.tv_grade5
         )
-
-        for(i in 0..4) {
-            gradeViews[i].setOnClickListener {
-                // Set color for tv_grade1
-                setGradeColors(gradeViews, i, R.color.main_C)
-                gradeList[currentItem.option] = i+1
+        if(option!=1) {
+            for(i in 0..4) {
+                gradeViews[i].setOnClickListener {
+                    // Set color for tv_grade1
+                    setGradeColors(gradeViews, i, R.color.main_C)
+                    gradeList[currentItem.option] = i+1
+                }
             }
         }
-
     }
 
     override fun getItemCount(): Int {
