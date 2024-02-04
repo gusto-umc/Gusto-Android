@@ -193,17 +193,17 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/btn_follow"
+                android:id="@+id/btn_profile_edit"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/background_radius_5"
                 android:backgroundTint="@color/gray_6"
-                android:textColor="@color/gray_1"
-                android:textSize="10sp"
                 android:fontFamily="@font/pretendard_semibold"
                 android:gravity="center"
-                android:text="팔로우"/>
+                android:text="프로필 수정"
+                android:textColor="@color/gray_1"
+                android:textSize="10sp" />
 
         </LinearLayout>
 
