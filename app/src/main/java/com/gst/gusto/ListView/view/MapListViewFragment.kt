@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.CategoryDetail
 import com.gst.gusto.ListView.Model.CategorySimple
@@ -65,6 +66,7 @@ class MapListViewFragment : Fragment() {
          */
         val cateShowAdapter = ListViewCategoryAdapter("show", requireFragmentManager())
         cateShowAdapter.submitList(sampleCategoryData)
+        cateShowAdapter.
         categoryRvShow.adapter = cateShowAdapter
         categoryRvShow.layoutManager = LinearLayoutManager(this.requireActivity())
 
@@ -82,8 +84,8 @@ class MapListViewFragment : Fragment() {
          * 뒤로가기 버튼, 시스템 뒤로가기 클릭리스너
          */
         binding.ivMapListviewBack.setOnClickListener {
-            Toast.makeText(this.requireContext(), "뒤로가기 클릭", Toast.LENGTH_SHORT).show()
-
+            //Toast.makeText(this.requireContext(), "뒤로가기 클릭", Toast.LENGTH_SHORT).show()
+            Navigation.findNavController(view).navigate(R.id.action_mapListViewFragment_to_fragment_map)
         }
 
         /**

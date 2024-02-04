@@ -3,12 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mapListViewSaveFragment">
+    app:startDestination="@id/fragment_map">
     <fragment
         android:id="@+id/fragment_map"
         android:name="com.gst.clock.Fragment.MapFragment"
         android:label="FragmentMap"
         tools:layout="@layout/fragment_map">
+        <action
+            android:id="@+id/action_fragment_map_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_fragment_map_to_mapListViewFragment"
+            app:destination="@id/mapListViewFragment" />
+        <action
+            android:id="@+id/action_fragment_map_to_mapListViewSaveFragment2"
+            app:destination="@id/mapListViewSaveFragment" />
     </fragment>
 
 
@@ -294,7 +303,11 @@
     <fragment
         android:id="@+id/mapListViewFragment"
         android:name="com.gst.gusto.ListView.view.MapListViewFragment"
-        android:label="MapListViewFragment" />
+        android:label="MapListViewFragment" >
+        <action
+            android:id="@+id/action_mapListViewFragment_to_fragment_map"
+            app:destination="@id/fragment_map" />
+    </fragment>
     <fragment
         android:id="@+id/storeDetailFragment"
         android:name="com.gst.gusto.store_detail.StoreDetailFragment"
@@ -305,6 +318,9 @@
         <action
             android:id="@+id/action_storeDetailFragment_to_fragment_review_detail"
             app:destination="@id/fragment_review_detail" />
+        <action
+            android:id="@+id/action_storeDetailFragment_to_mapListViewSaveFragment"
+            app:destination="@id/mapListViewSaveFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -320,5 +336,12 @@
     <fragment
         android:id="@+id/mapListViewSaveFragment"
         android:name="com.gst.gusto.ListView.view.MapListViewSaveFragment"
-        android:label="MapListViewSaveFragment" />
+        android:label="MapListViewSaveFragment" >
+        <action
+            android:id="@+id/action_mapListViewSaveFragment_to_fragment_map"
+            app:destination="@id/fragment_map" />
+        <action
+            android:id="@+id/action_mapListViewSaveFragment_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment" />
+    </fragment>
 </navigation>

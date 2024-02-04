@@ -32,7 +32,8 @@
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <!-- fragment_area.xml 내용 추가 -->
-        <include layout="@layout/fragment_area" />
+        <include layout="@layout/fragment_area"
+            android:id="@+id/fragment_area"/>
 
     </LinearLayout>
 

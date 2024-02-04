@@ -82,6 +82,9 @@ class StoreDetailFragment : Fragment() {
         /**
          * 뒤로가기 버튼 클릭 리스너
          */
+        binding.ivStoreDetailBack.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_mapListViewSaveFragment)
+        }
 
         /**
          * tablayout 설정

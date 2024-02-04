@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.ListView.adapter.ListViewStoreAdapter
@@ -41,14 +42,31 @@ class MapListViewSaveFragment : Fragment() {
         //방문 O Rv 연결
         val mSaveOAdapter = ListViewStoreAdapter("save")
         mSaveOAdapter.submitList(sampleSaveOArray)
+        mSaveOAdapter.setItemClickListener(object : ListViewStoreAdapter.OnItemClickListener{
+            override fun onClick(v: View, dataSet: Store) {
+                Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_storeDetailFragment)
+            }
+
+        })
         binding.rvMapSaveVisited.adapter = mSaveOAdapter
         binding.rvMapSaveVisited.layoutManager = LinearLayoutManager(this.requireActivity())
-        //방문 X Rv 연결
 
+        //방문 X Rv 연결
         val mSaveXAdapter = ListViewStoreAdapter("save")
         mSaveXAdapter.submitList(sampleSaveOArray)
+        mSaveXAdapter.setItemClickListener(object : ListViewStoreAdapter.OnItemClickListener{
+            override fun onClick(v: View, dataSet: Store) {
+                Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_storeDetailFragment)
+            }
+
+        })
         binding.rvMapSaveUnvisited.adapter = mSaveXAdapter
         binding.rvMapSaveUnvisited.layoutManager = LinearLayoutManager(this.requireActivity())
+
+        //뒤로가기 클리 리스너
+        binding.ivMapMapBack.setOnClickListener{
+            Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_fragment_map)
+        }
 
     }
 
