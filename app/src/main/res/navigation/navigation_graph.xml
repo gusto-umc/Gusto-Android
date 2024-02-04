@@ -10,12 +10,7 @@
         android:label="FragmentMap"
         tools:layout="@layout/fragment_map">
     </fragment>
-    <fragment
-        android:id="@+id/fragment_review"
-        android:name="com.gst.gusto.review.ReviewFragment"
-        android:label="FragmentReview"
-        tools:layout="@layout/fragment_review">
-    </fragment>
+
 
     <fragment
         android:id="@+id/fragment_feed"
@@ -131,7 +126,7 @@
             app:destination="@id/fragment_group_m_route_map" />
     </fragment>
 
-    <!-- Review 화면의 프래그먼트들 -->
+    <!-- Review 작성 화면의 프래그먼트들 -->
     <fragment
         android:id="@+id/fragment_review_add_1"
         android:name="com.gst.clock.Fragment.ReviewAdd1Fragment"
@@ -213,14 +208,25 @@
             android:id="@+id/action_reviewAdd7Fragment_to_reviewAdd6Fragment"
             app:destination="@id/fragment_review_add_6" />
     </fragment>
+
+    <!-- Review 화면의 프래그먼트들 -->
+    <fragment
+        android:id="@+id/fragment_review"
+        android:name="com.gst.gusto.review.ReviewFragment"
+        android:label="FragmentReview"
+        tools:layout="@layout/fragment_review">
+        <action
+            android:id="@+id/action_reviewFragment_to_reviewDetail"
+            app:destination="@id/fragment_review_detail"/>
+    </fragment>
     <fragment
         android:id="@+id/fragment_review_detail"
         android:name="com.gst.clock.Fragment.ReviewDetailFragment"
         android:label="FragmentReviewDetail"
         tools:layout="@layout/fragment_review_detail">
         <action
-            android:id="@+id/action_reviewDetail_to_myFragment"
-            app:destination="@id/fragment_my"/>
+            android:id="@+id/action_reviewDetail_to_reviewFragment"
+            app:destination="@id/fragment_review"/>
         <action
             android:id="@+id/action_reviewDetail_to_reviewDetailEdit"
             app:destination="@id/fragment_review_detail_edit"/>
@@ -231,8 +237,8 @@
         android:label="FragmentReviewDetailEdit"
         tools:layout="@layout/fragment_review_detail_edit">
         <action
-            android:id="@+id/action_reviewDetailEdit_to_myFragment"
-            app:destination="@id/fragment_my"/>
+            android:id="@+id/action_reviewDetailEdit_to_reviewFragment"
+            app:destination="@id/fragment_review"/>
     </fragment>
     <!-- Feed 화면의 프래그먼트들 -->
     <fragment

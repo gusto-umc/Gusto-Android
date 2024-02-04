@@ -41,7 +41,7 @@ class GroupRouteMapFragment : Fragment() {
         }
         val receivedBundle = arguments
         if (receivedBundle != null) {
-            page = receivedBundle.getString("page") as String
+            page = receivedBundle.getString("page")?:"group"
         }
         return binding.root
 

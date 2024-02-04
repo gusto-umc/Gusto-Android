@@ -1,38 +1,56 @@
 package com.gst.gusto.review.adapter
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.databinding.ItemReviewListBinding
+import com.gst.gusto.databinding.ItemReviewListButtonBinding
 
-class ListReviewAdapter(var dateList: Array<String>, var nameList: Array<String>, var visitList: Array<String>, var imageList: Array<Int>) : RecyclerView.Adapter<ListReviewAdapter.ViewHolder>() {
+class ListReviewAdapter(private val itemClickListener: (ListReviewData) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private var items = ArrayList<ListReviewData>()
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ListReviewAdapter.ViewHolder {
-        val binding: ItemReviewListBinding = ItemReviewListBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
-
-        return ViewHolder(binding)
+        if(viewType == ListReviewType.LISTREVIEW){
+            return ListReviewViewHolder(
+                ItemReviewListBinding.inflate(
+                    LayoutInflater.from(viewGroup.context),
+                    viewGroup, false
+                ), itemClickListener
+            )
+        }
+        return ListReviewBtnViewHolder(
+            ItemReviewListButtonBinding.inflate(
+                LayoutInflater.from(viewGroup.context),
+                viewGroup, false
+            ), itemClickListener
+        )
     }
 
-    override fun onBindViewHolder(holder: ListReviewAdapter.ViewHolder, position: Int) {
-        holder.datetextview.text = dateList[position]
-        holder.nametextview.text = nameList[position]
-        holder.visittextview.text = visitList[position]
-        holder.imageview1.setImageResource(imageList[position])
-        holder.imageview2.setImageResource(imageList[position])
-        holder.imageview3.setImageResource(imageList[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+        when(items[position].viewType){
+            ListReviewType.LISTREVIEW -> {
+                (holder as ListReviewViewHolder).bind(items[position])
+            }
+            ListReviewType.LISTBUTTON -> {
+                (holder as ListReviewBtnViewHolder).bind(items[position])
+            }
+
+        }
+
     }
 
-    override fun getItemCount(): Int = imageList.size
+    override fun getItemCount(): Int = items.size
 
+    override fun getItemViewType(position: Int): Int {
+        return items[position].viewType
+    }
 
-    inner class ViewHolder(val binding: ItemReviewListBinding) : RecyclerView.ViewHolder(binding.root){
-        val datetextview = binding.dateTextView
-        val nametextview = binding.nameTextView
-        val visittextview = binding.visitTextView
-        val imageview1 = binding.imageView1
-        val imageview2 = binding.imageView2
-        val imageview3 = binding.imageView3
+    @SuppressLint("NotifyDataSetChanged")
+    fun setData(list: ArrayList<ListReviewData>){
+        items = list
+        notifyDataSetChanged()
     }
 }
