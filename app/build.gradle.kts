@@ -34,8 +34,8 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        dataBinding = true
         viewBinding = true
+        dataBinding = true
 
     }
 }
@@ -72,6 +72,8 @@ dependencies {
     //extended floating button
     implementation ("com.google.android.material:material:1.3.0-alpha02")
 
+// Ted Permission - RxJava3
+    implementation ("io.github.ParkSangGwon:tedpermission-rx3:3.3.0")
 
 
 }

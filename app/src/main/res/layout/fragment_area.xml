@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/main"
                 android:textStyle="bold"
-                android:textSize="20px"
+                android:textSize="50px"
                 android:text="mio gusto!" />
         </LinearLayout>
         <TextView

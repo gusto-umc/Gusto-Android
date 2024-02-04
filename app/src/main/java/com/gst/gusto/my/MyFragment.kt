@@ -8,8 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import com.gst.clock.Fragment.MyListFragment
-import com.gst.clock.Fragment.MyReviewFragment
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentMyBinding
 
@@ -47,7 +45,9 @@ class MyFragment : Fragment() {
 
     }
     private fun initViewPager() {
+
         //ViewPager2 Adapter 셋팅
+
         var viewPager2Adatper = MyViewpagerAdapter(requireActivity())
         viewPager2Adatper.addFragment(MyListFragment())
         viewPager2Adatper.addFragment(MyReviewFragment())
