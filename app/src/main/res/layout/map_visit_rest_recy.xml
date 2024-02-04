@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="레스토랑 주소(위치)"
-            android:textSize="15ㄴp"
+            android:textSize="15sp"
             android:textColor="@color/main_C"
             android:textStyle="bold"
             />
