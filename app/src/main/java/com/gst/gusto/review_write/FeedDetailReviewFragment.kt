@@ -45,10 +45,10 @@ class FeedDetailReviewFragment : Fragment() {
         binding = FragmentFeedDetailBinding.inflate(inflater, container, false)
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_feedDetailReview_to_myFragment)
+            findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
         }
         binding.btnProfile.setOnClickListener {
-            findNavController().navigate(R.id.action_feedDetailReview_to_myFragment)
+            findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
         }
         chipGroup = binding.chipGroup
 
@@ -61,9 +61,9 @@ class FeedDetailReviewFragment : Fragment() {
 
         val viewPager = binding.vpImgSlider
         val imageList = listOf(
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_launcher_background
+            R.drawable.sample_store_img,
+            R.drawable.sample_store_2_img,
+            R.drawable.sample_store_3_img
             // Add more images as needed
         )
 

@@ -23,7 +23,7 @@ class ReviewAdd1Fragment : Fragment() {
         binding = FragmentReviewAdd1Binding.inflate(inflater, container, false)
 
         binding.btnExit.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd1Fragment_to_myFragment)
+            findNavController().navigate(R.id.action_reviewAdd1Fragment_to_storeDetailFragment)
         }
 
         binding.btnNext.setOnClickListener {

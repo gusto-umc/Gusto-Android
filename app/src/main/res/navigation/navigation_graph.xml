@@ -142,8 +142,8 @@
         android:label="FragmentReviewAdd1"
         tools:layout="@layout/fragment_review_add_1">
         <action
-            android:id="@+id/action_reviewAdd1Fragment_to_myFragment"
-            app:destination="@id/fragment_my" />
+            android:id="@+id/action_reviewAdd1Fragment_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment" />
         <action
             android:id="@+id/action_reviewAdd1Fragment_to_reviewAdd2Fragment"
             app:destination="@id/fragment_review_add_2" />
@@ -216,6 +216,10 @@
         <action
             android:id="@+id/action_reviewAdd7Fragment_to_reviewAdd6Fragment"
             app:destination="@id/fragment_review_add_6" />
+        <action
+            android:id="@+id/action_reviewAdd7Fragment_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment" />
+
     </fragment>
 
     <!-- Review 화면의 프래그먼트들 -->
@@ -256,8 +260,8 @@
         android:label="FeedDetailReviewFragment"
         tools:layout="@layout/fragment_feed_detail">
         <action
-            android:id="@+id/action_feedDetailReview_to_myFragment"
-            app:destination="@id/fragment_my" />
+            android:id="@+id/action_feedDetailReview_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment" />
     </fragment>
 
     <!-- My 화면의 프래그먼트들 -->
@@ -319,8 +323,8 @@
             android:id="@+id/action_storeDetailFragment_to_fragment_review_add_1"
             app:destination="@id/fragment_review_add_1" />
         <action
-            android:id="@+id/action_storeDetailFragment_to_fragment_review_detail"
-            app:destination="@id/fragment_review_detail" />
+            android:id="@+id/action_storeDetailFragment_to_fragment_feed_review_detail"
+            app:destination="@id/fragment_feed_detail_review" />
         <action
             android:id="@+id/action_storeDetailFragment_to_mapListViewSaveFragment"
             app:destination="@id/mapListViewSaveFragment" />
