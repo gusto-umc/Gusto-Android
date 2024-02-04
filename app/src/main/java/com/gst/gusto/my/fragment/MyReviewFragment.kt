@@ -1,5 +1,6 @@
 package com.gst.clock.Fragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentMyReviewBinding
 import com.gst.gusto.review.adapter.GalleryReviewAdapter
+import com.gst.gusto.review.adapter.GridItemDecoration
 
 class MyReviewFragment : Fragment() {
 
@@ -39,6 +41,10 @@ class MyReviewFragment : Fragment() {
         })
         binding.apply {
             recyclerView.adapter = adapter
+            val size = resources.getDimensionPixelSize(R.dimen.one_dp)
+            val color = Color.WHITE
+            val itemDecoration = GridItemDecoration(size, color)
+            recyclerView.addItemDecoration(itemDecoration)
             recyclerView.layoutManager = GridLayoutManager(activity, 3)
             adapter.notifyDataSetChanged()
         }
