@@ -18,8 +18,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="@color/gray_3"
-            android:textStyle="bold"
-            android:layout_marginTop="10px"
+            android:fontFamily="@font/pretendard_regular"
+            android:layout_marginTop="15sp"
+            android:textSize="15sp"
             android:text="현 위치" />
 
         <TextView
@@ -27,9 +28,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="@color/main"
-            android:textSize="25ds"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:padding="10px"
+            android:layout_marginLeft="10sp"
             android:text="현재 사용자의 위치" />
     </LinearLayout>
 
