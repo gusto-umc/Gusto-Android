@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.graphics.Point
 import android.graphics.PointF
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.gst.gusto.MapMainScreenFragment
 import com.gst.gusto.R
@@ -92,6 +94,23 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
             }
         })
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        //목록 보기 클릭 리스너 - 민디
+        binding.listViewBtn.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
+        }
+
+        //방문 o 클릭 리스너 -> 보완 예정
+        binding.fragmentArea.vis1.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
+        }
+        //방문 x 클릭 리스너 -> 보완 예정
+        binding.fragmentArea.vis01.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
+        }
     }
 
     private fun showMainScreenFragment() {
