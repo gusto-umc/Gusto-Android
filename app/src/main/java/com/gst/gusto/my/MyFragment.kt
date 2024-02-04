@@ -40,10 +40,6 @@ class MyFragment : Fragment() {
         binding.btnFeedDetailTmp.setOnClickListener {
             findNavController().navigate(R.id.action_myFragment_to_feedDetail)
         }
-        //임시 리뷰에서 리뷰 정보 보기
-        binding.btnReviewDetailTmp.setOnClickListener {
-            findNavController().navigate(R.id.action_myFragment_to_reviewDetail)
-        }
         //임시 로그인
         binding.btnLogin.setOnClickListener {
             val intent = Intent(requireContext(), StartActivity::class.java)
