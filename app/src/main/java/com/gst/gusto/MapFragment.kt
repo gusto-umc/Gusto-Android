@@ -140,7 +140,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
 
         naverMap.locationSource = locationSource
         naverMap.uiSettings.isLocationButtonEnabled = true
-        naverMap.locationTrackingMode = LocationTrackingMode.Follow
+        //naverMap.locationTrackingMode = LocationTrackingMode.Follow
 
         // 위치 소스 상태 확인
         when (locationSource.isActivated) {
@@ -159,11 +159,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
 
         //MapMainScreenFragment 띄우기
         val mainScreenFragment = MapMainScreenFragment()
-        childFragmentManager.beginTransaction()
+
+        // Use activity's fragmentManager instead of childFragmentManager
+        requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_map, mainScreenFragment)
             .commit()
     }
-
     fun onMapClick(point: LatLng, coord: Point) {
         // 클릭한 위치에 마커 추가
         val marker = Marker()
