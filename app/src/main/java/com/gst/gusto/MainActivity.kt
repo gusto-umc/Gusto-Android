@@ -10,7 +10,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.gst.gusto.databinding.ActivityMainBinding
 import com.naver.maps.map.NaverMapSdk
 
-// MainActivity.kt
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
