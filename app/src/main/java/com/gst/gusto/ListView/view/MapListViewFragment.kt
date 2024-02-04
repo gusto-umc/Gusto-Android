@@ -66,7 +66,6 @@ class MapListViewFragment : Fragment() {
          */
         val cateShowAdapter = ListViewCategoryAdapter("show", requireFragmentManager())
         cateShowAdapter.submitList(sampleCategoryData)
-        cateShowAdapter.
         categoryRvShow.adapter = cateShowAdapter
         categoryRvShow.layoutManager = LinearLayoutManager(this.requireActivity())
 
