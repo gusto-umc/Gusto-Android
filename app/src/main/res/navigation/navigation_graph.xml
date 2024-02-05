@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/fragment_feed"
-        android:name="com.gst.clock.Fragment.FeedFragment"
+        android:name="com.gst.gusto.feed.FeedFragment"
         android:label="FragmentFeed"
         tools:layout="@layout/fragment_feed">
     </fragment>
