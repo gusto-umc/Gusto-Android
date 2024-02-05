@@ -24,10 +24,11 @@
         <activity
             android:name=".MapInfoActivity"
             android:exported="false" />
-
+<!--
         <meta-data
             android:name="com.naver.maps.map.3yu23i1pd1"
             android:value="3yu23i1pd1" />
+            -->
 
         <activity
             android:name=".MainActivity"

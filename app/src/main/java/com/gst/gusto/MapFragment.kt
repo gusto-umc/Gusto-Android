@@ -46,8 +46,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
         super.onCreate(savedInstanceState)
 
         activity?.let {
-            NaverMapSdk.getInstance(it).client =
-                NaverMapSdk.NaverCloudPlatformClient("3yu23i1pd1")
+            //NaverMapSdk.getInstance(it).client =
+            //    NaverMapSdk.NaverCloudPlatformClient("3yu23i1pd1")
         }
 
         if (!hasPermission()) {
@@ -131,6 +131,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
     }
 
     private fun initMapView() {
+        /*
         val fm = childFragmentManager
         val mapFragment = fm.findFragmentById(R.id.map_fragment) as MapFragment?
             ?: MapFragment.newInstance().also {
@@ -139,6 +140,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
 
         mapFragment.getMapAsync(this)
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+
+         */
     }
 
     private fun hasPermission(): Boolean {
