@@ -76,6 +76,9 @@ dependencies {
     //extended floating button
     implementation ("com.google.android.material:material:1.3.0-alpha02")
 
-
+    // Retrofit 라이브러리
+    implementation ("com.squareup.retrofit2:retrofit:2.6.4")
+    implementation ("com.squareup.retrofit2:converter-gson:2.6.4")
+    implementation ("com.squareup.retrofit2:converter-scalars:2.6.4")
 
 }

@@ -12,8 +12,10 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.gst.api.LoginViewModel
 import com.gst.gusto.BuildConfig
 import com.gst.gusto.R
 import com.gst.gusto.databinding.StartFragmentLoginBinding
@@ -32,6 +34,7 @@ import java.net.URL
 class LoginFragment : Fragment() {
 
     lateinit var binding: StartFragmentLoginBinding
+    private val LoginViewModel : LoginViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +55,6 @@ class LoginFragment : Fragment() {
             binding.wv.visibility = View.VISIBLE
             Log.d("안녕", BuildConfig.API_BASE)
             binding.wv.loadUrl(BuildConfig.API_BASE+"oauth/authorize/naver")
-            //findNavController().navigate(R.id.action_loginFragment_to_nameFragment)
         }
         return binding.root
 
@@ -65,30 +67,14 @@ class LoginFragment : Fragment() {
 
                 var url = request?.url.toString()
                 Log.d("url",url)
-                if (url.startsWith("http://119")) {
-                    GlobalScope.launch(Dispatchers.IO) {
-                        try {
-                            val finalUrl = resolveRedirect(url)
-
-                            val url = URL(finalUrl)
-                            val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
-                            connection.connectTimeout = 3000
-                            connection.connect()
-
-                            // Get the size of the file which is in the header of the request
-                            val size: Int = connection.contentLength
-                            Log.d("ConnectionStatus", "Response Code: ${connection.responseCode}")
-                            Log.d("ConnectionStatus", "Response Message: ${connection.responseMessage}")
-                            Log.d("ConnectionStatus", "Response Message: ${connection}")
-                            val headers = connection.headerFields
-                            for ((key, value) in headers) {
-                                Log.d("Headers", "$key: $value")
+                if (url.startsWith("http://119.192.42.243:10004/auth/result")) {
+                    getResponseLogin(url) { result ->
+                        when (result) {
+                            1 -> {
+                                findNavController().navigate(R.id.action_loginFragment_to_nameFragment)
                             }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
                         }
                     }
-
                     return true
                 } else {
                     binding.wv.loadUrl(url)
@@ -100,21 +86,31 @@ class LoginFragment : Fragment() {
             }
         })
     }
-    private fun resolveRedirect(url: String): String {
-        val connection: HttpURLConnection = URL(url).openConnection() as HttpURLConnection
-        connection.instanceFollowRedirects = false
-        connection.connect()
+    private fun getResponseLogin(url : String, callback: (Int) -> Unit) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val headers = fetchHeadersFromUrl(url)
+            withContext(Dispatchers.Main) {
+                for ((key, value) in headers) {
+                    if(key == "temp-token") {
+                        LoginViewModel.setTempToken(value.get(0))
+                    }
+                }
+                callback(1)
+            }
+        }
+    }
+    private fun fetchHeadersFromUrl(urlString: String): Map<String, List<String>> {
+        val url = URL(urlString)
+        val connection = url.openConnection() as HttpURLConnection
+        try {
+            // 요청 보내기 (헤더 정보를 얻기 위해 빈 응답을 받아옴)
+            connection.requestMethod = "HEAD"
+            connection.connect()
 
-        val redirectUrl: String = connection.getHeaderField("Location") ?: url
-
-        return if (redirectUrl.startsWith("http")|| redirectUrl.startsWith("https")) {
-            // Absolute URL
-            redirectUrl
-        } else {
-            // Relative URL, resolve against the original URL
-            val originalUrl = URL(url)
-            val resolvedUrl = URL(originalUrl, redirectUrl)
-            resolvedUrl.toString()
+            // 헤더 정보 가져오기
+            return connection.headerFields
+        } finally {
+            connection.disconnect()
         }
     }
 }
