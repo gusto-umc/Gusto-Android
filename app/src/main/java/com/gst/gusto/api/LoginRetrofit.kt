@@ -1,4 +1,4 @@
-package com.gst.api
+package com.gst.gusto.api
 
 import com.google.gson.annotations.SerializedName
 import okhttp3.MultipartBody

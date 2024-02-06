@@ -16,7 +16,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
-import com.gst.api.LoginViewModel
+import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.BuildConfig
 import com.gst.gusto.R
 import com.gst.gusto.databinding.StartFragmentLoginBinding
@@ -72,9 +72,11 @@ class LoginFragment : Fragment() {
                     getResponseLogin(url) { result ->
                         when (result) {
                             1 -> {
+                                // 1은 회원가입 해야하는 상태
                                 findNavController().navigate(R.id.action_loginFragment_to_nameFragment)
                             }
                             0 -> {
+                                // 0은 회원가입 한 상태라 로그인
                                 requireActivity().finish()
                             }
                         }

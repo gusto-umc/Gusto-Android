@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.gst.api.LoginViewModel
+import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
 import com.gst.gusto.Util.util.Companion.toggleLayout

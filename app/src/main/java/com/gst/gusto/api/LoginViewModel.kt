@@ -1,4 +1,4 @@
-package com.gst.api
+package com.gst.gusto.api
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

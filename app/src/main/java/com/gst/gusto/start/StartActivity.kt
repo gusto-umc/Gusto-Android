@@ -11,7 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.gst.api.LoginViewModel
+import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.R
 import com.gst.gusto.databinding.ActivityStartBinding
 
