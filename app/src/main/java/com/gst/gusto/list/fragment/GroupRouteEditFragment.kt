@@ -34,7 +34,7 @@ class GroupRouteEditFragment : Fragment() {
         }
         val receivedBundle = arguments
         if (receivedBundle != null) {
-            page = receivedBundle.getString("page")?:"group"
+            page = receivedBundle.getString("page")?: "group"
         }
         return binding.root
 

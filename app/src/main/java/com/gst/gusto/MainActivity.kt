@@ -52,4 +52,5 @@ class MainActivity : AppCompatActivity() {
     fun getCon(): NavController {
         return navController
     }
+
 }
