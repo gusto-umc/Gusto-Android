@@ -1,4 +1,5 @@
 import org.gradle.api.JavaVersion
+import org.gradle.internal.impldep.bsh.commands.dir
 import java.util.Properties
 
 plugins {
@@ -65,8 +66,6 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
 
-    // 네이버 지도 SDK 의존성 선언
-    implementation("com.naver.maps:map-sdk:3.17.0")
 
     // 위치 권한 의존성 추가
     implementation("com.google.android.gms:play-services-location:21.0.1")
@@ -80,4 +79,8 @@ dependencies {
 
     // Ted Permission - RxJava3
     implementation("io.github.ParkSangGwon:tedpermission-rx3:3.3.0")
+
+    // kakao
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation(files("libs/libDaumMapAndroid.jar"))
 }
