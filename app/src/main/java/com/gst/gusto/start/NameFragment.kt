@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -25,10 +26,34 @@ class NameFragment : Fragment() {
     ): View? {
         binding = StartFragmentNameBinding.inflate(inflater, container, false)
 
-
         binding.btnNext.setOnClickListener {
-            LoginViewModel.setNickName(binding.etName.text.toString())
-            findNavController().navigate(R.id.action_nameFragment_to_ageFragment)
+            LoginViewModel.checkNickname(binding.etName.text.toString()) { resultCode ->
+                when (resultCode) {
+                    1 -> {
+                        LoginViewModel.confirmNickname(binding.etName.text.toString()) { resultCode ->
+                            when (resultCode) {
+                                1 -> {
+                                    LoginViewModel.setNickName(binding.etName.text.toString())
+                                    findNavController().navigate(R.id.action_nameFragment_to_ageFragment)
+                                }/*
+                                2 -> {
+                                    Toast.makeText(requireContext(), "이미 중복된 닉네임이 존재합니다", Toast.LENGTH_SHORT).show()
+                                }
+                                else -> {
+                                    Toast.makeText(requireContext(), "오류 발생", Toast.LENGTH_SHORT).show()
+                                }*/
+                            }
+                        }
+                    }
+                    2 -> {
+                        Toast.makeText(requireContext(), "이미 중복된 닉네임이 존재합니다", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {
+                        Toast.makeText(requireContext(), "오류 발생", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
         }
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.action_nameFragment_to_loginFragment)
@@ -40,8 +65,6 @@ class NameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
 
         binding.etName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -57,6 +80,9 @@ class NameFragment : Fragment() {
                 // 이벤트 발생 후에 수행할 작업
             }
         })
+
+        val activity = requireActivity() as StartActivity
+        activity.startTimer()
     }
 
 }

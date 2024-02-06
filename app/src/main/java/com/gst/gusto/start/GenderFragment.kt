@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -31,16 +32,13 @@ class GenderFragment : Fragment() {
                 when (resultCode) {
                     1 -> {
                         findNavController().navigate(R.id.action_genderFragment_to_completeFragment)
-                        // TODO: 성공에 대한 처리 작성
                         println("회원가입 성공")
                     }
                     2 -> {
-                        // 회원가입 실패한 경우
-                        // TODO: 실패에 대한 처리 작성
+                        Toast.makeText(requireContext(), "회원가입 실패", Toast.LENGTH_SHORT).show()
                         println("회원가입 실패")
                     }
                     else -> {
-                        // 기타 처리
                         println("알 수 없는 결과 코드")
                     }
                 }

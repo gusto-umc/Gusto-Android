@@ -74,6 +74,9 @@ class LoginFragment : Fragment() {
                             1 -> {
                                 findNavController().navigate(R.id.action_loginFragment_to_nameFragment)
                             }
+                            0 -> {
+                                requireActivity().finish()
+                            }
                         }
                     }
                     return true
@@ -90,13 +93,22 @@ class LoginFragment : Fragment() {
     private fun getResponseLogin(url : String, callback: (Int) -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
             val headers = fetchHeadersFromUrl(url)
+            var loginOrSign = 1 //0은 회원가입 한 상태라 로그인, 1은 회원가입 해야하는 상태
             withContext(Dispatchers.Main) {
                 for ((key, value) in headers) {
-                    if(key == "temp-token") {
-                        LoginViewModel.setTempToken(value.get(0))
+                    if(key!=null) {
+                        if(key == "temp-token") {
+                            LoginViewModel.setTempToken(value.get(0))
+                        } else if(key =="X-Auth-Token") {
+                            loginOrSign = 0
+                            LoginViewModel.setAccessToken(value.get(0))
+                        } else if(key =="refresh-Token") {
+                            loginOrSign = 0
+                            LoginViewModel.setRefreshToken(value.get(0))
+                        }
                     }
                 }
-                callback(1)
+                callback(loginOrSign)
             }
         }
     }
@@ -119,17 +131,22 @@ class LoginFragment : Fragment() {
                     response.append(line)
                 }
                 val gson = Gson()
-                val jsonObject = gson.fromJson(response.toString(), Map::class.java) as Map<String, Any>
-
-                val profileImgUrl = jsonObject["profileImg"] as? String
-                if (profileImgUrl != null) {
-                    LoginViewModel.setImage(profileImgUrl)
+                try {
+                    val jsonObject = gson.fromJson(response.toString(), Map::class.java) as? Map<String, Any>
+                    if (jsonObject != null) {
+                        val profileImgUrl = jsonObject["profileImg"] as? String
+                        if (profileImgUrl != null) {
+                            LoginViewModel.setImage(profileImgUrl)
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    // 예외 처리
                 }
                 reader.close()
             } else {
                 println("Failed to fetch response, response code: $responseCode")
             }
-
             // 헤더 정보 가져오기
             return connection.headerFields
         } finally {

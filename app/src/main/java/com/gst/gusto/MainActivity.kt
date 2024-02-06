@@ -28,11 +28,5 @@ class MainActivity : AppCompatActivity() {
         return navController
     }
 
-    override fun onBackPressed() {
-        // 현재 NavController의 백 스택을 확인하고, 이전 destination으로 이동합니다.
-        if (!navController.popBackStack()) {
-            super.onBackPressed()
-        }
-    }
 
 }
