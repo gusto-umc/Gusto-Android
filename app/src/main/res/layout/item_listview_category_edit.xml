@@ -10,14 +10,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="4dp"
-            android:layout_marginHorizontal="6dp"
+            android:layout_marginVertical="1dp"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_item_category_edit_updown"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:background="@color/white"
                 >
 
                 <CheckBox
@@ -26,8 +25,9 @@
                     android:layout_height="12dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="9dp"
                     android:layout_marginTop="20dp"
+                    android:background="@drawable/checkbox_custom"
+                    android:button="@null"
                     />
                 <ImageView
                     android:id="@+id/iv_item_category_edit"
@@ -66,7 +66,6 @@
                     android:layout_marginTop="4.65dp"
                     />
                 <FrameLayout
-                    android:id="@+id/layout_item_category_edit_updown"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -74,35 +73,25 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:paddingLeft="10dp"
                     android:layout_marginVertical="5dp">
+
                     <ImageView
                         android:id="@+id/btn_item_category_edit_down"
                         android:layout_width="12dp"
-                        android:layout_height="6dp"
-                        android:src="@drawable/arrow_down_2_img"
-                        android:layout_marginEnd="22.51dp"
+                        android:layout_height="7dp"
                         android:layout_gravity="center_vertical"
-                        />
-                    <ImageView
-                        android:id="@+id/btn_item_category_edit_up"
-                        android:visibility="gone"
-                        android:layout_width="12dp"
-                        android:layout_height="6dp"
-                        android:src="@drawable/arrow_up_1_img"
                         android:layout_marginEnd="22.51dp"
-                        android:layout_gravity="center_vertical"
-                        />
+                        android:src="@drawable/arrow_down_2_img" />
                 </FrameLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.recyclerview.widget.RecyclerView
-
+                android:visibility="gone"
                 android:id="@+id/rv_item_category_show_store"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
-                android:paddingTop="6dp"
-                android:background="@color/gray_2"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="6dp"
                 />
         </LinearLayout>
 
