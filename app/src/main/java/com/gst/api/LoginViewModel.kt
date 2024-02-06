@@ -2,10 +2,12 @@ package com.gst.api
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.google.gson.annotations.SerializedName
 import com.gst.gusto.BuildConfig
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,10 +19,15 @@ class LoginViewModel: ViewModel() {
         .addConverterFactory(GsonConverterFactory.create()).build()
     val service = retrofit.create(LoginRetrofit::class.java)
 
+    lateinit var image : String
     lateinit var tmpToken : String
     lateinit var nickName : String
     lateinit var age : String
     lateinit var gender : String
+    fun setImage(image : String) : Boolean {
+        this.image = image
+        return true
+    }
     fun setTempToken(tmpToken : String) : Boolean {
         this.tmpToken = tmpToken
         return true
@@ -38,15 +45,10 @@ class LoginViewModel: ViewModel() {
         return true
     }
     fun signUp(callback: (Int) -> Unit){
-        val profileImgPart: MultipartBody.Part? = null
-        val infoJson = """
-            {
-                "nickname": "$nickName",
-                "age": "$age",
-                "gender": "$gender"
-            }
-        """.trimIndent()
-        service.signUp(tmpToken,infoJson)
+        val data = LoginRetrofit.info("$nickName","$age","$gender","$image")
+        //jsonObject.put("profileImg",null)
+        Log.d("json",data.toString())
+        service.signUp(tmpToken, LoginRetrofit.signData(null,data))
             .enqueue(object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     if (response.isSuccessful) {
@@ -59,7 +61,7 @@ class LoginViewModel: ViewModel() {
                             callback(2)
                         }
                     } else {
-                        Log.e("LoginViewModel", "Unsuccessful response: ${response.code()}")
+                        Log.e("LoginViewModel", "Unsuccessful response: ${response}")
                         callback(2)
                     }
                 }
@@ -69,6 +71,6 @@ class LoginViewModel: ViewModel() {
                     callback(2)
                 }
             })
-
     }
+
 }

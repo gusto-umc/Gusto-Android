@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
 import com.gst.api.LoginViewModel
 import com.gst.gusto.BuildConfig
 import com.gst.gusto.R
@@ -67,7 +68,7 @@ class LoginFragment : Fragment() {
 
                 var url = request?.url.toString()
                 Log.d("url",url)
-                if (url.startsWith("http://119.192.42.243:10004/auth/result")) {
+                if (url.startsWith("https://gustoapp.shop/auth/result")) {
                     getResponseLogin(url) { result ->
                         when (result) {
                             1 -> {
@@ -104,8 +105,30 @@ class LoginFragment : Fragment() {
         val connection = url.openConnection() as HttpURLConnection
         try {
             // 요청 보내기 (헤더 정보를 얻기 위해 빈 응답을 받아옴)
-            connection.requestMethod = "HEAD"
+            connection.requestMethod = "GET"
             connection.connect()
+
+            val responseCode = connection.responseCode
+            // 응답 본문 가져오기
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val inputStream = connection.inputStream
+                val reader = BufferedReader(InputStreamReader(inputStream))
+                val response = StringBuilder()
+                var line: String?
+                while (reader.readLine().also { line = it } != null) {
+                    response.append(line)
+                }
+                val gson = Gson()
+                val jsonObject = gson.fromJson(response.toString(), Map::class.java) as Map<String, Any>
+
+                val profileImgUrl = jsonObject["profileImg"] as? String
+                if (profileImgUrl != null) {
+                    LoginViewModel.setImage(profileImgUrl)
+                }
+                reader.close()
+            } else {
+                println("Failed to fetch response, response code: $responseCode")
+            }
 
             // 헤더 정보 가져오기
             return connection.headerFields
