@@ -14,6 +14,7 @@ import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.createUpdateProgressRunnable
 import com.gst.gusto.databinding.FragmentReviewAdd7Binding
@@ -22,15 +23,16 @@ class ReviewAdd7Fragment : Fragment() {
 
     lateinit var binding: FragmentReviewAdd7Binding
     lateinit var progressBar : ProgressBar
-    private val menuList = ArrayList<EditText>()
     private val handler = Handler()
     private val progressPoint = 600
-
+    lateinit var activity: MainActivity
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentReviewAdd7Binding.inflate(inflater, container, false)
+
+        activity = requireActivity() as MainActivity
 
         val bundle = Bundle().apply {
             putInt("progress", progressPoint)
@@ -43,6 +45,7 @@ class ReviewAdd7Fragment : Fragment() {
             findNavController().navigate(R.id.action_reviewAdd7Fragment_to_reviewAdd6Fragment,bundle)
         }
         binding.btnEnd.setOnClickListener {
+            activity.hideBottomNavigation(false)
             findNavController().navigate(R.id.action_reviewAdd7Fragment_to_storeDetailFragment)
         }
         return binding.root

@@ -21,13 +21,6 @@
     </fragment>
 
 
-    <fragment
-        android:id="@+id/fragment_feed"
-        android:name="com.gst.gusto.feed.FeedFragment"
-        android:label="FragmentFeed"
-        tools:layout="@layout/fragment_feed">
-    </fragment>
-
     <!-- List 화면의 프래그먼트들 -->
     <fragment
         android:id="@+id/fragment_list"
@@ -241,6 +234,9 @@
             android:id="@+id/action_reviewDetail_to_reviewFragment"
             app:destination="@id/fragment_review"/>
         <action
+            android:id="@+id/action_reviewDetail_to_myFragment"
+            app:destination="@id/fragment_my"/>
+        <action
             android:id="@+id/action_reviewDetail_to_reviewDetailEdit"
             app:destination="@id/fragment_review_detail_edit"/>
     </fragment>
@@ -250,10 +246,19 @@
         android:label="FragmentReviewDetailEdit"
         tools:layout="@layout/fragment_review_detail_edit">
         <action
-            android:id="@+id/action_reviewDetailEdit_to_reviewFragment"
-            app:destination="@id/fragment_review"/>
+            android:id="@+id/action_reviewDetailEdit_to_reviewDetailFragment"
+            app:destination="@id/fragment_review_detail"/>
     </fragment>
     <!-- Feed 화면의 프래그먼트들 -->
+    <fragment
+        android:id="@+id/fragment_feed"
+        android:name="com.gst.gusto.feed.FeedFragment"
+        android:label="FragmentFeed"
+        tools:layout="@layout/fragment_feed">
+        <action
+            android:id="@+id/action_feedFragment_to_feedDetailReviewFragment"
+            app:destination="@id/fragment_feed_detail_review" />
+    </fragment>
     <fragment
         android:id="@+id/fragment_feed_detail_review"
         android:name="com.gst.clock.Fragment.FeedDetailReviewFragment"
@@ -262,6 +267,9 @@
         <action
             android:id="@+id/action_feedDetailReview_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_feedDetailReview_to_feedFragment"
+            app:destination="@id/fragment_feed" />
     </fragment>
 
     <!-- My 화면의 프래그먼트들 -->

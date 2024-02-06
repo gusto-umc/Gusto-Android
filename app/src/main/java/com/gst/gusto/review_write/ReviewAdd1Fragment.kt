@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.dpToPixels
 import com.gst.gusto.databinding.FragmentReviewAdd1Binding
@@ -15,6 +17,7 @@ import com.gst.gusto.databinding.FragmentReviewAdd1Binding
 class ReviewAdd1Fragment : Fragment() {
 
     lateinit var binding: FragmentReviewAdd1Binding
+    lateinit var activity: MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,7 +25,10 @@ class ReviewAdd1Fragment : Fragment() {
     ): View? {
         binding = FragmentReviewAdd1Binding.inflate(inflater, container, false)
 
+        activity = requireActivity() as MainActivity
+
         binding.btnExit.setOnClickListener {
+            activity.hideBottomNavigation(false)
             findNavController().navigate(R.id.action_reviewAdd1Fragment_to_storeDetailFragment)
         }
 
@@ -44,6 +50,7 @@ class ReviewAdd1Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activity.hideBottomNavigation(true)
         binding.lyRest.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
                 val width: Int = binding.lyRest.width
@@ -59,9 +66,5 @@ class ReviewAdd1Fragment : Fragment() {
                 return true
             }
         })
-
-
     }
-
-
 }

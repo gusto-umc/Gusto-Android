@@ -21,18 +21,23 @@ import com.gst.gusto.review_write.adapter.ReviewHowAdapter
 class ReviewDetailFragment : Fragment() {
 
     lateinit var binding: FragmentReviewDetailBinding
-
+    lateinit var page : String
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentReviewDetailBinding.inflate(inflater, container, false)
+        val receivedBundle = arguments
+        if (receivedBundle != null) {
+            page = receivedBundle.getString("page")?:"review"
+        }
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewDetail_to_reviewFragment)
+            if(page=="review") findNavController().navigate(R.id.action_reviewDetail_to_reviewFragment)
+            else if(page=="my") findNavController().navigate(R.id.action_reviewDetail_to_myFragment)
         }
         binding.btnEdit.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewDetail_to_reviewDetailEdit)
+            findNavController().navigate(R.id.action_reviewDetail_to_reviewDetailEdit,receivedBundle)
         }
         binding.btnRemove.setOnClickListener {
 

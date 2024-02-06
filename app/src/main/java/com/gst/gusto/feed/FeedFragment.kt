@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentFeedBinding
@@ -38,7 +39,10 @@ class FeedFragment : Fragment() {
         // feed 이미지클릭 리스너 부분
         adapter = GalleryReviewAdapter(testImageList, context,
             itemClickListener = {
-                    it -> Toast.makeText(context,"테스트용", Toast.LENGTH_SHORT).show()
+                val bundle = Bundle()
+                bundle.putInt("reviewId",0)     //리뷰 아이디 넘겨 주면 됨
+                bundle.putString("page","feed")
+                findNavController().navigate(R.id.action_feedFragment_to_feedDetailReviewFragment,bundle)
             })
 
         binding.apply {

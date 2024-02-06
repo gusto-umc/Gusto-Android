@@ -33,8 +33,13 @@ class ReviewDetailEditFragment : Fragment() {
     ): View? {
         binding = FragmentReviewDetailEditBinding.inflate(inflater, container, false)
 
+        val receivedBundle = arguments
+
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewDetailEdit_to_reviewFragment)
+            findNavController().navigate(R.id.action_reviewDetailEdit_to_reviewDetailFragment,receivedBundle)
+        }
+        binding.btnSave.setOnClickListener {
+            findNavController().navigate(R.id.action_reviewDetailEdit_to_reviewDetailFragment,receivedBundle)
         }
 
         return binding.root

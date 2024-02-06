@@ -30,13 +30,11 @@ import java.lang.Math.abs
 class FeedDetailReviewFragment : Fragment() {
 
     lateinit var binding: FragmentFeedDetailBinding
-
-
     lateinit var  chipGroup: ChipGroup
-
     private lateinit var scaleUpAnimation: ScaleAnimation
     private lateinit var scaleDownAnimation: ScaleAnimation
     private lateinit var bounceInterpolator: BounceInterpolator
+    lateinit var page : String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,8 +42,14 @@ class FeedDetailReviewFragment : Fragment() {
     ): View? {
         binding = FragmentFeedDetailBinding.inflate(inflater, container, false)
 
+        val receivedBundle = arguments
+        if (receivedBundle != null) {
+            page = receivedBundle.getString("page")?:"feed"
+        }
+
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
+            if(page=="feed") findNavController().navigate(R.id.action_feedDetailReview_to_feedFragment)
+            else if(page=="storeDetail") findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
         }
         binding.btnProfile.setOnClickListener {
             findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)

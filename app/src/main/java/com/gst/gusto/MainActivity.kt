@@ -8,10 +8,13 @@ import android.util.Base64
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gst.gusto.databinding.ActivityMainBinding
 import java.security.MessageDigest
 
@@ -52,5 +55,13 @@ class MainActivity : AppCompatActivity() {
     fun getCon(): NavController {
         return navController
     }
-
+    fun hideBottomNavigation(bool : Boolean) {
+        val bottomNavigation = binding.bottomNavigationView
+        if(bool){
+            bottomNavigation.isGone = true
+        }
+        else {
+            bottomNavigation.isVisible = true
+        }
+    }
 }

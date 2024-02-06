@@ -66,4 +66,6 @@ class StartActivity : AppCompatActivity() {
         navController.navigate(R.id.fragment_login)
     }
 
+
+
 }
