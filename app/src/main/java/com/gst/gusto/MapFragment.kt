@@ -84,8 +84,8 @@ class MapFragment : Fragment(){
         val markerList = ArrayList<MarkerItem>()
         markerList.add(MarkerItem("0",37.53737528, 127.00557635))
 
-        setMapInit()
-        setMarker(markerList)
+        //setMapInit()
+        //setMarker(markerList)
         return view
     }
 
