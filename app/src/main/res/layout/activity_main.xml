@@ -14,24 +14,21 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/navigation_graph"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/navigation_graph" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="8dp"
+        android:background="@drawable/shadow_line"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/shadow_line"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        app:layout_constraintTop_toBottomOf="@id/fl_container"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="72dp"
@@ -43,6 +40,10 @@
         app:itemTextAppearanceInactive="@style/BottomNavigationView"
         app:itemTextColor="@drawable/bottomnavigation_colors"
         app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fl_container"
         app:menu="@menu/bv_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:clickable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#99333333"
+        android:focusableInTouchMode="true">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/feedSearch"
+            android:focusable="true"
+            android:layout_width="328dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/background_radius_5_stroke_feed"
+            android:drawableRight="@drawable/search_feed"
+            android:fontFamily="@font/pretendard_regular"
+            android:hint="맛집 및 해시태그 검색"
+            android:paddingLeft="16dp"
+            android:paddingRight="10dp"
+            android:textColorHint="#A6A6A6"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/warm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_radius_feed_search_off"
+                android:fontFamily="@font/pretendard_medium"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:text="# 따뜻함"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/clean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_radius_feed_search_off"
+                android:fontFamily="@font/pretendard_medium"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:layout_marginLeft="12dp"
+                android:text="# 깨끗함"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/insta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_radius_feed_search_off"
+                android:fontFamily="@font/pretendard_medium"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:layout_marginLeft="12dp"
+                android:text="# 인스타"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/comportable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_radius_feed_search_off"
+                android:fontFamily="@font/pretendard_medium"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:layout_marginLeft="12dp"
+                android:text="# 쾌적"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="13dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/cute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_radius_feed_search_off"
+                android:fontFamily="@font/pretendard_medium"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:text="# 귀여워"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/wide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_radius_feed_search_off"
+                android:fontFamily="@font/pretendard_medium"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:layout_marginLeft="12dp"
+                android:text="# 넓음"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/mood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_radius_feed_search_off"
+                android:fontFamily="@font/pretendard_medium"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:layout_marginLeft="12dp"
+                android:text="# 분위기"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_radius_feed_search_off"
+                android:fontFamily="@font/pretendard_medium"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:layout_marginLeft="12dp"
+                android:text="# 가성비"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
