@@ -30,27 +30,6 @@
             android:textSize="16sp"
             android:fontFamily="@font/pretendard_bold"/>
         <TextView
-            android:id="@+id/btn_add_review_tmp"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="리뷰 작성"
-            android:background="@color/sub_m"/>
-        <TextView
-            android:id="@+id/btn_feed_detail_tmp"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="피드에서 리뷰 보기"
-            android:background="@color/sub1"/>
-        <TextView
-            android:id="@+id/btn_review_detail_tmp"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="자신 리뷰 보기"
-            android:background="@color/sub_m"/>
-        <TextView
             android:id="@+id/btn_login"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -199,17 +178,17 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/btn_follow"
+                android:id="@+id/btn_profile_edit"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/background_radius_5"
                 android:backgroundTint="@color/gray_6"
-                android:textColor="@color/gray_1"
-                android:textSize="10sp"
                 android:fontFamily="@font/pretendard_semibold"
                 android:gravity="center"
-                android:text="팔로우"/>
+                android:text="프로필 수정"
+                android:textColor="@color/gray_1"
+                android:textSize="10sp" />
 
         </LinearLayout>
 

@@ -33,12 +33,25 @@
                         app:tint="@color/black"
                         />
 
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/iv_map_listview_edit_back"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginLeft="10dp"
+                        android:padding="12dp"
+                        android:src="@drawable/arrow_left_1"
+                        app:tint="@color/black"
+                        />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="내 위치의 장소 보기"
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/pretendard_bold"
                         />
 
                     <View
@@ -56,6 +69,7 @@
                         android:paddingEnd="32dp"
                         android:paddingLeft="20dp"
                         android:textColor="@color/main_C"
+                        android:textSize="12sp"
                         />
                 </LinearLayout>
 
@@ -65,6 +79,7 @@
         </androidx.appcompat.widget.Toolbar>
 
         <RelativeLayout
+            android:id="@+id/layout_map_listview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/background_review_add">
@@ -81,39 +96,44 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/layout_order"
+                        android:id="@+id/layout_listview_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="13dp"
                         android:layout_marginStart="24dp"
                         >
                         <TextView
+                            android:id="@+id/tv_listview_order순"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="방문자순"
+                            android:text="최신순"
                             android:textSize="8sp"
                             android:textColor="@color/gray_3"
-                            android:layout_marginEnd="4dp"
+                            android:layout_marginEnd="3dp"
                             />
                         <ImageView
-                            android:layout_width="2.5dp"
-                            android:layout_height="6dp"
+                            android:layout_width="4dp"
+                            android:layout_height="10dp"
+                            android:src="@drawable/arrow_down_1_img"
+                            android:layout_gravity="center_vertical"
                             />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/layout_select"
+                        android:visibility="gone"
+                        android:id="@+id/layout_listview_select"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="13dp"
                         android:layout_marginStart="24dp"
-                        android:visibility="gone"
                         >
                         <CheckBox
                             android:id="@+id/cb_map_listview_all"
                             android:layout_width="12dp"
                             android:layout_height="12dp"
                             android:layout_gravity="center_vertical"
+                            android:background="@drawable/checkbox_custom"
+                            android:button="@null"
                             />
                         <TextView
                             android:layout_width="wrap_content"
@@ -134,18 +154,20 @@
                         android:id="@+id/rv_map_listview_category_show"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="15.5dp"
+                        android:layout_marginEnd="15.5dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="20dp"
                         />
                     <androidx.recyclerview.widget.RecyclerView
                         android:visibility="gone"
                         android:id="@+id/rv_map_listview_category_edit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="23dp"
+                        android:layout_marginEnd="15dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginBottom="100dp"
                         />
 
 
@@ -160,13 +182,25 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 >
+
+
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fab_map_listview_add"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_marginEnd="28.18dp"
-                    android:layout_marginVertical="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="40dp"
+                    android:backgroundTint="@color/sub_m"
+                    app:fabCustomSize="60dp"
+                    android:src="@drawable/plus_img"
+                    android:elevation="4dp"
+                    app:maxImageSize="24dp"
+                    app:tint="@color/white"
+                    app:shapeAppearance="@style/Widget.MaterialComponents.FloatingActionButton"
+                    app:fabSize="normal"
+                    app:borderWidth="0dp"
                     />
+
             </LinearLayout>
 
             <LinearLayout

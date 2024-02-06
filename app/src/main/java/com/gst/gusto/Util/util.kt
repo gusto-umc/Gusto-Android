@@ -1,17 +1,28 @@
 package com.gst.gusto.Util
 
+import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Point
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Handler
 import android.os.ext.SdkExtensions
 import android.util.DisplayMetrics
+import android.util.LayoutDirection
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.gst.gusto.ListView.ViewModel.MapViewModel
 import com.gst.gusto.R
 
 class util {
@@ -112,6 +123,73 @@ class util {
                 ToggleAnimation.collapse(layoutExpand)
             }
             return isExpanded
+        }
+
+        fun setPopupOne(context: Context, title : String, theView : View, desc : String){
+            val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_one_button, null)
+            val mBuilder = AlertDialog.Builder(context)
+                .setView(mDialogView)
+                .create()
+
+            mBuilder?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            mBuilder?.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            mBuilder.show()
+
+            //팝업 사이즈 조절
+            DisplayMetrics()
+            context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val size = Point()
+            val display = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+            display.getSize(size)
+            val screenWidth = size.x
+            val popupWidth = (screenWidth * 0.8).toInt()
+            mBuilder?.window?.setLayout(popupWidth, WindowManager.LayoutParams.WRAP_CONTENT)
+
+            //팝업 타이틀 설정, 버튼 작용 시스템
+            mDialogView.findViewById<TextView>(R.id.tv_dialog_one_text).text = title
+            mDialogView.findViewById<ImageButton>(R.id.btn_dialog_one).setOnClickListener( {
+                mBuilder.dismiss()
+            })
+            mDialogView.findViewById<TextView>(R.id.tv_dialog_one_desc).text  = desc
+
+        }
+
+        fun setPopupTwo(context: Context, title: String, theView : View, desc : String, flag : String, viewModel : MapViewModel){
+            val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_two_button, null)
+            val mBuilder = AlertDialog.Builder(context)
+                .setView(mDialogView)
+                .create()
+
+            mBuilder?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            mBuilder?.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            mBuilder.show()
+
+            //팝업 사이즈 조절
+            DisplayMetrics()
+            context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val size = Point()
+            val display = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+            display.getSize(size)
+            val screenWidth = size.x
+            val popupWidth = (screenWidth * 0.8).toInt()
+            mBuilder?.window?.setLayout(popupWidth, WindowManager.LayoutParams.WRAP_CONTENT)
+
+            //flag별 동작 적용
+
+            mDialogView.findViewById<TextView>(R.id.tv_dialog_two_text).text = title
+            mDialogView.findViewById<TextView>(R.id.tv_dialog_two_desc).text = desc
+            mDialogView.findViewById<TextView>(R.id.btn_dialog_two_no).text = "no"
+            mDialogView.findViewById<TextView>(R.id.btn_dialog_two_yes).text = "yes"
+
+            mDialogView.findViewById<TextView>(R.id.btn_dialog_two_no).setOnClickListener {
+                mBuilder.dismiss()
+            }
+
+            mDialogView.findViewById<TextView>(R.id.btn_dialog_two_yes).setOnClickListener {
+                mBuilder.dismiss()
+            }
+
+
         }
     }
 }

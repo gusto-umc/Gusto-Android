@@ -43,7 +43,7 @@ class ReviewAdd7Fragment : Fragment() {
             findNavController().navigate(R.id.action_reviewAdd7Fragment_to_reviewAdd6Fragment,bundle)
         }
         binding.btnEnd.setOnClickListener {
-            Log.d("contentList",binding.etContent.text.toString())
+            findNavController().navigate(R.id.action_reviewAdd7Fragment_to_storeDetailFragment)
         }
         return binding.root
 

@@ -35,7 +35,7 @@
                 android:fontFamily="@font/pretendard_medium"
                 android:text="12/31"
                 android:textColor="@color/white"
-                android:textSize="10dp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
                 android:fontFamily="@font/pretendard_bold"
                 android:text="오늘의 후기를 남겨주세요!"
                 android:textColor="@color/white"
-                android:textSize="10dp" />
+                android:textSize="10sp" />
 
         </LinearLayout>
 
