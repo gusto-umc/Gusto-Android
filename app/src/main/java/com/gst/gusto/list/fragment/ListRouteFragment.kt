@@ -28,7 +28,6 @@ class ListRouteFragment : Fragment() {
     ): View? {
         binding = FragmentListRouteBinding.inflate(inflater, container, false)
 
-
         return binding.root
     }
 
@@ -39,6 +38,17 @@ class ListRouteFragment : Fragment() {
         fun callActivityFunction(): NavController {
             return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
         }
+        itemList = ArrayList()
+        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
+        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
+        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
+        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
+
+        val boardAdapter = LisAdapter(itemList, callActivityFunction(), 1)
+        boardAdapter.notifyDataSetChanged()
+        rv_board.adapter = boardAdapter
+        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        /*
         gustoViewModel.getTokens(requireActivity() as MainActivity)
         gustoViewModel.checkMyRoute {result ->
             when(result) {
@@ -52,6 +62,6 @@ class ListRouteFragment : Fragment() {
 
                 }
             }
-        }
+        }*/
     }
 }

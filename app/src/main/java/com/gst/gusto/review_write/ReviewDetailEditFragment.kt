@@ -36,10 +36,10 @@ class ReviewDetailEditFragment : Fragment() {
         val receivedBundle = arguments
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewDetailEdit_to_reviewDetailFragment,receivedBundle)
+            findNavController().popBackStack()
         }
         binding.btnSave.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewDetailEdit_to_reviewDetailFragment,receivedBundle)
+            findNavController().popBackStack()
         }
 
         return binding.root

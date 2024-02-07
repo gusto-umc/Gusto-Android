@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupMRouteEditBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
 import com.gst.gusto.list.adapter.RouteItem
@@ -15,7 +17,7 @@ import com.gst.gusto.list.adapter.RouteItem
 class GroupRouteEditFragment : Fragment() {
 
     lateinit var binding: FragmentListGroupMRouteEditBinding
-    lateinit var page : String
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,20 +26,9 @@ class GroupRouteEditFragment : Fragment() {
         binding = FragmentListGroupMRouteEditBinding.inflate(inflater, container, false)
 
         binding.ivBack.setOnClickListener {
-            if(page == "route") {
-                findNavController().navigate(R.id.action_groupMRoutEditFragment_to_routeStoresFragment)
-            } else {
-                val bundle = Bundle()
-                bundle.putInt("viewpage",1)
-                findNavController().navigate(R.id.action_groupMRoutEditFragment_to_groupFragment,bundle)
-            }
-        }
-        val receivedBundle = arguments
-        if (receivedBundle != null) {
-            page = receivedBundle.getString("page")?: "group"
+            findNavController().popBackStack()
         }
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,7 +36,6 @@ class GroupRouteEditFragment : Fragment() {
 
         val itemList = ArrayList<RouteItem>()
 
-        itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
         itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
         itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
         itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
@@ -65,9 +55,11 @@ class GroupRouteEditFragment : Fragment() {
                 binding.lyAddRoute.visibility = View.INVISIBLE
             }
         }
-
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        gustoViewModel.groupFragment = 1
+    }
 
 }

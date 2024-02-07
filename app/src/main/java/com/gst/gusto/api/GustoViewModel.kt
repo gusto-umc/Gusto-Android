@@ -28,6 +28,10 @@ class GustoViewModel: ViewModel() {
     // 리뷰 작성하기에서 위의 진행도 바
     var progress = 0
 
+    // 리스트 화면에서 돌아온 화면 종류
+    var listFragment = "group" // group or route
+    var groupFragment = 0 // stores = 0 or routes = 1
+
     // 토큰 얻는 함수
     fun getTokens(activity: MainActivity) {
         xAuthToken = activity.getSharedPref().first

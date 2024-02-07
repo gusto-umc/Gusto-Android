@@ -17,22 +17,24 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.dpToPixels
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListMainBinding
 import com.gst.gusto.list.adapter.RouteItem
 
 
 class ListFragment : Fragment() {
-
     lateinit var binding: FragmentListMainBinding
     private var isFabOpen = false
     private val colorStateOffList = ColorStateList.valueOf(Color.parseColor("#FEB520"))
     private val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
     lateinit var fabBackground : ImageView
+    private val gustoViewModel : GustoViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,11 +76,7 @@ class ListFragment : Fragment() {
             navController.navigate(R.id.fragment_list_route)
         }
 
-        val receivedBundle = arguments
-        if (receivedBundle != null) {
-            val page = receivedBundle.getInt("page") as Int
-            if(page == 1) binding.btnRoute.callOnClick()
-        }
+        if(gustoViewModel.listFragment=="route") binding.btnRoute.callOnClick()
 
         return binding.root
 

@@ -48,8 +48,7 @@ class FeedDetailReviewFragment : Fragment() {
         }
 
         binding.btnBack.setOnClickListener {
-            if(page=="feed") findNavController().navigate(R.id.action_feedDetailReview_to_feedFragment)
-            else if(page=="storeDetail") findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
+            findNavController().popBackStack()
         }
         binding.btnProfile.setOnClickListener {
             findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)

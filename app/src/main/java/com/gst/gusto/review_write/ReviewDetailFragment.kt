@@ -33,8 +33,7 @@ class ReviewDetailFragment : Fragment() {
         }
 
         binding.btnBack.setOnClickListener {
-            if(page=="review") findNavController().navigate(R.id.action_reviewDetail_to_reviewFragment)
-            else if(page=="my") findNavController().navigate(R.id.action_reviewDetail_to_myFragment)
+            findNavController().popBackStack()
         }
         binding.btnEdit.setOnClickListener {
             findNavController().navigate(R.id.action_reviewDetail_to_reviewDetailEdit,receivedBundle)

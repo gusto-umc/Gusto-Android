@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -15,6 +16,7 @@ import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.Util.util
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupMRouteMapBinding
 import com.gst.gusto.list.adapter.RouteItem
 import com.gst.gusto.list.adapter.RouteMapDetailItem
@@ -28,11 +30,10 @@ import net.daum.mf.map.api.MapView
 class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEventListener {
 
     lateinit var binding: FragmentListGroupMRouteMapBinding
-    lateinit var page : String
     private val TAG = "MapViewEventListener"
     lateinit var mapView : MapView
-    private val routePOIList = ArrayList<MapPOIItem>()
     val markerList = ArrayList<MarkerItem>()
+    private val gustoViewModel : GustoViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,13 +41,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         binding = FragmentListGroupMRouteMapBinding.inflate(inflater, container, false)
 
         binding.ivBack.setOnClickListener {
-            if(page == "route") {
-                findNavController().navigate(R.id.action_groupMRoutMapFragment_to_routeStoresFragment)
-            } else {
-                val bundle = Bundle()
-                bundle.putInt("viewpage",1)
-                findNavController().navigate(R.id.action_groupMRoutMapFragment_to_groupFragment,bundle)
-            }
+            findNavController().popBackStack()
         }
 
         return binding.root
@@ -60,7 +55,6 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
 
         val receivedBundle = arguments
         if (receivedBundle != null) {
-            page = receivedBundle.getString("page")?:"group"
             val tmpList = receivedBundle.getSerializable("itemList") as ArrayList<RouteItem>?
             if (tmpList != null) {
                 for(data in tmpList) {
@@ -69,10 +63,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
             }
         }
 
-
-
         val viewPager = binding.vpSlider
-
 
         // 이미지 슬라이드
         val adapter = RouteViewPagerAdapter(itemList)
@@ -128,6 +119,10 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         super.onPause()
         Log.d("MapViewEventListener","onPause")
         binding.kakaoRouteMap.removeAllViews()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        gustoViewModel.groupFragment = 1
     }
 
     override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
