@@ -26,6 +26,9 @@ class MyProfileEditActivity : AppCompatActivity() {
                 test = !test
                 checkNickName(test)
             }
+            btnBack.setOnClickListener{
+                finish()
+            }
         }
 
         setContentView(binding.root)
