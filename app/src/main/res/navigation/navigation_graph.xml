@@ -359,4 +359,22 @@
             android:id="@+id/action_mapListViewSaveFragment_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/myRouteRoutesFragment"
+        android:name="com.gst.gusto.my.MyRouteRoutesFragment"
+        android:label="MyRouteRoutesFragment"
+        tools:layout="@layout/fragment_my_route_routes">
+        <action
+            android:id="@+id/action_myRouteRoutesFragment_to_myRouteStoresFragment"
+            app:destination="@id/myRouteStoresFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myRouteStoresFragment"
+        android:name="com.gst.gusto.my.MyRouteStoresFragment"
+        android:label="MyRouteStoresFragment"
+        tools:layout="@layout/fragment_my_route_stores">
+        <action
+            android:id="@+id/action_myRouteStoresFragment_to_myRouteRoutesFragment"
+            app:destination="@id/myRouteRoutesFragment" />
+    </fragment>
 </navigation>

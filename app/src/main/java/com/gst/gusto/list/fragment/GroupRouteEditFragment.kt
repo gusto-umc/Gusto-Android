@@ -45,10 +45,10 @@ class GroupRouteEditFragment : Fragment() {
 
         val itemList = ArrayList<RouteItem>()
 
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
+        itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
+        itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
+        itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
+        itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
 
         binding.rvRoutes
 

@@ -35,7 +35,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/pretendard_bold"
-                android:text="루트 제작"
+                android:text="루트"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 

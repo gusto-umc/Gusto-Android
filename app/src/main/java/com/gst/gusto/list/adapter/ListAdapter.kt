@@ -34,8 +34,13 @@ class LisAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListGroupViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list_group_view, parent, false)
 
-        if(option==1) {
+        // 디폴트 리스트 그룹
+        if(option==1||option==2||option==3) {
             view.findViewById<ImageView>(R.id.iv_icon).setImageResource(R.drawable.route_img)
+        }
+        if(option==3) { // 마이 루트
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_my_route, parent, false)
+            return ListGroupViewHolder(view)
         }
         return ListGroupViewHolder(view)
     }
@@ -43,7 +48,7 @@ class LisAdapter(
     @SuppressLint("ClickableViewAccessibility", "ResourceAsColor")
     override fun onBindViewHolder(holder: ListGroupViewHolder, position: Int) {
         holder.tv_title.text = itemList[position].title
-        if(option == 1) {
+        if(option == 1||option==2||option==3) {
             holder.tv_food.text = "장소 : ${itemList[position].food}개"
             holder.ly_route.visibility = View.GONE
         } else {
@@ -102,6 +107,8 @@ class LisAdapter(
                 }
             } else if(option == 2){
                 Navigation.findNavController(holder.itemView).navigate(R.id.action_groupMRSFragment_to_groupMRRFragment)
+            } else if(option == 3){
+                Navigation.findNavController(holder.itemView).navigate(R.id.action_myRouteRoutesFragment_to_myRouteStoresFragment)
             }
 
         }

@@ -27,7 +27,6 @@
                 app:tint="@color/gray_3" />
 
             <TextView
-                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -42,13 +41,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/background"
+            <RelativeLayout
+                android:id="@+id/kakao_route_map"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:background="#80333333" />
+                android:layout_height="match_parent"/>
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_slider"
                 android:layout_width="match_parent"
@@ -56,7 +52,38 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_height="191dp"
-                android:paddingHorizontal="10dp" />
+                android:paddingHorizontal="10dp" /><!--
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_edit"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="22dp"
+                android:layout_marginBottom="18dp"
+                app:fabCustomSize="60dp"
+                android:src="@drawable/fab_edit_img"
+                android:elevation="4dp"
+                app:maxImageSize="24dp"
+                app:tint="@color/white"
+                app:shapeAppearance="@style/Widget.MaterialComponents.FloatingActionButton"
+                app:fabSize="normal"
+                app:borderWidth="0dp"
+                android:backgroundTint="@color/sub_m"
+                app:layout_constraintBottom_toTopOf="@id/fab_list"
+                app:layout_constraintEnd_toEndOf="parent" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_list"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="22dp"
+                android:layout_marginBottom="20dp"
+                app:fabCustomSize="60dp"
+                android:src="@drawable/fab_map_img"
+                android:elevation="4dp"
+                app:fabSize="normal"
+                app:borderWidth="0dp"
+                android:backgroundTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

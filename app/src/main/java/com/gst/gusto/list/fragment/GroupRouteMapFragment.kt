@@ -11,7 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.gst.clock.Fragment.MapFragment
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.Util.mapUtil
+import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.Util.util
 import com.gst.gusto.databinding.FragmentListGroupMRouteMapBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
@@ -19,6 +23,7 @@ import com.gst.gusto.list.adapter.RouteItem
 import com.gst.gusto.list.adapter.RouteMapDetailItem
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter
 import com.gst.gusto.review_write.adapter.ImageViewPagerAdapter
+import net.daum.mf.map.api.MapView
 
 class GroupRouteMapFragment : Fragment() {
 
@@ -39,10 +44,7 @@ class GroupRouteMapFragment : Fragment() {
                 findNavController().navigate(R.id.action_groupMRoutMapFragment_to_groupFragment,bundle)
             }
         }
-        val receivedBundle = arguments
-        if (receivedBundle != null) {
-            page = receivedBundle.getString("page")?:"group"
-        }
+
         return binding.root
 
     }
@@ -54,18 +56,16 @@ class GroupRouteMapFragment : Fragment() {
 
         val receivedBundle = arguments
         if (receivedBundle != null) {
+            page = receivedBundle.getString("page")?:"group"
             val tmpList = receivedBundle.getSerializable("itemList") as ArrayList<RouteItem>?
             if (tmpList != null) {
                 for(data in tmpList) {
-                    //itemList.add(RouteMapDetailItem(data.name," ",""))
+                    itemList.add(RouteMapDetailItem(data.name,data.loc,"","",false))
                 }
             }
         }
 
-        itemList.add(RouteMapDetailItem("구스또 레스토랑","메롱시 메로나동 바밤바 24-6 1층", "매주 월요일 휴뮤, 08:~15:00","010-5338-8662",false))
-        itemList.add(RouteMapDetailItem("구스또 레스토랑2","메롱시 메로나동 바밤바 24-6 1층", "매주 월요일 휴뮤, 08:~15:00","010-5338-8662",false))
-        itemList.add(RouteMapDetailItem("구스또 레스토랑3","메롱시 메로나동 바밤바 24-6 1층", "매주 월요일 휴뮤, 08:~15:00","010-5338-8662",false))
-        itemList.add(RouteMapDetailItem("구스또 레스토랑4","메롱시 메로나동 바밤바 24-6 1층", "매주 월요일 휴뮤, 08:~15:00","010-5338-8662",false))
+
 
         val viewPager = binding.vpSlider
 
@@ -92,6 +92,19 @@ class GroupRouteMapFragment : Fragment() {
         })
         viewPager.setPageTransformer(compositePageTransformer)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val markerList = ArrayList<MarkerItem>()
+        markerList.add(MarkerItem(0, 1,37.6215101, 127.0751410))
+        markerList.add(MarkerItem(0, 2,37.6245301, 127.0740210))
+        markerList.add(MarkerItem(0, 3,37.6215001, 127.0743010))
+
+        val mapView = MapView(requireContext())
+
+        mapUtil.setMapInit(mapView, binding.kakaoRouteMap, requireContext(), requireActivity(),"route")
+        mapUtil.setRoute(mapView, markerList)
     }
 
 

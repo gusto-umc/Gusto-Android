@@ -14,8 +14,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gst.gusto.databinding.ActivityMainBinding
+import net.daum.mf.map.api.MapView
 import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.d(TAG, "Exception -> $e")
         }
+
     }
 
     fun getCon(): NavController {

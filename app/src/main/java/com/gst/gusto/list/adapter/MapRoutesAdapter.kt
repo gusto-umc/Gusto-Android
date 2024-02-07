@@ -26,22 +26,26 @@ class MapRoutesAdapter(val itemList: ArrayList<RouteItem>, val lyAddRoute: Const
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         holder.tv_rest_name.setText(itemList[position].name)
         holder.tv_route_order.text = (position+1).toString()
+        holder.tv_rest_loc.text = itemList[position].loc
         if(position==0) holder.iv_line_up.visibility = View.INVISIBLE
         if(lyAddRoute.visibility == View.INVISIBLE) holder.iv_line_down.visibility = View.INVISIBLE
         else if(lyAddRoute.visibility == View.GONE && position == itemList.count()-1) holder.iv_line_down.visibility = View.INVISIBLE
         else holder.iv_line_down.visibility = View.VISIBLE
 
-        holder.tv_rest_name.setOnClickListener {
-            holder.ly_rest_name.backgroundTintList = colorStateOnList
-            holder.et_rest_name.setText(itemList[position].name)
-            holder.tv_rest_name.visibility = View.GONE
-            holder.btn_remove.visibility = View.VISIBLE
-        }
-        holder.btn_remove.setOnClickListener {
-            itemList.removeAt(position)
-            lyAddRoute.visibility = View.VISIBLE
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position,getItemCount())
+        if(lyAddRoute.visibility == View.VISIBLE) {
+            holder.tv_rest_name.setOnClickListener {
+                holder.ly_rest_name.backgroundTintList = colorStateOnList
+                holder.et_rest_name.setText(itemList[position].name)
+                holder.tv_rest_name.visibility = View.GONE
+                holder.tv_rest_loc.visibility = View.GONE
+                holder.btn_remove.visibility = View.VISIBLE
+            }
+            holder.btn_remove.setOnClickListener {
+                itemList.removeAt(position)
+                lyAddRoute.visibility = View.VISIBLE
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position,getItemCount())
+            }
         }
     }
 
@@ -52,6 +56,7 @@ class MapRoutesAdapter(val itemList: ArrayList<RouteItem>, val lyAddRoute: Const
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tv_rest_name = itemView.findViewById<TextView>(R.id.tv_rest_name)
         val et_rest_name = itemView.findViewById<EditText>(R.id.et_rest_name)
+        val tv_rest_loc = itemView.findViewById<TextView>(R.id.tv_rest_loc)
         val tv_route_order = itemView.findViewById<TextView>(R.id.tv_route_order)
         val iv_line_up = itemView.findViewById<ImageView>(R.id.iv_line_up)
         val iv_line_down = itemView.findViewById<ImageView>(R.id.iv_line_down)
