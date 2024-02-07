@@ -127,7 +127,6 @@ class mapUtil {
             mapView.removeAllPOIItems()
             val route = MapPolyline()
             route.lineColor = Color.argb(255, 253, 105, 7)
-            route.
             for(data in markerList) {
                 route.addPoint(MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude))
                 val marker = MapPOIItem()
