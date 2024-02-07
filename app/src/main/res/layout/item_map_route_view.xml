@@ -89,12 +89,19 @@
                 android:layout_gravity="center_vertical"
                 android:padding="9dp"
                 android:fontFamily="@font/pretendard_bold"
-                android:background="@android:color/transparent"
-                android:hint="장소를 추가해주세요."
                 android:textColorHint="@color/gray_3"
                 android:text="구스또 레스토랑"
-                android:textColor="@color/gray_1"
+                android:textColor="@color/black"
                 android:textSize="14sp" />
+            <TextView
+                android:id="@+id/tv_rest_loc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="메롱시 메로나동 바밤바 24-6 1층"
+                android:textColor="@color/sub_m"
+                android:textSize="8sp" />
             <EditText
                 android:id="@+id/et_rest_name"
                 android:layout_width="wrap_content"

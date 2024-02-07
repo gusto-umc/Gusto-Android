@@ -59,7 +59,7 @@ class MyFragment : Fragment() {
         var viewPager2Adatper = MyViewpagerAdapter(requireActivity())
         viewPager2Adatper.addFragment(MyReviewFragment())
         viewPager2Adatper.addFragment(MyListFragment())
-
+        viewPager2Adatper.addFragment(MyRouteFragment())
         //Adapter 연결
         binding.viewpager.apply {
             adapter = viewPager2Adatper
@@ -71,13 +71,12 @@ class MyFragment : Fragment() {
             })
         }
 
-
-
         //ViewPager, TabLayout 연결
         TabLayoutMediator(binding.tablayout, binding.viewpager) { tab, position ->
             when (position) {
                 0 -> tab.text = "리뷰"
                 1 -> tab.text = "찜 리스트"
+                2 -> tab.text = "루트"
             }
         }.attach()
     }

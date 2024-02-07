@@ -98,6 +98,7 @@ class ReviewAdd5Fragment : Fragment() {
 
     private fun addChip(text:String) {
         val chip = Chip(requireContext())
+
         chip.isClickable = true
         chip.isCheckable = true
 

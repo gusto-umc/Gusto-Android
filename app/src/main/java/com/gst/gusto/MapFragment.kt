@@ -19,9 +19,15 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.gst.gusto.MainActivity
 import com.gst.gusto.MapMainScreenFragment
 import com.gst.gusto.R
+import com.gst.gusto.Util.mapUtil
+import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.Util.mapUtil.Companion.setMapInit
+import com.gst.gusto.Util.mapUtil.Companion.setMarker
 import com.gst.gusto.databinding.FragmentMapBinding
+import com.gst.gusto.list.fragment.GroupRouteMapFragment
 import net.daum.mf.map.api.CalloutBalloonAdapter
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -29,31 +35,19 @@ import net.daum.mf.map.api.MapView
 import net.daum.mf.map.api.MapView.setMapTilePersistentCacheEnabled
 
 
-class MapFragment : Fragment(){
+class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEventListener {
 
-    data class MarkerItem (val id : String, val latitude : Double, val longitude : Double)
+
     lateinit var binding: FragmentMapBinding
+    private val TAG = "SOL_LOG"
     lateinit var mapView : MapView
-
-    private val LOCATION_PERMISSION_REQUEST_CODE = 5000
-
-    private val PERMISSIONS = arrayOf(
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    )
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapBinding.inflate(inflater, container, false)
+
         val view = binding.root
 
         // BottomSheet 설정
@@ -76,16 +70,11 @@ class MapFragment : Fragment(){
                     }
                 }
             }
-
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 // 슬라이딩 중일 때 추가 작업이 필요하면 여기에 추가
             }
         })
-        val markerList = ArrayList<MarkerItem>()
-        markerList.add(MarkerItem("0",37.53737528, 127.00557635))
 
-        //setMapInit()
-        //setMarker(markerList)
         return view
     }
 
@@ -107,7 +96,6 @@ class MapFragment : Fragment(){
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
         }
     }
-
     private fun showMainScreenFragment() {
         // fragment_map_main_screen.xml을 보이게 하는 작업
         val mainScreenFragment = MapMainScreenFragment()
@@ -125,95 +113,75 @@ class MapFragment : Fragment(){
         }
     }
 
+    override fun onResume() {
+        super.onResume()
 
-    private fun hasPermission(): Boolean {
-        for (permission in PERMISSIONS) {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    permission
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return false
-            }
-        }
-        return true
+        val markerList = ArrayList<MarkerItem>()
+        markerList.add(MarkerItem(0, 0,37.6215101, 127.0751410))
+        markerList.add(MarkerItem(0,0,37.6245301, 127.0740210))
+        markerList.add(MarkerItem(0,0,37.6215001, 127.0743010))
+
+        //mapView = MapView(requireContext())
+
+        //mapView.setPOIItemEventListener(this)
+        //mapView.setMapViewEventListener(this)
+
+        //setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map")
+
+        //setMarker(mapView,markerList)
     }
-    @SuppressLint("MissingPermission")
-    private fun setMapInit() {
-        mapView = MapView(requireContext())
-        binding.kakaoMap.addView(mapView)
-        if (!hasPermission()) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                PERMISSIONS,
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-        } else {
-            val fusedLocationProviderClient =
-                LocationServices.getFusedLocationProviderClient(requireActivity())
+    override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
+        // 마커 클릭 시 이벤트
+        Log.d("MapViewEventListener","ccc")
 
-
-
-            fusedLocationProviderClient.lastLocation
-                .addOnSuccessListener { success: Location? ->
-                    success?.let { location ->
-                        val geocoder = Geocoder(requireContext())
-                        val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-
-                        if (addresses != null) {
-                            val address = addresses[0]
-                            val currentAddress = address.getAddressLine(0) // 필요에 따라 세부 정보를 더 가져올 수 있습니다
-
-                            // currentAddress를 필요에 따라 사용하세요
-                            Log.d("현재 주소: ", "$currentAddress")
-                            //mapView.setCurrentLocationEventListener()
-                            setMapTilePersistentCacheEnabled(true)  //다운로드한 지도를 캐시에 저장
-                            mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude), true)
-                            mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving)
-                            mapView.setShowCurrentLocationMarker(true)
-                            mapView.setCurrentLocationRadius(10)
-                            mapView.setCurrentLocationRadiusStrokeColor(Color.BLUE)
-                        }
-                    }
-                }
-                .addOnFailureListener { fail ->
-                    mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.53737528, 127.00557633), true)
-                }
-        }
     }
-    private fun setMarker(markerList: ArrayList<MarkerItem>) {
-        mapView.removeAllPOIItems()
-        for(data in markerList) {
-            val marker = MapPOIItem()
-            marker.itemName = "Default Marker"
-            marker.tag = 0 // id
-            marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
-            marker.markerType = MapPOIItem.MarkerType.CustomImage
-            marker.customImageResourceId = R.drawable.marker_color_small_img
-            marker.isShowCalloutBalloonOnTouch = false
+    override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?) {}
+    override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?, buttonType: MapPOIItem.CalloutBalloonButtonType?) {}
+    override fun onDraggablePOIItemMoved(mapView: MapView?, poiItem: MapPOIItem?, mapPoint: MapPoint?) {}
 
-            mapView.addPOIItem(marker)
-        }
-        mapView.setPOIItemEventListener(MarkerEventListener(requireContext()))
+    override fun onPause() {
+        super.onPause()
+        Log.d("MapViewEventListener","onPause")
+        binding.kakaoMap.removeAllViews()
     }
 
-    class MarkerEventListener(val context: Context): MapView.POIItemEventListener {
-        override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
-            // 마커 클릭 시 이벤트
-        }
-
-        override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?) {
-            // 말풍선 클릭 시 (Deprecated)
-            // 이 함수도 작동하지만 그냥 아래 있는 함수에 작성하자
-        }
-
-        override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?, buttonType: MapPOIItem.CalloutBalloonButtonType?) {
-            // 말풍선 클릭 시
-        }
-
-        override fun onDraggablePOIItemMoved(mapView: MapView?, poiItem: MapPOIItem?, mapPoint: MapPoint?) {
-            // 마커의 속성 중 isDraggable = true 일 때 마커를 이동시켰을 경우
-        }
+    override fun onMapViewInitialized(p0: MapView?) {
+        Log.d(TAG, "MapView가 초기화되었습니다.")
     }
+
+    override fun onMapViewCenterPointMoved(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도의 중심점이 이동되었습니다.")
+    }
+
+    override fun onMapViewZoomLevelChanged(p0: MapView?, p1: Int) {
+        Log.d(TAG, "지도의 줌 레벨이 변경되었습니다. 새로운 줌 레벨: $p1")
+    }
+
+    override fun onMapViewSingleTapped(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도가 단일 탭(클릭)되었습니다.")
+    }
+
+    override fun onMapViewDoubleTapped(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도가 더블 탭(클릭)되었습니다.")
+    }
+
+    override fun onMapViewLongPressed(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도가 길게 눌렸습니다.")
+    }
+
+    override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도 드래그가 시작되었습니다.")
+    }
+
+    override fun onMapViewDragEnded(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도 드래그가 종료되었습니다.")
+    }
+
+    override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도 이동이 완료되었습니다.")
+    }
+
+
+
 }
 

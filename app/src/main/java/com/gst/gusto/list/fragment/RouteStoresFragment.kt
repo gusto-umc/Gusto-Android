@@ -36,10 +36,10 @@ class RouteStoresFragment : Fragment() {
 
         val itemList = ArrayList<RouteItem>()
 
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
+        itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
+        itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
+        itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
+        itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
 
         binding.rvRoutes
 
@@ -58,6 +58,7 @@ class RouteStoresFragment : Fragment() {
         binding.fabMap.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("page","route")
+            bundle.putSerializable("itemList",itemList)
             findNavController().navigate(R.id.action_routeStoresFragment_to_groupMRMFragment,bundle)
         }
 
