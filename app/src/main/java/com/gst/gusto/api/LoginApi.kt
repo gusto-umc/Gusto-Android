@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -13,10 +12,9 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
-import java.io.File
 
 
-interface LoginRetrofit {
+interface LoginApi {
 
 
     @Multipart
@@ -36,4 +34,16 @@ interface LoginRetrofit {
     fun confirmNickname(
         @Path("nickname") nickname : String
     ) :Call<ResponseBody>
+
+    @POST("routes/")
+    fun checkMyRoute(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Body data : routedata
+    ) :Call<ResponseBody>
+
+    data class routedata(
+        @SerializedName("rootName") val rootName : String,
+        @SerializedName("storeId") val storeId: String,
+        @SerializedName("ordinal") val ordinal : String
+    )
 }

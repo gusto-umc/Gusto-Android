@@ -2,15 +2,10 @@ package com.gst.gusto.api
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.google.gson.annotations.SerializedName
 import com.gst.gusto.BuildConfig
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,7 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 class LoginViewModel: ViewModel() {
     val retrofit = Retrofit.Builder().baseUrl(BuildConfig.API_BASE)
         .addConverterFactory(GsonConverterFactory.create()).build()
-    val service = retrofit.create(LoginRetrofit::class.java)
+
+    val service = retrofit.create(LoginApi::class.java)
 
     private lateinit var image : String
     private lateinit var tmpToken : String

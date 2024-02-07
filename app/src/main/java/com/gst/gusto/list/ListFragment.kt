@@ -44,6 +44,7 @@ class ListFragment : Fragment() {
 
         fabBackground = binding.ivFabBackground
 
+        navController.popBackStack()
         navController.navigate(R.id.fragment_list_group)
 
         val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#FEB520"))

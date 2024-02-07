@@ -31,11 +31,8 @@ class GroupFragment : Fragment() {
             val adapter = mPager.adapter as GroupViewpagerAdapter
 
             val frag = adapter.getCurrentFragment()
-            Log.d("hello1",frag.toString())
             if(frag is GroupRoutesFragment ) {
-
                 if(frag.getCon().currentDestination !=null && frag.getCon().currentDestination!!.id == R.id.fragment_group_m_route_stores) {
-
                     frag.getCon().navigate(R.id.fragment_group_m_route_routes)
                 } else findNavController().navigate(R.id.action_groupFragment_to_listFragment)
             } else findNavController().navigate(R.id.action_groupFragment_to_listFragment)

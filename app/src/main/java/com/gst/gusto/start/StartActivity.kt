@@ -7,7 +7,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -16,7 +15,6 @@ import com.gst.gusto.R
 import com.gst.gusto.databinding.ActivityStartBinding
 
 class StartActivity : AppCompatActivity() {
-
     lateinit var binding: ActivityStartBinding
     lateinit var navController : NavController
     private lateinit var handler: Handler
@@ -40,6 +38,7 @@ class StartActivity : AppCompatActivity() {
         val editor = sharedPref.edit()
         editor.putString("accessToken", viewModel.getAccessToken())
         editor.putString("refreshToken", viewModel.getRefreshToken())
+
         Log.d("tokens", "${viewModel.getRefreshToken()}, ${viewModel.getAccessToken()}")
         editor.apply()
         stopTimer()

@@ -1,5 +1,6 @@
 package com.gst.gusto
 
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -28,8 +30,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fl_container) as NavHostFragment
         navController = navHostFragment.findNavController()
@@ -51,6 +51,8 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "Exception -> $e")
         }
 
+
+
     }
 
     fun getCon(): NavController {
@@ -64,5 +66,15 @@ class MainActivity : AppCompatActivity() {
         else {
             bottomNavigation.isVisible = true
         }
+    }
+    fun popFragment() {
+        supportFragmentManager.popBackStack()
+    }
+    fun getSharedPref(): Pair<String, String> {
+        val sharedPref = getSharedPreferences("token_pref", Context.MODE_PRIVATE)
+        // 액세스 토큰과 리프레시 토큰을 가져오는 함수
+        val accessToken = sharedPref.getString("accessToken", "")?: ""
+        val refreshToken = sharedPref.getString("refreshToken", "")?: ""
+        return Pair(accessToken, refreshToken)
     }
 }
