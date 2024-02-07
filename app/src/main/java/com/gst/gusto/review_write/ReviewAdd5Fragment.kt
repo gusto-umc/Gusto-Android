@@ -26,13 +26,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.R
+import com.gst.gusto.Util.util
 import com.gst.gusto.Util.util.Companion.createUpdateProgressRunnable
 import com.gst.gusto.Util.util.Companion.dpToPixels
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd5Binding
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -41,10 +44,10 @@ import java.util.Locale
 class ReviewAdd5Fragment : Fragment() {
 
     lateinit var binding: FragmentReviewAdd5Binding
-    lateinit var progressBar : ProgressBar
     private val menuList = ArrayList<EditText>()
     private val handler = Handler()
     private val progressPoint = 400
+    private val gustoViewModel : GustoViewModel by activityViewModels()
     lateinit var  chipGroup: ChipGroup
     private val hashTag = listOf<String>("#따뜻함","#여기서는 화장실 금지","#쾌적","#귀여워","#깨끗함","#인스타","#힙함","#나름 괜찮아","#넓음","#분위기","#가성비")
 
@@ -54,12 +57,8 @@ class ReviewAdd5Fragment : Fragment() {
     ): View? {
         binding = FragmentReviewAdd5Binding.inflate(inflater, container, false)
 
-        val bundle = Bundle().apply {
-            putInt("progress", progressPoint)
-        }
-
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd5Fragment_to_reviewAdd4Fragment,bundle)
+            findNavController().popBackStack()
         }
         chipGroup = binding.chipGroup
 
@@ -73,29 +72,30 @@ class ReviewAdd5Fragment : Fragment() {
                 }
             }
             Log.d("chipList",checkedChipPositions.toString())
-            findNavController().navigate(R.id.action_reviewAdd5Fragment_to_reviewAdd6Fragment,bundle)
+            findNavController().navigate(R.id.action_reviewAdd5Fragment_to_reviewAdd6Fragment)
         }
 
-
-
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        progressBar = binding.pBar
-        progressBar.progress = arguments?.getInt("progress", progressPoint)!!
-        val updateProgressRunnable = createUpdateProgressRunnable(progressBar, progressPoint,handler)
-        // 올릴 때 마다 부드럽게 움직이도록 시작
-        handler.post(updateProgressRunnable)
-
         for(i in 0.. hashTag.size-1) {
             addChip(hashTag[i])
         }
     }
+    override fun onPause() {
+        super.onPause()
+        gustoViewModel.progress = progressPoint
+    }
 
+    override fun onResume() {
+        super.onResume()
+        binding.pBar.progress = gustoViewModel.progress
+        val updateProgressRunnable = util.createUpdateProgressRunnable(binding.pBar, progressPoint, handler)
+        handler.post(updateProgressRunnable)
+    }
     private fun addChip(text:String) {
         val chip = Chip(requireContext())
 

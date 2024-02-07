@@ -25,6 +25,9 @@ class GustoViewModel: ViewModel() {
     // 자신의 루트 리스트 - (val title : String, val people : Int, val food : Int, val route : Int)
     val myRouteList = ArrayList<GroupItem>()
 
+    // 리뷰 작성하기에서 위의 진행도 바
+    var progress = 0
+
     // 토큰 얻는 함수
     fun getTokens(activity: MainActivity) {
         xAuthToken = activity.getSharedPref().first
