@@ -22,7 +22,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.gst.gusto.ListView.ViewModel.MapViewModel
 import com.gst.gusto.R
 
 class util {
@@ -154,7 +153,7 @@ class util {
 
         }
 
-        fun setPopupTwo(context: Context, title: String, theView : View, desc : String, flag : String, viewModel : MapViewModel){
+        fun setPopupTwo(context: Context, title: String, theView : View, desc : String, flag : String){
             val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_two_button, null)
             val mBuilder = AlertDialog.Builder(context)
                 .setView(mDialogView)

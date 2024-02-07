@@ -10,7 +10,6 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.ListView.adapter.ListViewStoreAdapter
-import com.gst.gusto.ListView.adapter.SearchStoreAdapter
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentMapListviewSaveBinding
 
