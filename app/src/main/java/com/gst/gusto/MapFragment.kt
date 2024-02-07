@@ -27,6 +27,7 @@ import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.Util.mapUtil.Companion.setMapInit
 import com.gst.gusto.Util.mapUtil.Companion.setMarker
 import com.gst.gusto.databinding.FragmentMapBinding
+import com.gst.gusto.list.fragment.GroupRouteMapFragment
 import net.daum.mf.map.api.CalloutBalloonAdapter
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -34,10 +35,12 @@ import net.daum.mf.map.api.MapView
 import net.daum.mf.map.api.MapView.setMapTilePersistentCacheEnabled
 
 
-class MapFragment : Fragment(){
+class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEventListener {
 
 
     lateinit var binding: FragmentMapBinding
+    private val TAG = "SOL_LOG"
+    lateinit var mapView : MapView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,12 +70,10 @@ class MapFragment : Fragment(){
                     }
                 }
             }
-
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 // 슬라이딩 중일 때 추가 작업이 필요하면 여기에 추가
             }
         })
-
 
         return view
     }
@@ -95,21 +96,6 @@ class MapFragment : Fragment(){
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-
-        val markerList = ArrayList<MarkerItem>()
-        markerList.add(MarkerItem(0, 0,37.6215101, 127.0751410))
-        markerList.add(MarkerItem(0,0,37.6245301, 127.0740210))
-        markerList.add(MarkerItem(0,0,37.6215001, 127.0743010))
-
-        val mapView = MapView(requireContext())
-
-        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map")
-        setMarker(mapView,markerList)
-    }
-
     private fun showMainScreenFragment() {
         // fragment_map_main_screen.xml을 보이게 하는 작업
         val mainScreenFragment = MapMainScreenFragment()
@@ -127,11 +113,75 @@ class MapFragment : Fragment(){
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        val markerList = ArrayList<MarkerItem>()
+        markerList.add(MarkerItem(0, 0,37.6215101, 127.0751410))
+        markerList.add(MarkerItem(0,0,37.6245301, 127.0740210))
+        markerList.add(MarkerItem(0,0,37.6215001, 127.0743010))
+
+        //mapView = MapView(requireContext())
+
+        //mapView.setPOIItemEventListener(this)
+        //mapView.setMapViewEventListener(this)
+
+        //setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map")
+
+        //setMarker(mapView,markerList)
+    }
+    override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
+        // 마커 클릭 시 이벤트
+        Log.d("MapViewEventListener","ccc")
+
+    }
+    override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?) {}
+    override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?, buttonType: MapPOIItem.CalloutBalloonButtonType?) {}
+    override fun onDraggablePOIItemMoved(mapView: MapView?, poiItem: MapPOIItem?, mapPoint: MapPoint?) {}
 
     override fun onPause() {
         super.onPause()
+        Log.d("MapViewEventListener","onPause")
         binding.kakaoMap.removeAllViews()
     }
+
+    override fun onMapViewInitialized(p0: MapView?) {
+        Log.d(TAG, "MapView가 초기화되었습니다.")
+    }
+
+    override fun onMapViewCenterPointMoved(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도의 중심점이 이동되었습니다.")
+    }
+
+    override fun onMapViewZoomLevelChanged(p0: MapView?, p1: Int) {
+        Log.d(TAG, "지도의 줌 레벨이 변경되었습니다. 새로운 줌 레벨: $p1")
+    }
+
+    override fun onMapViewSingleTapped(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도가 단일 탭(클릭)되었습니다.")
+    }
+
+    override fun onMapViewDoubleTapped(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도가 더블 탭(클릭)되었습니다.")
+    }
+
+    override fun onMapViewLongPressed(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도가 길게 눌렸습니다.")
+    }
+
+    override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도 드래그가 시작되었습니다.")
+    }
+
+    override fun onMapViewDragEnded(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도 드래그가 종료되었습니다.")
+    }
+
+    override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
+        Log.d(TAG, "지도 이동이 완료되었습니다.")
+    }
+
+
 
 }
 

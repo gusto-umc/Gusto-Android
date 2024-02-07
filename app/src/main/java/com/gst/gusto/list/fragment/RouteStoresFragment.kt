@@ -58,6 +58,7 @@ class RouteStoresFragment : Fragment() {
         binding.fabMap.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("page","route")
+            bundle.putSerializable("itemList",itemList)
             findNavController().navigate(R.id.action_routeStoresFragment_to_groupMRMFragment,bundle)
         }
 
