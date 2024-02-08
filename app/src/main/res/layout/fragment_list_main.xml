@@ -160,7 +160,7 @@
         app:rippleColor="@color/white"
         android:src="@drawable/plus_img"
         android:elevation="4dp"
-        app:maxImageSize="24dp"
+        app:maxImageSize="28dp"
         app:tint="@color/white"
         app:shapeAppearance="@style/Widget.MaterialComponents.FloatingActionButton"
         app:fabSize="normal"

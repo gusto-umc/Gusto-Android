@@ -1,6 +1,7 @@
 package com.gst.clock.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.MainActivity
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListRouteBinding
+import com.gst.gusto.list.ListFragment
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.LisAdapter
 
@@ -63,5 +65,17 @@ class ListRouteFragment : Fragment() {
                 }
             }
         }*/
+    }
+
+    override fun onResume() {
+        super.onResume()
+        gustoViewModel.listFragment = "route"
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val frag = requireParentFragment().parentFragment as ListFragment
+        Log.e("frag",frag.toString())
+        frag.callBtnGroup()
     }
 }

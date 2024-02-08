@@ -35,7 +35,9 @@ class mapUtil {
             R.drawable.route_marker_1_img,
             R.drawable.route_marker_2_img,
             R.drawable.route_marker_3_img,
-            R.drawable.route_marker_4_img
+            R.drawable.route_marker_4_img,
+            R.drawable.route_marker_5_img,
+            R.drawable.route_marker_6_img
         )
         @SuppressLint("MissingPermission")
         fun setMapInit(mapView : MapView,kakaoMap : RelativeLayout,context : Context,activity : Activity,option : String)  {
@@ -100,9 +102,10 @@ class mapUtil {
         }
         fun setRoute(
             mapView: MapView,
-            markerList: ArrayList<MarkerItem>
+            markerList: List<MarkerItem>
         ) {
             mapView.removeAllPOIItems()
+            mapView.removeAllPolylines()
             val route = MapPolyline()
             route.lineColor = Color.argb(255, 253, 105, 7)
             for(data in markerList) {

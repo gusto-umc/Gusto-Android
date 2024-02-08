@@ -32,7 +32,8 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
     lateinit var binding: FragmentListGroupMRouteMapBinding
     private val TAG = "MapViewEventListener"
     lateinit var mapView : MapView
-    val markerList = ArrayList<MarkerItem>()
+    val markerList = listOf(MarkerItem(0, 0,37.6215101, 127.0751410),
+        MarkerItem(0, 1,37.6245301, 127.0740210),MarkerItem(0, 2,37.6215001, 127.0743010))
     private val gustoViewModel : GustoViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +44,12 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
+        binding.fabList.setOnClickListener {
+            findNavController().popBackStack()
+        }
+        binding.fabEdit.setOnClickListener {
+            findNavController().navigate(R.id.fragment_group_m_route_edit)
+        }
 
         return binding.root
 
@@ -50,6 +57,8 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         val itemList = ArrayList<RouteMapDetailItem>()
 
@@ -97,14 +106,6 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
             }
         })
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        markerList.add(MarkerItem(0, 0,37.6215101, 127.0751410))
-        markerList.add(MarkerItem(0, 1,37.6245301, 127.0740210))
-        markerList.add(MarkerItem(0, 2,37.6215001, 127.0743010))
 
         mapView = MapView(requireContext())
         mapView.setPOIItemEventListener(this)
@@ -113,11 +114,15 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
 
         mapUtil.setMapInit(mapView, binding.kakaoRouteMap, requireContext(), requireActivity(),"route")
         mapUtil.setRoute(mapView, markerList)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
 
     }
     override fun onPause() {
         super.onPause()
-        Log.d("MapViewEventListener","onPause")
         binding.kakaoRouteMap.removeAllViews()
     }
     override fun onDestroy() {
@@ -131,6 +136,8 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
             Log.d("MapViewEventListener","${poiItem.itemName}")
 
         binding.vpSlider.visibility = View.VISIBLE
+        binding.fabEdit.visibility = View.GONE
+        binding.fabList.visibility = View.GONE
         if (poiItem != null) {
             binding.vpSlider.currentItem = poiItem.itemName.toInt()
         }
@@ -166,6 +173,8 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
 
     override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {
         binding.vpSlider.visibility=View.GONE
+        binding.fabEdit.visibility = View.VISIBLE
+        binding.fabList.visibility = View.VISIBLE
         Log.d(TAG, "지도 드래그가 시작되었습니다.")
     }
 

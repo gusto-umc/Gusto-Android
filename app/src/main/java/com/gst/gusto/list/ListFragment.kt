@@ -164,4 +164,8 @@ class ListFragment : Fragment() {
         animator.start()
     }
 
+    fun callBtnGroup() {
+        binding.btnGroup.callOnClick()
+    }
+
 }

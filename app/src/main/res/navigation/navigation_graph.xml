@@ -102,6 +102,9 @@
         <action
             android:id="@+id/action_groupMRoutMapFragment_to_routeStoresFragment"
             app:destination="@id/fragment_route_stores" />
+        <action
+            android:id="@+id/action_groupMRoutMapFragment_to_groupMRoutEditFragment"
+            app:destination="@id/fragment_group_m_route_edit" />
     </fragment>
     <fragment
         android:id="@+id/fragment_route_create"
