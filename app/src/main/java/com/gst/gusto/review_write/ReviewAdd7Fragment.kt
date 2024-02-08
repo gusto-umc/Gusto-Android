@@ -42,7 +42,8 @@ class ReviewAdd7Fragment : Fragment() {
         }
         binding.btnEnd.setOnClickListener {
             activity.hideBottomNavigation(false)
-            findNavController().navigate(R.id.action_reviewAdd7Fragment_to_storeDetailFragment)
+            //findNavController().navigate(R.id.action_reviewAdd7Fragment_to_storeDetailFragment)
+            findNavController().popBackStack(R.id.storeDetailFragment,false)
         }
         return binding.root
 

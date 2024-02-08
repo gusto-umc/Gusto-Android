@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentListGroupMRouteRoutesBinding
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.LisAdapter
@@ -19,6 +21,10 @@ class GroupRouteRoutesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentListGroupMRouteRoutesBinding.inflate(inflater, container, false)
+
+        binding.fabMain.setOnClickListener {
+            Navigation.findNavController(requireView()).navigate(R.id.action_groupMRSFragment_to_groupMRCFragment)
+        }
 
         return binding.root
     }

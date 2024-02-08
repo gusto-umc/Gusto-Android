@@ -34,13 +34,23 @@ class GroupFragment : Fragment() {
 
             val frag = adapter.getCurrentFragment()
             if(frag is GroupRoutesFragment) {
-                if(frag.getCon().currentDestination !=null && frag.getCon().currentDestination!!.id == R.id.fragment_group_m_route_stores) {
+                if(frag.getCon().currentDestination !=null && (frag.getCon().currentDestination!!.id == R.id.fragment_group_m_route_stores
+                            || frag.getCon().currentDestination!!.id == R.id.fragment_group_m_route_create)) {
                     frag.getCon().navigate(R.id.fragment_group_m_route_routes)
                 } else findNavController().popBackStack()
             } else findNavController().popBackStack()
-
         }
+        binding.btnSave.setOnClickListener {
+            val adapter = mPager.adapter as GroupViewpagerAdapter
 
+            val frag = adapter.getCurrentFragment()
+            if(frag is GroupRoutesFragment) {
+                if(frag.getCon().currentDestination !=null && frag.getCon().currentDestination!!.id == R.id.fragment_group_m_route_create) {
+                    frag.getCon().navigate(R.id.fragment_group_m_route_routes)
+                } else findNavController().popBackStack()
+            } else findNavController().popBackStack()
+            binding.btnSave.visibility =View.GONE
+        }
         return binding.root
     }
 
@@ -65,7 +75,6 @@ class GroupFragment : Fragment() {
                         Color.green(mainColor),
                         Color.blue(mainColor)
                     )
-
                     binding.lyGroup.setBackgroundColor(backgroundColor)
                 }
             }

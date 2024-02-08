@@ -78,6 +78,9 @@
         <action
             android:id="@+id/action_groupMRSFragment_to_groupMRRFragment"
             app:destination="@id/fragment_group_m_route_stores" />
+        <action
+            android:id="@+id/action_groupMRSFragment_to_groupMRCFragment"
+            app:destination="@id/fragment_group_m_route_create" />
     </fragment>
     <fragment
         android:id="@+id/fragment_group_m_route_edit"
@@ -90,6 +93,12 @@
         <action
             android:id="@+id/action_groupMRoutEditFragment_to_routeStoresFragment"
             app:destination="@id/fragment_route_stores" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_group_m_route_create"
+        android:name="com.gst.gusto.list.fragment.GroupRouteCreateFragment"
+        android:label="FragmentGroupMRouteCreate"
+        tools:layout="@layout/fragment_list_group_m_route_create">
     </fragment>
     <fragment
         android:id="@+id/fragment_group_m_route_map"
