@@ -24,14 +24,14 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var navController: NavController
+    lateinit var navHostFragment: NavHostFragment
     private val TAG = "SOL_LOG"
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fl_container) as NavHostFragment
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.fl_container) as NavHostFragment
         navController = navHostFragment.findNavController()
         binding.bottomNavigationView.setupWithNavController(navController)
 
@@ -57,6 +57,9 @@ class MainActivity : AppCompatActivity() {
 
     fun getCon(): NavController {
         return navController
+    }
+    fun getNavHost() : NavHostFragment {
+        return navHostFragment
     }
     fun hideBottomNavigation(bool : Boolean) {
         val bottomNavigation = binding.bottomNavigationView

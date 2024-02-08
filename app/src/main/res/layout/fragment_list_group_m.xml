@@ -30,14 +30,25 @@
                 app:tint="@color/white" />
 
             <TextView
-                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginLeft="5dp"
                 android:fontFamily="@font/pretendard_bold"
                 android:text="그룹 리스트&amp;루트"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
+            <TextView
+                android:id="@+id/btn_save"
+                android:visibility="gone"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:layout_marginRight="15dp"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="저장"/>
 
         </LinearLayout>
 

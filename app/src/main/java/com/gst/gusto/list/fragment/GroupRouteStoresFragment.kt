@@ -58,8 +58,5 @@ class GroupRouteStoresFragment : Fragment() {
         rv_board.adapter = boardAdapter
         rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-
-
     }
-
 }
