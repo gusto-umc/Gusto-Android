@@ -101,6 +101,7 @@
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ly_people"
                 android:layout_width="60dp"
                 android:layout_height="32dp">
                 <androidx.cardview.widget.CardView

@@ -25,7 +25,6 @@ import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.dpToPixels
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListMainBinding
-import com.gst.gusto.list.adapter.RouteItem
 
 
 class ListFragment : Fragment() {
@@ -76,15 +75,18 @@ class ListFragment : Fragment() {
             navController.navigate(R.id.fragment_list_route)
         }
 
-        if(gustoViewModel.listFragment=="route") binding.btnRoute.callOnClick()
 
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setFABClickEvent()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(gustoViewModel.listFragment=="route") binding.btnRoute.callOnClick()
     }
     private fun setFABClickEvent() {
         // 플로팅 버튼 클릭시 애니메이션 동작 기능

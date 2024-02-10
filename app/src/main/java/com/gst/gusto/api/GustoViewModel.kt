@@ -2,9 +2,11 @@ package com.gst.gusto.api
 
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
+import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.list.adapter.GroupItem
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -24,6 +26,8 @@ class GustoViewModel: ViewModel() {
 
     // 자신의 루트 리스트 - (val title : String, val people : Int, val food : Int, val route : Int)
     val myRouteList = ArrayList<GroupItem>()
+    // 현재 지도에 보이는 마커 리스트
+    val markerListLiveData: MutableLiveData<ArrayList<mapUtil.Companion.MarkerItem>> = MutableLiveData()
 
     // 리뷰 작성하기에서 위의 진행도 바
     var progress = 0

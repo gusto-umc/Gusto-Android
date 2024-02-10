@@ -33,6 +33,7 @@ class GroupFragment : Fragment() {
             val adapter = mPager.adapter as GroupViewpagerAdapter
 
             val frag = adapter.getCurrentFragment()
+            Log.d("frag",frag.toString())
             if(frag is GroupRoutesFragment) {
                 if(frag.getCon().currentDestination !=null && (frag.getCon().currentDestination!!.id == R.id.fragment_group_m_route_stores
                             || frag.getCon().currentDestination!!.id == R.id.fragment_group_m_route_create)) {
@@ -51,6 +52,9 @@ class GroupFragment : Fragment() {
             } else findNavController().popBackStack()
             binding.btnSave.visibility =View.GONE
         }
+        binding.lyPeople.setOnClickListener {
+            findNavController().navigate(R.id.action_groupFragment_to_followListFragment)
+        }
         return binding.root
     }
 
@@ -58,8 +62,6 @@ class GroupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mPager = binding.vpGroup
-        mPager.adapter = GroupViewpagerAdapter(requireActivity(),GroupRoutesFragment(gustoViewModel.groupFragment),mPager,2)
-        mPager.setCurrentItem(gustoViewModel.groupFragment,false)
         mPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)

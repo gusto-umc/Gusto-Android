@@ -28,7 +28,11 @@ class MyFragment : Fragment() {
     ): View? {
         binding = FragmentMyBinding.inflate(inflater, container, false)
         initViewPager()
-
+        val meMode = arguments?.getBoolean("me", true) ?: true
+        if(!meMode) {
+            binding.btnProfileEdit.text = "팔로잉"
+            binding.btnOption.visibility =View.GONE
+        }
 
         binding.apply{
             btnOption.setOnClickListener {
@@ -37,8 +41,12 @@ class MyFragment : Fragment() {
                 startActivity(intent)
             }
             btnProfileEdit.setOnClickListener {
-                val intent = Intent(requireContext(), MyProfileEditActivity::class.java)
-                startActivity(intent)
+                if(meMode) {
+                    val intent = Intent(requireContext(), MyProfileEditActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    // 팔로잉 버튼
+                }
             }
             btnFollowingList.setOnClickListener {
                 findNavController().navigate(R.id.action_myFragment_to_followList)
@@ -47,6 +55,9 @@ class MyFragment : Fragment() {
             btnLogin.setOnClickListener {
                 val intent = Intent(requireContext(), StartActivity::class.java)
                 startActivity(intent)
+            }
+            btnBack.setOnClickListener {
+                findNavController().popBackStack()
             }
         }
         return binding.root

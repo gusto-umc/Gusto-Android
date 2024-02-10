@@ -1,6 +1,7 @@
 package com.gst.gusto.review_write.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +15,14 @@ class ImageViewPagerAdapter(private val imageList: List<Int>) : RecyclerView.Ada
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewDetailViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_review_detail_image, parent, false)
-        return ReviewDetailViewHolder(view)
+        val viewHolder = ReviewDetailViewHolder(view)
+        imageViewList.add(viewHolder.imageView)
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: ReviewDetailViewHolder, position: Int) {
         val imageResId = imageList[position]
         holder.imageView.setImageResource(imageResId)
-        imageViewList.add(holder.imageView)
     }
 
     override fun getItemCount(): Int {

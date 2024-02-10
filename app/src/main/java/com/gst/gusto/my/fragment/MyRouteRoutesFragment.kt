@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMyRouteRoutesBinding
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.LisAdapter
@@ -22,6 +24,7 @@ import com.gst.gusto.review.adapter.GridItemDecoration
 class MyRouteRoutesFragment : Fragment() {
 
     lateinit var binding: FragmentMyRouteRoutesBinding
+    private val gustoViewModel : GustoViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,7 +48,7 @@ class MyRouteRoutesFragment : Fragment() {
         itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
 
 
-        val boardAdapter = LisAdapter(itemList, null, 3)
+        val boardAdapter = LisAdapter(itemList, null, 3, gustoViewModel)
         boardAdapter.notifyDataSetChanged()
 
         rv_board.adapter = boardAdapter

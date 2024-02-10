@@ -1,31 +1,19 @@
 package com.gst.gusto.my
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gst.gusto.MainActivity
-import com.gst.gusto.R
+import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.databinding.FragmentMyRouteStoresBinding
-import com.gst.gusto.list.adapter.GroupItem
-import com.gst.gusto.list.adapter.LisAdapter
 import com.gst.gusto.list.adapter.MapRoutesAdapter
-import com.gst.gusto.list.adapter.RouteAdapter
-import com.gst.gusto.list.adapter.RouteItem
-import com.gst.gusto.review.adapter.GalleryReviewAdapter
-import com.gst.gusto.review.adapter.GridItemDecoration
 
 class MyRouteStoresFragment : Fragment() {
 
     lateinit var binding: FragmentMyRouteStoresBinding
-    val itemList = ArrayList<RouteItem>()
+    val itemList = ArrayList<MarkerItem>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,12 +30,12 @@ class MyRouteStoresFragment : Fragment() {
 
         val rv_board = binding.recyclerView
 
-        itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
-        itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
-        itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
-        itemList.add(RouteItem("성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층"))
+        itemList.add(MarkerItem(0,0,1.1,1.1,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
+        itemList.add(MarkerItem(0,0,1.1,1.1,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
+        itemList.add(MarkerItem(0,0,1.1,1.1,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
+        itemList.add(MarkerItem(0,0,1.1,1.1,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
 
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyGone)
+        val boardAdapter = MapRoutesAdapter(itemList,binding.lyGone,requireActivity())
         boardAdapter.notifyDataSetChanged()
 
         rv_board.adapter = boardAdapter

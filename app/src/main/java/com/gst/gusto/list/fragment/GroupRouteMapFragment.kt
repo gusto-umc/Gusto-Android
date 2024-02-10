@@ -5,21 +5,24 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.Util.DiaLogFragment
 import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupMRouteMapBinding
-import com.gst.gusto.list.adapter.RouteItem
-import com.gst.gusto.list.adapter.RouteMapDetailItem
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter
 import net.daum.mf.map.api.CameraUpdateFactory
 import net.daum.mf.map.api.MapPOIItem
@@ -32,8 +35,8 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
     lateinit var binding: FragmentListGroupMRouteMapBinding
     private val TAG = "MapViewEventListener"
     lateinit var mapView : MapView
-    val markerList = listOf(MarkerItem(0, 0,37.6215101, 127.0751410),
-        MarkerItem(0, 1,37.6245301, 127.0740210),MarkerItem(0, 2,37.6215001, 127.0743010))
+    private var returnList = ArrayList<MarkerItem>()
+
     private val gustoViewModel : GustoViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,34 +51,45 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
             findNavController().popBackStack()
         }
         binding.fabEdit.setOnClickListener {
-            findNavController().navigate(R.id.fragment_group_m_route_edit)
+            val dialogFragment = DiaLogFragment({ selectedItem ->
+                // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
+                when (selectedItem) {
+                    1 -> {
+                        gustoViewModel.markerListLiveData.value?.let { it1 -> deepCopy(it1) }
+                    }
+                }
+            }, R.layout.routes_bottomsheetdialog, gustoViewModel,requireActivity() as MainActivity)
+            dialogFragment.show(parentFragmentManager, dialogFragment.tag)
+
+            //findNavController().navigate(R.id.fragment_group_m_route_edit)
         }
 
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
-        val itemList = ArrayList<RouteMapDetailItem>()
-
-        val receivedBundle = arguments
-        if (receivedBundle != null) {
-            val tmpList = receivedBundle.getSerializable("itemList") as ArrayList<RouteItem>?
-            if (tmpList != null) {
-                for(data in tmpList) {
-                    itemList.add(RouteMapDetailItem(data.name,data.loc,"","",false))
+        val editMode = arguments?.getBoolean("edit", false) ?: false
+        if(editMode) {
+            val dialogFragment = DiaLogFragment({ selectedItem ->
+                // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
+                when (selectedItem) {
+                    1 -> {
+                        gustoViewModel.markerListLiveData.value?.let { it1 -> deepCopy(it1) }
+                    }
                 }
-            }
+            }, R.layout.routes_bottomsheetdialog, gustoViewModel,requireActivity() as MainActivity)
+            dialogFragment.show(parentFragmentManager, dialogFragment.tag)
         }
+
+        val itemList = gustoViewModel.markerListLiveData.value as ArrayList<MarkerItem>
+        deepCopy(itemList)
 
         val viewPager = binding.vpSlider
 
         // 이미지 슬라이드
-        val adapter = RouteViewPagerAdapter(itemList)
+        val adapter = RouteViewPagerAdapter(itemList,requireActivity() as MainActivity)
         viewPager.adapter = adapter
 
         viewPager.offscreenPageLimit = 1
@@ -101,11 +115,10 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                 super.onPageSelected(position)
                 // 페이지가 선택되었을 때의 작업 수행
                 Log.d(TAG, "Page selected: $position")
-                val mapPoint = MapPoint.mapPointWithGeoCoord(markerList[position].latitude, markerList[position].longitude)
+                val mapPoint = MapPoint.mapPointWithGeoCoord(itemList[position].latitude, itemList[position].longitude)
                 mapView.moveCamera(CameraUpdateFactory.newMapPoint(mapPoint,mapView.zoomLevelFloat))
             }
         })
-
 
         mapView = MapView(requireContext())
         mapView.setPOIItemEventListener(this)
@@ -113,13 +126,12 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
 
 
         mapUtil.setMapInit(mapView, binding.kakaoRouteMap, requireContext(), requireActivity(),"route")
-        mapUtil.setRoute(mapView, markerList)
-    }
+        //mapUtil.setRoute(mapView, itemList)
 
-    override fun onResume() {
-        super.onResume()
-
-
+        gustoViewModel.markerListLiveData.observe(viewLifecycleOwner, Observer { markers ->
+            Log.d("itemList222",markers.toString())
+            mapUtil.setRoute(mapView, markers)
+        })
     }
     override fun onPause() {
         super.onPause()
@@ -128,6 +140,10 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
     override fun onDestroy() {
         super.onDestroy()
         gustoViewModel.groupFragment = 1
+        gustoViewModel.markerListLiveData.value?.clear()
+        for(data in returnList) {
+            gustoViewModel.markerListLiveData.value?.add(data)
+        }
     }
 
     override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
@@ -184,5 +200,11 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
 
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
         Log.d(TAG, "지도 이동이 완료되었습니다.")
+    }
+    fun deepCopy(itemList : ArrayList<MarkerItem>) {
+        returnList = ArrayList<MarkerItem>()
+        for(data in itemList) {
+            returnList.add(MarkerItem(data.id,data.num,data.latitude,data.longitude,data.name,data.loc,data.bookMark))
+        }
     }
 }

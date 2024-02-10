@@ -7,6 +7,7 @@ import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Handler
+import android.os.Parcelable
 import android.os.SystemClock
 import android.os.ext.SdkExtensions
 import android.util.DisplayMetrics
