@@ -5,17 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.MainActivity
-import com.gst.gusto.R
+import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.databinding.FragmentListGroupMRouteCreateBinding
-import com.gst.gusto.list.adapter.GroupItem
-import com.gst.gusto.list.adapter.LisAdapter
 import com.gst.gusto.list.adapter.MapRoutesAdapter
-import com.gst.gusto.list.adapter.RouteItem
 
 class GroupRouteCreateFragment : Fragment() {
 
@@ -36,18 +31,18 @@ class GroupRouteCreateFragment : Fragment() {
 
 
 
-        val itemList = ArrayList<RouteItem>()
+        val itemList = ArrayList<MarkerItem>()
 
         binding.rvRoutes
 
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute)
+        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute,null)
         boardAdapter.notifyDataSetChanged()
 
         binding.rvRoutes.adapter = boardAdapter
         binding.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         binding.btnPlus.setOnClickListener {
-            itemList.add(RouteItem(binding.tvRestName.text.toString(),""))
+            itemList.add(MarkerItem(0, 0, 37.6215001, 127.0743010,binding.tvRestName.text.toString(),"",false))
             boardAdapter.notifyItemInserted(itemList.size-1)
             if(itemList.size==6) {
                 binding.lyAddRoute.visibility = View.INVISIBLE

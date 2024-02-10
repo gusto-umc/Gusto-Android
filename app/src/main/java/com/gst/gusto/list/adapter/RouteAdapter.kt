@@ -5,12 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.Util.mapUtil
 
-data class RouteItem (val name : String, val loc : String)
 
-class RouteAdapter(val itemList: ArrayList<RouteItem>):
+class RouteAdapter(val itemList: ArrayList<mapUtil.Companion.MarkerItem>, val activity: MainActivity):
     RecyclerView.Adapter<RouteAdapter.ListViewHolder>(){
 
 
@@ -25,6 +27,10 @@ class RouteAdapter(val itemList: ArrayList<RouteItem>):
         holder.tv_route_order.text = (position+1).toString()
         if(position==0) holder.iv_line_up.visibility = View.INVISIBLE
         if(position+1>=itemList.count()) holder.iv_line_down.visibility = View.INVISIBLE
+        holder.itemView.setOnClickListener{
+            activity.getViewModel().groupFragment = 1
+            activity.getCon().navigate(R.id.action_groupFragment_to_storeDetailFragment)
+        }
 
     }
 

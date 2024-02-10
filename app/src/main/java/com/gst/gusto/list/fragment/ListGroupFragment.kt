@@ -42,7 +42,7 @@ class ListGroupFragment : Fragment() {
             return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
         }
 
-        val boardAdapter = LisAdapter(itemList, callActivityFunction(), 0)
+        val boardAdapter = LisAdapter(itemList, callActivityFunction(), 0,gustoViewModel)
         boardAdapter.notifyDataSetChanged()
 
         rv_board.adapter = boardAdapter

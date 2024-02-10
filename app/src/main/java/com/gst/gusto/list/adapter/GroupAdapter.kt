@@ -14,6 +14,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.navigation.NavController
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
 
@@ -35,7 +37,7 @@ class GroupAdapter(val itemList: ArrayList<RestItem>):
         holder.iv_recomend_profile_image.setImageResource(itemList[position].recomend)
         holder.iv_rest.setImageResource(itemList[position].rest)
         holder.btn_detail.setOnClickListener {
-            //nc.navigate(R.id.action_listFragment_to_groupFragment)
+            findNavController(holder.itemView).navigate(R.id.action_groupFragment_to_storeDetailFragment)
         }
 
     }

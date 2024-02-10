@@ -16,6 +16,8 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
+import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.api.GustoViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -25,7 +27,7 @@ data class GroupItem (val title : String, val people : Int, val food : Int, val 
 
 class LisAdapter(
     val itemList: ArrayList<GroupItem>, val nc: NavController?,
-    val option: Int,
+    val option: Int, val gustoViewModel: GustoViewModel
 ):
     RecyclerView.Adapter<LisAdapter.ListGroupViewHolder>(){
 
@@ -106,6 +108,14 @@ class LisAdapter(
                     nc?.navigate(R.id.action_listFragment_to_routeStoresFragment)
                 }
             } else if(option == 2){
+                val itemList = ArrayList<MarkerItem>()
+                itemList.add(MarkerItem(0,0,37.6215101, 127.0751410,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
+                itemList.add(MarkerItem(0,0,37.6245301, 127.0740210,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
+                itemList.add(MarkerItem(0,0,37.6215001, 127.0743010,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
+                itemList.add(MarkerItem(0,0,37.6215001, 127.0713010,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
+                itemList.add(MarkerItem(0,0,37.6210001, 127.0513010,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
+                gustoViewModel.markerListLiveData.value = itemList
+
                 Navigation.findNavController(holder.itemView).navigate(R.id.action_groupMRSFragment_to_groupMRRFragment)
             } else if(option == 3){
                 Navigation.findNavController(holder.itemView).navigate(R.id.action_myRouteRoutesFragment_to_myRouteStoresFragment)

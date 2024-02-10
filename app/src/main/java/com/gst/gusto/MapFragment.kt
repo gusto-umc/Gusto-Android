@@ -117,9 +117,9 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         super.onResume()
 
         val markerList = ArrayList<MarkerItem>()
-        markerList.add(MarkerItem(0, 0,37.6215101, 127.0751410))
-        markerList.add(MarkerItem(0,0,37.6245301, 127.0740210))
-        markerList.add(MarkerItem(0,0,37.6215001, 127.0743010))
+        markerList.add(MarkerItem(0, 0,37.6215101, 127.0751410,"","",false))
+        markerList.add(MarkerItem(0,0,37.6245301, 127.0740210,"","",false))
+        markerList.add(MarkerItem(0,0,37.6215001, 127.0743010,"","",false))
 /*
         mapView = MapView(requireContext())
 

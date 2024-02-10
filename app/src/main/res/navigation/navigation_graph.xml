@@ -63,6 +63,12 @@
         <action
             android:id="@+id/action_groupFragment_to_groupMRoutMapFragment"
             app:destination="@id/fragment_group_m_route_map" />
+        <action
+            android:id="@+id/action_groupFragment_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_groupFragment_to_followListFragment"
+            app:destination="@id/fragment_follow_list" />
     </fragment>
     <fragment
         android:id="@+id/fragment_group_m_route_stores"
@@ -114,6 +120,9 @@
         <action
             android:id="@+id/action_groupMRoutMapFragment_to_groupMRoutEditFragment"
             app:destination="@id/fragment_group_m_route_edit" />
+        <action
+            android:id="@+id/action_groupMRoutMapFragment_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/fragment_route_create"
@@ -138,6 +147,9 @@
         <action
             android:id="@+id/action_routeStoresFragment_to_groupMRMFragment"
             app:destination="@id/fragment_group_m_route_map" />
+        <action
+            android:id="@+id/action_routeStoresFragment_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment" />
     </fragment>
 
     <!-- Review 작성 화면의 프래그먼트들 -->
@@ -251,6 +263,9 @@
         <action
             android:id="@+id/action_reviewDetail_to_reviewDetailEdit"
             app:destination="@id/fragment_review_detail_edit"/>
+        <action
+            android:id="@+id/action_reviewDetail_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment"/>
     </fragment>
     <fragment
         android:id="@+id/fragment_review_detail_edit"
@@ -279,6 +294,9 @@
         <action
             android:id="@+id/action_feedDetailReview_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_feedDetailReview_to_myFragment"
+            app:destination="@id/fragment_my" />
         <action
             android:id="@+id/action_feedDetailReview_to_feedFragment"
             app:destination="@id/fragment_feed" />

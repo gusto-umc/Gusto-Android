@@ -42,15 +42,15 @@ class FeedDetailReviewFragment : Fragment() {
     ): View? {
         binding = FragmentFeedDetailBinding.inflate(inflater, container, false)
 
-        val receivedBundle = arguments
-        if (receivedBundle != null) {
-            page = receivedBundle.getString("page")?:"feed"
-        }
-
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
         binding.btnProfile.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putBoolean("me",false)
+            findNavController().navigate(R.id.action_feedDetailReview_to_myFragment,bundle)
+        }
+        binding.restInfo.setOnClickListener {
             findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
         }
         chipGroup = binding.chipGroup
@@ -63,7 +63,7 @@ class FeedDetailReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewPager = binding.vpImgSlider
-        val imageList = listOf(
+        val imageList = mutableListOf<Int>(
             R.drawable.sample_store_img,
             R.drawable.sample_store_2_img,
             R.drawable.sample_store_3_img

@@ -52,8 +52,8 @@ class ReviewAdd3Fragment : Fragment() {
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.btnBack2.setOnClickListener {
-            findNavController().popBackStack()
+        binding.btnSkip.setOnClickListener {
+            findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
         }
         binding.btnNext.setOnClickListener {
             findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
@@ -114,7 +114,6 @@ class ReviewAdd3Fragment : Fragment() {
                     })
                     binding.tvUpload1.text = "업로드 완료!"
                     binding.tvUpload2.text = "이제 리뷰를 작성하러 가볼까요?"
-                    binding.btnBack2.visibility = View.GONE
                     binding.btnNext.text = "리뷰 작성하러 가기"
                 }
 
@@ -130,6 +129,8 @@ class ReviewAdd3Fragment : Fragment() {
         }
 
         binding.ivImage.setOnClickListener {
+            binding.btnSkip.visibility = View.GONE
+            binding.btnNext.visibility = View.VISIBLE
             if(isPhotoPickerAvailable()) {
                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }

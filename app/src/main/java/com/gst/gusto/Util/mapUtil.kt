@@ -24,7 +24,7 @@ import net.daum.mf.map.api.MapView
 
 class mapUtil {
     companion object {
-        data class MarkerItem (val id : Int, val num : Int, val latitude : Double, val longitude : Double)
+        data class MarkerItem (val id : Int, val num : Int, val latitude : Double, val longitude : Double, val name : String, val loc : String, val bookMark : Boolean)
 
         private val MAPPERMISSIONS = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -100,15 +100,12 @@ class mapUtil {
                 mapView.addPOIItem(marker)
             }
         }
-        fun setRoute(
-            mapView: MapView,
-            markerList: List<MarkerItem>
-        ) {
+        fun setRoute(mapView: MapView, markerList: List<MarkerItem>) {
             mapView.removeAllPOIItems()
             mapView.removeAllPolylines()
             val route = MapPolyline()
             route.lineColor = Color.argb(255, 253, 105, 7)
-            for(data in markerList) {
+            for((index, data) in markerList.withIndex()) {
                 route.addPoint(MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude))
                 val marker = MapPOIItem()
                 marker.itemName = data.num.toString()
@@ -117,7 +114,7 @@ class mapUtil {
 
                 marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
                 marker.markerType = MapPOIItem.MarkerType.CustomImage
-                marker.customImageResourceId = ROUTE_MARKER_IMAGES[data.num]
+                marker.customImageResourceId = ROUTE_MARKER_IMAGES[index]
                 marker.isShowCalloutBalloonOnTouch = false
 
                 mapView.addPOIItem(marker)

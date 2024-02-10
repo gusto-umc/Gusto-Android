@@ -43,7 +43,6 @@ class ReviewDetailEditFragment : Fragment() {
         }
 
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,10 +50,11 @@ class ReviewDetailEditFragment : Fragment() {
 
         // 이미지 슬라이드
         val viewPager = binding.vpImgSlider
-        val imageList = listOf(
+        val imageList = mutableListOf<Int>(
             R.drawable.review_gallery_test,
             R.drawable.review_gallery_test2,
-            R.drawable.review_gallery_test
+            R.drawable.review_gallery_test,
+            R.color.white
             // Add more images as needed
         )
 

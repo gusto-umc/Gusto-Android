@@ -46,7 +46,7 @@ class ListRouteFragment : Fragment() {
         itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
         itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
 
-        val boardAdapter = LisAdapter(itemList, callActivityFunction(), 1)
+        val boardAdapter = LisAdapter(itemList, callActivityFunction(), 1,gustoViewModel)
         boardAdapter.notifyDataSetChanged()
         rv_board.adapter = boardAdapter
         rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
