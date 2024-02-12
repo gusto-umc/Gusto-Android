@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.Util.mapUtil
 
-data class RouteMapDetailItem (val name : String, val loc : String, val clock : String, val phone : String, val bookmark : Boolean)
 
-class RouteViewPagerAdapter(private val itemList: List<RouteMapDetailItem>) : RecyclerView.Adapter<RouteViewPagerAdapter.ReviewDetailViewHolder>() {
+class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerItem>,val activity: MainActivity) : RecyclerView.Adapter<RouteViewPagerAdapter.ReviewDetailViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewDetailViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_map_route_vp, parent, false)
@@ -20,14 +21,12 @@ class RouteViewPagerAdapter(private val itemList: List<RouteMapDetailItem>) : Re
     override fun onBindViewHolder(holder: ReviewDetailViewHolder, position: Int) {
         val item = itemList[position]
         holder.tv_route_order.text = "${position+1}"
-        holder.tv_rest_name.text = item.name
-        holder.tv_rest_loc.text = item.loc
+        holder.tv_rest_name.text = item.storeName
+        holder.tv_rest_loc.text = item.address
         holder.btn_detail.setOnClickListener {
-
+            activity.getCon().navigate(R.id.action_groupMRoutMapFragment_to_storeDetailFragment)
         }
         //holder.btn_bookmark
-        holder.tv_rest_clock.text = item.clock
-        holder.tv_rest_phone.text = item.phone
     }
 
     override fun getItemCount(): Int {
@@ -40,8 +39,6 @@ class RouteViewPagerAdapter(private val itemList: List<RouteMapDetailItem>) : Re
         val btn_detail: ImageView = itemView.findViewById(R.id.btn_detail)
         val btn_bookmark: ImageView = itemView.findViewById(R.id.btn_bookmark)
         val tv_rest_loc: TextView = itemView.findViewById(R.id.tv_rest_loc)
-        val tv_rest_clock: TextView = itemView.findViewById(R.id.tv_rest_clock)
-        val tv_rest_phone: TextView = itemView.findViewById(R.id.tv_rest_phone)
 
     }
 }

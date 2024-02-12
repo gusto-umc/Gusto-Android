@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentMyReviewBinding
@@ -37,7 +38,10 @@ class MyReviewFragment : Fragment() {
 
         adapter = GalleryReviewAdapter(testImageList, context,
             itemClickListener = {
-                it -> Toast.makeText(context,"테스트용", Toast.LENGTH_SHORT).show()
+                val bundle = Bundle()
+                bundle.putInt("reviewId",0)     //리뷰 아이디 넘겨 주면 됨
+                bundle.putString("page","my")
+                findNavController().navigate(R.id.action_myFragment_to_reviewDetail,bundle)
         })
         binding.apply {
             recyclerView.adapter = adapter

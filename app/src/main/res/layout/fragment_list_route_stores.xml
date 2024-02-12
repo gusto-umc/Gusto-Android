@@ -35,7 +35,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/pretendard_bold"
-                android:text="루트 제작"
+                android:text="루트"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
@@ -118,7 +118,8 @@
                 android:layout_marginEnd="22dp"
                 android:layout_marginBottom="20dp"
                 app:fabCustomSize="60dp"
-                android:src="@drawable/fab_map_img"
+                app:maxImageSize="40dp"
+                android:src="@drawable/fab_map_2_img"
                 android:elevation="4dp"
                 app:fabSize="normal"
                 app:borderWidth="0dp"

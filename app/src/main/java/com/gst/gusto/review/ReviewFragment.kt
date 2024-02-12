@@ -21,6 +21,8 @@ class ReviewFragment : Fragment() {
 
     lateinit var binding: FragmentReviewBinding
 
+    val icons = listOf(R.drawable.gallery_review_img, R.drawable.calendar_review_img, R.drawable.calendar_review_img)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,59 +53,10 @@ class ReviewFragment : Fragment() {
             })
         }
 
-
-        // ViewPager, TabLayout 연결
+        // ViewPager TabLayout 연결
         TabLayoutMediator(binding.reviewTab, binding.reviewVP) { tab, position ->
-            when (position) {
-                0 -> {
-                    val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.gallery_review_img)
-                    iconDrawable?.let { drawable ->
-                        drawable.setBounds(0, 0, 24, 24)
-                        tab.icon = drawable
-                    }
-                    tab.icon?.setTint(Color.parseColor("#333333"))
-                }
-                1 -> {
-                    val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_review_img)
-                    iconDrawable?.let { drawable ->
-                        drawable.setBounds(0, 0, 24, 24)
-                        tab.icon = drawable
-                    }
-                    tab.icon?.setTint(Color.parseColor("#CBCBCB"))
-                }
-                2 -> {
-                    val iconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.list_review_img)
-                    iconDrawable?.let { drawable ->
-                        drawable.setBounds(0, 0, 24, 24)
-                        tab.icon = drawable
-                    }
-                    tab.icon?.setTint(Color.parseColor("#CBCBCB"))
-                }
-            }
+            tab.setIcon(icons[position])
         }.attach()
-
-
-        binding.reviewTab.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                // 선택된 탭의 아이콘을 변경
-                tab?.icon?.setTint(Color.parseColor("#333333"))
-            }
-
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                // 선택이 해제된 탭의 아이콘을 변경
-                tab?.icon?.setTint(Color.parseColor("#CBCBCB"))
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                // 탭이 다시 선택될 때의 동작 (생략 가능)
-                tab?.icon?.setTint(Color.parseColor("#333333"))
-            }
-
-        })
-
-        // 초기에 첫 번째 탭을 선택
-        binding.reviewTab.getTabAt(0)?.select()
 
     }
 

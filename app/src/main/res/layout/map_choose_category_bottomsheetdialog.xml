@@ -22,7 +22,7 @@
         android:id="@+id/iv_category_choose_x"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/plus_img"
+        android:src="@drawable/x_1_img"
         app:tint="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -16,16 +16,24 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
+import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.api.GustoViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-data class GroupItem (val title : String, val people : Int, val food : Int, val route : Int)
+data class GroupItem(
+    val groupId: Long,
+    val groupName: String,
+    val numMembers: Int,
+    val numRestaurants: Int,
+    val numRoutes: Int
+)
 
 class LisAdapter(
     val itemList: ArrayList<GroupItem>, val nc: NavController?,
-    val option: Int,
+    val option: Int, val gustoViewModel: GustoViewModel
 ):
     RecyclerView.Adapter<LisAdapter.ListGroupViewHolder>(){
 
@@ -34,28 +42,33 @@ class LisAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListGroupViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list_group_view, parent, false)
 
-        if(option==1) {
+        // 디폴트 리스트 그룹
+        if(option==1||option==2||option==3) {
             view.findViewById<ImageView>(R.id.iv_icon).setImageResource(R.drawable.route_img)
+        }
+        if(option==3) { // 마이 루트
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_my_route, parent, false)
+            return ListGroupViewHolder(view)
         }
         return ListGroupViewHolder(view)
     }
 
     @SuppressLint("ClickableViewAccessibility", "ResourceAsColor")
     override fun onBindViewHolder(holder: ListGroupViewHolder, position: Int) {
-        holder.tv_title.text = itemList[position].title
-        if(option == 1) {
-            holder.tv_food.text = "장소 : ${itemList[position].food}개"
+        holder.tv_title.text = itemList[position].groupName
+        if(option == 1||option==2||option==3) {
+            holder.tv_food.text = "장소 : ${itemList[position].numRestaurants}개"
             holder.ly_route.visibility = View.GONE
         } else {
-            holder.tv_people.text = "${itemList[position].people}명"
-            holder.tv_food.text = "맛집 : ${itemList[position].food}개"
-            holder.tv_route.text = "루트 : ${itemList[position].route}개"
+            holder.tv_people.text = "${itemList[position].numMembers}명"
+            holder.tv_food.text = "맛집 : ${itemList[position].numRestaurants}개"
+            holder.tv_route.text = "루트 : ${itemList[position].numRoutes}개"
         }
 
         holder.item.setOnTouchListener { view, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    // 버튼을 누를 때 처
+                    // 버튼을 누를 때 처리
                     ViewCompat.setBackgroundTintList(holder.item, null)
                     holder.tv_title.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
                     holder.tv_people.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
@@ -101,7 +114,57 @@ class LisAdapter(
                     nc?.navigate(R.id.action_listFragment_to_routeStoresFragment)
                 }
             } else if(option == 2){
+                val itemList = ArrayList<MarkerItem>()
+                itemList.add(MarkerItem(
+                    0,
+                    0,0,
+                    37.6215101,
+                    127.0751410,
+                    "성수동 맛집 맵",
+                    "메롱시 메로나동 바밤바 24-6 1층",
+                    false
+                ))
+                itemList.add(MarkerItem(
+                    0,
+                    0,0,
+                    37.6245301,
+                    127.0740210,
+                    "성수동 맛집 맵",
+                    "메롱시 메로나동 바밤바 24-6 1층",
+                    false
+                ))
+                itemList.add(MarkerItem(
+                    0,
+                    0,0,
+                    37.6215001,
+                    127.0743010,
+                    "성수동 맛집 맵",
+                    "메롱시 메로나동 바밤바 24-6 1층",
+                    false
+                ))
+                itemList.add(MarkerItem(
+                    0,
+                    0,0,
+                    37.6215001,
+                    127.0713010,
+                    "성수동 맛집 맵",
+                    "메롱시 메로나동 바밤바 24-6 1층",
+                    false
+                ))
+                itemList.add(MarkerItem(
+                    0,
+                    0,0,
+                    37.6210001,
+                    127.0513010,
+                    "성수동 맛집 맵",
+                    "메롱시 메로나동 바밤바 24-6 1층",
+                    false
+                ))
+                gustoViewModel.markerListLiveData.value = itemList
+
                 Navigation.findNavController(holder.itemView).navigate(R.id.action_groupMRSFragment_to_groupMRRFragment)
+            } else if(option == 3){
+                Navigation.findNavController(holder.itemView).navigate(R.id.action_myRouteRoutesFragment_to_myRouteStoresFragment)
             }
 
         }
