@@ -28,7 +28,11 @@ class MyFragment : Fragment() {
     ): View? {
         binding = FragmentMyBinding.inflate(inflater, container, false)
         initViewPager()
-
+        val meMode = arguments?.getBoolean("me", true) ?: true
+        if(!meMode) {
+            binding.btnProfileEdit.text = "팔로잉"
+            binding.btnOption.visibility =View.GONE
+        }
 
         binding.apply{
             btnOption.setOnClickListener {
@@ -37,24 +41,23 @@ class MyFragment : Fragment() {
                 startActivity(intent)
             }
             btnProfileEdit.setOnClickListener {
-                val intent = Intent(requireContext(), MyProfileEditActivity::class.java)
-                startActivity(intent)
+                if(meMode) {
+                    val intent = Intent(requireContext(), MyProfileEditActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    // 팔로잉 버튼
+                }
             }
             btnFollowingList.setOnClickListener {
                 findNavController().navigate(R.id.action_myFragment_to_followList)
-            }
-            //임시 리뷰 추가 화면
-            btnAddReviewTmp.setOnClickListener {
-                findNavController().navigate(R.id.action_myFragment_to_reviewAdd1Fragment)
-            }
-            //임시 피드에서 리뷰 정보 보기
-            btnFeedDetailTmp.setOnClickListener {
-                findNavController().navigate(R.id.action_myFragment_to_feedDetail)
             }
             //임시 로그인
             btnLogin.setOnClickListener {
                 val intent = Intent(requireContext(), StartActivity::class.java)
                 startActivity(intent)
+            }
+            btnBack.setOnClickListener {
+                findNavController().popBackStack()
             }
         }
         return binding.root
@@ -67,7 +70,7 @@ class MyFragment : Fragment() {
         var viewPager2Adatper = MyViewpagerAdapter(requireActivity())
         viewPager2Adatper.addFragment(MyReviewFragment())
         viewPager2Adatper.addFragment(MyListFragment())
-
+        viewPager2Adatper.addFragment(MyRouteFragment())
         //Adapter 연결
         binding.viewpager.apply {
             adapter = viewPager2Adatper
@@ -79,13 +82,12 @@ class MyFragment : Fragment() {
             })
         }
 
-
-
         //ViewPager, TabLayout 연결
         TabLayoutMediator(binding.tablayout, binding.viewpager) { tab, position ->
             when (position) {
                 0 -> tab.text = "리뷰"
                 1 -> tab.text = "찜 리스트"
+                2 -> tab.text = "루트"
             }
         }.attach()
     }

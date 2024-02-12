@@ -1,27 +1,34 @@
 package com.gst.clock.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.MainActivity
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListRouteBinding
+import com.gst.gusto.list.ListFragment
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.LisAdapter
 
 class ListRouteFragment : Fragment() {
 
     lateinit var binding: FragmentListRouteBinding
+    lateinit var itemList : ArrayList<GroupItem>
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentListRouteBinding.inflate(inflater, container, false)
-
 
         return binding.root
     }
@@ -30,20 +37,45 @@ class ListRouteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val rv_board = binding.rvListRoute
 
-        val itemList = ArrayList<GroupItem>()
-
-        itemList.add(GroupItem("성수동 맛집 맵",0,5,0))
-        itemList.add(GroupItem("성수동 맛집 맵",0,4,0))
-        itemList.add(GroupItem("성수동 맛집 맵",0,2,0))
-        itemList.add(GroupItem("성수동 맛집 맵",0,8,0))
-
         fun callActivityFunction(): NavController {
             return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
-        }
-        val boardAdapter = LisAdapter(itemList, callActivityFunction(), 1)
-        boardAdapter.notifyDataSetChanged()
+        }/*
+        itemList = ArrayList()
+        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
+        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
+        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
+        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
 
+        val boardAdapter = LisAdapter(itemList, callActivityFunction(), 1,gustoViewModel)
+        boardAdapter.notifyDataSetChanged()
         rv_board.adapter = boardAdapter
-        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)*/
+
+        gustoViewModel.getTokens(requireActivity() as MainActivity)
+        gustoViewModel.getMyRoute {result ->
+            when(result) {
+                1 -> {
+                    itemList = gustoViewModel.myRouteList
+                    val boardAdapter = LisAdapter(itemList, callActivityFunction(), 1, gustoViewModel)
+                    boardAdapter.notifyDataSetChanged()
+                    rv_board.adapter = boardAdapter
+                    rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                } else -> {
+
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        gustoViewModel.listFragment = "route"
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val frag = requireParentFragment().parentFragment as ListFragment
+        Log.e("frag",frag.toString())
+        frag.callBtnGroup()
     }
 }

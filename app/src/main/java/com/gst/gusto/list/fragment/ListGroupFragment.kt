@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.MainActivity
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupBinding
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.LisAdapter
@@ -15,6 +17,7 @@ import com.gst.gusto.list.adapter.LisAdapter
 class ListGroupFragment : Fragment() {
 
     lateinit var binding: FragmentListGroupBinding
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,20 +29,20 @@ class ListGroupFragment : Fragment() {
 
         val itemList = ArrayList<GroupItem>()
 
-        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
-        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
-        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
-        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
-        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
-        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
-        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
-        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
+        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
+        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
+        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
+        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
+        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
+        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
+        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
+        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
 
         fun callActivityFunction(): NavController {
             return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
         }
 
-        val boardAdapter = LisAdapter(itemList, callActivityFunction(), 0)
+        val boardAdapter = LisAdapter(itemList, callActivityFunction(), 0,gustoViewModel)
         boardAdapter.notifyDataSetChanged()
 
         rv_board.adapter = boardAdapter
@@ -50,5 +53,8 @@ class ListGroupFragment : Fragment() {
         return binding.root
 
     }
-
+    override fun onResume() {
+        super.onResume()
+        gustoViewModel.listFragment = "group"
+    }
 }

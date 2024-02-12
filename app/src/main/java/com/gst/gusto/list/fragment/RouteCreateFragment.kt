@@ -5,16 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gst.gusto.R
+import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListRouteCreateBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
-import com.gst.gusto.list.adapter.RouteItem
 
 class RouteCreateFragment : Fragment() {
 
     lateinit var binding: FragmentListRouteCreateBinding
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,10 +24,13 @@ class RouteCreateFragment : Fragment() {
     ): View? {
         binding = FragmentListRouteCreateBinding.inflate(inflater, container, false)
 
+        gustoViewModel.listFragment = "route"
+
         binding.btnBack.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putInt("page",1)
-            findNavController().navigate(R.id.action_routeCreateFragment_to_listFragment,bundle)
+            findNavController().popBackStack()
+        }
+        binding.btnSave.setOnClickListener {
+            findNavController().popBackStack()
         }
         return binding.root
 
@@ -34,25 +39,18 @@ class RouteCreateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val itemList = ArrayList<RouteItem>()
-/*
-
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
-        itemList.add(RouteItem("성수동 맛집 맵"," "))
-*/
+        val itemList = ArrayList<MarkerItem>()
 
         binding.rvRoutes
 
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute)
+        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute,requireActivity())
         boardAdapter.notifyDataSetChanged()
 
         binding.rvRoutes.adapter = boardAdapter
         binding.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         binding.btnPlus.setOnClickListener {
-            itemList.add(RouteItem(binding.tvRestName.text.toString(),""))
+            itemList.add(MarkerItem(0, 0, 0,1.1, 1.1, binding.tvRestName.text.toString(), "", false))
             boardAdapter.notifyItemInserted(itemList.size-1)
             if(itemList.size==6) {
                 binding.lyAddRoute.visibility = View.INVISIBLE
@@ -61,6 +59,10 @@ class RouteCreateFragment : Fragment() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        gustoViewModel.listFragment="route"
+    }
 
 
 }

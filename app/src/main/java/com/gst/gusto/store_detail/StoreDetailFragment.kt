@@ -70,7 +70,10 @@ class StoreDetailFragment : Fragment() {
         mReviewAdapter.setItemClickListener(object : StoreDetailReviewAdapter.OnItemClickListener{
             override fun onClick(v: View, dataSet: StoreDetailReview) {
                 //데이터 넣기
-                Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_fragment_review_detail)
+                val bundle = Bundle()
+                bundle.putInt("reviewId",0)     //리뷰 아이디 넘겨 주면 됨
+                bundle.putString("page","storeDetail")
+                Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_fragment_feed_review_detail,bundle)
             }
 
         })

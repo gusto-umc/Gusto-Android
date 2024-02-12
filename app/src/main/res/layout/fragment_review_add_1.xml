@@ -65,8 +65,8 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/iv_rest"
-                    android:layout_width="300dp"
-                    android:layout_height="300dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="8dp"
                     android:layout_marginTop="7dp"
@@ -76,6 +76,7 @@
                         android:id="@+id/iv_imgae4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
                         android:background="@android:color/transparent"
                         android:src="@drawable/ic_launcher_background" />
                 </androidx.cardview.widget.CardView>

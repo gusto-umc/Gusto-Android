@@ -30,13 +30,11 @@ import java.lang.Math.abs
 class FeedDetailReviewFragment : Fragment() {
 
     lateinit var binding: FragmentFeedDetailBinding
-
-
     lateinit var  chipGroup: ChipGroup
-
     private lateinit var scaleUpAnimation: ScaleAnimation
     private lateinit var scaleDownAnimation: ScaleAnimation
     private lateinit var bounceInterpolator: BounceInterpolator
+    lateinit var page : String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,10 +43,15 @@ class FeedDetailReviewFragment : Fragment() {
         binding = FragmentFeedDetailBinding.inflate(inflater, container, false)
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_feedDetailReview_to_myFragment)
+            findNavController().popBackStack()
         }
         binding.btnProfile.setOnClickListener {
-            findNavController().navigate(R.id.action_feedDetailReview_to_myFragment)
+            val bundle = Bundle()
+            bundle.putBoolean("me",false)
+            findNavController().navigate(R.id.action_feedDetailReview_to_myFragment,bundle)
+        }
+        binding.restInfo.setOnClickListener {
+            findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
         }
         chipGroup = binding.chipGroup
 
@@ -60,10 +63,10 @@ class FeedDetailReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewPager = binding.vpImgSlider
-        val imageList = listOf(
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_launcher_background
+        val imageList = mutableListOf<Int>(
+            R.drawable.sample_store_img,
+            R.drawable.sample_store_2_img,
+            R.drawable.sample_store_3_img
             // Add more images as needed
         )
 

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -40,6 +39,7 @@ class GalleryReviewFragment : Fragment() {
             itemClickListener = {
                 val bundle = Bundle()
                 bundle.putInt("reviewId",0)     //리뷰 아이디 넘겨 주면 됨
+                bundle.putString("page","review")
                 findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail,bundle)
             })
         binding.apply {

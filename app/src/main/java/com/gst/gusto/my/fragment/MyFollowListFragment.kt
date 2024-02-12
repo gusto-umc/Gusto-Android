@@ -27,7 +27,7 @@ class MyFollowListFragment : Fragment() {
         binding = FragmentMyFollowListBinding.inflate(inflater, container, false)
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_followList_to_myFragment)
+            findNavController().popBackStack()
         }
 
         return binding.root

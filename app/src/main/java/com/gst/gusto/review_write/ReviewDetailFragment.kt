@@ -21,7 +21,7 @@ import com.gst.gusto.review_write.adapter.ReviewHowAdapter
 class ReviewDetailFragment : Fragment() {
 
     lateinit var binding: FragmentReviewDetailBinding
-
+    lateinit var page : String
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,7 +29,7 @@ class ReviewDetailFragment : Fragment() {
         binding = FragmentReviewDetailBinding.inflate(inflater, container, false)
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewDetail_to_reviewFragment)
+            findNavController().popBackStack()
         }
         binding.btnEdit.setOnClickListener {
             findNavController().navigate(R.id.action_reviewDetail_to_reviewDetailEdit)
@@ -37,14 +37,16 @@ class ReviewDetailFragment : Fragment() {
         binding.btnRemove.setOnClickListener {
 
         }
+        binding.lyTitle.setOnClickListener {
+            findNavController().navigate(R.id.action_reviewDetail_to_storeDetailFragment)
+        }
+
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
 
         // 평가 리사이클러뷰
         val rv_board = binding.rvHows
@@ -58,7 +60,7 @@ class ReviewDetailFragment : Fragment() {
 
         // 이미지 슬라이드
         val viewPager = binding.vpImgSlider
-        val imageList = listOf(
+        val imageList = mutableListOf<Int>(
             R.drawable.review_gallery_test,
             R.drawable.review_gallery_test2,
             R.drawable.review_gallery_test
@@ -68,7 +70,7 @@ class ReviewDetailFragment : Fragment() {
         val adapter = ImageViewPagerAdapter(imageList)
         viewPager.adapter = adapter
 
-        viewPager.offscreenPageLimit = 2
+        viewPager.offscreenPageLimit = 4
         viewPager.clipToPadding = false
         viewPager.clipChildren = false
         viewPager.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER)

@@ -7,9 +7,10 @@ import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Handler
+import android.os.Parcelable
+import android.os.SystemClock
 import android.os.ext.SdkExtensions
 import android.util.DisplayMetrics
-import android.util.LayoutDirection
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -20,9 +21,12 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.gst.gusto.R
+import kotlin.concurrent.thread
 
 class util {
 
@@ -187,7 +191,33 @@ class util {
             mDialogView.findViewById<TextView>(R.id.btn_dialog_two_yes).setOnClickListener {
                 mBuilder.dismiss()
             }
+        }
 
+        /**
+         * 작업자 : 옌 (출처 다른 분)
+         * 이 메서드는 fragment에서 사용가능하며, 포커스를 주고 키보드를 올려준다.
+         */
+        fun showSoftInputFragment(view:View, context: FragmentActivity?){
+            // 포커스를 준다.
+            view.requestFocus()
+
+            thread {
+                SystemClock.sleep(1)
+                val inputMethodManager = context?.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.showSoftInput(view, 0)
+            }
+        }
+
+        /**
+         * 작업자 : 옌 (출처 다른 분)
+         * 이 메서드는 activity에서 사용가능하며, 키보드를 내려준다.
+         */
+        fun hideSoftInput(activity:AppCompatActivity){
+            // 현재 포커스를 가지고 있는 View 있다면 키보드를 내린다.
+            if(activity.window.currentFocus != null){
+                val inputMethodManager = activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(activity.window.currentFocus?.windowToken, 0);
+            }
 
         }
     }
