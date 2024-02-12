@@ -52,7 +52,7 @@ class ListRouteFragment : Fragment() {
         rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)*/
 
         gustoViewModel.getTokens(requireActivity() as MainActivity)
-        gustoViewModel.checkMyRoute {result ->
+        gustoViewModel.getMyRoute {result ->
             when(result) {
                 1 -> {
                     itemList = gustoViewModel.myRouteList
