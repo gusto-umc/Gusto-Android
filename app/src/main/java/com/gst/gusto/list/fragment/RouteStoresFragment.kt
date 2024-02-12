@@ -57,9 +57,33 @@ class RouteStoresFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
 
-        itemList.add(MarkerItem(0,0,37.6215101, 127.0751410,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
-        itemList.add(MarkerItem(0,0,37.6245301, 127.0740210,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
-        itemList.add(MarkerItem(0,0,37.6215001, 127.0743010,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
+        itemList.add(MarkerItem(
+            0,
+            0,0,
+            37.6215101,
+            127.0751410,
+            "성수동 맛집 맵",
+            "메롱시 메로나동 바밤바 24-6 1층",
+            false
+        ))
+        itemList.add(MarkerItem(
+            0,
+            0,0,
+            37.6245301,
+            127.0740210,
+            "성수동 맛집 맵",
+            "메롱시 메로나동 바밤바 24-6 1층",
+            false
+        ))
+        itemList.add(MarkerItem(
+            0,
+            0,0,
+            37.6215001,
+            127.0743010,
+            "성수동 맛집 맵",
+            "메롱시 메로나동 바밤바 24-6 1층",
+            false
+        ))
     }
 
     override fun onResume() {

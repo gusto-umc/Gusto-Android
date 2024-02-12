@@ -23,7 +23,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-data class GroupItem (val title : String, val people : Int, val food : Int, val route : Int)
+data class GroupItem(
+    val groupId: Long,
+    val groupName: String,
+    val numMembers: Int,
+    val numRestaurants: Int,
+    val numRoutes: Int
+)
 
 class LisAdapter(
     val itemList: ArrayList<GroupItem>, val nc: NavController?,
@@ -49,14 +55,14 @@ class LisAdapter(
 
     @SuppressLint("ClickableViewAccessibility", "ResourceAsColor")
     override fun onBindViewHolder(holder: ListGroupViewHolder, position: Int) {
-        holder.tv_title.text = itemList[position].title
+        holder.tv_title.text = itemList[position].groupName
         if(option == 1||option==2||option==3) {
-            holder.tv_food.text = "장소 : ${itemList[position].food}개"
+            holder.tv_food.text = "장소 : ${itemList[position].numRestaurants}개"
             holder.ly_route.visibility = View.GONE
         } else {
-            holder.tv_people.text = "${itemList[position].people}명"
-            holder.tv_food.text = "맛집 : ${itemList[position].food}개"
-            holder.tv_route.text = "루트 : ${itemList[position].route}개"
+            holder.tv_people.text = "${itemList[position].numMembers}명"
+            holder.tv_food.text = "맛집 : ${itemList[position].numRestaurants}개"
+            holder.tv_route.text = "루트 : ${itemList[position].numRoutes}개"
         }
 
         holder.item.setOnTouchListener { view, event ->
@@ -109,11 +115,51 @@ class LisAdapter(
                 }
             } else if(option == 2){
                 val itemList = ArrayList<MarkerItem>()
-                itemList.add(MarkerItem(0,0,37.6215101, 127.0751410,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
-                itemList.add(MarkerItem(0,0,37.6245301, 127.0740210,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
-                itemList.add(MarkerItem(0,0,37.6215001, 127.0743010,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
-                itemList.add(MarkerItem(0,0,37.6215001, 127.0713010,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
-                itemList.add(MarkerItem(0,0,37.6210001, 127.0513010,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
+                itemList.add(MarkerItem(
+                    0,
+                    0,0,
+                    37.6215101,
+                    127.0751410,
+                    "성수동 맛집 맵",
+                    "메롱시 메로나동 바밤바 24-6 1층",
+                    false
+                ))
+                itemList.add(MarkerItem(
+                    0,
+                    0,0,
+                    37.6245301,
+                    127.0740210,
+                    "성수동 맛집 맵",
+                    "메롱시 메로나동 바밤바 24-6 1층",
+                    false
+                ))
+                itemList.add(MarkerItem(
+                    0,
+                    0,0,
+                    37.6215001,
+                    127.0743010,
+                    "성수동 맛집 맵",
+                    "메롱시 메로나동 바밤바 24-6 1층",
+                    false
+                ))
+                itemList.add(MarkerItem(
+                    0,
+                    0,0,
+                    37.6215001,
+                    127.0713010,
+                    "성수동 맛집 맵",
+                    "메롱시 메로나동 바밤바 24-6 1층",
+                    false
+                ))
+                itemList.add(MarkerItem(
+                    0,
+                    0,0,
+                    37.6210001,
+                    127.0513010,
+                    "성수동 맛집 맵",
+                    "메롱시 메로나동 바밤바 24-6 1층",
+                    false
+                ))
                 gustoViewModel.markerListLiveData.value = itemList
 
                 Navigation.findNavController(holder.itemView).navigate(R.id.action_groupMRSFragment_to_groupMRRFragment)

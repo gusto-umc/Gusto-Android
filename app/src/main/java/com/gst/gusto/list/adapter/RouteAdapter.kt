@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
@@ -22,8 +21,8 @@ class RouteAdapter(val itemList: ArrayList<mapUtil.Companion.MarkerItem>, val ac
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        holder.tv_rest_name.text = itemList[position].name
-        holder.tv_rest_location.text = itemList[position].loc
+        holder.tv_rest_name.text = itemList[position].storeName
+        holder.tv_rest_location.text = itemList[position].address
         holder.tv_route_order.text = (position+1).toString()
         if(position==0) holder.iv_line_up.visibility = View.INVISIBLE
         if(position+1>=itemList.count()) holder.iv_line_down.visibility = View.INVISIBLE

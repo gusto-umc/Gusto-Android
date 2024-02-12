@@ -39,10 +39,10 @@ class GroupRouteRoutesFragment : Fragment() {
 
         val itemList = ArrayList<GroupItem>()
 
-        itemList.add(GroupItem("성수동 맛집 맵",0,5,0))
-        itemList.add(GroupItem("성수동 맛집 맵",0,4,24))
-        itemList.add(GroupItem("성수동 맛집 맵",0,2,0))
-        itemList.add(GroupItem("성수동 맛집 맵",0,8,24))
+        itemList.add(GroupItem(0, "성수동 맛집 맵", 0, 5, 0))
+        itemList.add(GroupItem(0, "성수동 맛집 맵", 0, 4, 24))
+        itemList.add(GroupItem(0, "성수동 맛집 맵", 0, 2, 0))
+        itemList.add(GroupItem(0, "성수동 맛집 맵", 0, 8, 24))
 
         val boardAdapter = LisAdapter(itemList,null,2,gustoViewModel)
         boardAdapter.notifyDataSetChanged()

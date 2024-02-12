@@ -42,7 +42,15 @@ class GroupRouteCreateFragment : Fragment() {
         binding.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         binding.btnPlus.setOnClickListener {
-            itemList.add(MarkerItem(0, 0, 37.6215001, 127.0743010,binding.tvRestName.text.toString(),"",false))
+            itemList.add(MarkerItem(
+                0,
+                0,0,
+                37.6215001,
+                127.0743010,
+                binding.tvRestName.text.toString(),
+                "",
+                false
+            ))
             boardAdapter.notifyItemInserted(itemList.size-1)
             if(itemList.size==6) {
                 binding.lyAddRoute.visibility = View.INVISIBLE

@@ -3,16 +3,13 @@ package com.gst.gusto.list.adapter
 import android.app.Activity
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
@@ -32,9 +29,9 @@ class MapRoutesAdapter(
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        holder.tv_rest_name.setText(itemList[position].name)
+        holder.tv_rest_name.setText(itemList[position].storeName)
         holder.tv_route_order.text = (position+1).toString()
-        holder.tv_rest_loc.text = itemList[position].loc
+        holder.tv_rest_loc.text = itemList[position].address
         if(position==0) holder.iv_line_up.visibility = View.INVISIBLE
         if(lyAddRoute.visibility == View.INVISIBLE) holder.iv_line_down.visibility = View.INVISIBLE
         else if(lyAddRoute.visibility == View.GONE && position == itemList.count()-1) holder.iv_line_down.visibility = View.INVISIBLE
@@ -43,7 +40,7 @@ class MapRoutesAdapter(
         if(lyAddRoute.visibility == View.VISIBLE) {
             holder.tv_rest_name.setOnClickListener {
                 holder.ly_rest_name.backgroundTintList = colorStateOnList
-                holder.et_rest_name.setText(itemList[position].name)
+                holder.et_rest_name.setText(itemList[position].storeName)
                 holder.tv_rest_name.visibility = View.GONE
                 holder.tv_rest_loc.visibility = View.GONE
                 holder.btn_remove.visibility = View.VISIBLE

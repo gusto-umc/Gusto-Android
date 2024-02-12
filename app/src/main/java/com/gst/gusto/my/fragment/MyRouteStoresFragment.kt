@@ -30,10 +30,10 @@ class MyRouteStoresFragment : Fragment() {
 
         val rv_board = binding.recyclerView
 
-        itemList.add(MarkerItem(0,0,1.1,1.1,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
-        itemList.add(MarkerItem(0,0,1.1,1.1,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
-        itemList.add(MarkerItem(0,0,1.1,1.1,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
-        itemList.add(MarkerItem(0,0,1.1,1.1,"성수동 맛집 맵","메롱시 메로나동 바밤바 24-6 1층",false))
+        itemList.add(MarkerItem(0, 0,0, 1.1, 1.1, "성수동 맛집 맵", "메롱시 메로나동 바밤바 24-6 1층", false))
+        itemList.add(MarkerItem(0, 0,0,1.1, 1.1, "성수동 맛집 맵", "메롱시 메로나동 바밤바 24-6 1층", false))
+        itemList.add(MarkerItem(0, 0,0, 1.1, 1.1, "성수동 맛집 맵", "메롱시 메로나동 바밤바 24-6 1층", false))
+        itemList.add(MarkerItem(0, 0,0, 1.1, 1.1, "성수동 맛집 맵", "메롱시 메로나동 바밤바 24-6 1층", false))
 
         val boardAdapter = MapRoutesAdapter(itemList,binding.lyGone,requireActivity())
         boardAdapter.notifyDataSetChanged()

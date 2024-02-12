@@ -1,25 +1,25 @@
 package com.gst.gusto.list.adapter
 
-import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
+import com.gst.gusto.Util.util.Companion.setImage
 
-data class RestItem (val name : String, val loc : String, val rest : Int, val recomend : Int)
+data class RestItem(
+    val storeName: String,
+    val address: String,
+    val storeProfileImg: String,
+    val userProfileImg: String,
+    val storeId: Long,
+    val groupListId: Int
+)
 
 class GroupAdapter(val itemList: ArrayList<RestItem>):
     RecyclerView.Adapter<GroupAdapter.GroupViewHolder>(){
@@ -32,10 +32,10 @@ class GroupAdapter(val itemList: ArrayList<RestItem>):
     }
 
     override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
-        holder.tv_rest_name.text = itemList[position].name
-        holder.tv_rest_location.text = itemList[position].loc
-        holder.iv_recomend_profile_image.setImageResource(itemList[position].recomend)
-        holder.iv_rest.setImageResource(itemList[position].rest)
+        holder.tv_rest_name.text = itemList[position].storeName
+        holder.tv_rest_location.text = itemList[position].address
+        setImage(holder.iv_recomend_profile_image,itemList[position].userProfileImg,holder.itemView.context)
+        setImage(holder.iv_rest,itemList[position].storeProfileImg,holder.itemView.context)
         holder.btn_detail.setOnClickListener {
             findNavController(holder.itemView).navigate(R.id.action_groupFragment_to_storeDetailFragment)
         }
