@@ -21,8 +21,8 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
     override fun onBindViewHolder(holder: ReviewDetailViewHolder, position: Int) {
         val item = itemList[position]
         holder.tv_route_order.text = "${position+1}"
-        holder.tv_rest_name.text = item.name
-        holder.tv_rest_loc.text = item.loc
+        holder.tv_rest_name.text = item.storeName
+        holder.tv_rest_loc.text = item.address
         holder.btn_detail.setOnClickListener {
             activity.getCon().navigate(R.id.action_groupMRoutMapFragment_to_storeDetailFragment)
         }

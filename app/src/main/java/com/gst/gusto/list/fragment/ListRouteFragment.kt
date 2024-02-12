@@ -39,7 +39,7 @@ class ListRouteFragment : Fragment() {
 
         fun callActivityFunction(): NavController {
             return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
-        }
+        }/*
         itemList = ArrayList()
         itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
         itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
@@ -49,14 +49,14 @@ class ListRouteFragment : Fragment() {
         val boardAdapter = LisAdapter(itemList, callActivityFunction(), 1,gustoViewModel)
         boardAdapter.notifyDataSetChanged()
         rv_board.adapter = boardAdapter
-        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        /*
+        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)*/
+
         gustoViewModel.getTokens(requireActivity() as MainActivity)
         gustoViewModel.checkMyRoute {result ->
             when(result) {
                 1 -> {
                     itemList = gustoViewModel.myRouteList
-                    val boardAdapter = LisAdapter(itemList, callActivityFunction(), 1)
+                    val boardAdapter = LisAdapter(itemList, callActivityFunction(), 1, gustoViewModel)
                     boardAdapter.notifyDataSetChanged()
                     rv_board.adapter = boardAdapter
                     rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -64,7 +64,7 @@ class ListRouteFragment : Fragment() {
 
                 }
             }
-        }*/
+        }
     }
 
     override fun onResume() {

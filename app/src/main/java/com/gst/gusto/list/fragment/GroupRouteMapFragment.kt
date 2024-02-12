@@ -5,8 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -27,7 +25,6 @@ import com.gst.gusto.list.adapter.RouteViewPagerAdapter
 import net.daum.mf.map.api.CameraUpdateFactory
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
-import net.daum.mf.map.api.MapPointBounds
 import net.daum.mf.map.api.MapView
 
 class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEventListener {
@@ -204,7 +201,15 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
     fun deepCopy(itemList : ArrayList<MarkerItem>) {
         returnList = ArrayList<MarkerItem>()
         for(data in itemList) {
-            returnList.add(MarkerItem(data.id,data.num,data.latitude,data.longitude,data.name,data.loc,data.bookMark))
+            returnList.add(MarkerItem(
+                data.storeId,
+                data.ordinal,data.routeListId,
+                data.latitude,
+                data.longitude,
+                data.storeName,
+                data.address,
+                data.bookMark
+            ))
         }
     }
 }

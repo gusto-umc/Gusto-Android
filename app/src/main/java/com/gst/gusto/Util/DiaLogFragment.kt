@@ -10,8 +10,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
-import com.gst.gusto.databinding.FragmentListGroupMRouteEditBinding
-import com.gst.gusto.databinding.FragmentListGroupMRouteMapBinding
 import com.gst.gusto.databinding.RoutesBottomsheetdialogBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
 
@@ -44,7 +42,16 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
 
             binding1.btnPlus.setOnClickListener {
                 itemList.add(
-                    mapUtil.Companion.MarkerItem(0,0,37.6219001,127.0743010,binding1.tvRestName.text.toString(),"",false)
+                    mapUtil.Companion.MarkerItem(
+                        0,
+                        0,
+                        0,
+                        37.6219001,
+                        127.0743010,
+                        binding1.tvRestName.text.toString(),
+                        "",
+                        false
+                    )
                 )
                 gustoViewModel.markerListLiveData.value = itemList
                 boardAdapter.notifyItemInserted(itemList.size-1)

@@ -24,7 +24,16 @@ import net.daum.mf.map.api.MapView
 
 class mapUtil {
     companion object {
-        data class MarkerItem (val id : Int, val num : Int, val latitude : Double, val longitude : Double, val name : String, val loc : String, val bookMark : Boolean)
+        data class MarkerItem(
+            val storeId: Long,
+            val ordinal: Int,
+            val routeListId: Int,
+            var latitude: Double,
+            var longitude: Double,
+            val storeName: String,
+            val address: String,
+            val bookMark: Boolean
+        )
 
         private val MAPPERMISSIONS = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -91,7 +100,7 @@ class mapUtil {
             for(data in markerList) {
                 val marker = MapPOIItem()
                 marker.itemName = "Default Marker"
-                marker.tag = data.id // id
+                marker.tag = data.ordinal // id
                 marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
                 marker.markerType = MapPOIItem.MarkerType.CustomImage
                 marker.customImageResourceId = R.drawable.marker_color_small_img
@@ -108,9 +117,9 @@ class mapUtil {
             for((index, data) in markerList.withIndex()) {
                 route.addPoint(MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude))
                 val marker = MapPOIItem()
-                marker.itemName = data.num.toString()
+                marker.itemName = data.ordinal.toString()
                 marker.setCustomImageAnchor(0.5f,0.5f)
-                marker.tag = data.id // id
+                marker.tag = data.ordinal // id
 
                 marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
                 marker.markerType = MapPOIItem.MarkerType.CustomImage
