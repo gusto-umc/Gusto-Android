@@ -62,6 +62,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
         var openFlag = false
         val cateId = holder.bind(getItem(position))
 
+        //펼치기 클릭리스너
         holder.updownLayout.setOnClickListener {
             if(holder.data?.storeCount != 0){
                 if(openFlag){
@@ -78,8 +79,8 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                      */
                     //서버 연결 예정
                     var sampleStoreData : MutableList<Store> = arrayListOf<Store>(
-                        Store(id = 0, storeName = "구스토 레스토랑", location = "메롱시 메로나동 바밤바 24-6 3층", visitCount = 3, storePhoto = 1, serverCategory = null, isSaved = null),
-                        Store(id = 1, storeName = "Gusto Restaurant", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = 7, storePhoto = 1, serverCategory = null, isSaved = null)
+                        Store(id = 0, storeName = "구스토 레스토랑", location = "메롱시 메로나동 바밤바 24-6 3층", visitCount = 3, storePhoto = 1, serverCategory = "양식", isSaved = null),
+                        Store(id = 1, storeName = "Gusto Restaurant", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = 7, storePhoto = 1, serverCategory = "일식", isSaved = null)
                     )
                     val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
                     mStoreAdapter.submitList(sampleStoreData!!)
@@ -92,23 +93,29 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
             }
         }
 
+        //개수에 따라 펼치기 활성 상태 변경
         if(holder.data?.storeCount!! <= 0) {
             holder.ivUpDown.imageTintList = ColorStateList.valueOf(Color.parseColor("#ECECEC"))
         }
 
-        holder.updownLayout.setOnLongClickListener {
-            val categoryBottomSheetDialog = CategoryBottomSheetDialog(){
-                when(it){
-                    0 -> {
-                        Log.d("bottomsheet", "저장 click")
+        // route인 경우 롱클릭 비활성화
+        if(flag != "route"){
+            holder.updownLayout.setOnLongClickListener {
+                val categoryBottomSheetDialog = CategoryBottomSheetDialog(){
+                    when(it){
+                        0 -> {
+                            Log.d("bottomsheet", "저장 click")
+                        }
                     }
                 }
+                categoryBottomSheetDialog.isAdd = false
+                categoryBottomSheetDialog.categoryEdiBottomSheetData = CategoryDetail(id = holder.data!!.id, categoryName = holder.data!!.categoryName, categoryDesc = "냠냠", categoryIcon = 1, isPublic = true )
+                categoryBottomSheetDialog.show(mFragmentManager, categoryBottomSheetDialog.tag)
+                true
             }
-            categoryBottomSheetDialog.isAdd = false
-            categoryBottomSheetDialog.categoryEdiBottomSheetData = CategoryDetail(id = holder.data!!.id, categoryName = holder.data!!.categoryName, categoryDesc = "냠냠", categoryIcon = 1, isPublic = true )
-            categoryBottomSheetDialog.show(mFragmentManager, categoryBottomSheetDialog.tag)
-            true
         }
+
+
 
 
     }

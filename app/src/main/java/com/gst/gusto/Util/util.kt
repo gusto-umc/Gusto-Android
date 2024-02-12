@@ -25,7 +25,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
-import com.gst.gusto.ListView.ViewModel.MapViewModel
 import com.gst.gusto.R
 import kotlin.concurrent.thread
 
@@ -158,7 +157,7 @@ class util {
 
         }
 
-        fun setPopupTwo(context: Context, title: String, theView : View, desc : String, flag : String, viewModel : MapViewModel){
+        fun setPopupTwo(context: Context, title: String, theView : View, desc : String, flag : String){
             val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_two_button, null)
             val mBuilder = AlertDialog.Builder(context)
                 .setView(mDialogView)

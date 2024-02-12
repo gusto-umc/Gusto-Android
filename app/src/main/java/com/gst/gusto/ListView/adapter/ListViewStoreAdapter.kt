@@ -59,11 +59,6 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
         holder.bind(getItem(position))
 
         if(flag == "show"){
-            // 글자크기 조정
-            holder.tvStoreLocation.setTextSize(8F)
-            holder.tvStoreName.setTextSize(13F)
-            holder.tvCountCategory.setTextSize(8F)
-
             holder.cbEdit.visibility = View.GONE
             holder.tvCountCategory.text = "${holder.data?.visitCount}번 방문했어요"
 
@@ -72,33 +67,19 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
             }
         }
         else if(flag == "edit"){
-            // 글자크기 조정
-            holder.tvStoreLocation.setTextSize(8F)
-            holder.tvStoreName.setTextSize(13F)
-            holder.tvCountCategory.setTextSize(8F)
 
             holder.cbEdit.visibility = View.VISIBLE
             holder.cbEdit.isChecked = false
             holder.tvCountCategory.text = "${holder.data!!.visitCount}번 방문했어요"
         }
-        else{
-            // 글자크기 조정
-            //val layoutParams = holder.layoutData.layoutParams as LinearLayout.LayoutParams
-            //layoutParams.weight = 1.5f
-
-            holder.cbEdit.visibility = View.GONE
-            if(!holder.data!!.serverCategory.isNullOrBlank()){
-                holder.tvCountCategory.text = holder.data!!.serverCategory!!
-            }
-            else {
-                holder.tvCountCategory.text = " "
-            }
+        else if(flag == "route"){
+            holder.tvCountCategory.text = "${holder.data!!.serverCategory}"
 
             holder.cvStore.setOnClickListener {
-                itemClickListener.onClick(it, holder.data!!)
+                //루트 페이지로 이동
             }
-
         }
+
 
         /**
          * 체크박스 클릭리스너

@@ -31,19 +31,17 @@
             android:layout_height="wrap_content"
             android:weightSum="7"
             android:orientation="horizontal">
-            <ImageView
 
+            <ImageView
                 android:id="@+id/iv_item_store_img"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/sample_store_img"
-                android:clipToOutline="true"
-                android:layout_marginBottom="5dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginStart="11.73dp"
-                android:layout_marginTop="5dp"
+                android:layout_gravity="center_vertical"
                 android:background="@drawable/background_radius_5"
+                android:clipToOutline="true"
                 android:scaleType="fitXY"
-                />
+                android:src="@drawable/sample_store_img" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_card_data"
@@ -56,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="구스또 레스토랑"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:fontFamily="@font/pretendard_semibold"
                     android:textColor="@color/black"
                     app:layout_constraintTop_toTopOf="parent"
@@ -70,19 +68,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="메롱시 메로나동 바밤바 24-6 1층"
-                    android:textSize="12sp"
+                    android:textSize="8sp"
                     android:fontFamily="@font/pretendard_bold"
                     android:textColor="@color/main_C"
                     app:layout_constraintStart_toStartOf="@id/tv_item_store_title"
                     app:layout_constraintTop_toBottomOf="@id/tv_item_store_title"
                     android:layout_marginTop="2dp"
+                    android:paddingBottom="10dp"
                     />
                 <TextView
                     android:id="@+id/tv_item_store_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="n번 방문했어요"
-                    android:textSize="10sp"
+                    android:textSize="8sp"
                     android:fontFamily="@font/pretendard_bold"
                     android:textColor="@color/sub_m"
                     app:layout_constraintTop_toTopOf="@id/tv_item_store_title"
