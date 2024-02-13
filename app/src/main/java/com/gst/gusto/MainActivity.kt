@@ -8,7 +8,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.gst.gusto.databinding.ActivityMainBinding
-import com.naver.maps.map.NaverMapSdk
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,11 +18,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        /*
         // 네이버 지도 SDK 초기화
         NaverMapSdk.getInstance(this).client =
             NaverMapSdk.NaverCloudPlatformClient("YOUR_CLIENT_KEY_HERE")
-
+*/
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fl_container) as NavHostFragment
         navController = navHostFragment.findNavController()

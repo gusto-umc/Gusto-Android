@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Point
 import android.graphics.PointF
+import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,21 +15,19 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.MapMainScreenFragment
 import com.gst.gusto.R
+import com.gst.gusto.Util.util
 import com.gst.gusto.databinding.FragmentMapBinding
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.LocationTrackingMode
-import com.naver.maps.map.MapFragment
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.NaverMapSdk
-import com.naver.maps.map.OnMapReadyCallback
-import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.util.FusedLocationSource
 
-class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener {
+
+
+class MapFragment : Fragment() {
+//class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener {
 
     lateinit var binding: FragmentMapBinding
 
@@ -37,8 +37,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
-    private lateinit var naverMap: NaverMap
-    private lateinit var locationSource: FusedLocationSource
+    //private lateinit var naverMap: NaverMap
+    //private lateinit var locationSource: FusedLocationSource
+
+    lateinit var  chipGroup: ChipGroup
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,9 +68,13 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
         binding = FragmentMapBinding.inflate(inflater, container, false)
         val view = binding.root
 
+
         // BottomSheet 설정
         val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+
+        chipGroup = binding.fragmentMapMainScreen.chipGroup
+
 
 
         // BottomSheet 상태 변화 감지
@@ -138,6 +144,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
         return true
     }
 
+    /*
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
 
@@ -189,6 +196,31 @@ class MapFragment : Fragment(), OnMapReadyCallback, NaverMap.OnMapClickListener 
 
     override fun onMapClick(p0: PointF, p1: LatLng) {
         TODO("Not yet implemented")
+    }
+     */
+
+    override fun onResume() {
+        //사용자와 상호작용 하는 단계 / Activity 스택의 Top에 위치 / 주로 어플 기능이 onResume()에 설정됨
+        super.onResume()
+        //setMarkers()
+    }
+
+    //카테고리 마커 다르게 하기
+    private fun addChip(text:String) {
+        val chip = Chip(requireContext())
+        chip.isClickable = true
+        chip.isCheckable = true
+
+        chip.text  = text
+        chip.chipBackgroundColor = ContextCompat.getColorStateList(requireContext(), R.color.chip_select_color)
+        chip.chipStrokeColor = ContextCompat.getColorStateList(requireContext(), R.color.main_C)
+        chip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chip_select_text_color))
+        chip.textSize = 15f
+        chip.typeface = Typeface.createFromAsset(requireActivity().assets, "font/pretendard_medium.otf")
+        chip.chipStrokeWidth = util.dpToPixels(1f, resources.displayMetrics)
+        chip.chipCornerRadius = util.dpToPixels(41f, resources.displayMetrics)
+
+        chipGroup.addView(chip)
     }
 }
 
