@@ -178,5 +178,128 @@ interface GustoApi {
         @Path("nickname") nickname : String
     ):Call<ResponseBody>
 
+    /**
+     * 리스트 - 카테고리
+     */
+
+    //1. 카테고리 생성
+    @POST("myCategories")
+    fun addCategory(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Body body : RequestAddCategory
+    ) : Call<Void>
+
+    //2. 카테고리 수정
+    @PATCH("myCategories/{myCategoryId}")
+    fun editCategory(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Body body : RequestAddCategory
+    ) : Call<Void>
+
+    //3. 카테고리 조회(위치 기반, 내 위치 장소보기)
+    @GET("myCategories?townName={townName}")
+    fun getMapCategory(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("townName") townName : String
+    ) : Call<List<ResponseMapCategory>>
+
+    //4. 카테고리 삭제하기
+    @DELETE("myCategories?myCategoryId={myCategoryId}")
+    fun deleteCategory(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("myCategoryId") myCategoryId : Int
+    ) : Call<Void>
+
+    //5.카테고리 전체 조회 - 피드, 마이
+    @GET("myCategories/{nickname}")
+    fun getAllCategory(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("nickname") nickname : String
+    ) : Call<List<ResponseAllCategory>>
+
+    /**
+     * 가게
+     */
+
+    //1. 가게 카테고리 추가
+    @POST("myCategories/{myCategoryId}/pin")
+    fun addPin(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("myCategoryId") myCategoryId : Int,
+        @Body body: RequestPin
+    ) : Call<Void>
+
+    //2. 가게 카테고리 삭제(찜 취소)
+    @DELETE("myCategories/pins?pinId={pinId}")
+    fun deletePin(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("pinId") pinId : Int
+    ): Call<Void>
+
+    //3. 가게 상세 조회
+    @GET("stores/{storeId}/detail?reviewId={reviewId}&visitedAt={visitedAt}")
+    fun getStoreDetail(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("storeId") storeId : Int,
+        @Path("reviewId") reviewId : Int,
+        @Path("visitedAt") visitedAt : String,
+    )
+
+    //4. 카테고리 별 가게 조회 - 위치기반
+    @GET("myCategories/pins?myCategoryId={categoryId}&townName={townName}")
+    fun getMapStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("categoryId") categoryId : Int,
+        @Path("townName") townName : String
+    ) : Call<List<ResponseStoreListItem>>
+
+    //5. 카테고리 별 가게 조회 - 전체
+    @GET("myCategories/pins/{nickname}?myCategoryId={categoryId}")
+    fun getAllStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("nickname") nickname : String,
+        @Path("categoryId") categoryId : Int
+    ): Call<List<ResponseStoreListItem>>
+
+    //6. 저장된 맛집 리스트
+    @GET("stores/pins?myCategoryId={categoryId}&townName={townName}")
+    fun getSavedStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("categoryId") categoryId : Int,
+        @Path("townName") townName : String
+    ) : Call<ResponseSavedStore>
+
+
+    /**
+     * 리뷰
+     */
+
+    //1. 리뷰 1건 조회
+    @GET("reviews/{reviewId}")
+    fun getReview(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("reviewId") reviewId : Int
+    ) : Call<ResponseMyReview>
+
+    //2. 리뷰 수정
+    @PATCH("reviews/{reviewId}")
+    fun editReview(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("reviewId") reviewId : Int,
+        @Body body : RequestMyReview
+    ) : Call<Void>
+
+    //3. 리뷰 삭제
+    @DELETE("reviews/{reviewId}")
+    fun deleteReview(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("reviewId") reviewId : Int
+    ) : Call<Void>
+
+    /**
+     * 검색
+     */
+
+    //1. 검색 결과
 
 }

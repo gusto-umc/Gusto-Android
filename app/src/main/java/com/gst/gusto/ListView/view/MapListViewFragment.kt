@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.CategoryDetail
@@ -21,11 +22,13 @@ import com.gst.gusto.ListView.adapter.CategoryBottomSheetDialog
 import com.gst.gusto.ListView.adapter.ListViewCategoryAdapter
 import com.gst.gusto.ListView.adapter.ListViewEditCategoryAdapter
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMapListviewBinding
 
 class MapListViewFragment : Fragment() {
 
     private lateinit var binding : FragmentMapListviewBinding
+    private val gustoViewModel : GustoViewModel by activityViewModels()
     private var orderFlag = 0
     // 0 : 최신순, 1 : 오래된 순, 2 : ㄱ 부터, 3: ㅎ부터, 4 : 방문횟수 높은 순, 5 : 방문회수 낮은 순
     private var sampleCategoryData = arrayListOf<CategorySimple>(
@@ -124,12 +127,19 @@ class MapListViewFragment : Fragment() {
             val categoryAddBottomSheetDialog = CategoryBottomSheetDialog(){
                 when(it){
                     0 -> {
-                        Log.d("bottomsheet", "저장 click")
+                        //추가 성공
+                        Toast.makeText(context, "추가 성공", Toast.LENGTH_SHORT).show()
+                        //카테고리 새로 받아와서 연결시키기
+                    }
+                    1 -> {
+                        //추가 실페
+                        Toast.makeText(context, "추가 fail", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
             categoryAddBottomSheetDialog.isAdd = true
             categoryAddBottomSheetDialog.categoryEdiBottomSheetData = null
+            categoryAddBottomSheetDialog.viewModel = gustoViewModel
             categoryAddBottomSheetDialog.show(requireFragmentManager(), categoryAddBottomSheetDialog.tag)
         }
 

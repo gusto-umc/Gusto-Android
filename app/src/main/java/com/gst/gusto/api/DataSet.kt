@@ -1,6 +1,7 @@
 package com.gst.gusto.api
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serial
 
 
 // 내 루트 조회
@@ -99,3 +100,104 @@ data class ResponseProfile(
     @SerializedName("follower") val follower : Int,
     @SerializedName("followed") val followed : Boolean
 )
+
+//카테고리 추가, 수정 request body
+data class RequestAddCategory(
+    @SerializedName("myCategoryName") var categoryName : String,
+    @SerializedName("myCategoryIcon") var categoryIcon : Int,
+    @SerializedName("publishCategory") var publishCategory : String = "PUBLIC",
+    @SerializedName("myCategoryScript") var myCategoryScript : String?
+)
+
+//카테고리 조회(내 위치 장소 보기)
+data class ResponseMapCategory(
+    @SerializedName("myCategoryId") val myCategoryId : Int,
+    @SerializedName("myCategoryName") var categoryName : String,
+    @SerializedName("myCategoryIcon") var categoryIcon : Int,
+    @SerializedName("publishCategory") var publishCategory : String,
+    @SerializedName("pinCnt") var pinCnt : Int
+)
+
+//카테고리 조회- 마이, 피드
+data class ResponseAllCategory(
+    @SerializedName("myCategoryId") val myCategoryId : Int,
+    @SerializedName("myCategoryName") var categoryName : String,
+    @SerializedName("myCategoryIcon") var categoryIcon : Int,
+    @SerializedName("publishCategory") var publishCategory : String,
+    @SerializedName("pinCnt") var pinCnt : Int
+)
+
+//가게 찜 추가
+data class RequestPin(
+    @SerializedName("myCategoryName") val myCategoryName : String,
+    @SerializedName("storeName") val storeName : String
+)
+
+//가게 상세 조회
+data class ResponseStoreDetail(
+    @SerializedName("storeId") val storeId : Int,
+    @SerializedName("storeName") val storeName : String,
+    @SerializedName("categoryName") val categoryName : String,
+    @SerializedName("address") val address : String,
+    @SerializedName("opening") val opening : Int,
+    @SerializedName("pin") var pin : Boolean,
+    @SerializedName("reviewImg4") val reviewImg4: List<String>,
+    @SerializedName("reviews") val reviews : List<ResponseReviews>
+)
+
+//가게 상세 리뷰 -> 수정 필요
+data class ResponseReviews(
+    @SerializedName("date") val date : String
+)
+
+//가게 조회
+data class ResponseStoreListItem(
+    @SerializedName("storeId") val storeId : Int,
+    @SerializedName("storeName") val storeName  :String,
+    @SerializedName("address") val address : String,
+    @SerializedName("reviewCnt") var reviewCnt : Int,
+    @SerializedName("reviewImg") val reviewImg : String
+)
+
+// 저장된 가게 response
+data class ResponseSavedStore(
+    @SerializedName("nickname") val nickname : String,
+    @SerializedName("numPinStores") val numPinStores : Int,
+    @SerializedName("visitedStores") val visitedStores : List<ResponseStoreListItem>,
+    @SerializedName("unvisitedStores") val unvisitedStores : List<ResponseStoreListItem>
+)
+
+//리뷰 상세
+data class ResponseMyReview(
+    @SerializedName("storeId") val storeId : Int,
+    @SerializedName("storeName") val storeName : String,
+    @SerializedName("nickName") val nickName : String,
+    @SerializedName("visitedAt") var visitedAt : String?,
+    @SerializedName("img") val img : List<String>?,
+    @SerializedName("menuName") val menuName : List<String>?,
+    @SerializedName("hashTagId") val hashTagId : List<Int>?,
+    @SerializedName("taste") val taste : Int,
+    @SerializedName("spiciness") val spiciness : Int?,
+    @SerializedName("mood") val mood : Int?,
+    @SerializedName("toilet") val toilet : Int?,
+    @SerializedName("parking") val parking : Int?,
+    @SerializedName("comment") val comment : String?,
+    @SerializedName("likeCnt") val likeCnt : Int
+)
+
+//리뷰 수정
+data class RequestMyReview(
+    @SerializedName("visitedAt") var visitedAt : String?,
+    @SerializedName("img") val img : List<String>?,
+    @SerializedName("menuName") val menuName : List<String>?,
+    @SerializedName("hashTagId") val hashTagId : List<Int>?,
+    @SerializedName("taste") val taste : Int,
+    @SerializedName("spiciness") val spiciness : Int?,
+    @SerializedName("mood") val mood : Int?,
+    @SerializedName("toilet") val toilet : Int?,
+    @SerializedName("parking") val parking : Int?,
+    @SerializedName("comment") val comment : String?
+)
+
+
+

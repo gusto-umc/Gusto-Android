@@ -588,4 +588,27 @@ class GustoViewModel: ViewModel() {
     }
 
 
+    //카테고리 주차
+    fun addCategory(categoryName : String,categoryIcon : Int, public : String, desc : String,  callback: (Int) -> Unit){
+        var categoryRequestData = RequestAddCategory(categoryName = categoryName, categoryIcon = categoryIcon, publishCategory = public, myCategoryScript = desc )
+        service.addCategory(xAuthToken, body = categoryRequestData).enqueue(object : Callback<Void>{
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if(response.isSuccessful){
+                    Log.d("viewmodel", "Successful response: ${response}")
+                    callback(0)
+                }else{
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
+
+
 }

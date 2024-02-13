@@ -15,11 +15,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.gst.gusto.ListView.Model.CategoryDetail
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
+import org.w3c.dom.Text
 
 class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDialogFragment() {
 
+
     var isAdd = false
     var categoryEdiBottomSheetData : CategoryDetail? = null
+    var viewModel : GustoViewModel? = null
+
+    var selectedIconInt : Int = 1
     private val sampleIconArray = arrayListOf<Int>(
         R.drawable.category_icon_1,
         R.drawable.category_icon_1,
@@ -47,10 +53,10 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view?.findViewById<TextView>(R.id.tv_category_save)?.setOnClickListener {
-            itemClick(0)
-            dialog?.dismiss()
-        }
+//        view?.findViewById<TextView>(R.id.tv_category_save)?.setOnClickListener {
+//            itemClick(0)
+//            dialog?.dismiss()
+//        }
         view?.findViewById<ImageView>(R.id.iv_bottomsheet_category_x)?.setOnClickListener {
             dialog?.dismiss()
         }
@@ -85,7 +91,29 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
                     view?.findViewById<RecyclerView>(R.id.rv_category_add_icon)!!.visibility = View.VISIBLE
                 }
             }
-            view?.findViewById<Switch>(R.id.switch_category_public)?.isEnabled = true
+            //view?.findViewById<Switch>(R.id.switch_category_public)?.isEnabled = true
+            view?.findViewById<TextView>(R.id.tv_category_save)?.setOnClickListener {
+                //1. 공백확인 -> 추가 필요
+
+                //2. 서버 연결
+                val title = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)!!.text.toString()
+                val desc = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)!!.text.toString()
+
+                viewModel!!.addCategory(categoryName = title, desc = desc, categoryIcon = selectedIconInt, public = "PUBLIC"){
+                    result ->
+                    when(result){
+                        0 -> {
+                            //연결 성공
+                            itemClick(0)
+                        }
+                        1-> {
+                            //연결 실패
+                            itemClick(1)
+                        }
+                    }
+                }
+                dialog?.dismiss()
+            }
 
         }
         else{
