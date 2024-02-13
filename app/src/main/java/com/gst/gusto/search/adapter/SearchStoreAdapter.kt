@@ -1,4 +1,4 @@
-package com.gst.gusto.ListView.adapter
+package com.gst.gusto.search.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,12 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.gst.gusto.ListView.Model.Store
-import com.gst.gusto.ListView.Model.StoreDetailReview
 import com.gst.gusto.ListView.Model.StoreSearch
-import com.gst.gusto.databinding.CardWxampleBinding
 import com.gst.gusto.databinding.ItemListviewStoreCardBinding
-import com.gst.gusto.databinding.ItemStoreCardBinding
+import com.gst.gusto.databinding.ItemStoreSearchBinding
 
 class SearchStoreAdapter() : ListAdapter<StoreSearch, SearchStoreAdapter.ViewHolder>(DiffCallback){
 
@@ -30,23 +27,22 @@ class SearchStoreAdapter() : ListAdapter<StoreSearch, SearchStoreAdapter.ViewHol
         }
     }
 
-    inner class ViewHolder(private val binding : ItemListviewStoreCardBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(private val binding : ItemStoreSearchBinding) : RecyclerView.ViewHolder(binding.root){
         var data : StoreSearch? = null
 
         fun bind(result : StoreSearch){
             data = result
             //데이터 적용(가게명, 카테고리, 위치, 사진)
-            binding.tvItemListviewCardTitle.text = result.storeName
-            binding.tvItemListviewCardCount.text = result.categoryName
+            binding.tvItemStoreSearchTitle.text = result.storeName
+            binding.tvItemStoreSearchCategory.text = result.categoryName
             //binding.tvItemStoreLocation.text =
-            binding.ivItemListviewCardImg.setImageResource(result.reviewImg)
+            binding.ivItemStoreSearchImg.setImageResource(result.reviewImg)
         }
-        val cvItem = binding.cvItemListviewCard
-        val ivPhoto = binding.ivItemListviewCardImg
+        val cvItem = binding.root
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val viewHolder = ViewHolder(ItemListviewStoreCardBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        val viewHolder = ViewHolder(ItemStoreSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         return viewHolder
     }
 

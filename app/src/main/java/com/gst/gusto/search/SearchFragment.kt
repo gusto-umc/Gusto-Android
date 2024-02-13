@@ -1,6 +1,5 @@
-package com.gst.gusto
+package com.gst.gusto.search
 
-import android.graphics.drawable.RippleDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,8 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.StoreSearch
-import com.gst.gusto.ListView.adapter.ListViewStoreAdapter
-import com.gst.gusto.ListView.adapter.SearchStoreAdapter
+import com.gst.gusto.search.adapter.SearchStoreAdapter
+import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentSearchBinding
 
 class SearchFragment : Fragment() {
