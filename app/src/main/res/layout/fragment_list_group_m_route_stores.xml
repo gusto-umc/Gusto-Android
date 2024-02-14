@@ -34,12 +34,17 @@
         android:layout_marginEnd="22dp"
         android:layout_marginBottom="20dp"
         app:fabCustomSize="60dp"
-        android:src="@drawable/fab_map_img"
+        app:maxImageSize="40dp"
+        android:src="@drawable/fab_map_2_img"
         android:elevation="4dp"
         app:fabSize="normal"
         app:borderWidth="0dp"
         android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ly_add_route"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

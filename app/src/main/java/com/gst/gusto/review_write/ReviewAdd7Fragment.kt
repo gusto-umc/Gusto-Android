@@ -13,37 +13,37 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.Util.util
 import com.gst.gusto.Util.util.Companion.createUpdateProgressRunnable
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd7Binding
 
 class ReviewAdd7Fragment : Fragment() {
 
     lateinit var binding: FragmentReviewAdd7Binding
-    lateinit var progressBar : ProgressBar
-    private val menuList = ArrayList<EditText>()
     private val handler = Handler()
     private val progressPoint = 600
-
+    private val gustoViewModel : GustoViewModel by activityViewModels()
+    lateinit var activity: MainActivity
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentReviewAdd7Binding.inflate(inflater, container, false)
 
-        val bundle = Bundle().apply {
-            putInt("progress", progressPoint)
-        }
+        activity = requireActivity() as MainActivity
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd7Fragment_to_reviewAdd6Fragment,bundle)
-        }
-        binding.btnBack2.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd7Fragment_to_reviewAdd6Fragment,bundle)
+            findNavController().popBackStack()
         }
         binding.btnEnd.setOnClickListener {
-            Log.d("contentList",binding.etContent.text.toString())
+            activity.hideBottomNavigation(false)
+            //findNavController().navigate(R.id.action_reviewAdd7Fragment_to_storeDetailFragment)
+            findNavController().popBackStack(R.id.storeDetailFragment,false)
         }
         return binding.root
 
@@ -51,12 +51,6 @@ class ReviewAdd7Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        progressBar = binding.pBar
-        progressBar.progress = arguments?.getInt("progress", progressPoint)!!
-        val updateProgressRunnable = createUpdateProgressRunnable(progressBar, progressPoint,handler)
-        // 올릴 때 마다 부드럽게 움직이도록 시작
-        handler.post(updateProgressRunnable)
 
         binding.etContent.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -72,8 +66,16 @@ class ReviewAdd7Fragment : Fragment() {
                 // 이벤트 발생 후에 수행할 작업
             }
         })
-        binding
-
+    }
+    override fun onPause() {
+        super.onPause()
+        gustoViewModel.progress = progressPoint
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.pBar.progress = gustoViewModel.progress
+        val updateProgressRunnable = util.createUpdateProgressRunnable(binding.pBar, progressPoint, handler)
+        handler.post(updateProgressRunnable)
+    }
 }

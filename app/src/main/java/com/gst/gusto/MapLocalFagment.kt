@@ -13,7 +13,7 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [MapAreaFagment.newInstance] factory method to
+ * Use the [areaFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 class MapAreaFagment : Fragment() {
@@ -34,6 +34,8 @@ class MapAreaFagment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_area, container, false)
+
         return inflater.inflate(R.layout.fragment_map_laocal_1, container, false)
     }
 

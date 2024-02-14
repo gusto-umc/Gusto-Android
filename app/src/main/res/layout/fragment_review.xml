@@ -23,7 +23,9 @@
         android:layout_height="50dp"
         android:layout_marginTop="17dp"
         android:background="@color/white"
-        app:tabIndicatorColor="#00000000">
+        app:tabIndicatorColor="#00000000"
+        app:tabRippleColor="#00000000"
+        app:tabIconTint="@color/tab_icon_review_color">
 
     </com.google.android.material.tabs.TabLayout>
 

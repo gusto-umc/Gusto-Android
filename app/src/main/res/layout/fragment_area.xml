@@ -34,6 +34,8 @@
             android:textColor="@color/main"
             android:fontFamily="@font/pretendard_semibold"
             android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="10px"
             android:layout_marginLeft="10sp"
             android:text="현재 사용자의 위치" />
     </LinearLayout>

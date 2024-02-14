@@ -12,20 +12,22 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
 import com.gst.gusto.Util.util.Companion.dpToPixels
 import com.gst.gusto.Util.util.Companion.isPhotoPickerAvailable
 import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd3Binding
 
 class ReviewAdd3Fragment : Fragment() {
 
     lateinit var binding: FragmentReviewAdd3Binding
-    lateinit var progressBar : ProgressBar
     private val handler = Handler()
     private val progressPoint = 200
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,18 +35,15 @@ class ReviewAdd3Fragment : Fragment() {
     ): View? {
         binding = FragmentReviewAdd3Binding.inflate(inflater, container, false)
 
-        val bundle = Bundle().apply {
-            putInt("progress", progressPoint)
-        }
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd2Fragment,bundle)
+            findNavController().popBackStack()
         }
-        binding.btnBack2.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd2Fragment,bundle)
+        binding.btnSkip.setOnClickListener {
+            findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
         }
         binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment,bundle)
+            findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
         }
 
 
@@ -54,12 +53,6 @@ class ReviewAdd3Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        progressBar = binding.pBar
-        progressBar.progress = arguments?.getInt("progress", progressPoint)!!
-
-
-        val updateProgressRunnable = util.createUpdateProgressRunnable(progressBar, progressPoint, handler)
 
         val imageViews = listOf(
             binding.ivImgae1,
@@ -73,9 +66,6 @@ class ReviewAdd3Fragment : Fragment() {
             binding.cvImgae3,
             binding.cvImgae4
         )
-
-        // 올릴 때 마다 부드럽게 움직이도록 시작
-        handler.post(updateProgressRunnable)
 
         var imagesOn = false
 
@@ -111,7 +101,6 @@ class ReviewAdd3Fragment : Fragment() {
                     })
                     binding.tvUpload1.text = "업로드 완료!"
                     binding.tvUpload2.text = "이제 리뷰를 작성하러 가볼까요?"
-                    binding.btnBack2.visibility = View.GONE
                     binding.btnNext.text = "리뷰 작성하러 가기"
                 }
 
@@ -127,6 +116,8 @@ class ReviewAdd3Fragment : Fragment() {
         }
 
         binding.ivImage.setOnClickListener {
+            binding.btnSkip.visibility = View.GONE
+            binding.btnNext.visibility = View.VISIBLE
             if(isPhotoPickerAvailable()) {
                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
@@ -138,17 +129,19 @@ class ReviewAdd3Fragment : Fragment() {
                 }
             }
         }
-
-
     }
 
-    // 사진 불러오기 위한 SDK 검수
+    override fun onPause() {
+        super.onPause()
+        gustoViewModel.progress = progressPoint
+    }
 
-    // 이미지 적용
-
-
-
-    // 이미지 크기 조절 함수
+    override fun onResume() {
+        super.onResume()
+        binding.pBar.progress = gustoViewModel.progress
+        val updateProgressRunnable = util.createUpdateProgressRunnable(binding.pBar, progressPoint, handler)
+        handler.post(updateProgressRunnable)
+    }
     private fun setImageViewSize(imageView: CardView, length: Int) {
         val layoutParams = imageView.layoutParams
         layoutParams.width = length

@@ -103,7 +103,7 @@
                         android:id="@+id/btn_heart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="40dp"
+                        android:layout_marginLeft="20dp"
                         android:orientation="vertical"
                         android:padding="10dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -130,6 +130,7 @@
                         android:id="@+id/ly_title"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:paddingHorizontal="20dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:orientation="vertical">

@@ -12,9 +12,11 @@ import android.widget.ProgressBar
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd2Binding
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -23,20 +25,17 @@ import java.util.Locale
 class ReviewAdd2Fragment : Fragment() {
 
     lateinit var binding: FragmentReviewAdd2Binding
-    lateinit var progressBar : ProgressBar
     private val handler = Handler()
     private val progressPoint = 100
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentReviewAdd2Binding.inflate(inflater, container, false)
-        val bundle = Bundle().apply {
-            putInt("progress", progressPoint)
-        }
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd2Fragment_to_reviewAdd1Fragment,bundle)
+            findNavController().popBackStack()
         }
         binding.btnNext.setOnClickListener {
             val year = if(binding.etYear.text.toString()=="") binding.etYear.hint.toString().toInt() else binding.etYear.text.toString().toInt()
@@ -46,10 +45,9 @@ class ReviewAdd2Fragment : Fragment() {
 
             } else {
                 Log.d("dayList","${year}-${month}-${day}")
-                findNavController().navigate(R.id.action_reviewAdd2Fragment_to_reviewAdd3Fragment,bundle)
+                findNavController().navigate(R.id.action_reviewAdd2Fragment_to_reviewAdd3Fragment)
             }
         }
-
 
         return binding.root
 
@@ -57,7 +55,6 @@ class ReviewAdd2Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val calendar = Calendar.getInstance()
 
         // 오늘 날짜를 얻기
@@ -97,15 +94,18 @@ class ReviewAdd2Fragment : Fragment() {
             false
         }
 
-        progressBar = binding.pBar
-        progressBar.progress = arguments?.getInt("progress", progressPoint)!!
-
-        val updateProgressRunnable = util.createUpdateProgressRunnable(progressBar, progressPoint, handler)
-
-        // 올릴 때 마다 부드럽게 움직이도록 시작
-        handler.post(updateProgressRunnable)
-
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        gustoViewModel.progress = progressPoint
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.pBar.progress = gustoViewModel.progress
+        val updateProgressRunnable = util.createUpdateProgressRunnable(binding.pBar, progressPoint, handler)
+        handler.post(updateProgressRunnable)
+    }
 }

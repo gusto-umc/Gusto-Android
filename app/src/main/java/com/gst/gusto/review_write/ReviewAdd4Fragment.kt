@@ -25,11 +25,13 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
 import com.gst.gusto.Util.util.Companion.dpToPixels
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd4Binding
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -38,10 +40,10 @@ import java.util.Locale
 class ReviewAdd4Fragment : Fragment() {
 
     lateinit var binding: FragmentReviewAdd4Binding
-    lateinit var progressBar : ProgressBar
     private val menuList = ArrayList<EditText>()
     private val handler = Handler()
     private val progressPoint = 300
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,12 +51,8 @@ class ReviewAdd4Fragment : Fragment() {
     ): View? {
         binding = FragmentReviewAdd4Binding.inflate(inflater, container, false)
 
-        val bundle = Bundle().apply {
-            putInt("progress", progressPoint)
-        }
-
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd4Fragment_to_reviewAdd3Fragment,bundle)
+            findNavController().popBackStack()
         }
         binding.btnNext.setOnClickListener {
             val textList = ArrayList<String>()
@@ -64,7 +62,7 @@ class ReviewAdd4Fragment : Fragment() {
                 textList.add(text)
             }
             Log.d("menuList",textList.toString())
-            findNavController().navigate(R.id.action_reviewAdd4Fragment_to_reviewAdd5Fragment,bundle)
+            findNavController().navigate(R.id.action_reviewAdd4Fragment_to_reviewAdd5Fragment)
         }
 
 
@@ -75,17 +73,22 @@ class ReviewAdd4Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        progressBar = binding.pBar
-        progressBar.progress = arguments?.getInt("progress", progressPoint)!!
-
-        val updateProgressRunnable = util.createUpdateProgressRunnable(progressBar, progressPoint, handler)
-        // 올릴 때 마다 부드럽게 움직이도록 시작
-        handler.post(updateProgressRunnable)
-
         addMenu()
+
         binding.ivPlusMenu.setOnClickListener {
             addMenu()
         }
+    }
+    override fun onPause() {
+        super.onPause()
+        gustoViewModel.progress = progressPoint
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.pBar.progress = gustoViewModel.progress
+        val updateProgressRunnable = util.createUpdateProgressRunnable(binding.pBar, progressPoint, handler)
+        handler.post(updateProgressRunnable)
     }
 
     private fun addMenu() {

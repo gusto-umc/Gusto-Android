@@ -9,10 +9,13 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.R
+import com.gst.gusto.Util.util
 import com.gst.gusto.Util.util.Companion.createUpdateProgressRunnable
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd6Binding
 import com.gst.gusto.review_write.adapter.HowItem
 import com.gst.gusto.review_write.adapter.ReviewHowAdapter
@@ -20,10 +23,9 @@ import com.gst.gusto.review_write.adapter.ReviewHowAdapter
 class ReviewAdd6Fragment : Fragment() {
 
     lateinit var binding: FragmentReviewAdd6Binding
-    lateinit var progressBar : ProgressBar
-    private val menuList = ArrayList<EditText>()
     private val handler = Handler()
     private val progressPoint = 500
+    private val gustoViewModel : GustoViewModel by activityViewModels()
     private val howList = mutableListOf(3,3,3,3,3)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,15 +33,12 @@ class ReviewAdd6Fragment : Fragment() {
     ): View? {
         binding = FragmentReviewAdd6Binding.inflate(inflater, container, false)
 
-        val bundle = Bundle().apply {
-            putInt("progress", progressPoint)
-        }
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd6Fragment_to_reviewAdd5Fragment,bundle)
+            findNavController().popBackStack()
         }
         binding.btnNext.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewAdd6Fragment_to_reviewAdd7Fragment,bundle)
+            findNavController().navigate(R.id.action_reviewAdd6Fragment_to_reviewAdd7Fragment)
             Log.d("howList",howList.toString())
         }
 
@@ -50,12 +49,6 @@ class ReviewAdd6Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        progressBar = binding.pBar
-        progressBar.progress = arguments?.getInt("progress", progressPoint)!!
-        val updateProgressRunnable = createUpdateProgressRunnable(progressBar, progressPoint,handler)
-        // 올릴 때 마다 부드럽게 움직이도록 시작
-        handler.post(updateProgressRunnable)
-
         val rv_board = binding.rvHows
         val howAdapter = ReviewHowAdapter(howList,0)
         howAdapter.notifyDataSetChanged()
@@ -63,5 +56,16 @@ class ReviewAdd6Fragment : Fragment() {
         rv_board.adapter = howAdapter
         rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
+    }
+    override fun onPause() {
+        super.onPause()
+        gustoViewModel.progress = progressPoint
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.pBar.progress = gustoViewModel.progress
+        val updateProgressRunnable = util.createUpdateProgressRunnable(binding.pBar, progressPoint, handler)
+        handler.post(updateProgressRunnable)
     }
 }
