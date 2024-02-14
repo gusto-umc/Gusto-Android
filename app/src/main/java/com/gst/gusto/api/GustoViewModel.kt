@@ -717,9 +717,12 @@ class GustoViewModel: ViewModel() {
     /**
      * 가게 api 함수 - mindy
      */
-    //가게 카테고리 추가(찜)
-    fun addPin(categoryId: Long, storeInt: Long, callback: (Int) -> Unit){
-        var pinData = RequestPin(myCategoryName = categoryId, storeName = storeInt)
+    var myMapStoreList : List<ResponseStoreListItem>? = null
+    var myAllStoreList : List<ResponseStoreListItem>? = null
+
+    //가게 카테고리 추가(찜) -> 확인 완, 수정 필요
+    fun addPin(categoryId: Long, storeLong: Long, callback: (Int) -> Unit){
+        var pinData = RequestPin(storeId = storeLong)
         service.addPin(xAuthToken, categoryId, pinData).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
@@ -738,8 +741,8 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //가게 카테고리 삭제(찜 취소)
-    fun deletePin(storeId: Long, callback: (Int) -> Unit){
+    //가게 카테고리 삭제(찜 취소) -> 수정 필요
+    fun deletePin(storeId: Int, callback: (Int) -> Unit){
         service.deletePin(xAuthToken, storeId).enqueue(object :Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
@@ -782,7 +785,7 @@ class GustoViewModel: ViewModel() {
         })
     }
     //카테고리 별 가게 조회 - 위치기반
-    fun getMapStores(categoryId: Long, townName: String, callback: (Int) -> Unit){
+    fun getMapStores(categoryId: Int, townName: String, callback: (Int) -> Unit){
         service.getMapStores(xAuthToken, categoryId = categoryId, townName = townName).enqueue(object :Callback<List<ResponseStoreListItem>>{
             override fun onResponse(
                 call: Call<List<ResponseStoreListItem>>,
@@ -790,6 +793,8 @@ class GustoViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel", response.body()!!.toString())
+                    myMapStoreList = response.body()!!
                     callback(0)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -805,7 +810,7 @@ class GustoViewModel: ViewModel() {
         })
     }
     //카테고리 별 가게 조회 - 전체
-    fun getAllStores(categoryId: Long, nickname: String, callback: (Int) -> Unit){
+    fun getAllStores(categoryId: Int, nickname: String, callback: (Int) -> Unit){
         service.getAllStores(xAuthToken, nickname = nickname, categoryId = categoryId).enqueue(object : Callback<List<ResponseStoreListItem>>{
             override fun onResponse(
                 call: Call<List<ResponseStoreListItem>>,
@@ -813,6 +818,7 @@ class GustoViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
+                    myAllStoreList = response.body()!!
                     callback(0)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")

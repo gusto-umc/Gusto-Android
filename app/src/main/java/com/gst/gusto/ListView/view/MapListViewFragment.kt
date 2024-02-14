@@ -32,19 +32,6 @@ class MapListViewFragment : Fragment() {
     private val gustoViewModel : GustoViewModel by activityViewModels()
     private var orderFlag = 0
     // 0 : 최신순, 1 : 오래된 순, 2 : ㄱ 부터, 3: ㅎ부터, 4 : 방문횟수 높은 순, 5 : 방문회수 낮은 순
-    private var sampleCategoryData = arrayListOf<CategorySimple>(
-        CategorySimple(0, "카페", 0, 2),
-        CategorySimple(1, "한식", 0, 0),
-        CategorySimple(2, "일식", 0, 2),
-                CategorySimple(3, "양식", 0, 2)
-
-    )
-
-    private var sampleStoreDataSave = arrayListOf<Store>(
-        Store(id = 0, storeName = "구스토 레스토랑", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = null, storePhoto = 1, serverCategory ="양식", isSaved = false),
-        Store(id = 1, storeName = "Gusto Restaurant", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = null, storePhoto = 1, serverCategory = "양식", isSaved = true)
-    )
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,21 +55,32 @@ class MapListViewFragment : Fragment() {
 
         gustoViewModel.getTokens(requireActivity() as MainActivity)
 
-        /**
-         * 카테고리Show 연결
-         * 아이템 클릭 리스너
-         */
+
         // 서버 연결
         gustoViewModel.getMapCategory("성수1가1동"){
             result ->
             when(result){
                 0 -> {
                     Toast.makeText(context, "연결 성공", Toast.LENGTH_SHORT).show()
+                    /**
+                     * 카테고리Show 연결
+                     * 아이템 클릭 리스너
+                     */
                     cateShowAdapter = ListViewCategoryAdapter("show", requireFragmentManager(), view)
                     cateShowAdapter!!.submitList(gustoViewModel.myMapCategoryList)
                     cateShowAdapter!!.viewModel = gustoViewModel
                     categoryRvShow.adapter = cateShowAdapter
                     categoryRvShow.layoutManager = LinearLayoutManager(this.requireActivity())
+
+                    /**
+                     * 카테고리Edit 연결
+                     * 체크박스 리스너 처리
+                     */
+                    val cateEditAdapter = ListViewEditCategoryAdapter("edit", view)
+                    cateEditAdapter.submitList(gustoViewModel.myMapCategoryList)
+                    cateShowAdapter!!.viewModel = gustoViewModel
+                    categoryRvEdit.adapter = cateEditAdapter
+                    categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())
                 }
                 1 -> {
                     Toast.makeText(context, "연결 실패", Toast.LENGTH_SHORT).show()
@@ -91,22 +89,11 @@ class MapListViewFragment : Fragment() {
         }
 
 
-
-        /**
-         * 카테고리Edit 연결
-         * 체크박스 리스너 처리
-         */
-        val cateEditAdapter = ListViewEditCategoryAdapter("edit", view)
-        cateEditAdapter.submitList(sampleCategoryData)
-        categoryRvEdit.adapter = cateEditAdapter
-        categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())
-
         /**
          * 뒤로가기 버튼, 시스템 뒤로가기 클릭리스너
          */
         binding.ivMapListviewBack.setOnClickListener {
-            //Toast.makeText(this.requireContext(), "뒤로가기 클릭", Toast.LENGTH_SHORT).show()
-            Navigation.findNavController(view).navigate(R.id.action_mapListViewFragment_to_fragment_map)
+            Navigation.findNavController(view).popBackStack()
         }
 
         /**
@@ -120,7 +107,6 @@ class MapListViewFragment : Fragment() {
          * 편집 버튼 클릭리스너
          */
         binding.tvMapListviewEdit.setOnClickListener {
-            Toast.makeText(this.requireContext(), "편집 클릭", Toast.LENGTH_SHORT).show()
             goEdit()
         }
 
@@ -170,15 +156,15 @@ class MapListViewFragment : Fragment() {
 
             //삭제 동작
             //어댑터에 알리기
-            cateShowAdapter!!.notifyDataSetChanged()
-            categoryRvShow.adapter = cateShowAdapter
-            cateEditAdapter.notifyDataSetChanged()
-            categoryRvEdit.adapter = cateEditAdapter
+//            cateShowAdapter!!.notifyDataSetChanged()
+//            categoryRvShow.adapter = cateShowAdapter
+//            cateEditAdapter.notifyDataSetChanged()
+//            categoryRvEdit.adapter = cateEditAdapter
             goShow()
         }
 
         /**
-         * 전체 카테고리 테스트
+         * 전체 카테고리, 가게 테스트
          */
         binding.tvTestAll.setOnClickListener {
             gustoViewModel.getAllCategory("mindddy"){
@@ -186,6 +172,20 @@ class MapListViewFragment : Fragment() {
                 when(result){
                     0 ->{}
                     1 -> {}
+                }
+            }
+            gustoViewModel.getAllStores(3, nickname = "mindddy"){
+                result ->
+                when(result){
+                    0 -> {
+                        //성공
+                        Log.d("all stores", "success")
+                        Log.d("all stores", gustoViewModel.myAllStoreList.toString())
+                    }
+                    1 -> {
+                        //실패
+                        Log.e("all stores", "fail")
+                    }
                 }
             }
         }

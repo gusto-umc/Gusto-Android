@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -79,15 +80,23 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                     /**
                      * storeRv 연결
                      */
-                    //서버 연결 예정
-                    var sampleStoreData : MutableList<Store> = arrayListOf<Store>(
-                        Store(id = 0, storeName = "구스토 레스토랑", location = "메롱시 메로나동 바밤바 24-6 3층", visitCount = 3, storePhoto = 1, serverCategory = "양식", isSaved = null),
-                        Store(id = 1, storeName = "Gusto Restaurant", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = 7, storePhoto = 1, serverCategory = "일식", isSaved = null)
-                    )
-                    val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
-                    mStoreAdapter.submitList(sampleStoreData!!)
-                    holder.storeRv.adapter = mStoreAdapter
-                    holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
+                    viewModel!!.getMapStores(holder.data!!.myCategoryId, townName = "성수1가1동"){
+                        result ->
+                        when(result){
+                            0 -> {
+                                //성공
+                                val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
+                                mStoreAdapter.submitList(viewModel!!.myMapStoreList!!)
+                                holder.storeRv.adapter = mStoreAdapter
+                                holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
+                            }
+                            1 -> {
+                                //실패
+                                Log.d("store checking", "fail")
+                            }
+                        }
+                    }
+
                 }
             }
             else {

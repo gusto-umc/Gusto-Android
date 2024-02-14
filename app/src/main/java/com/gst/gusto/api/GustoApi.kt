@@ -214,7 +214,7 @@ interface GustoApi {
         @Query("myCategoryId") myCategoryId : Int
     ) : Call<Void>
 
-    //5.카테고리 전체 조회 - 피드, 마이
+    //5.카테고리 전체 조회 - 피드, 마이 -> 확인 완
     @GET("myCategories/{nickname}")
     fun getAllCategory(
         @Header("X-AUTH-TOKEN") token : String,
@@ -225,7 +225,7 @@ interface GustoApi {
      * 가게
      */
 
-    //1. 가게 카테고리 추가
+    //1. 가게 카테고리 추가 -> 확인 완, 보완 필(pinInd)
     @POST("myCategories/{myCategoryId}/pin")
     fun addPin(
         @Header("X-AUTH-TOKEN") token : String,
@@ -233,15 +233,15 @@ interface GustoApi {
         @Body body: RequestPin
     ) : Call<Void>
 
-    //2. 가게 카테고리 삭제(찜 취소)
-    @DELETE("myCategories/pins?pinId={pinId}")
+    //2. 가게 카테고리 삭제(찜 취소) -> 확인 완
+    @DELETE("myCategories/pins")
     fun deletePin(
         @Header("X-AUTH-TOKEN") token : String,
-        @Query("pinId") pinId : Long
+        @Query("pinId") pinId : Int
     ): Call<Void>
 
     //3. 가게 상세 조회
-    @GET("stores/{storeId}/detail?reviewId={reviewId}&visitedAt={visitedAt}")
+    @GET("stores/{storeId}/detail")
     fun getStoreDetail(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("storeId") storeId : Long,
@@ -249,20 +249,20 @@ interface GustoApi {
         @Query("visitedAt") visitedAt : String,
     ) : Call<ResponseStoreDetail>
 
-    //4. 카테고리 별 가게 조회 - 위치기반
-    @GET("myCategories/pins?myCategoryId={categoryId}&townName={townName}")
+    //4. 카테고리 별 가게 조회 - 위치기반 -> 확인 완, 보완 필(pinInd)
+    @GET("myCategories/pins")
     fun getMapStores(
         @Header("X-AUTH-TOKEN") token : String,
-        @Query("categoryId") categoryId : Long,
+        @Query("myCategoryId") categoryId : Int,
         @Query("townName") townName : String
     ) : Call<List<ResponseStoreListItem>>
 
     //5. 카테고리 별 가게 조회 - 전체
-    @GET("myCategories/pins/{nickname}?myCategoryId={categoryId}")
+    @GET("myCategories/pins/{nickname}")
     fun getAllStores(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("nickname") nickname : String,
-        @Query("categoryId") categoryId : Long
+        @Query("myCategoryId") categoryId : Int
     ): Call<List<ResponseStoreListItem>>
 
     //6. 저장된 맛집 리스트
@@ -285,7 +285,7 @@ interface GustoApi {
         @Path("reviewId") reviewId : Long
     ) : Call<ResponseMyReview>
 
-    //2. 리뷰 수정 -> 확인 완료
+    //2. 리뷰 수정 -> 확인 완료, 보완필(image 첨부해서 보내기)
     @Multipart
     @PATCH("reviews/{reviewId}")
     fun editReview(
