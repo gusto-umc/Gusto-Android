@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Base64
 import android.util.Log
 import android.view.View
@@ -21,7 +20,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.ActivityMainBinding
-import net.daum.mf.map.api.MapView
 import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {

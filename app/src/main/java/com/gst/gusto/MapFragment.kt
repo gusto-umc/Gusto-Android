@@ -1,9 +1,5 @@
 package com.gst.clock.Fragment
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.graphics.Point
-import android.graphics.PointF
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -35,10 +31,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 5000
 
-    private val PERMISSIONS = arrayOf(
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    )
     //private lateinit var naverMap: NaverMap
     //private lateinit var locationSource: FusedLocationSource
 
@@ -50,20 +42,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        activity?.let {
-            //NaverMapSdk.getInstance(it).client =
-            //    NaverMapSdk.NaverCloudPlatformClient("3yu23i1pd1")
-        }
-
-        if (!hasPermission()) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                PERMISSIONS,
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-        } else {
-            initMapView()
-        }
     }
 
     override fun onCreateView(
@@ -135,7 +113,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         binding.listViewBtn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
         }
-
+        /*
         //방문 o 클릭 리스너 -> 보완 예정
         binding.fragmentArea.vis1.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
@@ -144,6 +122,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         binding.fragmentArea.vis01.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
         }
+         */
     }
     private fun showMainScreenFragment() {
         // fragment_map_main_screen.xml을 보이게 하는 작업
