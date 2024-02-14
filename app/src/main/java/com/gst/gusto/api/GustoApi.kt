@@ -225,7 +225,7 @@ interface GustoApi {
     @POST("myCategories/{myCategoryId}/pin")
     fun addPin(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("myCategoryId") myCategoryId : Int,
+        @Path("myCategoryId") myCategoryId : Long,
         @Body body: RequestPin
     ) : Call<Void>
 
@@ -233,23 +233,23 @@ interface GustoApi {
     @DELETE("myCategories/pins?pinId={pinId}")
     fun deletePin(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("pinId") pinId : Int
+        @Path("pinId") pinId : Long
     ): Call<Void>
 
     //3. 가게 상세 조회
     @GET("stores/{storeId}/detail?reviewId={reviewId}&visitedAt={visitedAt}")
     fun getStoreDetail(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("storeId") storeId : Int,
+        @Path("storeId") storeId : Long,
         @Path("reviewId") reviewId : Int,
         @Path("visitedAt") visitedAt : String,
-    )
+    ) : Call<ResponseStoreDetail>
 
     //4. 카테고리 별 가게 조회 - 위치기반
     @GET("myCategories/pins?myCategoryId={categoryId}&townName={townName}")
     fun getMapStores(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("categoryId") categoryId : Int,
+        @Path("categoryId") categoryId : Long,
         @Path("townName") townName : String
     ) : Call<List<ResponseStoreListItem>>
 
@@ -258,7 +258,7 @@ interface GustoApi {
     fun getAllStores(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("nickname") nickname : String,
-        @Path("categoryId") categoryId : Int
+        @Path("categoryId") categoryId : Long
     ): Call<List<ResponseStoreListItem>>
 
     //6. 저장된 맛집 리스트
@@ -278,14 +278,14 @@ interface GustoApi {
     @GET("reviews/{reviewId}")
     fun getReview(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("reviewId") reviewId : Int
+        @Path("reviewId") reviewId : Long
     ) : Call<ResponseMyReview>
 
     //2. 리뷰 수정
     @PATCH("reviews/{reviewId}")
     fun editReview(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("reviewId") reviewId : Int,
+        @Path("reviewId") reviewId : Long,
         @Body body : RequestMyReview
     ) : Call<Void>
 
@@ -293,7 +293,7 @@ interface GustoApi {
     @DELETE("reviews/{reviewId}")
     fun deleteReview(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("reviewId") reviewId : Int
+        @Path("reviewId") reviewId : Long
     ) : Call<Void>
 
     /**

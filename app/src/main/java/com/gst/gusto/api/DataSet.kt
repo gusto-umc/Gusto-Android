@@ -129,8 +129,8 @@ data class ResponseAllCategory(
 
 //가게 찜 추가
 data class RequestPin(
-    @SerializedName("myCategoryName") val myCategoryName : String,
-    @SerializedName("storeName") val storeName : String
+    @SerializedName("myCategoryName") val myCategoryName : Long,
+    @SerializedName("storeName") val storeName : Long
 )
 
 //가게 상세 조회
