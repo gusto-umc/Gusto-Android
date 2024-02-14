@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.gst.gusto.R
 
@@ -78,7 +77,7 @@ class util {
          * @param context 해당 CONTEXT
          * @return null
          */
-        fun setImage(imageView: ImageView, url : String, context: Context) {
+        fun setImage(imageView: ImageView, url: String, context: Context) {
             Glide.with(context).load(url).placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).into(imageView)
         }
 

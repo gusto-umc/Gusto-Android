@@ -2,26 +2,19 @@ package com.gst.clock.Fragment
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Point
-import android.graphics.PointF
-import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.MapMainScreenFragment
 import com.gst.gusto.R
-import com.gst.gusto.Util.util
 import com.gst.gusto.databinding.FragmentMapBinding
 
 
@@ -100,6 +93,12 @@ class MapFragment : Fragment() {
                 // 슬라이딩 중일 때 추가 작업이 필요하면 여기에 추가
             }
         })
+
+        // 버튼 클릭 리스너 설정
+        binding.listViewBtn.setOnClickListener {
+            // 네비게이션 컨트롤러를 사용하여 다른 프래그먼트로 이동
+            //navController.navigate(R.id.listFragment)
+        }
 
         // 칩그룹에 칩 클릭 리스너 추가
         chipGroup.setOnCheckedChangeListener { group, checkedId ->

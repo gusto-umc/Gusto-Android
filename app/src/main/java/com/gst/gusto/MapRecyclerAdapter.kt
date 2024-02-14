@@ -1,28 +1,32 @@
-package com.gst.gusto
-
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.R
+import com.gst.gusto.Util.util.Companion.setImage
 
-class MapRecyclerAdapter(val list : List<Int>): RecyclerView.Adapter<MapRecyclerAdapter.ViewHolder>() {
+class MapRecyclerAdapter(val list: ArrayList<String>) : RecyclerView.Adapter<MapRecyclerAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // ViewHolder에 필요한 코드 작성
+        val recycler_pic: ImageView = itemView.findViewById(R.id.picture)
+        //어디에 넣을지!
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // ViewHolder 생성 및 초기화
         val view = LayoutInflater.from(parent.context).inflate(R.layout.map_recycler_view_list, parent, false)
         return ViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        // 항목 수 반환
-        return list.count()
+        return list.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // ViewHolder에 데이터 바인딩
+        setImage(holder.recycler_pic,list[position],holder.itemView.context)
+        //holder.recycler_pic.setImageDrawable(list[position].pic)
     }
 }
+
+data class Item(val pic: Drawable)

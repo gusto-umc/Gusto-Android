@@ -53,7 +53,7 @@
                         app:chipCornerRadius="41dp"
                         app:chipBackgroundColor="@color/main_C"
                         app:chipStrokeColor="@color/main_C"
-                        android:textFamily="@font/pretnedard_medium.otf"
+                        android:textAppearance="@font/pretendard_medium"
                         android:textColor="@color/white"
                         android:text="전체"
                         android:layout_marginRight="12dp"
@@ -79,7 +79,7 @@
                                 app:chipCornerRadius="41dp"
                                 app:chipIcon="@drawable/streamline_bean"
                                 app:chipBackgroundColor="@color/chip_select_color"
-                                android:textFamily="@font/pretnedard_medium.otf"
+                                android:textAppearance="@font/pretendard_medium"
                                 android:text="카페"
                                 android:textSize="13sp"/>
                             <com.google.android.material.chip.Chip
@@ -93,7 +93,7 @@
                                 app:chipCornerRadius="41dp"
                                 app:chipIcon="@drawable/streamline_bean"
                                 app:chipBackgroundColor="@color/chip_select_color"
-                                android:textFamily="@font/pretnedard_medium.otf"
+                                android:textAppearance="@font/pretendard_medium"
                                 android:text="양식"
                                 android:textSize="13sp"/>
                             <com.google.android.material.chip.Chip
@@ -107,7 +107,7 @@
                                 app:chipCornerRadius="41dp"
                                 app:chipIcon="@drawable/streamline_bean"
                                 app:chipBackgroundColor="@color/chip_select_color"
-                                android:textFamily="@font/pretnedard_medium.otf"
+                                android:textAppearance="@font/pretendard_medium"
                                 android:text="일식"
                                 android:textSize="13sp"/>
                             <com.google.android.material.chip.Chip
@@ -121,8 +121,7 @@
                                 app:chipCornerRadius="41dp"
                                 app:chipIcon="@drawable/streamline_bean"
                                 app:chipBackgroundColor="@color/chip_select_color"
-                                android:textFamily="@font/pretnedard_medium.otf"
-                                android:text="이자카야"
+                                android:textAppearance="@font/pretendard_medium"
                                 android:textSize="13sp"/>
                         </com.google.android.material.chip.ChipGroup>
                     </LinearLayout>
