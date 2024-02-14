@@ -5,8 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.clearFragmentResult
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,12 +41,7 @@ class ReviewDetailFragment : Fragment() {
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.btnEdit.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewDetail_to_reviewDetailEdit)
-        }
-        binding.btnRemove.setOnClickListener {
 
-        }
         binding.lyTitle.setOnClickListener {
             findNavController().navigate(R.id.action_reviewDetail_to_storeDetailFragment)
         }
@@ -102,7 +100,6 @@ class ReviewDetailFragment : Fragment() {
             result ->
             when(result){
                 0 -> {
-                    Toast.makeText(context, "리뷰 상세 GET 성공", Toast.LENGTH_SHORT).show()
                     if(gustoViewModel.myReview != null){
                         val reviewDate = LocalDate.parse(gustoViewModel.myReview!!.visitedAt)
                         binding.tvDay.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
@@ -119,13 +116,14 @@ class ReviewDetailFragment : Fragment() {
                         //taste 처리
                         binding.ratingbarTaste.rating = gustoViewModel.myReview!!.taste.toFloat()
                         //spiceness 처리 -> 더미데이터가 null이라서 임의 처리, 추후 보완 예정
-                        binding.ratingbarSpiceness.rating = 2.0F
-                        //mood 처리
-                        binding.ratingbarMood.rating = gustoViewModel.myReview!!.mood!!.toFloat()
-                        //toilet 처리-> 더미데이터가 null이라서 임의 처리, 추후 보완 예정
-                        binding.ratingbarTaste.rating = 2.0F
+                        binding.ratingbarSpiceness.rating = 3.0F
+                        //mood 처리 -> 더미데이터가 null이라서 임의 처리, 추후 보완 예정
+                        //binding.ratingbarMood.rating = gustoViewModel.myReview!!.mood!!.toFloat()
+                        binding.ratingbarMood.rating = 4.0F
+                                //toilet 처리-> 더미데이터가 null이라서 임의 처리, 추후 보완 예정
+                        binding.ratingbarTaste.rating = 4.0F
                         //parking 처리-> 더미데이터가 null이라서 임의 처리, 추후 보완 예정
-                        binding.ratingbarParking.rating = 2.0F
+                        binding.ratingbarParking.rating = 5.0F
                         //comment 처리
                         binding.tvMemo.text = gustoViewModel.myReview!!.comment
 
@@ -141,7 +139,32 @@ class ReviewDetailFragment : Fragment() {
 
 
         binding.btnPopup.setOnClickListener {
-            binding.lyEditRemove.visibility = View.VISIBLE
+            if(binding.lyEditRemove.isGone){
+                binding.lyEditRemove.visibility = View.VISIBLE
+            }
+            else{
+                binding.lyEditRemove.visibility = View.GONE
+            }
+        }
+
+        binding.btnEdit.setOnClickListener {
+            findNavController().navigate(R.id.action_reviewDetail_to_reviewDetailEdit)
+        }
+        binding.btnRemove.setOnClickListener {
+            gustoViewModel.deleteReview(reviewId = reviewId.toLong()){
+                result ->
+                when(result){
+                    0 -> {
+                        //성공
+                        Toast.makeText(context, "리뷰를 성공적으로 삭제했습니다.", Toast.LENGTH_SHORT).show()
+                        Navigation.findNavController(view).popBackStack()
+                    }
+                    1 -> {
+                        //실페
+                        Toast.makeText(context, "리뷰 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
 
     }

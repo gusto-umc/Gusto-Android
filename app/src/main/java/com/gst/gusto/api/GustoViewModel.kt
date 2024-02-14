@@ -884,7 +884,7 @@ class GustoViewModel: ViewModel() {
         service.deleteReview(xAuthToken, reviewId).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    Log.e("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel", "Successful response: ${response}")
                     callback(0)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
