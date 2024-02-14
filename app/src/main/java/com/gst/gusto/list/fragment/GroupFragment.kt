@@ -10,11 +10,14 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.gst.gusto.R
+import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupMBinding
 import com.gst.gusto.list.adapter.GroupViewpagerAdapter
+import com.gst.gusto.list.adapter.LisAdapter
 import java.lang.Math.abs
 
 class GroupFragment : Fragment() {
@@ -32,6 +35,7 @@ class GroupFragment : Fragment() {
         binding.ivBack.setOnClickListener {
             val adapter = mPager.adapter as GroupViewpagerAdapter
 
+            binding.btnSave.visibility =View.GONE
             val frag = adapter.getCurrentFragment()
             Log.d("frag",frag.toString())
             if(frag is GroupRoutesFragment) {
@@ -84,6 +88,32 @@ class GroupFragment : Fragment() {
                 super.onPageSelected(position)
             }
         })
+        gustoViewModel.getGroup {result, data ->
+            when(result) {
+                1 -> {
+                    if(data!=null) {
+                        Log.d("viewmodel",data.toString())
+                        binding.tvName.text = data.groupName
+                        binding.tvComment.text = data.groupScript
+                        binding.tvNotice.text = data.notice
+                        binding.tvPeople.text = "${data.groupMembers.get(0).nickname} 님 외 ${data.groupMembers.size-1}명"
+                        if(data.groupMembers.size==1) {
+                            setImage(binding.ivProfileImage1,data.groupMembers.get(0).profileImg,requireContext())
+                            binding.cdProfileImage2.visibility = View.INVISIBLE
+                            binding.cdProfileImage3.visibility = View.INVISIBLE
+                        } else if(data.groupMembers.size==2) {
+                            setImage(binding.ivProfileImage1,data.groupMembers.get(0).profileImg,requireContext())
+                            setImage(binding.ivProfileImage2,data.groupMembers.get(1).profileImg,requireContext())
+                            binding.cdProfileImage3.visibility = View.INVISIBLE
+                        } else {
+                            setImage(binding.ivProfileImage1,data.groupMembers.get(0).profileImg,requireContext())
+                            setImage(binding.ivProfileImage2,data.groupMembers.get(1).profileImg,requireContext())
+                            setImage(binding.ivProfileImage3,data.groupMembers.get(2).profileImg,requireContext())
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroy() {

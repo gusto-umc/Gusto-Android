@@ -26,6 +26,8 @@ class GustoViewModel: ViewModel() {
     val myRouteList = ArrayList<GroupItem>()
     // 자신의 그룹 리스트
     val myGroupList = ArrayList<GroupItem>()
+    // 현재 그룹 아이디
+    var currentGroupId = 0L
     // 현재 지도에 보이는 마커 리스트 - (val id : Int, val num : Int, val latitude : Double, val longitude : Double, val name : String, val loc : String, val bookMark : Boolean)
     val markerListLiveData: MutableLiveData<ArrayList<mapUtil.Companion.MarkerItem>> = MutableLiveData()
     // 그룹 내에 식당 리스트
@@ -53,6 +55,7 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     // 성공적이라면 일단 서버와의 연결에 성공 했다는 것!
                     val responseBody = response.body()
+                    myRouteList.clear()
                     if(responseBody!=null) {
                         Log.e("viewmodel", "Successful response: ${response}")
                         for(data in responseBody) {
@@ -206,10 +209,11 @@ class GustoViewModel: ViewModel() {
             override fun onResponse(call: Call<List<ResponseGetGroups>>, response: Response<List<ResponseGetGroups>>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
+                    myGroupList.clear()
                     if(responseBody!=null) {
                         Log.e("viewmodel", "Successful response: ${response}")
                         for(data in responseBody) {
-                            myRouteList.add(GroupItem(data.groupId,data.groupName,data.numMembers,data.numRestaurants,data.numRoutes))
+                            myGroupList.add(GroupItem(data.groupId,data.groupName,data.numMembers,data.numRestaurants,data.numRoutes))
                         }
                     }
                     callback(1)
@@ -296,9 +300,9 @@ class GustoViewModel: ViewModel() {
         })
     }
     // 그룹 1건 조회
-    fun getGroup(groupId : Long, callback: (Int, ResponseGroup?) -> Unit){
+    fun getGroup( callback: (Int, ResponseGroup?) -> Unit){
         Log.e("token",xAuthToken)
-        service.getGroup(xAuthToken,groupId).enqueue(object : Callback<ResponseGroup> {
+        service.getGroup(xAuthToken,currentGroupId).enqueue(object : Callback<ResponseGroup> {
             override fun onResponse(call: Call<ResponseGroup>, response: Response<ResponseGroup>) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
@@ -337,7 +341,8 @@ class GustoViewModel: ViewModel() {
     // 그룹 및 초대코드 생성
     fun createGroup(groupName: String,groupScript: String, callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
-        service.createGroup(xAuthToken, RequestCreateGroup(groupName,groupScript)).enqueue(object : Callback<ResponseBody> {
+        val data = RequestCreateGroup(groupName,groupScript)
+        service.createGroup(xAuthToken, data).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")

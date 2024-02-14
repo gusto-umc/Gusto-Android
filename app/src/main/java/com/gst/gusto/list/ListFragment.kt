@@ -22,6 +22,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.Util.DiaLogFragment
 import com.gst.gusto.Util.util.Companion.dpToPixels
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListMainBinding
@@ -81,7 +82,6 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setFABClickEvent()
-
     }
 
     override fun onResume() {
@@ -101,12 +101,30 @@ class ListFragment : Fragment() {
 
         // 플로팅 버튼 클릭 이벤트 - 캡처
         binding.fabCreate.setOnClickListener {
-            Toast.makeText(this.context, "캡처 버튼 클릭!", Toast.LENGTH_SHORT).show()
+            toggleFab()
+            val dialogFragment = DiaLogFragment({ selectedItem ->
+                // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
+                when (selectedItem) {
+                    1 -> {
+
+                    }
+                }
+            }, R.layout.bottomsheetdialog_create, gustoViewModel,requireActivity() as MainActivity)
+            dialogFragment.show(parentFragmentManager, dialogFragment.tag)
         }
 
         // 플로팅 버튼 클릭 이벤트 - 공유
         binding.fabInput.setOnClickListener {
-            Toast.makeText(this.context, "공유 버튼 클릭!", Toast.LENGTH_SHORT).show()
+            toggleFab()
+            val dialogFragment = DiaLogFragment({ selectedItem ->
+                // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
+                when (selectedItem) {
+                    1 -> {
+
+                    }
+                }
+            }, R.layout.bottomsheetdialog_invite, gustoViewModel,requireActivity() as MainActivity)
+            dialogFragment.show(parentFragmentManager, dialogFragment.tag)
         }
     }
     private fun toggleFab() {

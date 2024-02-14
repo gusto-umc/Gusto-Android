@@ -61,7 +61,7 @@ data class ResponseGroup(
     @SerializedName("groupScript") val groupScript : String,
     @SerializedName("owner") val owner : Int,
     @SerializedName("notice") val notice : String,
-    @SerializedName("owner") val groupMembers : List<Member>
+    @SerializedName("groupMembers") val groupMembers : List<Member>
 )
 data class Member(
     @SerializedName("groupMemberId") val groupMemberId : Int,

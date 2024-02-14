@@ -55,7 +55,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                         gustoViewModel.markerListLiveData.value?.let { it1 -> deepCopy(it1) }
                     }
                 }
-            }, R.layout.routes_bottomsheetdialog, gustoViewModel,requireActivity() as MainActivity)
+            }, R.layout.bottomsheetdialog_routes, gustoViewModel,requireActivity() as MainActivity)
             dialogFragment.show(parentFragmentManager, dialogFragment.tag)
 
             //findNavController().navigate(R.id.fragment_group_m_route_edit)
@@ -76,7 +76,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                         gustoViewModel.markerListLiveData.value?.let { it1 -> deepCopy(it1) }
                     }
                 }
-            }, R.layout.routes_bottomsheetdialog, gustoViewModel,requireActivity() as MainActivity)
+            }, R.layout.bottomsheetdialog_routes, gustoViewModel,requireActivity() as MainActivity)
             dialogFragment.show(parentFragmentManager, dialogFragment.tag)
         }
 

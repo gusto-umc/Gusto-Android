@@ -62,7 +62,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     }
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //목록 보기 클릭 리스너 - 민디
