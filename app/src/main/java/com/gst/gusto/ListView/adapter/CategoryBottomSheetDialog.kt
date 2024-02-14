@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -93,26 +94,40 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
             }
             //view?.findViewById<Switch>(R.id.switch_category_public)?.isEnabled = true
             view?.findViewById<TextView>(R.id.tv_category_save)?.setOnClickListener {
-                //1. 공백확인 -> 추가 필요
-
-                //2. 서버 연결
                 val title = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)!!.text.toString()
                 val desc = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)!!.text.toString()
-
-                viewModel!!.addCategory(categoryName = title, desc = desc, categoryIcon = selectedIconInt, public = "PUBLIC"){
-                    result ->
-                    when(result){
-                        0 -> {
-                            //연결 성공
-                            itemClick(0)
-                        }
-                        1-> {
-                            //연결 실패
-                            itemClick(1)
+                var descData : String = ""
+                //1. 공백확인 -> 추가 필요
+                if(title.isNullOrBlank()){
+                    Toast.makeText(context, "카테고리명을 입력해주세요", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    if(desc.isNullOrBlank()){
+                        descData = ""
+                    }
+                    else{
+                        descData = desc
+                    }
+                    //2. 서버 연결
+                    viewModel!!.addCategory(categoryName = title, desc = descData, categoryIcon = selectedIconInt, public = "PUBLIC"){
+                            result ->
+                        when(result){
+                            0 -> {
+                                //연결 성공
+                                itemClick(0)
+                            }
+                            1-> {
+                                //연결 실패
+                                itemClick(1)
+                            }
                         }
                     }
+                    dialog?.dismiss()
+
                 }
-                dialog?.dismiss()
+
+
+
             }
 
         }

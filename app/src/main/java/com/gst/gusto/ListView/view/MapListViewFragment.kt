@@ -21,6 +21,7 @@ import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.ListView.adapter.CategoryBottomSheetDialog
 import com.gst.gusto.ListView.adapter.ListViewCategoryAdapter
 import com.gst.gusto.ListView.adapter.ListViewEditCategoryAdapter
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMapListviewBinding
@@ -63,14 +64,30 @@ class MapListViewFragment : Fragment() {
         val categoryRvShow = binding.rvMapListviewCategoryShow
         val categoryRvEdit = binding.rvMapListviewCategoryEdit
 
+        gustoViewModel.getTokens(requireActivity() as MainActivity)
+
         /**
          * 카테고리Show 연결
          * 아이템 클릭 리스너
          */
-        val cateShowAdapter = ListViewCategoryAdapter("show", requireFragmentManager(), view)
-        cateShowAdapter.submitList(sampleCategoryData)
-        categoryRvShow.adapter = cateShowAdapter
-        categoryRvShow.layoutManager = LinearLayoutManager(this.requireActivity())
+        // 서버 연결
+        gustoViewModel.getMapCategory("성수1가1동"){
+            result ->
+            when(result){
+                0 -> {
+                    Toast.makeText(context, "연결 성공", Toast.LENGTH_SHORT).show()
+                    val cateShowAdapter = ListViewCategoryAdapter("show", requireFragmentManager(), view)
+                    //cateShowAdapter.submitList(sampleCategoryData)
+
+                    categoryRvShow.adapter = cateShowAdapter
+                    categoryRvShow.layoutManager = LinearLayoutManager(this.requireActivity())
+                }
+                1 -> {
+                    Toast.makeText(context, "연결 실패", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
 
 
         /**

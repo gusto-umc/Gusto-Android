@@ -587,14 +587,20 @@ class GustoViewModel: ViewModel() {
         })
     }
 
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+    //내 우치 장소보기 카테고리 array
+
+
     /**
-     * 카테고리 api 함수
+     * 카테고리 api 함수 - mindy
      */
 
-    // 카테고리 추가
+    // 카테고리 추가 -> 확인 완료
     fun addCategory(categoryName : String,categoryIcon : Int, public : String, desc : String,  callback: (Int) -> Unit){
-        var categoryRequestData = RequestAddCategory(categoryName = categoryName, categoryIcon = categoryIcon, publishCategory = public, myCategoryScript = desc )
-        service.addCategory(xAuthToken, body = categoryRequestData).enqueue(object : Callback<Void>{
+        var categoryRequestData = RequestAddCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = public, myCategoryScript = desc )
+        Log.d("checking", categoryRequestData.toString())
+        service.addCategory(xAuthToken, data = categoryRequestData).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if(response.isSuccessful){
                     Log.d("viewmodel", "Successful response: ${response}")
@@ -614,7 +620,7 @@ class GustoViewModel: ViewModel() {
     }
     // 카테고리 수정
     fun editCategory(categoryName: String, categoryIcon: Int, public: String, desc: String, callback: (Int) -> Unit){
-        var categoryRequestData = RequestAddCategory(categoryName = categoryName, categoryIcon = categoryIcon, publishCategory = public, myCategoryScript = desc )
+        var categoryRequestData = RequestAddCategory(myCategoryName = "test1", myCategoryIcon = 2, publishCategory = "PUBLIC", myCategoryScript = "hello" )
         service.editCategory(xAuthToken, body = categoryRequestData).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if(response.isSuccessful){
@@ -641,6 +647,7 @@ class GustoViewModel: ViewModel() {
                 response: Response<List<ResponseMapCategory>>
             ) {
                 if (response.isSuccessful) {
+                    Log.e("viewmodel", response.body()!!.toString())
                     Log.e("viewmodel", "Successful response: ${response}")
                     callback(0)
                 } else {
@@ -701,7 +708,7 @@ class GustoViewModel: ViewModel() {
     }
 
     /**
-     * 가게 api 함수
+     * 가게 api 함수 - mindy
      */
     //가게 카테고리 추가
     fun addPin(categoryId: Long, storeInt: Long, callback: (Int) -> Unit){
@@ -817,7 +824,7 @@ class GustoViewModel: ViewModel() {
 
 
     /**
-     * 리뷰 api 함수
+     * 리뷰 api 함수 - mindy
      */
     //리뷰 1건 조회
     fun getReview(reviewId : Long, callback: (Int) -> Unit){
@@ -885,7 +892,7 @@ class GustoViewModel: ViewModel() {
     }
 
     /**
-     * 검색 api 함수
+     * 검색 api 함수 - mindy
      */
     //검색 결과 -> 작성 예정
 

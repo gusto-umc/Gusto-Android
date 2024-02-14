@@ -12,24 +12,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.Model.CategoryDetail
-import com.gst.gusto.ListView.Model.CategorySimple
 import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.R
+import com.gst.gusto.api.ResponseMapCategory
 import com.gst.gusto.databinding.ItemListviewCategoryShowBinding
 
-class ListViewCategoryAdapter(private var flag : String, private val fragmentManager : FragmentManager, private val parentView : View) : ListAdapter<CategorySimple, ListViewCategoryAdapter.ViewHolder>(
+class ListViewCategoryAdapter(private var flag : String, private val fragmentManager : FragmentManager, private val parentView : View) : ListAdapter<ResponseMapCategory, ListViewCategoryAdapter.ViewHolder>(
     DiffCallback) {
 
     private val mFragmentManager = fragmentManager
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<CategorySimple>(){
-            override fun areItemsTheSame(oldItem: CategorySimple, newItem: CategorySimple): Boolean {
+        private val DiffCallback = object : DiffUtil.ItemCallback<ResponseMapCategory>(){
+            override fun areItemsTheSame(oldItem: ResponseMapCategory, newItem: ResponseMapCategory): Boolean {
                 //아이템  id 가 같은지 확인
-                return oldItem.id == newItem.id
+                return oldItem.myCategoryId == newItem.myCategoryId
             }
 
-            override fun areContentsTheSame(oldItem: CategorySimple, newItem: CategorySimple): Boolean {
+            override fun areContentsTheSame(oldItem: ResponseMapCategory, newItem: ResponseMapCategory): Boolean {
                 //아이템 내용이 같은 지 확인
                 return oldItem == newItem
             }
@@ -39,13 +39,13 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
 
 
     inner class ViewHolder(private val binding : ItemListviewCategoryShowBinding) : RecyclerView.ViewHolder(binding.root){
-        var data : CategorySimple? = null
+        var data : ResponseMapCategory? = null
 
-        fun bind(simple: CategorySimple){
+        fun bind(simple: ResponseMapCategory){
             data = simple
             binding.ivItemCategoryShow.setImageResource(R.drawable.category_icon_1)
             binding.tvItemCategoryShowTitle.text = simple.categoryName
-            binding.tvCategoryShowCount.text = "${simple.storeCount}개"
+            binding.tvCategoryShowCount.text = "${simple.pinCnt}개"
         }
         val updownLayout = binding.layoutItemCategoryShowUpdown
         val storeRv = binding.rvItemCategoryShowStore
@@ -64,7 +64,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
 
         //펼치기 클릭리스너
         holder.updownLayout.setOnClickListener {
-            if(holder.data?.storeCount != 0){
+            if(holder.data?.pinCnt != 0){
                 if(openFlag){
                     holder.storeRv.visibility = View.GONE
                     holder.ivUpDown.setImageResource(R.drawable.arrow_down_2_img)
@@ -94,7 +94,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
         }
 
         //개수에 따라 펼치기 활성 상태 변경
-        if(holder.data?.storeCount!! <= 0) {
+        if(holder.data?.pinCnt!! <= 0) {
             holder.ivUpDown.imageTintList = ColorStateList.valueOf(Color.parseColor("#ECECEC"))
         }
 
@@ -109,7 +109,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                     }
                 }
                 categoryBottomSheetDialog.isAdd = false
-                categoryBottomSheetDialog.categoryEdiBottomSheetData = CategoryDetail(id = holder.data!!.id, categoryName = holder.data!!.categoryName, categoryDesc = "냠냠", categoryIcon = 1, isPublic = true )
+                categoryBottomSheetDialog.categoryEdiBottomSheetData = CategoryDetail(id = holder.data!!.myCategoryId, categoryName = holder.data!!.categoryName, categoryDesc = "냠냠", categoryIcon = 1, isPublic = true )
                 categoryBottomSheetDialog.show(mFragmentManager, categoryBottomSheetDialog.tag)
                 true
             }

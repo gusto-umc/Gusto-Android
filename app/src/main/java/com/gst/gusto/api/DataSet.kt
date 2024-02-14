@@ -103,10 +103,10 @@ data class ResponseProfile(
 
 //카테고리 추가, 수정 request body
 data class RequestAddCategory(
-    @SerializedName("myCategoryName") var categoryName : String,
-    @SerializedName("myCategoryIcon") var categoryIcon : Int,
-    @SerializedName("publishCategory") var publishCategory : String = "PUBLIC",
-    @SerializedName("myCategoryScript") var myCategoryScript : String?
+    @SerializedName("myCategoryName") var myCategoryName : String,
+    @SerializedName("myCategoryIcon") var myCategoryIcon : Int,
+    @SerializedName("publishCategory") var publishCategory : String,
+    @SerializedName("myCategoryScript") var myCategoryScript : String = ""
 )
 
 //카테고리 조회(내 위치 장소 보기)
