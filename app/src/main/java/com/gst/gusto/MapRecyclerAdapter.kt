@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class MapRecyclerAdapter: RecyclerView.Adapter<MapRecyclerAdapter.ViewHolder>() {
+class MapRecyclerAdapter(val list : List<Int>): RecyclerView.Adapter<MapRecyclerAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // ViewHolder에 필요한 코드 작성
@@ -19,7 +19,7 @@ class MapRecyclerAdapter: RecyclerView.Adapter<MapRecyclerAdapter.ViewHolder>() 
 
     override fun getItemCount(): Int {
         // 항목 수 반환
-        return 10
+        return list.count()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

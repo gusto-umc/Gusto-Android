@@ -21,7 +21,11 @@ class AreaFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_area, container, false)
 
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView_no_visited_rest)
+        val recyclerView2: RecyclerView = view.findViewById(R.id.recyclerView_visited_rest)
+        val recyclerView3: RecyclerView = view.findViewById(R.id.recyclerView_age_no_visited_rest)
         val adapter = MapRecyclerAdapter()
+        val adapter2 = MapRecyclerAdapter()
+        val adapter3 = MapRecyclerAdapter()
         recyclerView.adapter = adapter
 
         // 그 외의 초기화 작업 수행

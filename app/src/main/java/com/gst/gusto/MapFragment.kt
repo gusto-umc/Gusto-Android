@@ -42,6 +42,9 @@ class MapFragment : Fragment() {
 
     lateinit var  chipGroup: ChipGroup
 
+    // 이전에 활성화된 칩을 저장하는 변수
+    private var previousChipId: Int = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -97,6 +100,21 @@ class MapFragment : Fragment() {
                 // 슬라이딩 중일 때 추가 작업이 필요하면 여기에 추가
             }
         })
+
+        // 칩그룹에 칩 클릭 리스너 추가
+        chipGroup.setOnCheckedChangeListener { group, checkedId ->
+            // 이전에 활성화된 칩이 있으면 해당 칩의 색상을 변경
+            if (previousChipId != -1) {
+                val previousChip = group.findViewById<Chip>(previousChipId)
+                previousChip.setChipBackgroundColorResource(R.color.white)
+            }
+            // 현재 클릭된 칩의 색상 변경
+            val currentChip = group.findViewById<Chip>(checkedId)
+            currentChip.setChipBackgroundColorResource(R.color.chip_select_color)
+            // 클릭된 칩의 ID를 이전 칩의 ID로 저장
+            previousChipId = checkedId
+        }
+
         return view
     }
 
@@ -205,22 +223,5 @@ class MapFragment : Fragment() {
         //setMarkers()
     }
 
-    //카테고리 마커 다르게 하기
-    private fun addChip(text:String) {
-        val chip = Chip(requireContext())
-        chip.isClickable = true
-        chip.isCheckable = true
-
-        chip.text  = text
-        chip.chipBackgroundColor = ContextCompat.getColorStateList(requireContext(), R.color.chip_select_color)
-        chip.chipStrokeColor = ContextCompat.getColorStateList(requireContext(), R.color.main_C)
-        chip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chip_select_text_color))
-        chip.textSize = 15f
-        chip.typeface = Typeface.createFromAsset(requireActivity().assets, "font/pretendard_medium.otf")
-        chip.chipStrokeWidth = util.dpToPixels(1f, resources.displayMetrics)
-        chip.chipCornerRadius = util.dpToPixels(41f, resources.displayMetrics)
-
-        chipGroup.addView(chip)
-    }
 }
 
