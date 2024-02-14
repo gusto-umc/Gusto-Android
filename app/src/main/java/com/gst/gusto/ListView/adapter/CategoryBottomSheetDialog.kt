@@ -1,6 +1,7 @@
 package com.gst.gusto.ListView.adapter
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.gst.gusto.ListView.Model.CategoryDetail
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.RequestAddCategory
 import org.w3c.dom.Text
 
 class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDialogFragment() {
@@ -54,10 +56,6 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        view?.findViewById<TextView>(R.id.tv_category_save)?.setOnClickListener {
-//            itemClick(0)
-//            dialog?.dismiss()
-//        }
         view?.findViewById<ImageView>(R.id.iv_bottomsheet_category_x)?.setOnClickListener {
             dialog?.dismiss()
         }
@@ -97,7 +95,7 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
                 val title = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)!!.text.toString()
                 val desc = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)!!.text.toString()
                 var descData : String = ""
-                //1. 공백확인 -> 추가 필요
+
                 if(title.isNullOrBlank()){
                     Toast.makeText(context, "카테고리명을 입력해주세요", Toast.LENGTH_SHORT).show()
                 }
@@ -126,12 +124,11 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
 
                 }
 
-
-
             }
 
         }
         else{
+            // 수정 상황
             view?.findViewById<ImageView>(R.id.iv_bottomsheet_category_x)?.visibility = View.GONE
             view?.findViewById<TextView>(R.id.tv_category_edit)?.visibility = View.VISIBLE
             view?.findViewById<TextView>(R.id.tv_category_bottomsheet_banner)?.text = "카테고리 수정하기"
@@ -147,6 +144,41 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
             view?.findViewById<Switch>(R.id.switch_category_public)?.isChecked =
                 categoryEdiBottomSheetData!!.isPublic
             view?.findViewById<Switch>(R.id.switch_category_public)?.isEnabled = false
+
+            view?.findViewById<TextView>(R.id.tv_category_save)?.setOnClickListener {
+                val title = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)!!.text.toString()
+                val desc = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)!!.text.toString()
+                var descData : String = ""
+
+                if(title.isNullOrBlank()){
+                    Toast.makeText(context, "카테고리명을 입력해주세요", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    if(desc.isNullOrBlank()){
+                        descData = ""
+                    }
+                    else{
+                        descData = desc
+                    }
+                    //2. 서버 연결
+                    viewModel!!.editCategory(categoryName = title, desc = descData, categoryIcon = selectedIconInt, public = "PUBLIC", categoryId = categoryEdiBottomSheetData!!.id.toLong()){
+                            result ->
+                        when(result){
+                            0 -> {
+                                //연결 성공
+                                itemClick(0)
+                            }
+                            1-> {
+                                //연결 실패
+                                itemClick(1)
+                            }
+                        }
+                    }
+                    dialog?.dismiss()
+
+                }
+
+            }
 
         }
 

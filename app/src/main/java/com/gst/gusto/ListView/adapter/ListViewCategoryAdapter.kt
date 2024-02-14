@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.Model.CategoryDetail
 import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseMapCategory
 import com.gst.gusto.databinding.ItemListviewCategoryShowBinding
 
@@ -21,6 +22,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
     DiffCallback) {
 
     private val mFragmentManager = fragmentManager
+    var viewModel : GustoViewModel? = null
 
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<ResponseMapCategory>(){
@@ -104,12 +106,16 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                 val categoryBottomSheetDialog = CategoryBottomSheetDialog(){
                     when(it){
                         0 -> {
-                            Log.d("bottomsheet", "저장 click")
+                            //성공 -> 카테고리 목록 새로 불러오기
+                        }
+                        1 -> {
+                            //실패
                         }
                     }
                 }
                 categoryBottomSheetDialog.isAdd = false
                 categoryBottomSheetDialog.categoryEdiBottomSheetData = CategoryDetail(id = holder.data!!.myCategoryId, categoryName = holder.data!!.categoryName, categoryDesc = "냠냠", categoryIcon = 1, isPublic = true )
+                categoryBottomSheetDialog.viewModel = viewModel
                 categoryBottomSheetDialog.show(mFragmentManager, categoryBottomSheetDialog.tag)
                 true
             }

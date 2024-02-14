@@ -1,5 +1,6 @@
 package com.gst.gusto.api
 
+import android.widget.EditText
 import com.google.gson.annotations.SerializedName
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -12,6 +13,7 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -190,14 +192,15 @@ interface GustoApi {
         @Body data : RequestAddCategory
     ) : Call<Void>
 
-    //2. 카테고리 수정
+    //2. 카테고리 수정 -> 에러
     @PATCH("myCategories/{myCategoryId}")
     fun editCategory(
         @Header("X-AUTH-TOKEN") token : String,
-        @Body body : RequestAddCategory
+        @Path("myCategoryId", encoded = true) myCategoryId : Long,
+        @Body data : RequestEditCategory
     ) : Call<Void>
 
-    //3. 카테고리 조회(위치 기반, 내 위치 장소보기)
+    //3. 카테고리 조회(위치 기반, 내 위치 장소보기) ->  확인 완
     @GET("myCategories")
     fun getMapCategory(
         @Header("X-AUTH-TOKEN") token : String,

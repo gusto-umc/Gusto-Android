@@ -64,6 +64,8 @@ class MapListViewFragment : Fragment() {
         val categoryRvShow = binding.rvMapListviewCategoryShow
         val categoryRvEdit = binding.rvMapListviewCategoryEdit
 
+        var cateShowAdapter : ListViewCategoryAdapter? = null
+
         gustoViewModel.getTokens(requireActivity() as MainActivity)
 
         /**
@@ -76,9 +78,9 @@ class MapListViewFragment : Fragment() {
             when(result){
                 0 -> {
                     Toast.makeText(context, "연결 성공", Toast.LENGTH_SHORT).show()
-                    val cateShowAdapter = ListViewCategoryAdapter("show", requireFragmentManager(), view)
-                    //cateShowAdapter.submitList(sampleCategoryData)
-
+                    cateShowAdapter = ListViewCategoryAdapter("show", requireFragmentManager(), view)
+                    cateShowAdapter!!.submitList(gustoViewModel.myMapCategoryList)
+                    cateShowAdapter!!.viewModel = gustoViewModel
                     categoryRvShow.adapter = cateShowAdapter
                     categoryRvShow.layoutManager = LinearLayoutManager(this.requireActivity())
                 }
@@ -168,7 +170,7 @@ class MapListViewFragment : Fragment() {
 
             //삭제 동작
             //어댑터에 알리기
-            cateShowAdapter.notifyDataSetChanged()
+            cateShowAdapter!!.notifyDataSetChanged()
             categoryRvShow.adapter = cateShowAdapter
             cateEditAdapter.notifyDataSetChanged()
             categoryRvEdit.adapter = cateEditAdapter

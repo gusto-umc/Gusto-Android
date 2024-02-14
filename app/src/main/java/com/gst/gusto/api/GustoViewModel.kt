@@ -1,6 +1,7 @@
 package com.gst.gusto.api
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gst.gusto.BuildConfig
@@ -590,7 +591,7 @@ class GustoViewModel: ViewModel() {
     //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 
     //내 우치 장소보기 카테고리 array
-
+    var myMapCategoryList : List<ResponseMapCategory>? = null
 
     /**
      * 카테고리 api 함수 - mindy
@@ -619,27 +620,29 @@ class GustoViewModel: ViewModel() {
         })
     }
     // 카테고리 수정
-    fun editCategory(categoryName: String, categoryIcon: Int, public: String, desc: String, callback: (Int) -> Unit){
-        var categoryRequestData = RequestAddCategory(myCategoryName = "test1", myCategoryIcon = 2, publishCategory = "PUBLIC", myCategoryScript = "hello" )
-        service.editCategory(xAuthToken, body = categoryRequestData).enqueue(object : Callback<Void>{
+    fun editCategory(categoryId: Long, categoryName: String, categoryIcon: Int, public: String, desc: String, callback: (Int) -> Unit){
+        var categoryRequestData = RequestEditCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = public)
+        Log.d("checking edit", categoryRequestData.toString())
+        Log.d("checking edit", categoryId.toString())
+        service.editCategory(token = xAuthToken, myCategoryId = categoryId, data = categoryRequestData).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if(response.isSuccessful){
-                    Log.d("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel edit", "Successful response: ${response}")
                     callback(0)
                 }else{
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    Log.e("viewmodel edit", "Unsuccessful response: ${response}")
                     callback(1)
                 }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
+                Log.e("viewmodel edit", "Failed to make the request", t)
                 callback(1)
             }
 
         })
     }
-    // 카테고리 조회(위치 기반, 내 위치 장소보기)
+    // 카테고리 조회(위치 기반, 내 위치 장소보기) -> 확인 완료
     fun getMapCategory(townName : String, callback: (Int) -> Unit){
         service.getMapCategory(xAuthToken, townName = townName).enqueue(object :Callback<List<ResponseMapCategory>>{
             override fun onResponse(
@@ -649,6 +652,7 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", response.body()!!.toString())
                     Log.e("viewmodel", "Successful response: ${response}")
+                    myMapCategoryList = response.body()!!
                     callback(0)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")

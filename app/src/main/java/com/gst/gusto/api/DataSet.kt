@@ -109,6 +109,14 @@ data class RequestAddCategory(
     @SerializedName("myCategoryScript") var myCategoryScript : String = ""
 )
 
+data class RequestEditCategory(
+    @SerializedName("myCategoryName") var myCategoryName : String,
+    @SerializedName("myCategoryIcon") var myCategoryIcon : Int,
+    @SerializedName("publishCategory") var publishCategory : String
+)
+
+
+
 //카테고리 조회(내 위치 장소 보기)
 data class ResponseMapCategory(
     @SerializedName("myCategoryId") val myCategoryId : Int,
