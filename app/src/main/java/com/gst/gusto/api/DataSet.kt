@@ -193,12 +193,9 @@ data class ResponseMyReview(
     @SerializedName("likeCnt") val likeCnt : Int
 )
 
-//리뷰 수정
+//리뷰 수정완 -> 확인 완
 data class RequestMyReview(
-    @SerializedName("visitedAt") var visitedAt : String?,
-    @SerializedName("img") val img : List<String>?,
-    @SerializedName("menuName") val menuName : List<String>?,
-    @SerializedName("hashTagId") val hashTagId : List<Int>?,
+    @SerializedName("menuName") val menuName : String?,
     @SerializedName("taste") val taste : Int,
     @SerializedName("spiciness") val spiciness : Int?,
     @SerializedName("mood") val mood : Int?,

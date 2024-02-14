@@ -96,6 +96,7 @@ class ReviewDetailFragment : Fragment() {
          * 서버 데이터 연결
          */
         var reviewId = 1
+        gustoViewModel.myReviewId = reviewId.toLong()
         gustoViewModel.getReview(reviewId.toLong()){
             result ->
             when(result){
@@ -105,27 +106,62 @@ class ReviewDetailFragment : Fragment() {
                         binding.tvDay.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
                         binding.tvReviewStoreName.text = gustoViewModel.myReview!!.storeName
                         binding.tvHeartNum.text = gustoViewModel.myReview!!.likeCnt.toString()
+                        //이미지 처리
                         if(!gustoViewModel.myReview!!.img.isNullOrEmpty()){
                             var reviewImageList : MutableList<Int>? = null
-                            //이미지 처리
+
                         }
                         else{
                             settingImages(imageList)
                         }
-                        binding.tvMenu.text = gustoViewModel.myReview!!.menuName
+                        //메뉴
+                        binding.tvMenu.text = if(gustoViewModel.myReview!!.menuName.isNullOrBlank()){
+                            ""
+                        }
+                        else{
+                            gustoViewModel.myReview!!.menuName
+                        }
                         //taste 처리
                         binding.ratingbarTaste.rating = gustoViewModel.myReview!!.taste.toFloat()
-                        //spiceness 처리 -> 더미데이터가 null이라서 임의 처리, 추후 보완 예정
-                        binding.ratingbarSpiceness.rating = 3.0F
-                        //mood 처리 -> 더미데이터가 null이라서 임의 처리, 추후 보완 예정
-                        //binding.ratingbarMood.rating = gustoViewModel.myReview!!.mood!!.toFloat()
-                        binding.ratingbarMood.rating = 4.0F
-                                //toilet 처리-> 더미데이터가 null이라서 임의 처리, 추후 보완 예정
-                        binding.ratingbarTaste.rating = 4.0F
+                        //spiceness 처리
+                        if(gustoViewModel.myReview!!.spiciness == null){
+                            binding.ratingbarSpiceness.visibility = View.INVISIBLE
+                        }
+                        else{
+                            binding.ratingbarSpiceness.visibility = View.VISIBLE
+                            binding.ratingbarSpiceness.rating = gustoViewModel.myReview!!.taste.toFloat()
+                        }
+                        //mood 처리
+                        if(gustoViewModel.myReview!!.mood == null){
+                            binding.ratingbarMood.visibility = View.INVISIBLE
+                        }
+                        else{
+                            binding.ratingbarMood.visibility = View.VISIBLE
+                            binding.ratingbarMood.rating = gustoViewModel.myReview!!.mood!!.toFloat()
+                        }
+                        //toilet 처리
+                        if(gustoViewModel.myReview!!.toilet == null){
+                            binding.ratingbarToilet.visibility = View.INVISIBLE
+                        }
+                        else{
+                            binding.ratingbarToilet.visibility = View.VISIBLE
+                            binding.ratingbarToilet.rating = gustoViewModel.myReview!!.toilet!!.toFloat()
+                        }
                         //parking 처리-> 더미데이터가 null이라서 임의 처리, 추후 보완 예정
-                        binding.ratingbarParking.rating = 5.0F
+                        if(gustoViewModel.myReview!!.parking == null){
+                            binding.ratingbarParking.visibility = View.INVISIBLE
+                        }
+                        else{
+                            binding.ratingbarParking.visibility = View.VISIBLE
+                            binding.ratingbarParking.rating = gustoViewModel.myReview!!.parking!!.toFloat()
+                        }
                         //comment 처리
-                        binding.tvMemo.text = gustoViewModel.myReview!!.comment
+                        binding.tvMemo.text = if(gustoViewModel.myReview!!.comment == null){
+                            ""
+                        }
+                        else{
+                            gustoViewModel.myReview!!.comment
+                        }
 
                     }else{
                         Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
@@ -151,7 +187,7 @@ class ReviewDetailFragment : Fragment() {
             findNavController().navigate(R.id.action_reviewDetail_to_reviewDetailEdit)
         }
         binding.btnRemove.setOnClickListener {
-            gustoViewModel.deleteReview(reviewId = reviewId.toLong()){
+            gustoViewModel.deleteReview(reviewId = gustoViewModel.myReviewId!!){
                 result ->
                 when(result){
                     0 -> {

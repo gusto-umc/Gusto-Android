@@ -192,11 +192,11 @@ interface GustoApi {
         @Body data : RequestAddCategory
     ) : Call<Void>
 
-    //2. 카테고리 수정 -> 에러
+    //2. 카테고리 수정 -> 확인 완료, desc 추가 확인 필요
     @PATCH("myCategories/{myCategoryId}")
     fun editCategory(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("myCategoryId", encoded = true) myCategoryId : Long,
+        @Path("myCategoryId") myCategoryId : Long,
         @Body data : RequestEditCategory
     ) : Call<Void>
 
@@ -285,15 +285,17 @@ interface GustoApi {
         @Path("reviewId") reviewId : Long
     ) : Call<ResponseMyReview>
 
-    //2. 리뷰 수정
+    //2. 리뷰 수정 -> 확인 완료
+    @Multipart
     @PATCH("reviews/{reviewId}")
     fun editReview(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("reviewId") reviewId : Long,
-        @Body body : RequestMyReview
+        @Part image: MultipartBody.Part?,
+        @Part("info") info: RequestMyReview
     ) : Call<Void>
 
-    //3. 리뷰 삭제
+    //3. 리뷰 삭제 -> 확인 완료
     @DELETE("reviews/{reviewId}")
     fun deleteReview(
         @Header("X-AUTH-TOKEN") token : String,

@@ -177,6 +177,19 @@ class MapListViewFragment : Fragment() {
             goShow()
         }
 
+        /**
+         * 전체 카테고리 테스트
+         */
+        binding.tvTestAll.setOnClickListener {
+            gustoViewModel.getAllCategory("mindddy"){
+                result ->
+                when(result){
+                    0 ->{}
+                    1 -> {}
+                }
+            }
+        }
+
 
 
     }

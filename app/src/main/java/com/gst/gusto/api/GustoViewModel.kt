@@ -592,6 +592,7 @@ class GustoViewModel: ViewModel() {
 
     //내 우치 장소보기 카테고리 array
     var myMapCategoryList : List<ResponseMapCategory>? = null
+    var myAllCategoryList : List<ResponseAllCategory>? = null
 
     /**
      * 카테고리 api 함수 - mindy
@@ -619,9 +620,9 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    // 카테고리 수정
+    // 카테고리 수정 -> 확인 완료, comment 일단 제외
     fun editCategory(categoryId: Long, categoryName: String, categoryIcon: Int, public: String, desc: String, callback: (Int) -> Unit){
-        var categoryRequestData = RequestEditCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = public)
+        var categoryRequestData = RequestEditCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = "PUBLIC")
         Log.d("checking edit", categoryRequestData.toString())
         Log.d("checking edit", categoryId.toString())
         service.editCategory(token = xAuthToken, myCategoryId = categoryId, data = categoryRequestData).enqueue(object : Callback<Void>{
@@ -687,7 +688,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //카테고리 전체 조회 - 피드, 마이
+    //카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
     fun getAllCategory(nickname: String, callback: (Int) -> Unit){
         service.getAllCategory(xAuthToken, nickname = nickname).enqueue(object : Callback<List<ResponseAllCategory>>{
             override fun onResponse(
@@ -696,6 +697,8 @@ class GustoViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
+                    Log.d("getAllMap", response.body()!!.toString())
+                    myAllCategoryList = response.body()!!
                     callback(0)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -714,7 +717,7 @@ class GustoViewModel: ViewModel() {
     /**
      * 가게 api 함수 - mindy
      */
-    //가게 카테고리 추가
+    //가게 카테고리 추가(찜)
     fun addPin(categoryId: Long, storeInt: Long, callback: (Int) -> Unit){
         var pinData = RequestPin(myCategoryName = categoryId, storeName = storeInt)
         service.addPin(xAuthToken, categoryId, pinData).enqueue(object : Callback<Void>{
@@ -832,7 +835,8 @@ class GustoViewModel: ViewModel() {
      */
 
     var myReview : ResponseMyReview? = null
-    //리뷰 1건 조회
+    var myReviewId : Long? = null
+    //리뷰 1건 조회 -> 확인 완
     fun getReview(reviewId : Long, callback: (Int) -> Unit){
         service.getReview(xAuthToken, reviewId).enqueue(object : Callback<ResponseMyReview>{
             override fun onResponse(
@@ -858,10 +862,11 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //리뷰 수정
-    fun editReview(reviewId : Long, visitedDate: String, img : List<String>?, menuName : List<String>?, hashtagId : List<Int>?, taste : Int, spiceness : Int, mood : Int, toilet : Int, parking : Int, comment : String?, callback: (Int) -> Unit){
-        var requestBody = RequestMyReview(visitedAt = visitedDate, img = img, menuName = menuName, hashTagId = hashtagId, taste = taste, spiciness = spiceness, mood = mood, toilet = toilet, parking = parking, comment = comment)
-        service.editReview(xAuthToken, reviewId, requestBody).enqueue(object : Callback<Void>{
+    //리뷰 수정 -> 확인 완
+    fun editReview(reviewId : Long, img : String?, menuName : String?, taste : Int, spiceness : Int, mood : Int, toilet : Int, parking : Int, comment : String?, callback: (Int) -> Unit){
+        var requestBody = RequestMyReview(menuName = menuName, taste = taste, spiciness = spiceness, mood = mood, toilet = toilet, parking = parking, comment = comment)
+        Log.d("edit checking", requestBody.toString())
+        service.editReview(xAuthToken, reviewId, null, requestBody).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
@@ -879,7 +884,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //리뷰 삭제
+    //리뷰 삭제 -> 확인 완
     fun deleteReview(reviewId: Long, callback: (Int) -> Unit){
         service.deleteReview(xAuthToken, reviewId).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

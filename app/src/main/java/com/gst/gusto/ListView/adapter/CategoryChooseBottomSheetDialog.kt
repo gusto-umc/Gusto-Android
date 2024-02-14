@@ -11,8 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.gst.gusto.ListView.Model.CategorySimple
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
 
 class CategoryChooseBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDialogFragment() {
+
+    var viewModel : GustoViewModel? = null
 
     private var sampleCategoryArray = arrayListOf<CategorySimple>(
         CategorySimple(id = 0, categoryName = "양식", categoryIcon = R.drawable.category_icon_1, storeCount = 3),
