@@ -6,9 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.MapMainScreenFragment
 import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
@@ -25,6 +29,21 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     private val TAG = "SOL_LOG"
     lateinit var mapView : MapView
 
+    private val LOCATION_PERMISSION_REQUEST_CODE = 5000
+
+    //private lateinit var naverMap: NaverMap
+    //private lateinit var locationSource: FusedLocationSource
+
+    lateinit var  chipGroup: ChipGroup
+
+    // 이전에 활성화된 칩을 저장하는 변수
+    private var previousChipId: Int = -1
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,9 +52,13 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         val view = binding.root
 
+
         // BottomSheet 설정
         val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+
+        chipGroup = binding.fragmentMapMainScreen.chipGroup
+
 
 
         // BottomSheet 상태 변화 감지
@@ -58,6 +81,27 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             }
         })
 
+
+        // 버튼 클릭 리스너 설정
+        binding.listViewBtn.setOnClickListener {
+            // 네비게이션 컨트롤러를 사용하여 다른 프래그먼트로 이동
+            //navController.navigate(R.id.listFragment)
+        }
+
+        // 칩그룹에 칩 클릭 리스너 추가
+        chipGroup.setOnCheckedChangeListener { group, checkedId ->
+            // 이전에 활성화된 칩이 있으면 해당 칩의 색상을 변경
+            if (previousChipId != -1) {
+                val previousChip = group.findViewById<Chip>(previousChipId)
+                previousChip.setChipBackgroundColorResource(R.color.white)
+            }
+            // 현재 클릭된 칩의 색상 변경
+            val currentChip = group.findViewById<Chip>(checkedId)
+            currentChip.setChipBackgroundColorResource(R.color.chip_select_color)
+            // 클릭된 칩의 ID를 이전 칩의 ID로 저장
+            previousChipId = checkedId
+        }
+
         return view
     }
 
@@ -69,7 +113,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         binding.listViewBtn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
         }
-
+        /*
         //방문 o 클릭 리스너 -> 보완 예정
         binding.fragmentArea.vis1.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
@@ -78,6 +122,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         binding.fragmentArea.vis01.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
         }
+         */
     }
     private fun showMainScreenFragment() {
         // fragment_map_main_screen.xml을 보이게 하는 작업
@@ -167,4 +212,5 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
 
 }
+
 

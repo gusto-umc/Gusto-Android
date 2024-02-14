@@ -3,15 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
     android:background="@drawable/background_radius_10"
-    tools:context=".areaFragment">
+    tools:context=".AreaFragment">
     <!--part1-->
     <LinearLayout
         android:id="@+id/location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
         android:orientation="horizontal">
 
         <TextView
@@ -19,9 +22,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="@color/gray_3"
-            android:fontFamily="@font/pretendard_regular"
-            android:layout_marginTop="15sp"
+            android:fontFamily="@font/pretendard_semibold"
             android:textSize="15sp"
+            android:layout_marginTop="5dp"
             android:text="현 위치" />
 
         <TextView
@@ -29,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="@color/main"
+            android:fontFamily="@font/pretendard_semibold"
             android:textSize="20sp"
             android:textStyle="bold"
             android:padding="10px"
@@ -36,17 +40,12 @@
             android:text="현재 사용자의 위치" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="20px"
-        android:background="#FFD704" />
-
 
     <!--part2-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -59,14 +58,16 @@
                 android:id="@+id/user_name1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="15sp"
                 android:textColor="@color/main_C"
                 android:text="사용자" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="15sp"
                 android:text="님, 좋은 하루예요" />
         </LinearLayout>
 
@@ -78,7 +79,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="15sp"
                 android:textColor="@color/black"
                 android:text="오늘도 " />
 
@@ -86,23 +88,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/main"
-                android:textStyle="bold"
-                android:textSize="50px"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="15sp"
                 android:text="mio gusto!" />
         </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10px"
-            android:layout_marginTop="30px"
+            android:layout_marginTop="34dp"
             android:textColor="@color/gray_3"
-            android:textStyle="bold"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textSize="12sp"
             android:text="맛집 둘러보기"/>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginTop="6dp"
         android:background="#FFD704" />
 
     <!--part3-->
@@ -122,7 +125,8 @@
                 android:id="@+id/user_name2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="15sp"
                 android:textColor="@color/main_C"
                 android:text="사용자" />
 
@@ -130,7 +134,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="15sp"
                 android:text="님이 계신 성수동에" />
         </LinearLayout>
 
@@ -143,8 +148,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/main"
-                android:textStyle="bold"
-                android:textSize="25px"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="20sp"
                 android:text="저장한 맛집이 " />
 
             <TextView
@@ -152,16 +157,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/main"
-                android:textStyle="bold"
-                android:textSize="25px"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="20sp"
                 android:text="N" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/main"
-                android:textStyle="bold"
-                android:textSize="25px"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="20sp"
                 android:text="개 있어요" />
         </LinearLayout>
     </LinearLayout>
@@ -170,25 +175,29 @@
         android:id="@+id/first_visit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
+            android:fontFamily="@font/pretendard_medium"
+            android:textSize="12sp"
             android:textColor="@color/gray_navi"
             android:text="이 집에 방문해 보시는 거는 어떨까요?" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_1"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="16sp"
                 android:text="방문해 본적 없는 맛집들이 " />
 
             <TextView
@@ -196,54 +205,38 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_1"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="16sp"
                 android:text="N" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_1"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="16sp"
                 android:text="개 있습니다." />
         </LinearLayout>
-    </LinearLayout>
 
-    <HorizontalScrollView
-        android:id="@+id/scrollview_map_area_save_x"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
+        <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10px"
-            >
-            <ImageView
-                android:id="@+id/vis1"
-                android:layout_width="200px"
-                android:layout_height="200px"
-                android:src="@drawable/visit"
-                android:layout_margin="10px"/>
-            <ImageView
-                android:id="@+id/vis2"
-                android:layout_width="200px"
-                android:layout_height="200px"
-                android:src="@drawable/visit"
-                android:layout_margin="10px"/>
-            <ImageView
-                android:id="@+id/vis3"
-                android:layout_width="200px"
-                android:layout_height="200px"
-                android:src="@drawable/visit"
-                android:layout_margin="10px"/>
-            <ImageView
-                android:id="@+id/vis4"
-                android:layout_width="200px"
-                android:layout_height="200px"
-                android:src="@drawable/visit"
-                android:layout_margin="10px"/>
+            android:layout_height="wrap_content" >
+            <LinearLayout
+                android:id="@+id/no_visit_rest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginLeft="16dp"
+                android:orientation="horizontal">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_no_visited_rest"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp"/>
             </LinearLayout>
         </HorizontalScrollView>
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/first_visited"
@@ -255,7 +248,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
+            android:fontFamily="@font/pretendard_medium"
+            android:textSize="12sp"
             android:textColor="@color/gray_navi"
             android:text="이 참에 아는 맛 영업... 도전?" />
 
@@ -268,7 +262,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_1"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="16sp"
                 android:text="방문해봤던 맛집들이 " />
 
             <TextView
@@ -276,63 +271,47 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_1"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="16sp"
                 android:text="N" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_1"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="16sp"
                 android:text="개 있어요" />
         </LinearLayout>
-    </LinearLayout>
-    <HorizontalScrollView
-        android:id="@+id/scrollview_map_area_save_o"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-        <LinearLayout
+        <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10px"
-            >
-            <ImageView
-                android:id="@+id/vis01"
-                android:layout_width="200px"
-                android:layout_height="200px"
-                android:src="@drawable/visit"
-                android:layout_margin="10px"/>
-            <ImageView
-                android:id="@+id/vis02"
-                android:layout_width="200px"
-                android:layout_height="200px"
-                android:src="@drawable/visit"
-                android:layout_margin="10px"/>
-            <ImageView
-                android:id="@+id/vis03"
-                android:layout_width="200px"
-                android:layout_height="200px"
-                android:src="@drawable/visit"
-                android:layout_margin="10px"/>
-            <ImageView
-                android:id="@+id/vis04"
-                android:layout_width="200px"
-                android:layout_height="200px"
-                android:src="@drawable/visit"
-                android:layout_margin="10px"/>
-        </LinearLayout>
-    </HorizontalScrollView>
+            android:layout_height="wrap_content" >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="18dp"
+                android:layout_marginLeft="16dp">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_visited_rest"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
         android:background="#FFD704" />
 
     <!-- part4-->
     <LinearLayout
+        android:id="@+id/part4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -347,25 +326,29 @@
                 android:id="@+id/user_name3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="15sp"
                 android:textColor="@color/main_C"
                 android:text="사용자" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="15sp"
                 android:text="님과 같은 " />
             <TextView
                 android:id="@+id/user_age"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="15sp"
                 android:text="N" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="15sp"
                 android:text="대 여성들의" />
         </LinearLayout>
         <LinearLayout
@@ -377,37 +360,39 @@
                 android:id="@+id/area_pick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="20px"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="20sp"
                 android:text="AREA" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="20px"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="20sp"
                 android:text=" 맛집 PICK!" />
         </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10px"
-            android:layout_marginTop="20px"
+            android:layout_marginTop="26dp"
             android:textColor="@color/gray_3"
-            android:textStyle="bold"
+            android:fontFamily="@font/pretendard_medium"
+            android:textSize="12sp"
             android:text="도전은 즐거워"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_1"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="16sp"
                 android:text="방문해 본적 없는 맛집들이 " />
 
             <TextView
@@ -415,51 +400,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_1"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="16sp"
                 android:text="N" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_1"
-                android:textStyle="bold"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="16sp"
                 android:text="개 있어요" />
         </LinearLayout>
-    </LinearLayout>
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-        <LinearLayout
+        <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10px"
-            >
-            <ImageView
-                android:id="@+id/vis001"
-                android:layout_width="200px"
-                android:layout_height="200px"
-                android:src="@drawable/visit"
-                android:layout_margin="10px"/>
-            <ImageView
-                android:id="@+id/vis002"
-                android:layout_width="200px"
-                android:layout_height="200px"
-                android:src="@drawable/visit"
-                android:layout_margin="10px"/>
-            <ImageView
-                android:id="@+id/vis003"
-                android:layout_width="200px"
-                android:layout_height="200px"
-                android:src="@drawable/visit"
-                android:layout_margin="10px"/>
-            <ImageView
-                android:id="@+id/vis004"
-                android:layout_width="200px"
-                android:layout_height="200px"
-                android:src="@drawable/visit"
-                android:layout_margin="10px"/>
-        </LinearLayout>
-    </HorizontalScrollView>
+            android:layout_height="wrap_content" >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10px"
+                >
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_age_no_visited_rest"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
 
 </LinearLayout>

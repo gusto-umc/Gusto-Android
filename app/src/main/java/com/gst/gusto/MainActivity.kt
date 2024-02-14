@@ -20,7 +20,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.ActivityMainBinding
-import net.daum.mf.map.api.MapView
 import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
