@@ -830,6 +830,8 @@ class GustoViewModel: ViewModel() {
     /**
      * 리뷰 api 함수 - mindy
      */
+
+    var myReview : ResponseMyReview? = null
     //리뷰 1건 조회
     fun getReview(reviewId : Long, callback: (Int) -> Unit){
         service.getReview(xAuthToken, reviewId).enqueue(object : Callback<ResponseMyReview>{
@@ -839,10 +841,13 @@ class GustoViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
+                    Log.e("viewmodel", response.body()!!.toString())
+                    myReview = response.body()!!
                     callback(0)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
                     callback(1)
+                    myReview = null
                 }
             }
 

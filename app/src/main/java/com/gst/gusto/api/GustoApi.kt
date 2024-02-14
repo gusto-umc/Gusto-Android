@@ -278,7 +278,7 @@ interface GustoApi {
      * 리뷰
      */
 
-    //1. 리뷰 1건 조회
+    //1. 리뷰 1건 조회 -> 확인 완료
     @GET("reviews/{reviewId}")
     fun getReview(
         @Header("X-AUTH-TOKEN") token : String,
