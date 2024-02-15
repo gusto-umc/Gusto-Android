@@ -20,7 +20,7 @@ class ListReviewViewHolder(
     fun bind(listReviewList: ListReviewData){
         datetextview.text = listReviewList.date
         nametextview.text = listReviewList.name
-        visittextview.text = listReviewList.visit
+        visittextview.text = "${listReviewList.visit}번 방문"
         setImage(imageview1, listReviewList.imageview1, itemView.context)
         setImage(imageview2, listReviewList.imageview2, itemView.context)
         setImage(imageview3, listReviewList.imageview3, itemView.context)
