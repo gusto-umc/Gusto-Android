@@ -92,7 +92,7 @@ class util {
          * @return null
          */
         fun setImage(imageView: ImageView, url : String, context: Context) {
-            Glide.with(context).load(url).placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).into(imageView)
+            Glide.with(context).load(url).placeholder(R.drawable.gst_dummypic).error(R.drawable.gst_dummypic).into(imageView)
         }
 
 
