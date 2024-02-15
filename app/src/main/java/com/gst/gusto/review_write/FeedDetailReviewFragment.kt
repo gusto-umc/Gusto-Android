@@ -11,6 +11,7 @@ import android.view.animation.ScaleAnimation
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.dpToPixels
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentFeedDetailBinding
 import com.gst.gusto.review_write.adapter.HowItem
 import com.gst.gusto.review_write.adapter.ImageViewPagerAdapter
@@ -34,6 +36,7 @@ class FeedDetailReviewFragment : Fragment() {
     private lateinit var scaleUpAnimation: ScaleAnimation
     private lateinit var scaleDownAnimation: ScaleAnimation
     private lateinit var bounceInterpolator: BounceInterpolator
+    private val gustoViewModel : GustoViewModel by activityViewModels()
     lateinit var page : String
 
     override fun onCreateView(
@@ -48,6 +51,7 @@ class FeedDetailReviewFragment : Fragment() {
         binding.btnProfile.setOnClickListener {
             val bundle = Bundle()
             bundle.putBoolean("me",false)
+            bundle.putString("nickname","mindddy")
             findNavController().navigate(R.id.action_feedDetailReview_to_myFragment,bundle)
         }
         binding.restInfo.setOnClickListener {

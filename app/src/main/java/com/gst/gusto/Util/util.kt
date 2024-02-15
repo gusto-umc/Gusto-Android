@@ -1,15 +1,19 @@
 package com.gst.gusto.Util
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.database.Cursor
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Parcelable
 import android.os.SystemClock
 import android.os.ext.SdkExtensions
+import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -26,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.gst.gusto.R
+import java.io.File
 import kotlin.concurrent.thread
 
 class util {
@@ -154,9 +159,7 @@ class util {
                 mBuilder.dismiss()
             })
             mDialogView.findViewById<TextView>(R.id.tv_dialog_one_desc).text  = desc
-
         }
-
         fun setPopupTwo(context: Context, title: String, theView : View, desc : String, flag : String){
             val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_two_button, null)
             val mBuilder = AlertDialog.Builder(context)
@@ -220,5 +223,19 @@ class util {
             }
 
         }
+        @SuppressLint("Range")
+        @Throws(Exception::class)
+        fun convertContentToFile(ctx: Context, uri: Uri): File {
+            var cursor: Cursor? = null
+            return try {
+                cursor = ctx.contentResolver.query(uri, null, null, null, null)
+                cursor!!.moveToNext()
+                val filePath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
+                File(filePath)
+            } finally {
+                cursor?.close()
+            }
+        }
+
     }
 }

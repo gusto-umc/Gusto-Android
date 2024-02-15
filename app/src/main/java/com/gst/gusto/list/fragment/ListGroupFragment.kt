@@ -29,15 +29,6 @@ class ListGroupFragment : Fragment() {
 
         val itemList = ArrayList<GroupItem>()
 
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 5, 32, 24))
-
         fun callActivityFunction(): NavController {
             return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
         }
@@ -53,8 +44,35 @@ class ListGroupFragment : Fragment() {
         return binding.root
 
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+    }
     override fun onResume() {
         super.onResume()
         gustoViewModel.listFragment = "group"
+        fun callActivityFunction(): NavController {
+            return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
+        }
+
+        val rv_board = binding.rvListGourp
+
+        var itemList = ArrayList<GroupItem>()
+
+        gustoViewModel.getTokens(requireActivity() as MainActivity)
+        gustoViewModel.getGroups {result ->
+            when(result) {
+                1 -> {
+                    itemList = gustoViewModel.myGroupList
+                    val boardAdapter = LisAdapter(itemList, callActivityFunction(), 0, gustoViewModel)
+                    boardAdapter.notifyDataSetChanged()
+                    rv_board.adapter = boardAdapter
+                    rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                } else -> {
+
+                }
+            }
+        }
     }
 }

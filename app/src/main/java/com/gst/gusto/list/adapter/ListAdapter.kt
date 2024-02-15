@@ -106,6 +106,7 @@ class LisAdapter(
             if(option==0) {
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(50)
+                    gustoViewModel.currentGroupId = itemList[position].groupId
                     nc?.navigate(R.id.action_listFragment_to_groupFragment)
                 }
             } else if(option == 1){
@@ -164,7 +165,11 @@ class LisAdapter(
 
                 Navigation.findNavController(holder.itemView).navigate(R.id.action_groupMRSFragment_to_groupMRRFragment)
             } else if(option == 3){
-                Navigation.findNavController(holder.itemView).navigate(R.id.action_myRouteRoutesFragment_to_myRouteStoresFragment)
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(50)
+                    Navigation.findNavController(holder.itemView).navigate(R.id.action_myRouteRoutesFragment_to_myRouteStoresFragment)
+                }
+
             }
 
         }

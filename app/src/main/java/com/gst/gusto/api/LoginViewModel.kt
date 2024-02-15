@@ -110,7 +110,7 @@ class LoginViewModel: ViewModel() {
         })
     }
     fun confirmNickname(nickname : String, callback: (Int) -> Unit){
-        service.checkNickname(nickname).enqueue(object : Callback<ResponseBody> {
+        service.confirmNickname(nickname).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 Log.d("code",response.code().toString())
                 if (response.isSuccessful) {

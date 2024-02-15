@@ -44,6 +44,7 @@ class ReviewAdd2Fragment : Fragment() {
             if(year<2000 || month<1||month>12 || day<1 || day>31) {
 
             } else {
+                gustoViewModel.visitedAt =  String.format("%d-%02d-%02d", year, month, day)
                 Log.d("dayList","${year}-${month}-${day}")
                 findNavController().navigate(R.id.action_reviewAdd2Fragment_to_reviewAdd3Fragment)
             }

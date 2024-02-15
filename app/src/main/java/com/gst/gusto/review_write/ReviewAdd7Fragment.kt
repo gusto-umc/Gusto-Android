@@ -15,12 +15,14 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
 import com.gst.gusto.Util.util.Companion.createUpdateProgressRunnable
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd7Binding
+import com.gst.gusto.list.adapter.LisAdapter
 
 class ReviewAdd7Fragment : Fragment() {
 
@@ -41,9 +43,16 @@ class ReviewAdd7Fragment : Fragment() {
             findNavController().popBackStack()
         }
         binding.btnEnd.setOnClickListener {
-            activity.hideBottomNavigation(false)
-            //findNavController().navigate(R.id.action_reviewAdd7Fragment_to_storeDetailFragment)
-            findNavController().popBackStack(R.id.storeDetailFragment,false)
+            gustoViewModel.comment = binding.etContent.text.toString()
+            gustoViewModel.createReview() {result ->
+                when(result) {
+                    1 -> {
+                        activity.hideBottomNavigation(false)
+                        findNavController().popBackStack(R.id.storeDetailFragment,false)
+                    }
+                }
+            }
+
         }
         return binding.root
 

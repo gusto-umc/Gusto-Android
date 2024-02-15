@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="16dp"
+        android:background="@drawable/background_radius_top_15"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="19dp"
+            android:layout_marginTop="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="새 그룹 만들기"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_exit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="28dp"
+                android:src="@drawable/x_1_img"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:text="우리 그룹의 이름을 정해주세요."
+            android:textSize="12sp"
+            android:textColor="@color/main_C"
+            android:fontFamily="@font/pretendard_bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="영문, 숫자, 공백 포함 최대 10글자까지 작성 가능해요."
+            android:textSize="10sp"
+            android:textColor="@color/gray_3"
+            android:fontFamily="@font/pretendard_medium"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/background_radius_10_stroke_1"
+            android:backgroundTint="@color/gray_3">
+            <EditText
+                android:id="@+id/et_group_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:hint="예) 성수동 맛집 멤"
+                android:textColor="@color/gray_1"
+                android:textSize="13sp"
+                android:maxLength="10"
+                android:textColorHint="@color/gray_7"
+                android:fontFamily="@font/pretendard_bold"
+                android:background="@android:color/transparent"/>
+            <TextView
+                android:id="@+id/tv_group_name_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_marginRight="8dp"
+                android:text="(0/10)"
+                android:textSize="10sp"
+                android:textColor="@color/gray_7"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:text="멤버들에게 남길 코멘트를 입력해주세요."
+            android:textSize="12sp"
+            android:textColor="@color/main_C"
+            android:fontFamily="@font/pretendard_bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="한번 정한 코멘트는 수정할 수 없어요."
+            android:textSize="10sp"
+            android:textColor="@color/gray_3"
+            android:fontFamily="@font/pretendard_medium"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="영문, 숫자, 공백 포함 최대 30글자까지 작성 가능해요."
+            android:textSize="10sp"
+            android:textColor="@color/gray_3"
+            android:fontFamily="@font/pretendard_medium"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/background_radius_10_stroke_1"
+            android:backgroundTint="@color/gray_3">
+            <EditText
+                android:id="@+id/et_coment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginHorizontal="15dp"
+                android:hint="예) 목요일에 만나!"
+                android:maxLength="30"
+                android:textColor="@color/gray_1"
+                android:textSize="13sp"
+                android:textColorHint="@color/gray_7"
+                android:fontFamily="@font/pretendard_bold"
+                android:background="@android:color/transparent"/>
+            <TextView
+                android:id="@+id/tv_coment_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:gravity="right"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="12dp"
+                android:text="(0/10)"
+                android:textSize="10sp"
+                android:textColor="@color/gray_7"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:layout_width="145dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="42dp"
+            android:src="@drawable/gusto_color_img"/>
+        <TextView
+            android:id="@+id/btn_enter"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="26dp"
+            android:gravity="center"
+            android:text="그룹 만들기"
+            android:textSize="11sp"
+            android:textColor="@color/gray_3"
+            android:fontFamily="@font/pretendard_bold"
+            android:background="@drawable/background_radius_10"
+            android:backgroundTint="@color/gray_6"/>
+    </LinearLayout>
+
+</LinearLayout>

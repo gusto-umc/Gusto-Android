@@ -35,15 +35,4 @@ interface LoginApi {
         @Path("nickname") nickname : String
     ) :Call<ResponseBody>
 
-    @POST("routes/")
-    fun checkMyRoute(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Body data : routedata
-    ) :Call<ResponseBody>
-
-    data class routedata(
-        @SerializedName("rootName") val rootName : String,
-        @SerializedName("storeId") val storeId: String,
-        @SerializedName("ordinal") val ordinal : String
-    )
 }
