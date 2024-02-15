@@ -35,10 +35,15 @@ class ListReviewFragment : Fragment() {
 
         // 클릭 리스너 부분
         adapter = ListReviewAdapter(itemClickListener = {
-            val bundle = Bundle()
-            bundle.putInt("reviewId",0)     //리뷰 아이디 넘겨 주면 됨
-            bundle.putString("page","review")
-            findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail,bundle)
+            if(it.viewType == ListReviewType.LISTREVIEW){
+                val bundle = Bundle()
+                bundle.putLong("reviewId", it.reviewId)     //리뷰 아이디 넘겨 주면 됨
+                bundle.putString("page","review")
+                findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail,bundle)
+            } else {
+                // 리뷰 작성 버튼
+            }
+
         })
 
         binding.apply{
@@ -83,14 +88,14 @@ class ListReviewFragment : Fragment() {
                 }
 
 
-                val reviewData = ListReviewData(date, name, visit, imageview1, imageview2, imageview3)
+                val reviewData = ListReviewData(date, name, visit, imageview1, imageview2, imageview3, data.reviewId)
                 reviewList.add(reviewData)
             }
         }
 
         val NowTime = System.currentTimeMillis()
         val result = DF.format(NowTime).toString()
-        reviewList.add(ListReviewData(result, "","","","","", ListReviewType.LISTBUTTON))
+        reviewList.add(ListReviewData(result, "","","","","", 0, ListReviewType.LISTBUTTON))
 
         return reviewList
     }

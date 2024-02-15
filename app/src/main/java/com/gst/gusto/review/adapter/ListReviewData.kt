@@ -7,5 +7,7 @@ data class ListReviewData(
     var imageview1: String = "",
     var imageview2: String = "",
     var imageview3: String = "",
-    var viewType: Int = ListReviewType.LISTREVIEW
+    var reviewId: Long,
+    var viewType: Int = ListReviewType.LISTREVIEW,
+
 )
