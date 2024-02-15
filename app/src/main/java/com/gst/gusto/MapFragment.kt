@@ -49,17 +49,11 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapBinding.inflate(inflater, container, false)
-
         val view = binding.root
-
 
         // BottomSheet 설정
         val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-
-        chipGroup = binding.fragmentMapMainScreen.chipGroup
-
-
 
         // BottomSheet 상태 변화 감지
         bottomSheetBehavior.addBottomSheetCallback(object :
@@ -82,27 +76,61 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         })
 
 
+        ////    카테고리    ////
+
         // 버튼 클릭 리스너 설정
-        binding.listViewBtn.setOnClickListener {
-            // 네비게이션 컨트롤러를 사용하여 다른 프래그먼트로 이동
-            //navController.navigate(R.id.listFragment)
+        val totalBtn = view.findViewById<Chip>(R.id.total_btn)
+        totalBtn.setOnClickListener {
+            // 현재 버튼의 텍스트를 가져옴
+            val currentText = totalBtn.text.toString()
+            // 다음 순서로 변경
+            val nextText = when (currentText) {
+                "전체" -> "가본 곳 만"
+                "가본 곳 만" -> "가본 곳 제외"
+                else -> "전체"
+            }
+            // 변경된 텍스트 설정
+            totalBtn.text = nextText
         }
 
-        // 칩그룹에 칩 클릭 리스너 추가
-        chipGroup.setOnCheckedChangeListener { group, checkedId ->
-            // 이전에 활성화된 칩이 있으면 해당 칩의 색상을 변경
-            if (previousChipId != -1) {
-                val previousChip = group.findViewById<Chip>(previousChipId)
-                previousChip.setChipBackgroundColorResource(R.color.white)
-            }
-            // 현재 클릭된 칩의 색상 변경
-            val currentChip = group.findViewById<Chip>(checkedId)
-            currentChip.setChipBackgroundColorResource(R.color.chip_select_color)
-            // 클릭된 칩의 ID를 이전 칩의 ID로 저장
-            previousChipId = checkedId
+
+        // 칩 그룹 초기화
+        chipGroup = binding.fragmentMapMainScreen.chipGroup
+
+        // 각 칩에 대한 클릭 리스너 설정
+        view.findViewById<Chip>(R.id.cafe_btn).setOnClickListener {
+            handleChipClick(it as Chip)
+        }
+        view.findViewById<Chip>(R.id.Italian_btn).setOnClickListener {
+            handleChipClick(it as Chip)
+        }
+        view.findViewById<Chip>(R.id.Japanese_btn).setOnClickListener {
+            handleChipClick(it as Chip)
+        }
+        view.findViewById<Chip>(R.id.Izakaya_btn).setOnClickListener {
+            handleChipClick(it as Chip)
         }
 
         return view
+    }
+
+
+    // 클릭된 칩의 처리를 담당하는 함수
+    private fun handleChipClick(chip: Chip) {
+        // 이전에 활성화된 칩이 있으면 해당 칩의 색상을 변경
+        if (previousChipId != -1) {
+            val previousChip = chipGroup.findViewById<Chip>(previousChipId)
+            // 이전에 활성화된 칩
+            previousChip.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_C))
+            previousChip.setChipBackgroundColorResource(R.color.chip_select_color)
+            previousChip.setChipIconResource(R.drawable.streamline_bean)
+        }
+        // 현재 클릭된 칩의 색상 변경
+        chip.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+        chip.setChipBackgroundColorResource(R.color.main_C)
+        chip.setChipIconResource(R.drawable.streamline_coffee_bean_white)
+        // 클릭된 칩의 ID를 이전 칩의 ID로 저장
+        previousChipId = chip.id
     }
 
 
