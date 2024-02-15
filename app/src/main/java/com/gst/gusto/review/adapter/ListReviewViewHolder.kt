@@ -1,6 +1,7 @@
 package com.gst.gusto.review.adapter
 
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.databinding.ItemReviewListBinding
 
 class ListReviewViewHolder(
@@ -20,9 +21,9 @@ class ListReviewViewHolder(
         datetextview.text = listReviewList.date
         nametextview.text = listReviewList.name
         visittextview.text = listReviewList.visit
-        imageview1.setImageResource(listReviewList.imageview1)
-        imageview2.setImageResource(listReviewList.imageview2)
-        imageview3.setImageResource(listReviewList.imageview3)
+        setImage(imageview1, listReviewList.imageview1, itemView.context)
+        setImage(imageview2, listReviewList.imageview2, itemView.context)
+        setImage(imageview3, listReviewList.imageview3, itemView.context)
         linearLayout.setOnClickListener {
             itemClickListener.invoke(listReviewList)
         }

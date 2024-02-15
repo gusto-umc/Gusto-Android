@@ -1,6 +1,7 @@
 package com.gst.gusto.api
 
 import com.google.gson.annotations.SerializedName
+import java.util.Date
 
 
 // 내 루트 조회
@@ -98,4 +99,25 @@ data class ResponseProfile(
     @SerializedName("pin") val pin : Int,
     @SerializedName("follower") val follower : Int,
     @SerializedName("followed") val followed : Boolean
+)
+// list (timeline) review Request-Body
+data class RequestBodyListReview(
+    @SerializedName("reviewId") val reviewId: Long,
+    @SerializedName("size") val size: Int
+)
+
+
+// list (timeline) review 조회- reviews
+data class ResponseListReviews(
+    @SerializedName("reviewId") val reviewId: Long,
+    @SerializedName("storeName") val storeName: String,
+    @SerializedName("visitedAt") val visitedAt: Date,
+    @SerializedName("visitedCount") val visitedCount: Int,
+    @SerializedName("images") val images: List<String>,
+    )
+
+// list (timeline) review 조회
+data class ResponseListReview(
+    @SerializedName("reviews") val reviews: List<ResponseListReviews>,
+    @SerializedName("hasNext") val hasNext: Boolean
 )

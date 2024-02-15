@@ -9,11 +9,10 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
-import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface GustoApi {
@@ -177,6 +176,13 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("nickname") nickname : String
     ):Call<ResponseBody>
+
+    @GET("reviews/timelineView") // 리뷰 모아보기-3 (timeline view)
+    fun timelineView(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("reviewId") reviewId: Long?,
+        @Query("size") size: Int
+    ):Call<ResponseListReview>
 
 
 }

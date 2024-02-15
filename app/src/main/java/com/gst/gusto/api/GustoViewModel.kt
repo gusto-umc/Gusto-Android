@@ -568,7 +568,7 @@ class GustoViewModel: ViewModel() {
         })
     }
     // 언팔로우하기
-    fun unFollow(nickname: String,callback: (Int) -> Unit){
+    fun unFollow(nickname: String, callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
         service.unFollow(xAuthToken,nickname).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -583,6 +583,32 @@ class GustoViewModel: ViewModel() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
                 callback(3)
+            }
+        })
+    }
+
+    // 리뷰 모아보기-3 (timeline view)
+    fun timeLineView(reviewId: Long?, size: Int, callback: (Int, ResponseListReview?) -> Unit){
+        Log.e("token",xAuthToken)
+        service.timelineView(xAuthToken, reviewId, size).enqueue(object : Callback<ResponseListReview> {
+            override fun onResponse(call: Call<ResponseListReview>, response: Response<ResponseListReview>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if(responseBody!=null) {
+                        Log.e("viewmodel", "1 Successful response: ${response}")
+                        callback(1, responseBody)
+                    } else {
+                        Log.e("viewmodel", "2 Successful response: ${response}")
+                        callback(2, null)
+                    }
+                }else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3, null)
+                }
+            }
+            override fun onFailure(call: Call<ResponseListReview>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3, null)
             }
         })
     }
