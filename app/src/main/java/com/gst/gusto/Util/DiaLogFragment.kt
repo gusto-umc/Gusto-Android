@@ -81,7 +81,13 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                 dialog?.dismiss()
             }
             binding2.btnEnter.setOnClickListener {
-                dialog?.dismiss()
+                gustoViewModel.joinGroup(12,binding2.etCode.text.toString()) {result ->
+                    when(result) {
+                        1 -> {
+                            dialog?.dismiss()
+                        }
+                    }
+                }
             }
         }
         else if(layout == R.layout.bottomsheetdialog_create) {

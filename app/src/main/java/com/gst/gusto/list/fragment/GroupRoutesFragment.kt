@@ -40,7 +40,4 @@ class GroupRoutesFragment(val num: Int) : Fragment() {
         return navController
     }
 
-
-
-
 }

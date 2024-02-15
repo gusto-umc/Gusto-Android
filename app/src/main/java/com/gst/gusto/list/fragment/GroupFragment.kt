@@ -1,12 +1,26 @@
 package com.gst.gusto.list.fragment
 
+import android.app.AlertDialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.Color
+import android.graphics.Point
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -57,7 +71,46 @@ class GroupFragment : Fragment() {
             binding.btnSave.visibility =View.GONE
         }
         binding.lyPeople.setOnClickListener {
-            findNavController().navigate(R.id.action_groupFragment_to_followListFragment)
+            gustoViewModel.getGroupMembers {result ->
+                when(result) {
+                    1 -> {
+                        findNavController().navigate(R.id.action_groupFragment_to_followListFragment)
+                    }
+                    else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        binding.tvNotice.setOnClickListener {
+            val mDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_notice, null)
+            val mBuilder = AlertDialog.Builder(requireContext())
+                .setView(mDialogView)
+                .create()
+
+            mBuilder?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            mBuilder?.window?.requestFeature(Window.FEATURE_NO_TITLE)
+            mBuilder.show()
+
+            //팝업 사이즈 조절
+            DisplayMetrics()
+            requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val size = Point()
+            val display = (requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+            display.getSize(size)
+            val screenWidth = size.x
+            val popupWidth = (screenWidth * 0.8).toInt()
+            mBuilder?.window?.setLayout(popupWidth, WindowManager.LayoutParams.WRAP_CONTENT)
+
+            //팝업 타이틀 설정, 버튼 작용 시스템
+            mDialogView.findViewById<TextView>(R.id.btn_dialog_one).setOnClickListener( {
+                gustoViewModel.editGroupOption(null,mDialogView.findViewById<EditText>(R.id.tv_dialog_one_desc).text.toString()) {result, ->
+                    when(result) {
+                        1 -> {
+                            binding.tvNotice.text = mDialogView.findViewById<EditText>(R.id.tv_dialog_one_desc).text.toString()
+                            mBuilder.dismiss()
+                        }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
         }
         return binding.root
     }
@@ -111,7 +164,22 @@ class GroupFragment : Fragment() {
                             setImage(binding.ivProfileImage3,data.groupMembers.get(2).profileImg,requireContext())
                         }
                     }
-                }
+                }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+            }
+        }
+        gustoViewModel.getGroupInvitationCode {result, data ->
+            when(result) {
+                1 -> {
+                    if(data!=null) {
+                        Log.d("viewmodel",data.toString())
+                        val clipboardManager = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+                        val clipData = ClipData.newPlainText("viewmodel_data", data.toString())
+
+                        clipboardManager.setPrimaryClip(clipData)
+
+                    }
+                }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
             }
         }
     }

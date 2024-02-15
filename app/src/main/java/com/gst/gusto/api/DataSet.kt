@@ -66,7 +66,10 @@ data class ResponseGroup(
 data class Member(
     @SerializedName("groupMemberId") val groupMemberId : Int,
     @SerializedName("nickname") val nickname : String,
-    @SerializedName("profileImg") val profileImg : String
+    @SerializedName("profileImg") val profileImg : String,
+
+    // 팔로워 조회
+    @SerializedName("followId") val followId : Int
 )
 data class NewOwner(
     @SerializedName("newOwner") val newOwner : Int
@@ -98,4 +101,18 @@ data class ResponseProfile(
     @SerializedName("pin") val pin : Int,
     @SerializedName("follower") val follower : Int,
     @SerializedName("followed") val followed : Boolean
+)
+
+// 리뷰 작성
+data class RequestCreateReview(
+    @SerializedName("storeId") val storeId : Int,
+    @SerializedName("visitedAt") val visitedAt : String?,
+    @SerializedName("menuName") val menuName : String?,
+    @SerializedName("hashTagId") val hashTagId : String?,
+    @SerializedName("taste") val taste : Int?,
+    @SerializedName("spiciness") val spiciness : Int?,
+    @SerializedName("mood") val mood : Int?,
+    @SerializedName("toilet") val toilet : Int?,
+    @SerializedName("parking") val parking : Int?,
+    @SerializedName("comment") val comment : String?,
 )

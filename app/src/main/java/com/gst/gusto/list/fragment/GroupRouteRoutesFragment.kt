@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupMRouteRoutesBinding
+import com.gst.gusto.list.adapter.GroupAdapter
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.LisAdapter
 
@@ -37,18 +38,22 @@ class GroupRouteRoutesFragment : Fragment() {
 
         val rv_board = binding.rv
 
-        val itemList = ArrayList<GroupItem>()
+        var itemList = ArrayList<GroupItem>()
 
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 0, 5, 0))
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 0, 4, 24))
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 0, 2, 0))
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 0, 8, 24))
+        gustoViewModel.getGroupRoutes {result, data ->
+            when(result) {
+                1 -> {
+                    if(data !=null) {
+                        itemList = data
+                        val boardAdapter = LisAdapter(itemList,null,2,gustoViewModel)
+                        boardAdapter.notifyDataSetChanged()
 
-        val boardAdapter = LisAdapter(itemList,null,2,gustoViewModel)
-        boardAdapter.notifyDataSetChanged()
-
-        rv_board.adapter = boardAdapter
-        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                        rv_board.adapter = boardAdapter
+                        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    }
+                }
+            }
+        }
 
     }
 

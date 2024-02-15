@@ -1,5 +1,6 @@
 package com.gst.clock.Fragment
 
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -26,11 +27,13 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
+import com.gst.gusto.Util.util.Companion.convertContentToFile
 import com.gst.gusto.Util.util.Companion.dpToPixels
 import com.gst.gusto.Util.util.Companion.isPhotoPickerAvailable
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd3Binding
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -118,6 +121,8 @@ class ReviewAdd3Fragment : Fragment() {
                 }
 
                 for (j in 0 .. uri.size-1) {
+                    gustoViewModel.img = convertContentToFile(requireContext(),uri[j])
+
                     setImage(imageViews[j],uri[j].toString(),requireContext())
                 }
                 for (j in uri.size .. 3) {

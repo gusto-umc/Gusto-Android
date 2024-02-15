@@ -164,6 +164,14 @@ interface GustoApi {
         @Path("nickname") nickname : String
     ):Call<ResponseProfile>
 
+    @Multipart
+    @POST("reviews") // 리뷰 작성
+    fun createReview(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Part image: MultipartBody.Part?,
+        @Part("info") info: RequestCreateReview
+    ):Call<ResponseBody>
+
     //USERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSER
 
     @POST("users/follow/{nickname}") // 팔로우하기
@@ -177,6 +185,11 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("nickname") nickname : String
     ):Call<ResponseBody>
+
+    @GET("users/follower") // 팔로워 조회
+    fun getFollower(
+        @Header("X-AUTH-TOKEN") token : String
+    ):Call<List<Member>>
 
 
 }
