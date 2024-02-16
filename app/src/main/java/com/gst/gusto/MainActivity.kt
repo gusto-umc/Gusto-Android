@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var navController: NavController
     lateinit var navHostFragment: NavHostFragment
-    private val gustoViewModel : GustoViewModel by viewModels()
+    val gustoViewModel : GustoViewModel by viewModels()
     private val TAG = "SOL_LOG"
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {

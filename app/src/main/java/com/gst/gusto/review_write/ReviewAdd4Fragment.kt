@@ -61,10 +61,10 @@ class ReviewAdd4Fragment : Fragment() {
                 if(editText.text.toString() !="") {
                     val text = editText.text.toString()
                     textList.add(text)
-                    tmpString += (", "+editText.text.toString())
+                    tmpString += (","+editText.text.toString())
                 }
             }
-            if(tmpString != "") gustoViewModel.menuName = tmpString.substring(2)
+            if(tmpString != "") gustoViewModel.menuName = tmpString.substring(1)
             Log.d("menuList",textList.toString())
             findNavController().navigate(R.id.action_reviewAdd4Fragment_to_reviewAdd5Fragment)
         }

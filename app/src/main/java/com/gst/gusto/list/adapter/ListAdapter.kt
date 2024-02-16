@@ -3,6 +3,7 @@ package com.gst.gusto.list.adapter
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -10,14 +11,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.clock.Fragment.ListRouteFragment
 import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.list.fragment.GroupRouteRoutesFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -27,15 +33,14 @@ data class GroupItem(
     val groupId: Long,
     val groupName: String,
     val numMembers: Int,
+    val isOner:Boolean,
     val numRestaurants: Int,
     val numRoutes: Int
 )
 
 class LisAdapter(
-    val itemList: ArrayList<GroupItem>, val nc: NavController?,
-    val option: Int, val gustoViewModel: GustoViewModel
-):
-    RecyclerView.Adapter<LisAdapter.ListGroupViewHolder>(){
+    val itemList: ArrayList<GroupItem>, val nc: NavController?,val option: Int, val gustoViewModel: GustoViewModel, val fragment : Fragment?
+):RecyclerView.Adapter<LisAdapter.ListGroupViewHolder>(){
 
     val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
 
@@ -59,11 +64,12 @@ class LisAdapter(
         if(option == 1||option==2||option==3) {
             holder.tv_food.text = "장소 : ${itemList[position].numRestaurants}개"
             holder.ly_route.visibility = View.GONE
-        } else {
+        } else if(option==0){
             holder.tv_people.text = "${itemList[position].numMembers}명"
             holder.tv_food.text = "맛집 : ${itemList[position].numRestaurants}개"
             holder.tv_route.text = "루트 : ${itemList[position].numRoutes}개"
         }
+        if(option==0 || option==3) holder.btn_remove.visibility = View.GONE
 
         holder.item.setOnTouchListener { view, event ->
             when (event.action) {
@@ -75,7 +81,7 @@ class LisAdapter(
                     holder.tv_food.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
                     holder.tv_route.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
                     holder.icon.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.white))
-                    holder.btn.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
+                    holder.btn_remove.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.white))
                 }
                 MotionEvent.ACTION_UP -> {
                     // 버튼에서 손을 뗄 때 처리
@@ -85,7 +91,7 @@ class LisAdapter(
                     holder.tv_food.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.main))
                     holder.tv_route.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.main))
                     holder.icon.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
-                    holder.btn.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.main))
+                    holder.btn_remove.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.main))
                 }
                 MotionEvent.ACTION_CANCEL -> {
                     // 버튼에서 손을 뗄 때 처리
@@ -95,7 +101,7 @@ class LisAdapter(
                     holder.tv_food.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.main))
                     holder.tv_route.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.main))
                     holder.icon.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
-                    holder.btn.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.main))
+                    holder.btn_remove.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.main))
                 }
 
             }
@@ -104,74 +110,79 @@ class LisAdapter(
         }
         holder.item.setOnClickListener {
             if(option==0) {
+                // 그룹 리스트 들어가기
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(50)
                     gustoViewModel.currentGroupId = itemList[position].groupId
+                    gustoViewModel.groupOner = itemList[position].isOner
                     nc?.navigate(R.id.action_listFragment_to_groupFragment)
                 }
             } else if(option == 1){
-                CoroutineScope(Dispatchers.Main).launch {
-                    delay(50)
-                    nc?.navigate(R.id.action_listFragment_to_routeStoresFragment)
+                gustoViewModel.getGroupRouteDetail(itemList[position].groupId) { result ->
+                    when (result) {
+                        1 -> {
+                            gustoViewModel.currentRouteId = itemList[position].groupId
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(50)
+                                nc?.navigate(R.id.action_listFragment_to_routeStoresFragment)
+                            }
+                        }
+                        else -> {
+                            Toast.makeText(holder.itemView.context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                        }
+                    }
                 }
             } else if(option == 2){
-                val itemList = ArrayList<MarkerItem>()
-                itemList.add(MarkerItem(
-                    0,
-                    0,0,
-                    37.6215101,
-                    127.0751410,
-                    "성수동 맛집 맵",
-                    "메롱시 메로나동 바밤바 24-6 1층",
-                    false
-                ))
-                itemList.add(MarkerItem(
-                    0,
-                    0,0,
-                    37.6245301,
-                    127.0740210,
-                    "성수동 맛집 맵",
-                    "메롱시 메로나동 바밤바 24-6 1층",
-                    false
-                ))
-                itemList.add(MarkerItem(
-                    0,
-                    0,0,
-                    37.6215001,
-                    127.0743010,
-                    "성수동 맛집 맵",
-                    "메롱시 메로나동 바밤바 24-6 1층",
-                    false
-                ))
-                itemList.add(MarkerItem(
-                    0,
-                    0,0,
-                    37.6215001,
-                    127.0713010,
-                    "성수동 맛집 맵",
-                    "메롱시 메로나동 바밤바 24-6 1층",
-                    false
-                ))
-                itemList.add(MarkerItem(
-                    0,
-                    0,0,
-                    37.6210001,
-                    127.0513010,
-                    "성수동 맛집 맵",
-                    "메롱시 메로나동 바밤바 24-6 1층",
-                    false
-                ))
-                gustoViewModel.markerListLiveData.value = itemList
+                gustoViewModel.getGroupRouteDetail(itemList[position].groupId) { result ->
+                    when (result) {
+                        1 -> {
+                            gustoViewModel.currentRouteId = itemList[position].groupId
+                            Navigation.findNavController(holder.itemView).navigate(R.id.action_groupMRSFragment_to_groupMRRFragment)
+                        }
+                        else -> {
+                            Toast.makeText(holder.itemView.context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                        }
+                    }
+                }
 
-                Navigation.findNavController(holder.itemView).navigate(R.id.action_groupMRSFragment_to_groupMRRFragment)
             } else if(option == 3){
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(50)
                     Navigation.findNavController(holder.itemView).navigate(R.id.action_myRouteRoutesFragment_to_myRouteStoresFragment)
                 }
-
             }
+        }
+        holder.btn_remove.setOnClickListener {
+            util.setPopupTwo(holder.itemView.context,"구스또레스토랑을\n그룹 맛집에서 삭제핫시겠습니까?","",1) { yesOrNo ->
+                when (yesOrNo) {
+                    0 -> {
+                        if(option==1) {
+                            gustoViewModel.deleteRoute(itemList[position].groupId) { result ->
+                                when (result) {
+                                    1 -> {
+                                        (fragment as ListRouteFragment)?.checkRoutes()
+                                    }
+                                    else -> {
+                                        Toast.makeText(holder.itemView.context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                    }
+                                }
+                            }
+                        } else if(option==2) {
+                            gustoViewModel.removeGroupRoute(itemList[position].groupId) { result ->
+                                when (result) {
+                                    1 -> {
+                                        (fragment as GroupRouteRoutesFragment)?.checkRoutes()
+                                    }
+                                    else -> {
+                                        Toast.makeText(holder.itemView.context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                    }
+                                }
+                            }
+                        }
 
+                    }
+                }
+            }
         }
 
     }
@@ -188,7 +199,7 @@ class LisAdapter(
         val ly_route = itemView.findViewById<LinearLayout>(R.id.ly_route)
         val item = itemView.findViewById<LinearLayout>(R.id.item_list_group)
         val icon = itemView.findViewById<ImageView>(R.id.iv_icon)
-        val btn = itemView.findViewById<TextView>(R.id.btn_tmp)
+        val btn_remove = itemView.findViewById<TextView>(R.id.btn_remove)
     }
 
 }

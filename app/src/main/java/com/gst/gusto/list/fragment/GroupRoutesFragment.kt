@@ -17,7 +17,7 @@ import com.gst.gusto.databinding.FragmentListGroupMRoutesBinding
 class GroupRoutesFragment(val num: Int) : Fragment() {
 
     lateinit var binding: FragmentListGroupMRoutesBinding
-    lateinit var navController : NavController
+    lateinit var navHostFragment : NavHostFragment
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,14 +30,16 @@ class GroupRoutesFragment(val num: Int) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val navHostFragment = childFragmentManager.findFragmentById(R.id.fl_routes_container) as NavHostFragment
-        navController = navHostFragment.navController
+        navHostFragment = childFragmentManager.findFragmentById(R.id.fl_routes_container) as NavHostFragment
 
-        if(num==0)navController.navigate(R.id.fragment_group_m_route_routes)
-        else navController.navigate(R.id.fragment_group_m_route_stores)
+        if(num==0) navHostFragment.navController.navigate(R.id.fragment_group_m_route_routes)
+        else navHostFragment.navController.navigate(R.id.fragment_group_m_route_stores)
     }
     public fun getCon() : NavController{
-        return navController
+        return navHostFragment.navController
+    }
+    public fun getNavHost() : NavHostFragment{
+        return navHostFragment
     }
 
 }

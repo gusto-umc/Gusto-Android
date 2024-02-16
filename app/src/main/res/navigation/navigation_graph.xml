@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/searchFragment">
+
+    <!-- Map 화면의 프래그먼트들 -->
     <fragment
         android:id="@+id/fragment_map"
         android:name="com.gst.clock.Fragment.MapFragment"
@@ -18,8 +20,16 @@
         <action
             android:id="@+id/action_fragment_map_to_mapListViewSaveFragment2"
             app:destination="@id/mapListViewSaveFragment" />
+        <action
+            android:id="@+id/action_fragment_map_to_mapViewpagerFragment"
+            app:destination="@id/fragment_map_viewpager" />
     </fragment>
-
+    <fragment
+        android:id="@+id/fragment_map_viewpager"
+        android:name="com.gst.gusto.MapViewpagerFragment"
+        android:label="FragmentMapViewpager"
+        tools:layout="@layout/fragment_map_viewpager">
+    </fragment>
 
     <!-- List 화면의 프래그먼트들 -->
     <fragment
