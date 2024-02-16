@@ -112,7 +112,8 @@ data class RequestAddCategory(
 data class RequestEditCategory(
     @SerializedName("myCategoryName") var myCategoryName : String,
     @SerializedName("myCategoryIcon") var myCategoryIcon : Int,
-    @SerializedName("publishCategory") var publishCategory : String
+    @SerializedName("publishCategory") var publishCategory : String,
+    @SerializedName("myCategoryScript") var myCategoryScript : String
 )
 
 
@@ -170,10 +171,27 @@ data class ResponseStoreListItem(
 data class ResponseSavedStore(
     @SerializedName("nickname") val nickname : String,
     @SerializedName("numPinStores") val numPinStores : Int,
-    @SerializedName("visitedStores") val visitedStores : List<ResponseStoreListItem>,
-    @SerializedName("unvisitedStores") val unvisitedStores : List<ResponseStoreListItem>
+    @SerializedName("visitedStores") val visitedStores : List<ResponseVisitedStoreData>,
+    @SerializedName("unvisitedStores") val unvisitedStores : List<ResponseUnvisitedStoreData>
 )
 
+data class ResponseUnvisitedStoreData(
+    @SerializedName("numPinStores") val numPinStores : Int,
+    @SerializedName("unvisitedStores") val unvisitedStores : List<ResponseSavedStoreData>
+)
+
+data class ResponseVisitedStoreData(
+    @SerializedName("numPinStores") val numPinStores : Int,
+    @SerializedName("visitedStores") val visitedStores : List<ResponseSavedStoreData>
+)
+
+data class ResponseSavedStoreData(
+    @SerializedName("storeId") val storeId : Int,
+    @SerializedName("categoryName") val categoryName : String,
+    @SerializedName("storeName") val storeName : String,
+    @SerializedName("address") val address : String,
+    @SerializedName("reviewImg") val reviewImg : String
+)
 //리뷰 상세
 data class ResponseMyReview(
     @SerializedName("storeId") val storeId : Int,

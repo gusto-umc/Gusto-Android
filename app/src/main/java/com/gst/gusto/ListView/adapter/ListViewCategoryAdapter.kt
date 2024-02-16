@@ -17,6 +17,7 @@ import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseMapCategory
+import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.ItemListviewCategoryShowBinding
 
 class ListViewCategoryAdapter(private var flag : String, private val fragmentManager : FragmentManager, private val parentView : View) : ListAdapter<ResponseMapCategory, ListViewCategoryAdapter.ViewHolder>(
@@ -116,6 +117,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                     when(it){
                         0 -> {
                             //성공 -> 카테고리 목록 새로 불러오기
+                            viewModel!!.changeEditFlag(viewModel!!.cateEditFlag.value!!)
                         }
                         1 -> {
                             //실패
@@ -129,10 +131,6 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                 true
             }
         }
-
-
-
-
     }
 
 }

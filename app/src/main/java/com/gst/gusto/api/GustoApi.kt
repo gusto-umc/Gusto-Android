@@ -192,7 +192,7 @@ interface GustoApi {
         @Body data : RequestAddCategory
     ) : Call<Void>
 
-    //2. 카테고리 수정 -> 확인 완료, desc 추가 확인 필요
+    //2. 카테고리 수정 -> 확인 완
     @PATCH("myCategories/{myCategoryId}")
     fun editCategory(
         @Header("X-AUTH-TOKEN") token : String,
@@ -207,18 +207,18 @@ interface GustoApi {
         @Query("townName") townName : String
     ) : Call<List<ResponseMapCategory>>
 
-    //4. 카테고리 삭제하기
-    @DELETE("myCategories?myCategoryId={myCategoryId}")
+    //4. 카테고리 삭제하기 -> 단 건 삭제 확인 완
+    @DELETE("myCategories")
     fun deleteCategory(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("myCategoryId") myCategoryId : Int
     ) : Call<Void>
 
-    //5.카테고리 전체 조회 - 피드, 마이 -> 확인 완
-    @GET("myCategories/{nickname}")
+    //5.카테고리 전체 조회 - 피드, 마이 -> 서버 배포 후 다시 확인하기
+    @GET("myCategories")
     fun getAllCategory(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("nickname") nickname : String
+        @Query("nickname") nickname : String
     ) : Call<List<ResponseAllCategory>>
 
     /**
@@ -245,8 +245,7 @@ interface GustoApi {
     fun getStoreDetail(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("storeId") storeId : Long,
-        @Query("reviewId") reviewId : Int,
-        @Query("visitedAt") visitedAt : String,
+        @Query("reviewId") reviewId : Int?,
     ) : Call<ResponseStoreDetail>
 
     //4. 카테고리 별 가게 조회 - 위치기반 -> 확인 완, 보완 필(pinInd)
@@ -257,25 +256,25 @@ interface GustoApi {
         @Query("townName") townName : String
     ) : Call<List<ResponseStoreListItem>>
 
-    //5. 카테고리 별 가게 조회 - 전체
-    @GET("myCategories/pins/{nickname}")
+    //5. 카테고리 별 가게 조회 - 전체 -> 확인 완
+    @GET("myCategories/pins")
     fun getAllStores(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("nickname") nickname : String,
+        @Query("nickname") nickname : String,
         @Query("myCategoryId") categoryId : Int
     ): Call<List<ResponseStoreListItem>>
 
-    //6. 저장된 맛집 리스트
-    @GET("stores/pins?myCategoryId={categoryId}&townName={townName}")
+    //6. 저장된 맛집 리스트 -> cateogry 적용 X
+    @GET("stores/pins")
     fun getSavedStores(
         @Header("X-AUTH-TOKEN") token : String,
-        @Query("categoryId") categoryId : Int,
+        @Query("myCategoryId") categoryId : Int,
         @Query("townName") townName : String
-    ) : Call<ResponseSavedStore>
+    ) : Call<List<ResponseSavedStore>>
 
 
     /**
-     * 리뷰
+     * 리뷰 - 연결 완
      */
 
     //1. 리뷰 1건 조회 -> 확인 완료
