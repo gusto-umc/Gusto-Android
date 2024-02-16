@@ -241,6 +241,7 @@
             </HorizontalScrollView>
         </LinearLayout>
 
+
         <LinearLayout
             android:id="@+id/first_visited"
             android:layout_width="match_parent"
@@ -433,4 +434,4 @@
         </LinearLayout>
 
     </LinearLayout>
-    </LinearLayout>
+</LinearLayout>

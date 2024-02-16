@@ -10,14 +10,17 @@
         android:id="@+id/kakao_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <include
-        layout="@layout/fragment_map_main_screen"
-        android:id="@+id/fragment_map_main_screen"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"/>
 
     <!-- BottomSheet -->
+    <include
+        android:id="@+id/fragment_map_main_screen"
+        layout="@layout/fragment_map_main_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        app:layout_anchor="@+id/kakao_map"
+        app:layout_anchorGravity="center" />
+
     <LinearLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
