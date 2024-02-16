@@ -321,18 +321,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="185dp"
+        android:layout_marginTop="190dp"
         android:orientation="horizontal"/>
-<!--
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_group"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="171dp"
-        android:paddingTop="21dp"
-        android:background="@drawable/background_radius_top_30"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
