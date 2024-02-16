@@ -130,7 +130,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         return view
     }
 
-
     // 클릭된 칩의 처리를 담당하는 함수
     private fun handleChipClick(chip: Chip) {
         // 이전에 활성화된 칩이 있으면 해당 칩의 색상을 변경
