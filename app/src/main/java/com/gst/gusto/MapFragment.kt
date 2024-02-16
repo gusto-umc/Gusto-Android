@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
@@ -26,6 +25,10 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
 
     lateinit var binding: FragmentMapBinding
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+
+
     private val TAG = "SOL_LOG"
     lateinit var mapView : MapView
 
@@ -63,6 +66,13 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     BottomSheetBehavior.STATE_HIDDEN -> {
                         // BottomSheet가 숨겨진 경우 fragment_map_main_screen.xml을 보여줌
                         showMainScreenFragment()
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        // BottomSheet가 펼쳐진 경우 AreaFragment로 이동
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_map, AreaFragment())
+                            .addToBackStack(null) //뒤로가기
+                            .commit()
                     }
                     else -> {
                         // 다른 상태에서는 fragment_map_main_screen.xml을 숨김

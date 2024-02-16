@@ -3,17 +3,14 @@ package com.gst.gusto
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
-import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -53,8 +50,6 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.d(TAG, "Exception -> $e")
         }
-
-
 
     }
 
