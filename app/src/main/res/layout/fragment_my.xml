@@ -51,7 +51,6 @@
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/iv_profile_image"
             android:layout_marginLeft="38dp"
             android:layout_marginRight="41dp"
             android:layout_width="93dp"
@@ -60,6 +59,7 @@
             app:cardCornerRadius="50dp">
 
             <ImageView
+                android:id="@+id/iv_profile_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_launcher_background"/>

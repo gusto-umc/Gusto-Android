@@ -7,19 +7,18 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.gst.clock.Fragment.ListGroupFragment
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.DiaLogFragment
@@ -35,19 +34,12 @@ class ListFragment : Fragment() {
     private val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
     lateinit var fabBackground : ImageView
     private val gustoViewModel : GustoViewModel by activityViewModels()
+    lateinit var navHostFragment: NavHostFragment
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentListMainBinding.inflate(inflater, container, false)
-
-        val navHostFragment = childFragmentManager.findFragmentById(R.id.fl_list_container) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        fabBackground = binding.ivFabBackground
-
-        navController.popBackStack()
-        navController.navigate(R.id.fragment_list_group)
 
         val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#FEB520"))
         val colorStateOffList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
@@ -59,7 +51,7 @@ class ListFragment : Fragment() {
             ViewCompat.setBackgroundTintList(binding.btnRoute, colorStateOffList)
             binding.ivRoute.setColorFilter(Color.parseColor("#FFD704"))
             binding.tvRoute.setTextColor(Color.parseColor("#828282"))
-            navController.navigate(R.id.fragment_list_group)
+            navHostFragment.navController.navigate(R.id.fragment_list_group)
         }
 
         binding.btnRoute.setOnClickListener {
@@ -73,7 +65,7 @@ class ListFragment : Fragment() {
             binding.ivGroup.setColorFilter(Color.parseColor("#FFD704"))
             binding.tvGroup.setTextColor(Color.parseColor("#828282"))
 
-            navController.navigate(R.id.fragment_list_route)
+            navHostFragment.navController.navigate(R.id.fragment_list_route)
         }
 
 
@@ -82,6 +74,14 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setFABClickEvent()
+        navHostFragment = childFragmentManager.findFragmentById(R.id.fl_list_container) as NavHostFragment
+
+        fabBackground = binding.ivFabBackground
+
+        navHostFragment.navController.popBackStack()
+        navHostFragment.navController.navigate(R.id.fragment_list_group)
+
+
     }
 
     override fun onResume() {
@@ -106,7 +106,7 @@ class ListFragment : Fragment() {
                 // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
                 when (selectedItem) {
                     1 -> {
-
+                        (navHostFragment.childFragmentManager.primaryNavigationFragment as ListGroupFragment).checkGroups()
                     }
                 }
             }, R.layout.bottomsheetdialog_create, gustoViewModel,requireActivity() as MainActivity)
@@ -120,10 +120,10 @@ class ListFragment : Fragment() {
                 // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
                 when (selectedItem) {
                     1 -> {
-
+                        (navHostFragment.childFragmentManager.primaryNavigationFragment as ListGroupFragment).checkGroups()
                     }
                 }
-            }, R.layout.bottomsheetdialog_invite, gustoViewModel,requireActivity() as MainActivity)
+            }, R.layout.bottomsheetdialog_join, gustoViewModel,requireActivity() as MainActivity)
             dialogFragment.show(parentFragmentManager, dialogFragment.tag)
         }
     }

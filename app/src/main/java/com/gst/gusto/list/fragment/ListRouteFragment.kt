@@ -35,41 +35,26 @@ class ListRouteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val rv_board = binding.rvListRoute
 
-        fun callActivityFunction(): NavController {
-            return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
-        }/*
-        itemList = ArrayList()
-        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
-        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
-        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
-        itemList.add(GroupItem("성수동 맛집 맵",5,32,24))
-
-        val boardAdapter = LisAdapter(itemList, callActivityFunction(), 1,gustoViewModel)
-        boardAdapter.notifyDataSetChanged()
-        rv_board.adapter = boardAdapter
-        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)*/
-
-        gustoViewModel.getTokens(requireActivity() as MainActivity)
-        gustoViewModel.getMyRoute {result ->
-            when(result) {
-                1 -> {
-                    itemList = gustoViewModel.myRouteList
-                    val boardAdapter = LisAdapter(itemList, callActivityFunction(), 1, gustoViewModel)
-                    boardAdapter.notifyDataSetChanged()
-                    rv_board.adapter = boardAdapter
-                    rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                } else -> {
-
-                }
-            }
-        }
     }
 
     override fun onResume() {
         super.onResume()
         gustoViewModel.listFragment = "route"
+        gustoViewModel.getMyRoute {result ->
+            when(result) {
+                1 -> {
+                    val rv_board = binding.rvListRoute
+                    itemList = gustoViewModel.myRouteList
+                    val boardAdapter = LisAdapter(itemList, (requireActivity() as MainActivity).getCon(), 1, gustoViewModel,this)
+                    boardAdapter.notifyDataSetChanged()
+                    rv_board.adapter = boardAdapter
+                    rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                } else -> {
+                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -77,5 +62,21 @@ class ListRouteFragment : Fragment() {
         val frag = requireParentFragment().parentFragment as ListFragment
         Log.e("frag",frag.toString())
         frag.callBtnGroup()
+    }
+    fun checkRoutes() {
+        gustoViewModel.getMyRoute {result ->
+            when(result) {
+                1 -> {
+                    val rv_board = binding.rvListRoute
+                    itemList = gustoViewModel.myRouteList
+                    val boardAdapter = LisAdapter(itemList, (requireActivity() as MainActivity).getCon(), 1, gustoViewModel,this)
+                    boardAdapter.notifyDataSetChanged()
+                    rv_board.adapter = boardAdapter
+                    rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                } else -> {
+                Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 }

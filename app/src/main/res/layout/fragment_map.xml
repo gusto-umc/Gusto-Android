@@ -34,9 +34,13 @@
 
     <ImageButton
         android:id="@+id/list_view_btn"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/list_view"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/fab_list_img"
+        android:background="@drawable/background_radius_10"
+        android:elevation="4dp"
+        android:scaleType="centerCrop"
+        android:padding="10dp"
         android:contentDescription="목록보기"
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="60dp"

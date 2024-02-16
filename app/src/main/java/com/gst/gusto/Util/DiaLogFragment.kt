@@ -1,5 +1,8 @@
 package com.gst.gusto.Util
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.gst.gusto.MainActivity
@@ -14,8 +18,8 @@ import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.BottomsheetdialogCreateBinding
 import com.gst.gusto.databinding.BottomsheetdialogInviteBinding
+import com.gst.gusto.databinding.BottomsheetdialogJoinBinding
 import com.gst.gusto.databinding.BottomsheetdialogRoutesBinding
-import com.gst.gusto.list.adapter.LisAdapter
 import com.gst.gusto.list.adapter.MapRoutesAdapter
 
 
@@ -23,18 +27,22 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
     BottomSheetDialogFragment() {
 
     lateinit var binding1: BottomsheetdialogRoutesBinding
-    lateinit var binding2: BottomsheetdialogInviteBinding
+    lateinit var binding2: BottomsheetdialogJoinBinding
     lateinit var binding3: BottomsheetdialogCreateBinding
+    lateinit var binding4: BottomsheetdialogInviteBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         if(layout == R.layout.bottomsheetdialog_routes) {
             binding1 = BottomsheetdialogRoutesBinding.inflate(inflater, container, false)
             return binding1.root
-        } else if(layout == R.layout.bottomsheetdialog_invite) {
-            binding2 = BottomsheetdialogInviteBinding.inflate(inflater, container, false)
+        } else if(layout == R.layout.bottomsheetdialog_join) {
+            binding2 = BottomsheetdialogJoinBinding.inflate(inflater, container, false)
             return binding2.root
         }  else if(layout == R.layout.bottomsheetdialog_create) {
             binding3 = BottomsheetdialogCreateBinding.inflate(inflater, container, false)
             return binding3.root
+        } else if(layout == R.layout.bottomsheetdialog_invite) {
+            binding4 = BottomsheetdialogInviteBinding.inflate(inflater, container, false)
+            return binding4.root
         }  else {
             return inflater.inflate(layout, container, false)
         }
@@ -76,14 +84,15 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                 dialog?.dismiss()
             }
         }
-        else if(layout == R.layout.bottomsheetdialog_invite) {
+        else if(layout == R.layout.bottomsheetdialog_join) {
             binding2.btnExit.setOnClickListener {
                 dialog?.dismiss()
             }
             binding2.btnEnter.setOnClickListener {
-                gustoViewModel.joinGroup(12,binding2.etCode.text.toString()) {result ->
+                gustoViewModel.joinGroup(binding2.etCode.text.toString()) {result ->
                     when(result) {
                         1 -> {
+                            itemClick(1)
                             dialog?.dismiss()
                         }
                     }
@@ -92,9 +101,6 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
         }
         else if(layout == R.layout.bottomsheetdialog_create) {
             binding3.btnExit.setOnClickListener {
-                dialog?.dismiss()
-            }
-            binding3.btnEnter.setOnClickListener {
                 dialog?.dismiss()
             }
             binding3.etGroupName.addTextChangedListener(object : TextWatcher {
@@ -129,11 +135,42 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                 gustoViewModel.createGroup(binding3.etGroupName.text.toString(),binding3.etComent.text.toString()) {result ->
                     when(result) {
                         1 -> {
+                            itemClick(1)
                             dialog?.dismiss()
                         }
                     }
                 }
             }
+        }
+        else if(layout == R.layout.bottomsheetdialog_invite) {
+            binding4.tvCode
+            var tmpCode = ""
+            gustoViewModel.getGroupInvitationCode {result, data ->
+                when(result) {
+                    1 -> {
+                        if(data!=null) {
+                            tmpCode = data
+                            binding4.tvCode.text = data
+                        }
+                    }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                }
+            }
+            binding4.btnExit.setOnClickListener {
+                dialog?.dismiss()
+            }
+            binding4.btnEnter.setOnClickListener {
+                dialog?.dismiss()
+            }
+            binding4.btnCopy.setOnClickListener {
+                val clipboardManager = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+                val clipData = ClipData.newPlainText("viewmodel_data", tmpCode.toString())
+
+
+                clipboardManager.setPrimaryClip(clipData)
+                itemClick(1)
+            }
+
         }
     }
 }
