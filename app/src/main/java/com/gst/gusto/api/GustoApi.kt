@@ -281,7 +281,7 @@ interface GustoApi {
     @GET("reviews/{reviewId}")
     fun getReview(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("reviewId") reviewId : Long
+        @Path("reviewId") reviewId : Int
     ) : Call<ResponseMyReview>
 
     //2. 리뷰 수정 -> 확인 완료, 보완필(image 첨부해서 보내기)

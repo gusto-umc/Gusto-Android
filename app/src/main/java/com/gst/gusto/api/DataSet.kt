@@ -194,13 +194,12 @@ data class ResponseSavedStoreData(
 )
 //리뷰 상세
 data class ResponseMyReview(
-    @SerializedName("storeId") val storeId : Int,
+    @SerializedName("storeId") val storeId : Long,
     @SerializedName("storeName") val storeName : String,
-    @SerializedName("nickName") val nickName : String,
     @SerializedName("visitedAt") var visitedAt : String?,
-    @SerializedName("img") val img : List<String>?,
+    @SerializedName("images") val img : List<String>?,
     @SerializedName("menuName") val menuName : String?,
-    @SerializedName("hashTagId") val hashTagId : List<Int>?,
+    @SerializedName("hashTags") val hashTags : String?,
     @SerializedName("taste") val taste : Int,
     @SerializedName("spiciness") val spiciness : Int?,
     @SerializedName("mood") val mood : Int?,
@@ -208,6 +207,10 @@ data class ResponseMyReview(
     @SerializedName("parking") val parking : Int?,
     @SerializedName("comment") val comment : String?,
     @SerializedName("likeCnt") val likeCnt : Int
+)
+
+data class ResponseMyReview2(
+    @SerializedName("storeId") val storeId : Long
 )
 
 //리뷰 수정완 -> 확인 완

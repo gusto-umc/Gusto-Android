@@ -888,26 +888,26 @@ class GustoViewModel: ViewModel() {
     var myReview : ResponseMyReview? = null
     var myReviewId : Long? = null
     //리뷰 1건 조회 -> 확인 완
-    fun getReview(reviewId : Long, callback: (Int) -> Unit){
-        service.getReview(xAuthToken, reviewId).enqueue(object : Callback<ResponseMyReview>{
+    fun getReview(reviewId : Int, callback: (Int) -> Unit){
+        service.getReview(xAuthToken, 4).enqueue(object : Callback<ResponseMyReview>{
             override fun onResponse(
                 call: Call<ResponseMyReview>,
                 response: Response<ResponseMyReview>
             ) {
                 if (response.isSuccessful) {
-                    Log.e("viewmodel", "Successful response: ${response}")
-                    Log.e("viewmodel", response.body()!!.toString())
-                    myReview = response.body()!!
+                    Log.e("getReview", "Successful response: ${response}")
+                    Log.e("getReview", response.body()!!.toString())
+                    //myReview = response.body()!!
                     callback(0)
                 } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    Log.e("getReview", "Unsuccessful response: ${response}")
                     callback(1)
                     myReview = null
                 }
             }
 
             override fun onFailure(call: Call<ResponseMyReview>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
+                Log.e("getReview", "Failed to make the request", t)
                 callback(1)
             }
 
