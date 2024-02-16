@@ -116,3 +116,15 @@ data class RequestCreateReview(
     @SerializedName("parking") val parking : Int?,
     @SerializedName("comment") val comment : String?,
 )
+
+// insta (gallery) review 조회- reviews
+data class ResponseInstaReviews(
+    @SerializedName("reviewId") val reviewId: Long,
+    @SerializedName("images") val images: List<String>,
+)
+
+// insta (gallery) review 조회
+data class ResponseInstaReview(
+    @SerializedName("reviews") val reviews: List<ResponseInstaReviews>,
+    @SerializedName("hasNext") val hasNext: Boolean
+)

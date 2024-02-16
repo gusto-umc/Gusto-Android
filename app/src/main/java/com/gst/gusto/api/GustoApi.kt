@@ -14,6 +14,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface GustoApi {
@@ -190,6 +191,13 @@ interface GustoApi {
     fun getFollower(
         @Header("X-AUTH-TOKEN") token : String
     ):Call<List<Member>>
+
+    @GET("reviews/instaView") // 리뷰 모아보기 - 1 (insta view)
+    fun instaView(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("reviewId") reviewId: Long?,
+        @Query("size") size: Int
+    ):Call<ResponseInstaReview>
 
 
 }

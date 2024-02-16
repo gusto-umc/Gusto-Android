@@ -2,14 +2,18 @@ package com.gst.gusto.review.adapter
 
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.api.ResponseInstaReview
+import com.gst.gusto.api.ResponseInstaReviews
 import com.gst.gusto.databinding.ItemReviewGalleryBinding
 
-class GalleryReviewAdapter(var imageList: Array<Int>, val context: Context?, private val itemClickListener: (Array<Int>) -> Unit) : RecyclerView.Adapter<GalleryReviewAdapter.ViewHolder>() {
+class GalleryReviewAdapter(var galleryList: ArrayList<ResponseInstaReviews>, val context: Context?, private val itemClickListener: (Long) -> Unit) : RecyclerView.Adapter<GalleryReviewAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): GalleryReviewAdapter.ViewHolder {
@@ -21,18 +25,19 @@ class GalleryReviewAdapter(var imageList: Array<Int>, val context: Context?, pri
     override fun onBindViewHolder(holder: GalleryReviewAdapter.ViewHolder, position: Int) {
         val width = (context?.resources?.displayMetrics?.widthPixels ?: 0) / 3
         holder.imageview.layoutParams = LinearLayoutCompat.LayoutParams(width, width)
-        holder.imageview.setImageResource(imageList[position])
+        setImage(holder.imageview, galleryList[position].images[0], holder.itemView.context)
+        Log.d("plz", galleryList[position].images[0])
     }
 
-    override fun getItemCount(): Int = imageList.size
+    override fun getItemCount(): Int = galleryList.size
 
 
-    inner class ViewHolder(val binding: ItemReviewGalleryBinding, private val itemClickListener: (Array<Int>) -> Unit) : RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(val binding: ItemReviewGalleryBinding, private val itemClickListener: (Long) -> Unit) : RecyclerView.ViewHolder(binding.root){
         val imageview : ImageView = binding.imageView
 
         init {
             imageview.setOnClickListener{
-                itemClickListener.invoke(imageList)
+                itemClickListener.invoke(galleryList[position].reviewId)
             }
         }
 
