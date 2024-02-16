@@ -14,31 +14,32 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface GustoApi {
     //ROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTE
-    @GET("routes/") // 내 루트 조회
+    @GET("routes") // 내 루트 조회
     fun getMyRoute(
         @Header("X-AUTH-TOKEN") token : String
     ):Call<List<Routes>>
 
-    @POST("routes/") // 루트 생성 or 그룹 내 루트 추가
+    @POST("routes") // 루트 생성 or 그룹 내 루트 추가
     fun createRoute(
         @Header("X-AUTH-TOKEN") token : String,
         @Body requestBody : RequestCreateRoute
     ):Call<ResponseBody>
-    @GET("routeLists/{routeId}/order") // 내 or 그룹 루트 거리 조회(공통)
+    @GET("routeLists/{routeId}/order") // 내/그룹 루트 거리 조회(공통)
     fun getRouteMap(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("routeId") routeId : Long
     ):Call<List<RouteList>>
-
+/* 통합 됨
     @GET("routeLists/{routeId}") // 내 루트 상세 조회
     fun getRouteDetail(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("routeId") routeId : Long
-    ):Call<ResponseRouteDetail>
+    ):Call<ResponseRouteDetail>*/
     @DELETE("routes/{routeId}") // 내 루트 삭제
     fun deleteRoute(
         @Header("X-AUTH-TOKEN") token : String,
@@ -62,7 +63,7 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("groupId") groupId : Long
     ):Call<List<ResponseStore>>
-    @GET("groups/{groupId}/routes/") // 그룹 내 루트 목록 조회
+    @GET("routes/{groupId}") // 그룹 내 루트 목록 조회
     fun getGroupRoutes(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("groupId") groupId : Long
@@ -100,11 +101,10 @@ interface GustoApi {
         @Path("groupId") groupId : Long
     ):Call<ResponseBody>
 
-    @DELETE("groups/groupLists?groupListId={groupListId}&groupListId={groupListId}") // 그룹 내 식당 삭제(중복처리가능)
+    @DELETE("groups/groupLists") // 그룹 내 식당 삭제(중복처리가능)
     fun deleteGroupStore(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("groupId") groupId : Long,
-        @Path("groupListId") groupListId : Long
+        @Query("groupListId") groupListId: Long
     ):Call<ResponseBody>
 
     @PATCH("groups/{groupId}/transfer-ownership") // 그룹 소유권 이전
@@ -120,10 +120,9 @@ interface GustoApi {
         @Path("groupId") groupId : Long
     ):Call<ResponseBody>
 
-    @POST("groups/{groupId}/join") // 그룹 참여
+    @POST("groups/join") // 그룹 참여
     fun joinGroup(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("groupId") groupId : Long,
         @Body body : RequestJoinGroup
     ):Call<ResponseBody>
 
@@ -139,10 +138,19 @@ interface GustoApi {
         @Path("groupId") groupId : Long
     ):Call<ResoponseInvititionCode>
 
-    @GET("group/routeLists/{routeId}") // 그룹 루트 상세 조회
+    @GET("routeLists/{routeId}") // 내 루트/그룹 루트 상세 조회 (공통)
     fun getGroupRouteDetail(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("routeId") routeId : Long?,
+        @Query("groupId") groupId : Long?
+    ):Call<ResponseRouteDetail>
 
-    )
+    @DELETE("groups/routes/{routeId}") // 그룹 루트 삭제
+    fun removeGroupRoute(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("routeId") routeId : Long,
+        @Query("groupId") groupId : Long
+    ):Call<ResponseBody>
 
     //REVIEWREVIEWREVIEWREVIEWREVIEWREVIEWREVIEWREVIEWREVIEWREVIEWREVIEWREVIEWREVIEW
 
@@ -164,6 +172,14 @@ interface GustoApi {
         @Path("nickname") nickname : String
     ):Call<ResponseProfile>
 
+    @Multipart
+    @POST("reviews") // 리뷰 작성
+    fun createReview(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Part image: MultipartBody.Part?,
+        @Part("info") info: RequestCreateReview
+    ):Call<ResponseBody>
+
     //USERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSER
 
     @POST("users/follow/{nickname}") // 팔로우하기
@@ -178,5 +194,28 @@ interface GustoApi {
         @Path("nickname") nickname : String
     ):Call<ResponseBody>
 
+    @GET("users/follower") // 팔로워 조회
+    fun getFollower(
+        @Header("X-AUTH-TOKEN") token : String
+    ):Call<List<Member>>
+    @GET("users/following") // 팔로워 조회
+    fun getFollowing(
+        @Header("X-AUTH-TOKEN") token : String
+    ):Call<List<Member>>
 
+    //STORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORE
+
+    @GET("stores/{storeId}") // 가게 정보 조회(잛은 화면)
+    fun getStoreDetailQuick(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("storeId") storeId : Long
+    ):Call<ResponseStoreDetailQuick>
+
+    // 행정구역 가져오기
+    @GET("v2/local/geo/coord2regioncode.json")
+    fun getRegionInfo(
+        @Header("Authorization") authorization: String,
+        @Query("x") longitude: String,
+        @Query("y") latitude: String
+    ): Call<RegionInfoResponse>
 }

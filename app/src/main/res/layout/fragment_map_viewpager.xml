@@ -1,51 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/search"
-        android:layout_width="328dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="22dp"
-        android:layout_gravity="center_horizontal"
-        android:paddingLeft="8dp"
-        android:textColor="@color/gray_3"
-        android:textSize="14sp"
-        android:fontFamily="@font/pretendard_medium"
-        android:inputType="text"
-        android:background="@drawable/edit_text_border"
-        android:hint="맛집 검색"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:paddingRight="8dp"/>
-
+    <RelativeLayout
+        android:id="@+id/kakao_map_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="320dp"
         android:orientation="vertical">
-        <!-- ImageButton -->
-        <ImageButton
-            android:id="@+id/list_view_btn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/list_view"
-            android:layout_gravity="bottom|right"
-            android:layout_marginRight="30dp"/>
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewpager"
-            android:layout_width="340dp"
-            android:layout_height="145dp"
-            android:layout_marginTop="18dp"
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="328dp"
+            android:layout_height="40dp"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/background_radius_20"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginTop="22dp"
+            android:background="@drawable/edit_text_border"
+            android:ellipsize="end"
+            android:fontFamily="@font/pretendard_medium"
+            android:hint="맛집 검색"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textColor="@color/gray_3"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="320dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <!-- ImageButton -->
+            <ImageButton
+                android:id="@+id/list_view_btn"
+                android:layout_marginBottom="18dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="bottom|right"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/background_radius_10"
+                android:elevation="4dp"
+                android:padding="10dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/fab_list_img" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_slider"
+                android:visibility="gone"
+                android:layout_marginBottom="26dp"
+                android:layout_width="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_height="191dp"
+                android:paddingHorizontal="10dp" />
+        </LinearLayout>
     </LinearLayout>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
