@@ -19,6 +19,7 @@ import com.gst.gusto.ListView.Model.StoreDetailReview
 import com.gst.gusto.ListView.adapter.CategoryChooseBottomSheetDialog
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.ResponseStoreDetail
 import com.gst.gusto.databinding.FragmentStoreDetailBinding
 import com.gst.gusto.store_detail.adapter.StoreDetailPhotoAdapter
 import com.gst.gusto.store_detail.adapter.StoreDetailReviewAdapter
@@ -60,31 +61,67 @@ class StoreDetailFragment : Fragment() {
         /**
          * 데이터 적용
          */
-        binding.ivStoreDetailBanner.setImageResource(R.drawable.sample_store_3_img)
-        binding.tvStoreDetailCategory.text = sampleData.categoryName
-        binding.tvStoreDetailName.text = sampleData.storeName
-        binding.tvStoreDetailAddress.text = sampleData.address
-        if(sampleData.pin == 1){
-            binding.ivStoreDetailSave.setImageResource(R.drawable.save_o_img)
-        }
-        //리뷰사진 리사이클러뷰 연결
-        val mStorePhotoAdapter = StoreDetailPhotoAdapter(samplePhotoDataArray)
-        binding.rvStoreDetailPhoto.adapter = mStorePhotoAdapter
-        //리뷰 리사이클러뷰 연결
-        val mReviewAdapter = StoreDetailReviewAdapter()
-        mReviewAdapter.setItemClickListener(object : StoreDetailReviewAdapter.OnItemClickListener{
-            override fun onClick(v: View, dataSet: StoreDetailReview) {
-                //데이터 넣기
-                val bundle = Bundle()
-                bundle.putInt("reviewId",0)     //리뷰 아이디 넘겨 주면 됨
-                bundle.putString("page","storeDetail")
-                Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_fragment_feed_review_detail,bundle)
+        fun setDatas(data : ResponseStoreDetail?){
+            if(data == null){
+                binding.ivStoreDetailBanner.setImageResource(R.drawable.sample_store_3_img)
+                binding.tvStoreDetailCategory.text = sampleData.categoryName
+                binding.tvStoreDetailName.text = sampleData.storeName
+                binding.tvStoreDetailAddress.text = sampleData.address
+                if(sampleData.pin == 1){
+                    binding.ivStoreDetailSave.setImageResource(R.drawable.save_o_img)
+                }
+
+                //리뷰사진 리사이클러뷰 연결
+                val mStorePhotoAdapter = StoreDetailPhotoAdapter(samplePhotoDataArray)
+                binding.rvStoreDetailPhoto.adapter = mStorePhotoAdapter
+                //리뷰 리사이클러뷰 연결
+                val mReviewAdapter = StoreDetailReviewAdapter()
+                mReviewAdapter.setItemClickListener(object : StoreDetailReviewAdapter.OnItemClickListener{
+                    override fun onClick(v: View, dataSet: StoreDetailReview) {
+                        //데이터 넣기
+                        val bundle = Bundle()
+                        bundle.putInt("reviewId",0)     //리뷰 아이디 넘겨 주면 됨
+                        bundle.putString("page","storeDetail")
+                        Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_fragment_feed_review_detail,bundle)
+                    }
+
+                })
+                mReviewAdapter.submitList(sampleReviewDataArray)
+                binding.rvStoreDetailReview.adapter = mReviewAdapter
+                binding.rvStoreDetailReview.layoutManager = LinearLayoutManager(this.requireActivity())
+            }
+            else{
+                binding.tvStoreDetailCategory.text = data!!.categoryName
+                binding.tvStoreDetailName.text = data!!.storeName
+                binding.tvStoreDetailAddress.text = data!!.address
+                if (data.pin){
+                    binding.ivStoreDetailSave.setImageResource(R.drawable.save_o_img)
+                }
             }
 
-        })
-        mReviewAdapter.submitList(sampleReviewDataArray)
-        binding.rvStoreDetailReview.adapter = mReviewAdapter
-        binding.rvStoreDetailReview.layoutManager = LinearLayoutManager(this.requireActivity())
+        }
+
+        setDatas(gustoViewModel.myStoreDetail)
+
+        gustoViewModel.getStoreDetail(sampleStoreId.toLong(), null){
+            result ->
+            when(result){
+                0 -> {
+                    //success
+                    Toast.makeText(context, "detail 성공", Toast.LENGTH_SHORT).show()
+                    setDatas(gustoViewModel.myStoreDetail)
+                }
+                1 -> {
+                    //fail
+                    Toast.makeText(context, "detail 실패", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+
+
+
+
 
 
         /**
@@ -137,6 +174,7 @@ class StoreDetailFragment : Fragment() {
         /**
          * 더보기 클릭 시 페이징 처리
          */
+        //리사이클러뷰 포거스 관찰 -> 뷰모델에 lastreviewId != null 일때만 서버 연결 후 페이징 처리
 
         /**
          * 리뷰 추가 버튼 클릭 리스너
@@ -149,6 +187,12 @@ class StoreDetailFragment : Fragment() {
         /**
          * 리뷰 페이징
          */
+
+
+        /**
+         * map icon 클릭리스너
+         */
+
 
     }
 }

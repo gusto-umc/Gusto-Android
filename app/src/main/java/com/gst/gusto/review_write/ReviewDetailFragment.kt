@@ -97,6 +97,7 @@ class ReviewDetailFragment : Fragment() {
          */
         var reviewId = 1
         gustoViewModel.myReviewId = reviewId.toLong()
+
         gustoViewModel.getReview(reviewId.toLong()){
             result ->
             when(result){

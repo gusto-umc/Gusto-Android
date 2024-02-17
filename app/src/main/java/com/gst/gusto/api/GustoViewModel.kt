@@ -3,6 +3,7 @@ package com.gst.gusto.api
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gst.gusto.BuildConfig
@@ -776,22 +777,30 @@ class GustoViewModel: ViewModel() {
         })
     }
 
-    // 행정 구역
-    companion object {
-        private const val BASE_URL = "https://dapi.kakao.com/"
-        private const val REST_API_KEY = "70da0c4f2b9dfd637641a4dd22039969"
-    }
-    fun getRegionInfo(x: Double,y : Double, callback: (Int) -> Unit){
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+
 
     //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 
     //내 우치 장소보기 카테고리 array
     var myMapCategoryList : List<ResponseMapCategory>? = null
     var myAllCategoryList : List<ResponseAllCategory>? = null
+
+    private val _cateEditFlag = MutableLiveData<Boolean?>(false)
+    val cateEditFlag: LiveData<Boolean?>
+        get() = _cateEditFlag
+    fun changeEditFlag(flag : Boolean){
+        _cateEditFlag.value = !flag
+    }
+    var selectedCategory = mutableListOf<Int>()
+
+    private val _categoryAllFlag = MutableLiveData<Boolean>(false)
+    val categoryAllFlag : LiveData<Boolean>
+        get() = _categoryAllFlag
+    fun changeCategoryFlag(flag : Boolean){
+        _categoryAllFlag.value = flag
+    }
+    var cateRemoveFlag = false
+
 
     /**
      * 카테고리 api 함수 - mindy
@@ -821,7 +830,7 @@ class GustoViewModel: ViewModel() {
     }
     // 카테고리 수정 -> 확인 완료, comment 일단 제외
     fun editCategory(categoryId: Long, categoryName: String, categoryIcon: Int, public: String, desc: String, callback: (Int) -> Unit){
-        var categoryRequestData = RequestEditCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = "PUBLIC")
+        var categoryRequestData = RequestEditCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = "PUBLIC", myCategoryScript = desc)
         Log.d("checking edit", categoryRequestData.toString())
         Log.d("checking edit", categoryId.toString())
         service.editCategory(token = xAuthToken, myCategoryId = categoryId, data = categoryRequestData).enqueue(object : Callback<Void>{
@@ -919,6 +928,8 @@ class GustoViewModel: ViewModel() {
     var myMapStoreList : List<ResponseStoreListItem>? = null
     var myAllStoreList : List<ResponseStoreListItem>? = null
 
+    var myStoreDetail : ResponseStoreDetail? = null
+
     //가게 카테고리 추가(찜) -> 확인 완, 수정 필요
     fun addPin(categoryId: Long, storeLong: Long, callback: (Int) -> Unit){
         var pinData = RequestPin(storeId = storeLong)
@@ -961,14 +972,16 @@ class GustoViewModel: ViewModel() {
         })
     }
     //가게 상세 조회 -> 수정 필요
-    fun getStoreDetail(storeId: Long, reviewId : Int, visitedDate : String, callback: (Int) -> Unit){
-        service.getStoreDetail(xAuthToken, storeId, reviewId, visitedDate).enqueue(object : Callback<ResponseStoreDetail>{
+    fun getStoreDetail(storeId: Long, reviewId : Int?, callback: (Int) -> Unit){
+        service.getStoreDetail(xAuthToken, storeId, reviewId).enqueue(object : Callback<ResponseStoreDetail>{
             override fun onResponse(
                 call: Call<ResponseStoreDetail>,
                 response: Response<ResponseStoreDetail>
             ) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
+                    Log.d("getStoreDetail", response.body()!!.reviews.toString())
+                    myStoreDetail = response.body()
                     callback(0)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1033,7 +1046,29 @@ class GustoViewModel: ViewModel() {
         })
     }
     //저장된 맛집 리스트 -> 수정 예정
+    fun getSavedStores(townName: String, categoryId : Int?, callback: (Int) -> Unit){
+        service.getSavedStores(xAuthToken, townName = "성수1가1동", categoryId = 3).enqueue(object : Callback<List<ResponseSavedStore>>{
+            override fun onResponse(
+                call: Call<List<ResponseSavedStore>>,
+                response: Response<List<ResponseSavedStore>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.e("getSavedStores", "Successful response: ${response}")
+                    Log.d("getSavedStores", response.body()!![0].toString())
+                    callback(0)
+                } else {
+                    Log.e("getSavedStores", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
 
+            override fun onFailure(call: Call<List<ResponseSavedStore>>, t: Throwable) {
+                Log.e("getSavedStores", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
 
     /**
      * 리뷰 api 함수 - mindy
@@ -1043,7 +1078,7 @@ class GustoViewModel: ViewModel() {
     var myReviewId : Long? = null
     //리뷰 1건 조회 -> 확인 완
     fun getReview(reviewId : Long, callback: (Int) -> Unit){
-        service.getReview(xAuthToken, reviewId).enqueue(object : Callback<ResponseMyReview>{
+        service.getReview(xAuthToken, reviewId.toInt()).enqueue(object : Callback<ResponseMyReview>{
             override fun onResponse(
                 call: Call<ResponseMyReview>,
                 response: Response<ResponseMyReview>
@@ -1114,30 +1149,48 @@ class GustoViewModel: ViewModel() {
      * 검색 api 함수 - mindy
      */
     //검색 결과 -> 작성 예정
+
+
+    // 행정 구역
+    companion object {
+        private const val BASE_URL = "https://dapi.kakao.com/"
+        private const val REST_API_KEY = "70da0c4f2b9dfd637641a4dd22039969"
+    }
+    fun getRegionInfo(x: Double,y : Double, callback: (Int) -> Unit) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
         val tmpService = retrofit.create(GustoApi::class.java)
-        tmpService.getRegionInfo("KakaoAK ${REST_API_KEY}",x.toString(),y.toString()).enqueue(object : Callback<RegionInfoResponse> {
-            override fun onResponse(call: Call<RegionInfoResponse>, response: Response<RegionInfoResponse>) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if(responseBody!=null) {
-                        Log.d("viewmodel", "Successful response: ${response}")
-                        dong = responseBody.documents.get(1).region3DepthName
-                        callback(1)
+        tmpService.getRegionInfo("KakaoAK ${REST_API_KEY}", x.toString(), y.toString())
+            .enqueue(object : Callback<RegionInfoResponse> {
+                override fun onResponse(
+                    call: Call<RegionInfoResponse>,
+                    response: Response<RegionInfoResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            Log.d("viewmodel", "Successful response: ${response}")
+                            dong = responseBody.documents.get(1).region3DepthName
+                            callback(1)
+                        } else {
+                            Log.e("viewmodel", "Unsuccessful response: ${response}")
+                            callback(3)
+                        }
+
                     } else {
                         Log.e("viewmodel", "Unsuccessful response: ${response}")
                         callback(3)
                     }
+                }
 
-                } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                override fun onFailure(call: Call<RegionInfoResponse>, t: Throwable) {
+                    Log.e("viewmodel", "Failed to make the request", t)
                     callback(3)
                 }
-            }
-            override fun onFailure(call: Call<RegionInfoResponse>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(3)
-            }
-        })
+            })
     }
+
 
 }
