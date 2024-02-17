@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="64dp"
     android:orientation="vertical"
+
     android:paddingLeft="32dp">
 
     <ImageView
@@ -68,6 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginRight="30dp"
+            android:layout_marginTop="2dp"
             android:background="@drawable/background_radius_5"
             android:backgroundTint="#F9F9F9"
             android:elevation="2dp"

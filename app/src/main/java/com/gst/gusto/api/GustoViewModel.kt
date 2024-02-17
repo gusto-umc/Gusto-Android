@@ -107,6 +107,33 @@ class GustoViewModel: ViewModel() {
         refreshToken = activity.getSharedPref().second
     }
 
+    // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+    fun getCurrentMapStores(callback: (Int,List<RouteList>?) -> Unit){
+        Log.e("token",xAuthToken)
+        Log.d("viewmodel","view : ${dong}")
+        service.getCurrentMapStores(xAuthToken,dong,null).enqueue(object : Callback<List<RouteList>> {
+            override fun onResponse(call: Call<List<RouteList>>, response: Response<List<RouteList>>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    myRouteList.clear()
+                    if(responseBody!=null) {
+                        Log.d("viewmodel", "Successful response: ${response}")
+                        callback(1,responseBody)
+                    } else {
+                        Log.e("viewmodel", "Unsuccessful response: ${response}")
+                        callback(3,null)
+                    }
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3,null)
+                }
+            }
+            override fun onFailure(call: Call<List<RouteList>>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3,null)
+            }
+        })
+    }
 
     // 내 루트 조회
     fun getMyRoute(callback: (Int) -> Unit){
