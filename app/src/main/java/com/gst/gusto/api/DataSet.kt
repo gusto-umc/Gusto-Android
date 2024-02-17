@@ -1,9 +1,7 @@
 package com.gst.gusto.api
 
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDate
 import java.util.Date
-import java.io.Serial
 
 // 내 루트 조회
 data class Routes(
@@ -334,4 +332,10 @@ data class ResponseCalReviews(
 // cal Review (calendar Review) 조회
 data class ResponseCalReview(
      @SerializedName("reviews") val reviews: List<ResponseCalReviews>
+)
+
+// 먹스또 랜덤 피드
+data class ResponseFeedReview(
+    @SerializedName("reviewId") val reviewId: Long,
+    @SerializedName("images") val images: String
 )

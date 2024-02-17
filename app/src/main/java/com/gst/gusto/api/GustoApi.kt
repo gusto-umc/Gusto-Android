@@ -371,4 +371,9 @@ interface GustoApi {
         @Query("y") latitude: String
     ): Call<RegionInfoResponse>
 
+    @GET("feeds") // 먹스또 랜덤 피드
+    fun feed(
+        @Header("X-AUTH-TOKEN") token: String
+    ):Call<ArrayList<ResponseFeedReview>>
+
 }
