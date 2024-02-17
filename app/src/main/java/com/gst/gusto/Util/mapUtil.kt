@@ -6,14 +6,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.location.Geocoder
 import android.location.Location
 import android.util.Log
 import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.LocationServices
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
@@ -28,14 +25,14 @@ import net.daum.mf.map.api.MapView
 class mapUtil {
     companion object {
         data class MarkerItem(
-            val storeId: Long,
-            var ordinal: Int,
-            val routeListId: Int,
-            var latitude: Double,
-            var longitude: Double,
-            val storeName: String,
-            val address: String,
-            val bookMark: Boolean
+                val storeId: Long,
+                var ordinal: Int,
+                val routeListId: Long,
+                var latitude: Double,
+                var longitude: Double,
+                val storeName: String,
+                val address: String,
+                val bookMark: Boolean
         )
 
         private val MAPPERMISSIONS = arrayOf(

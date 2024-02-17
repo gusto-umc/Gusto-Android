@@ -20,13 +20,14 @@ data class RouteList(
     @SerializedName("storeId") val storeId : Long,
     @SerializedName("ordinal") val ordinal : Int,
     // 루트 상세 조회
-    @SerializedName("routeListId") val routeListId : Int?,
+    @SerializedName("routeListId") val routeListId : Long?,
     @SerializedName("storeName") val storeName : String?,
     @SerializedName("address") val address : String?,
     // 루트 지도 조회
-    @SerializedName("longtitude") val longtitude : Double?,
+    @SerializedName("longitude") val longitude : Double?,
     @SerializedName("latitude") val latitude : Double?
 )
+
 // 루트 상세 조회
 data class ResponseRouteDetail(
     @SerializedName("routeId") val routeId : Long,
@@ -322,6 +323,24 @@ data class RegionDocument(
     @SerializedName("y") val latitude: Double
 )
 
+data class ResponseFeedDetail(
+    @SerializedName("storeId") val storeId: Long,
+    @SerializedName("storeName") val storeName: String,
+    @SerializedName("address") val address: String,
+    @SerializedName("nickName") val nickName: String,
+    @SerializedName("profileImage") val profileImage: String,
+    @SerializedName("likeCnt") val likeCnt: Int,
+    @SerializedName("likeCheck") val likeCheck: Boolean,
+    @SerializedName("images") val images: List<String>,
+    @SerializedName("menuName") val menuName: String,
+    @SerializedName("hashTags") val hashTags: String,
+    @SerializedName("taste") val taste: Int,
+    @SerializedName("spiciness") val spiciness: Int,
+    @SerializedName("mood") val mood: Int,
+    @SerializedName("toilet") val toilet: Int,
+    @SerializedName("parking") val parking: Int,
+    @SerializedName("comment") val comment: String
+  )
 // cal Review (calendar Review) 조회- reviews
 data class ResponseCalReviews(
     @SerializedName("reviewId") val reviewId: Long,
@@ -338,4 +357,4 @@ data class ResponseCalReview(
 data class ResponseFeedReview(
     @SerializedName("reviewId") val reviewId: Long,
     @SerializedName("images") val images: String
-)
+

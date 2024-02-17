@@ -57,14 +57,11 @@ class ReviewDetailFragment : Fragment() {
         /**
          * 이미지 슬라이드 기본 설정
           */
-        val imageList = mutableListOf<Int>(
-            R.drawable.review_gallery_test,
-            R.drawable.review_gallery_test2,
-            R.drawable.review_gallery_test
-            // Add more images as needed
+        val imageList = mutableListOf<String>(
+                ""
         )
 
-        fun settingImages(imageList : MutableList<Int>){
+        fun settingImages(imageList : List<String>){
             val viewPager = binding.vpImgSlider
 
             val adapter = ImageViewPagerAdapter(imageList)
@@ -109,8 +106,8 @@ class ReviewDetailFragment : Fragment() {
                         binding.tvHeartNum.text = gustoViewModel.myReview!!.likeCnt.toString()
                         //이미지 처리
                         if(!gustoViewModel.myReview!!.img.isNullOrEmpty()){
-                            var reviewImageList : MutableList<Int>? = null
-
+                            var reviewImageList : MutableList<String>? = null
+                            //settingImages(gustoViewModel.myReview!!.img) 이걸로 담아야햄
                         }
                         else{
                             settingImages(imageList)

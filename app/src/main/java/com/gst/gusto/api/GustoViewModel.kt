@@ -1,8 +1,6 @@
 package com.gst.gusto.api
 
-import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,11 +9,9 @@ import com.gst.gusto.MainActivity
 import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.RestItem
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,9 +28,17 @@ class GustoViewModel: ViewModel() {
     private val service = retrofit.create(GustoApi::class.java)
     private var xAuthToken = ""
     private var refreshToken = ""
+    // 해쉬 태그
+    val hashTag = listOf<String>("#따뜻함","#여기서는 화장실 금지","#쾌적","#귀여워","#깨끗함","#인스타","#힙함","#나름 괜찮아","#넓음","#분위기","#가성비")
 
     // 자신의 루트 리스트 - (val title : String, val people : Int, val food : Int, val route : Int)
     val myRouteList = ArrayList<GroupItem>()
+    // 루트 이름
+    var routeName = ""
+    // 루트 편집 정보
+    var removeRoute = ArrayList<Long>()
+    var addRoute = ArrayList<Long>()
+
     // 루트 생성 데이터
     var requestRoutesData : RequestCreateRoute? = null
     // 자신의 그룹 리스트
@@ -83,10 +87,15 @@ class GustoViewModel: ViewModel() {
     }
 
     // 선택한 음식점
-    var selectStoreId =  0L
+    var selectStoreId =  2L
 
     // 현재 동
     var dong = ""
+
+    // 현재 피드 리뷰 아이디
+    var currentFeedReviewId = 2L
+    // 현재 피드 리뷰 데이터
+    lateinit var currentFeedData :ResponseFeedDetail
 
 
 
@@ -153,10 +162,11 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     val responseBody = response.body()
                     if(responseBody !=null) {
+                        Log.d("viewmodel",responseBody.toString())
                         for(data in responseBody) {
                             val tmp = markerListLiveData.value?.get(data.ordinal-1)
                             if (tmp != null) {
-                                tmp.longitude = data.longtitude!!
+                                tmp.longitude = data.longitude!!
                                 tmp.latitude = data.latitude!!
                             }
                         }
@@ -202,6 +212,7 @@ class GustoViewModel: ViewModel() {
                             // ordinal 속성을 기준으로 리스트를 정렬
                             list.sortBy { it.ordinal }
                         }
+                        routeName = responseBody.routeName
                         callback(1)
                     } else callback(2)
 
@@ -236,9 +247,28 @@ class GustoViewModel: ViewModel() {
         })
     }
     // 루트 내 식당 삭제
-    fun deleteRouteStore(routeListId : Int,callback: (Int) -> Unit){
+    fun deleteRouteStore(routeListId : Long,callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
         service.deleteRouteStore(xAuthToken, routeListId).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel", "Successful response: ${response}")
+                    callback(1)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2)
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(2)
+            }
+        })
+    }
+    // 루트 내 식당 추가 (공통)
+    fun addRouteStore(storeId : Long, ordinal : Int,callback: (Int) -> Unit){
+        Log.e("token",xAuthToken)
+        service.addRouteStore(xAuthToken,currentRouteId,RouteList(storeId,ordinal,null,null,null,null,null)).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Log.d("viewmodel", "Successful response: ${response}")
@@ -356,7 +386,7 @@ class GustoViewModel: ViewModel() {
         service.getGroup(xAuthToken,currentGroupId).enqueue(object : Callback<ResponseGroup> {
             override fun onResponse(call: Call<ResponseGroup>, response: Response<ResponseGroup>) {
                 if (response.isSuccessful) {
-                    Log.d("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel", "Successful response: ${response}, data : ${response.body()!!}")
                     callback(1, response.body()!!)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -452,7 +482,7 @@ class GustoViewModel: ViewModel() {
         service.transferOwnership(xAuthToken,currentGroupId, NewOwner(newOwner)).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    Log.d("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel", "Successful response: ${response}, id:${newOwner}")
                     callback(1)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -575,9 +605,9 @@ class GustoViewModel: ViewModel() {
     }
 
     // 리뷰 좋아요 취소
-    fun unlickReview(reviewId: Long,callback: (Int) -> Unit){
+    fun unlickReview(callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
-        service.unlickReview(xAuthToken,reviewId).enqueue(object : Callback<ResponseBody> {
+        service.unlickReview(xAuthToken,currentFeedReviewId).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Log.d("viewmodel", "Successful response: ${response}")
@@ -595,9 +625,9 @@ class GustoViewModel: ViewModel() {
     }
 
     // 리뷰 좋아요
-    fun lickReview(reviewId: Long,callback: (Int) -> Unit){
+    fun lickReview(callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
-        service.lickReview(xAuthToken,reviewId).enqueue(object : Callback<ResponseBody> {
+        service.lickReview(xAuthToken,currentFeedReviewId).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Log.d("viewmodel", "Successful response: ${response}")
@@ -667,6 +697,32 @@ class GustoViewModel: ViewModel() {
                 }
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3)
+            }
+        })
+    }
+    // 먹스또 피드 상세 보기
+    fun getFeedReview(callback: (Int) -> Unit){
+        Log.e("token",xAuthToken)
+        service.getFeedReview(xAuthToken,currentFeedReviewId).enqueue(object : Callback<ResponseFeedDetail> {
+            override fun onResponse(call: Call<ResponseFeedDetail>, response: Response<ResponseFeedDetail>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if(responseBody!=null) {
+                        Log.d("viewmodel", "Successful response: ${response}")
+                        currentFeedData = responseBody
+                        callback(1)
+                    } else {
+                        Log.e("viewmodel", "Unsuccessful response: ${response}")
+                        callback(3)
+                    }
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3)
+                }
+            }
+            override fun onFailure(call: Call<ResponseFeedDetail>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
                 callback(3)
             }

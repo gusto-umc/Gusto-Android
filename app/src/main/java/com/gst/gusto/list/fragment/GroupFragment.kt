@@ -152,17 +152,18 @@ class GroupFragment : Fragment() {
                 gustoViewModel.transferOwnership(otherGroupMemberId) {result ->
                     when(result) {
                         1 -> {
+                            /*gustoViewModel.leaveGroup {result ->
+                                when(result) {
+                                    1 -> {
+                                        findNavController().popBackStack()
+                                    }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                                }
+                            }*/
                         }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-            gustoViewModel.leaveGroup {result ->
-                when(result) {
-                    1 -> {
-                        findNavController().popBackStack()
-                    }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                }
-            }
+
         }
         binding.btnOnerRemove.setOnClickListener {
             gustoViewModel.deleteGroup {result ->

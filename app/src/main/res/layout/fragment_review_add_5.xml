@@ -54,15 +54,15 @@
 
         <TextView
             android:id="@+id/tv_upload1"
-            android:layout_width="220dp"
-            android:layout_height="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:layout_marginBottom="12dp"
             android:textColor="@color/black"
             android:fontFamily="@font/pretendard_black"
             android:textSize="20sp"
-            android:text="구스또 레스토랑에 어울리는 해시태그를 선택해주세요" />
+            android:text="구스또 레스토랑에 어울리는\n해시태그를 선택해주세요" />
 
         <LinearLayout
             android:layout_marginHorizontal="23dp"

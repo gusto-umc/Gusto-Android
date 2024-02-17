@@ -305,8 +305,8 @@
             android:id="@+id/action_feedDetailReview_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
         <action
-            android:id="@+id/action_feedDetailReview_to_myFragment"
-            app:destination="@id/fragment_my" />
+            android:id="@+id/action_feedDetailReview_to_otherFragment"
+            app:destination="@id/fragment_other" />
         <action
             android:id="@+id/action_feedDetailReview_to_feedFragment"
             app:destination="@id/fragment_feed" />
@@ -319,12 +319,6 @@
         android:label="FragmentMy"
         tools:layout="@layout/fragment_my">
         <action
-            android:id="@+id/action_myFragment_to_reviewAdd1Fragment"
-            app:destination="@id/fragment_review_add_1" />
-        <action
-            android:id="@+id/action_myFragment_to_myProfileFragment"
-            app:destination="@id/fragment_my_profile" />
-        <action
             android:id="@+id/action_myFragment_to_followList"
             app:destination="@id/fragment_follow_list" />
         <action
@@ -333,6 +327,12 @@
         <action
             android:id="@+id/action_myFragment_to_reviewDetail"
             app:destination="@id/fragment_review_detail" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_other"
+        android:name="com.gst.gusto.my.OtherFragment"
+        android:label="FragmentOther"
+        tools:layout="@layout/fragment_my">
     </fragment>
     <fragment
         android:id="@+id/fragment_my_profile"

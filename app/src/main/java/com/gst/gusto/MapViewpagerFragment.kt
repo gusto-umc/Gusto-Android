@@ -7,11 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -19,7 +16,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
-import com.gst.gusto.databinding.FragmentListGroupMRouteMapBinding
 import com.gst.gusto.databinding.FragmentMapViewpagerBinding
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter
 import net.daum.mf.map.api.CameraUpdateFactory
@@ -51,11 +47,12 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.d("viewmodel","hi")
         val viewPager = binding.vpSlider
 
         val markers = ArrayList<mapUtil.Companion.MarkerItem>()
         // 이미지 슬라이드
-        val adapter = RouteViewPagerAdapter(markers,requireActivity() as MainActivity)
+        val adapter = RouteViewPagerAdapter(markers,requireActivity() as MainActivity,1)
         viewPager.adapter = adapter
 
         viewPager.offscreenPageLimit = 1
@@ -91,17 +88,16 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
 
         mapUtil.setMapInit(mapView, binding.kakaoMapSearch, requireContext(), requireActivity(),"route")
 
-
-
-        for((index, id) in gustoViewModel.storeIdList.withIndex()) {
+        var num = 2
+        for( id in gustoViewModel.storeIdList) {
+            var selectAfter = 0
             gustoViewModel.getStoreDetailQuick(id) {result, data ->
                 when(result) {
                     1 -> {
                         if (data != null) {
-                            Log.d("viewmodel",data.toString())
                             val tmpData = mapUtil.Companion.MarkerItem(
                                 data.storeId,
-                                0,
+                                num++,
                                 0,
                                 data.latitude,
                                 data.longitude,
@@ -109,16 +105,19 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
                                 data.address,
                                 data.pin
                             )
-                            if(id== gustoViewModel.selectStoreId) {
-                                markers.add(tmpData)
-                            } else {
-                                tmpData.ordinal = index+1
-                                markers.add(tmpData)
-                            }
+                            if(data.storeId == gustoViewModel.selectStoreId) {
+                                tmpData.ordinal = 1
+                                num--
+                                markers.add(0,tmpData)
+                            } else markers.add(tmpData)
+                            Log.d("viewmodel","${tmpData.toString()}, ${markers.size+2}, ${gustoViewModel.storeIdList.size-1}")
                         }
-                        if (index == gustoViewModel.storeIdList.size - 1) {
+                        if (markers.size == gustoViewModel.storeIdList.size) {
+                            Log.d("viewmodel","set marker!!!")
                             mapUtil.setStores(mapView, markers)
+                            adapter.notifyDataSetChanged()
                         }
+
                     }
                     else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                 }
@@ -135,7 +134,6 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
         binding.vpSlider.visibility = View.VISIBLE
 
         if (poiItem != null) {
-            Log.d("viewmodel","num : ${poiItem.itemName.toInt()-1}")
             binding.vpSlider.currentItem = poiItem.itemName.toInt()-1
         }
     }

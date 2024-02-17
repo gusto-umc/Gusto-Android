@@ -1,6 +1,7 @@
 package com.gst.gusto.list.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,15 +73,21 @@ class RouteStoresFragment : Fragment() {
         val boardAdapter = MapRoutesAdapter(itemList,binding.lyNull,requireActivity())
         boardAdapter.notifyDataSetChanged()
 
+        binding.tvRouteName.text = gustoViewModel.routeName
         binding.rvRoutes.adapter = boardAdapter
         binding.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
         gustoViewModel.groupFragment = 0
         gustoViewModel.listFragment="route"
-        gustoViewModel.markerListLiveData.value?.clear()
+        //gustoViewModel.markerListLiveData.value?.clear()
     }
 
 

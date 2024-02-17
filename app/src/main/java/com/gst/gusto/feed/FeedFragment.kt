@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseFeedReview
 import com.gst.gusto.api.ResponseInstaReviews
@@ -23,9 +24,9 @@ import com.gst.gusto.review.adapter.GridItemDecoration
 class FeedFragment : Fragment() {
 
     lateinit var binding: FragmentFeedBinding
+    private val gustoViewModel : GustoViewModel by activityViewModels()
     lateinit var adapter: FeedReviewAdapter
 
-    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     val bundle = Bundle()
 
@@ -46,10 +47,13 @@ class FeedFragment : Fragment() {
 
         adapter = FeedReviewAdapter(ArrayList(), context,
             itemClickListener = { reviewId ->
-                val bundle = Bundle()
-                bundle.putLong("reviewId", reviewId)     //리뷰 아이디 넘겨 주면 됨
-                bundle.putString("page","feed")
-                findNavController().navigate(R.id.action_feedFragment_to_feedDetailReviewFragment,bundle)
+                gustoViewModel.getFeedReview{ result ->
+                    when(result) {
+                        1 -> {
+                            findNavController().navigate(R.id.action_feedFragment_to_feedDetailReviewFragment)
+                        }
+                    }
+                }
             })
 
         binding.apply {

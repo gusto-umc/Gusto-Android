@@ -52,8 +52,10 @@ class MapRoutesAdapter(
                 notifyItemRangeChanged(position,getItemCount())
                 if(activity!=null) {
                     val parentActivity = activity as MainActivity
-                    parentActivity.getViewModel().markerListLiveData.value = itemList
-
+                    val gustoVM = parentActivity.gustoViewModel
+                    gustoVM.markerListLiveData.value = itemList
+                    if(gustoVM.addRoute.contains(itemList[position].storeId)) gustoVM.addRoute.remove(itemList[position].storeId)
+                    else gustoVM.removeRoute.add(itemList[position].routeListId)
                 }
             }
         } else {

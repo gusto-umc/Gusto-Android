@@ -22,6 +22,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.dpToPixels
+import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentFeedDetailBinding
 import com.gst.gusto.review_write.adapter.HowItem
@@ -38,6 +39,7 @@ class FeedDetailReviewFragment : Fragment() {
     private lateinit var bounceInterpolator: BounceInterpolator
     private val gustoViewModel : GustoViewModel by activityViewModels()
     lateinit var page : String
+    private var likeIt = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,9 +52,8 @@ class FeedDetailReviewFragment : Fragment() {
         }
         binding.btnProfile.setOnClickListener {
             val bundle = Bundle()
-            bundle.putBoolean("me",false)
             bundle.putString("nickname","mindddy")
-            findNavController().navigate(R.id.action_feedDetailReview_to_myFragment,bundle)
+            findNavController().navigate(R.id.action_feedDetailReview_to_otherFragment,bundle)
         }
         binding.restInfo.setOnClickListener {
             findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
@@ -65,16 +66,24 @@ class FeedDetailReviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // 데이터 세팅
+        val feedDetail = gustoViewModel.currentFeedData
+        binding.tvRestName.text = feedDetail.storeName
+        binding.tvRestLoc.text = feedDetail.address
+        binding.tvNickname.text = feedDetail.nickName
+        setImage(binding.ivProfileImage,feedDetail.profileImage,requireContext())
+        binding.tvHeartNum.text = "${feedDetail.likeCnt}"
+        val imageList = mutableListOf<String>()
+        for(image in feedDetail.images) {
+            imageList.add(image)
+        }
+        binding.tvMenuName.text = feedDetail.menuName
+        for(tagNum in feedDetail.hashTags.split(",").map{it.toInt()}) {
+            addChip(gustoViewModel.hashTag[tagNum])
+        }
+        binding.tvMemo.text = feedDetail.comment
 
         val viewPager = binding.vpImgSlider
-        val imageList = mutableListOf<Int>(
-            R.drawable.sample_store_img,
-            R.drawable.sample_store_2_img,
-            R.drawable.sample_store_3_img
-            // Add more images as needed
-        )
-
-
         // 이미지 슬라이드
         val adapter = ImageViewPagerAdapter(imageList)
         viewPager.adapter = adapter
@@ -96,16 +105,10 @@ class FeedDetailReviewFragment : Fragment() {
         })
         viewPager.setPageTransformer(compositePageTransformer)
 
-        // 해쉬태그
-        addChip("# 안매운")
-        addChip("# 분위기")
-        addChip("# 화장실")
-        addChip("# 주차장")
-        addChip("# 가성비")
 
         // 평가 리사이클러뷰
         val rv_board = binding.rvHows
-        val howList = mutableListOf(3,3,3,3,3)
+        val howList = mutableListOf(feedDetail.taste,feedDetail.spiciness,feedDetail.mood,feedDetail.toilet,feedDetail.parking)
         val howAdapter = ReviewHowAdapter(howList,1)
         howAdapter.notifyDataSetChanged()
 
@@ -134,15 +137,20 @@ class FeedDetailReviewFragment : Fragment() {
         scaleDownAnimation.interpolator = bounceInterpolator
         binding.btnHeart.setOnClickListener {
             if (it.isSelected) {
+                // 좋아요 취소
+                likeIt = 2
                 binding.ivHeart.setColorFilter(null)
                 it.startAnimation(scaleDownAnimation)
             } else {
+                // 좋아요
+                likeIt = 1
                 val color = ContextCompat.getColor(requireContext(), R.color.main_C)
                 binding.ivHeart.setColorFilter(color)
                 it.startAnimation(scaleUpAnimation)
             }
             it.isSelected = !it.isSelected
         }
+        if(feedDetail.likeCheck) binding.btnHeart.callOnClick()
     }
 
     private fun addChip(text:String) {
@@ -171,6 +179,28 @@ class FeedDetailReviewFragment : Fragment() {
         chip.layoutParams = layoutParams
 
         chipGroup.addView(chip)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(likeIt==1) {
+            gustoViewModel.lickReview{ result ->
+                when(result) {
+                    1 -> {
+
+                    }
+                }
+            }
+        } else if(likeIt==2) {
+            gustoViewModel.unlickReview{ result ->
+                when(result) {
+                    1 -> {
+
+                    }
+                }
+            }
+        }
+
     }
 
 
