@@ -50,7 +50,7 @@ class ListReviewFragment : Fragment() {
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(activity)
         }
-
+        
         gustoViewModel.getTokens(requireActivity() as MainActivity)
         gustoViewModel.timeLineView(null, 31) { result , response ->
             when(result){
@@ -62,7 +62,7 @@ class ListReviewFragment : Fragment() {
             }
 
         }
-
+        
         return binding.root
     }
 

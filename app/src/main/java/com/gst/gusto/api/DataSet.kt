@@ -1,9 +1,9 @@
 package com.gst.gusto.api
 
 import com.google.gson.annotations.SerializedName
+import java.time.LocalDate
 import java.util.Date
 import java.io.Serial
-
 
 // 내 루트 조회
 data class Routes(
@@ -127,7 +127,7 @@ data class ResponseListReviews(
 data class ResponseListReview(
     @SerializedName("reviews") val reviews: List<ResponseListReviews>,
     @SerializedName("hasNext") val hasNext: Boolean
-=======
+)
 
 //카테고리 추가, 수정 request body
 data class RequestAddCategory(
@@ -273,7 +273,7 @@ data class RequestCreateReview(
     @SerializedName("mood") val mood : Int?,
     @SerializedName("toilet") val toilet : Int?,
     @SerializedName("parking") val parking : Int?,
-    @SerializedName("comment") val comment : String?
+@SerializedName("comment") val comment : String?
 )
 
 // insta (gallery) review 조회- reviews
@@ -322,4 +322,16 @@ data class RegionDocument(
     @SerializedName("code") val code: String,
     @SerializedName("x") val longitude: Double,
     @SerializedName("y") val latitude: Double
+)
+
+// cal Review (calendar Review) 조회- reviews
+data class ResponseCalReviews(
+    @SerializedName("reviewId") val reviewId: Long,
+    @SerializedName("visitedDate") val visitedDate: String,
+    @SerializedName("images") val images: String
+)
+
+// cal Review (calendar Review) 조회
+data class ResponseCalReview(
+     @SerializedName("reviews") val reviews: List<ResponseCalReviews>
 )
