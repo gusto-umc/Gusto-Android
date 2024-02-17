@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.gst.clock.Fragment.MyReviewFragment
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
@@ -39,17 +40,19 @@ class MyFragment : Fragment() {
     ): View? {
         binding = FragmentMyBinding.inflate(inflater, container, false)
         initViewPager()
+
         val meMode = arguments?.getBoolean("me", true) ?: true
-        val nickname = arguments?.getString("nickname", "beoru") ?: "beoru"
+        val nickname = arguments?.getString("nickname", "my") ?: "my"
 
         gustoViewModel.getUserProfile(nickname) { result, data ->
             when(result) {
                 1 -> {
                     if(data!=null) {
                         Log.d("viewmodel",data.toString())
+                        setImage(binding.ivProfileImage,data.profileImg,requireContext())
                         binding.tvNickname.text = data.nickname
                         binding.tvReviewNum.text = "${data.review}"
-                        binding.tvFollowingNum.text = "${data.pin}"
+                        binding.tvFollowingNum.text = "${data.following}"
                         binding.tvFollowerNum.text = "${data.follower}"
                         //setImage(binding.ivProfileImage)
                         followed = data.followed
@@ -92,6 +95,7 @@ class MyFragment : Fragment() {
                                     followed = false
                                     btnProfileEdit.backgroundTintList = colorStateOnList
                                     btnProfileEdit.text = "팔로우"
+                                    tvFollowingNum.text ="${tvFollowingNum.text.toString().toInt()-1}"
                                     binding.btnProfileEdit.setTextColor(Color.parseColor("#FFFFFF"))
                                 }
                             }
@@ -103,6 +107,7 @@ class MyFragment : Fragment() {
                                     followed = true
                                     btnProfileEdit.backgroundTintList = colorStateOffList
                                     btnProfileEdit.text = "팔로잉"
+                                    tvFollowingNum.text ="${tvFollowingNum.text.toString().toInt()+1}"
                                     binding.btnProfileEdit.setTextColor(Color.parseColor("#717171"))
                                 }
                             }
@@ -116,14 +121,21 @@ class MyFragment : Fragment() {
                     gustoViewModel.getFollower {result ->
                         when(result) {
                             1 -> {
-                                findNavController().navigate(R.id.action_groupFragment_to_followListFragment)
+                                findNavController().navigate(R.id.action_myFragment_to_followList)
                             }
                             else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
                 btnFollowingList.setOnClickListener {
-                    findNavController().navigate(R.id.action_myFragment_to_followList)
+                    gustoViewModel.getFollowing {result ->
+                        when(result) {
+                            1 -> {
+                                findNavController().navigate(R.id.action_myFragment_to_followList)
+                            }
+                            else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
 

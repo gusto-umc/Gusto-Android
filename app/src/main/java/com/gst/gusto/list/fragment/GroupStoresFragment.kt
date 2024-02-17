@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +29,10 @@ class GroupStoresFragment : Fragment() {
             gustoViewModel.addGroupStore(2) {result ->
                 when(result) {
                     1 -> {
-
+                        checkGroupStores()
+                    }
+                    else -> {
+                        Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -40,22 +44,42 @@ class GroupStoresFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val rv_board = binding.rv
-
-        var itemList = ArrayList<RestItem>()
-
         gustoViewModel.getGroupStores {result ->
             when(result) {
                 1 -> {
+                    val rv_board = binding.rv
+                    var itemList = ArrayList<RestItem>()
                     itemList = gustoViewModel.storeListLiveData
-                    val boardAdapter = GroupAdapter(itemList)
+                    val boardAdapter = GroupAdapter(itemList,gustoViewModel,this)
                     boardAdapter.notifyDataSetChanged()
                     rv_board.adapter = boardAdapter
                     rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 }
+                else -> {
+                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
+    }
+
+    fun checkGroupStores() {
+        gustoViewModel.getGroupStores {result ->
+            when(result) {
+                1 -> {
+                    val rv_board = binding.rv
+                    var itemList = ArrayList<RestItem>()
+                    itemList = gustoViewModel.storeListLiveData
+                    val boardAdapter = GroupAdapter(itemList,gustoViewModel,this)
+                    boardAdapter.notifyDataSetChanged()
+                    rv_board.adapter = boardAdapter
+                    rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                }
+                else -> {
+                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
 }

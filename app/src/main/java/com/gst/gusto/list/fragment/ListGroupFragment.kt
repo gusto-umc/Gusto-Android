@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -25,22 +26,6 @@ class ListGroupFragment : Fragment() {
     ): View? {
         binding = FragmentListGroupBinding.inflate(inflater, container, false)
 
-        val rv_board = binding.rvListGourp
-
-        val itemList = ArrayList<GroupItem>()
-
-        fun callActivityFunction(): NavController {
-            return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
-        }
-
-        val boardAdapter = LisAdapter(itemList, callActivityFunction(), 0,gustoViewModel)
-        boardAdapter.notifyDataSetChanged()
-
-        rv_board.adapter = boardAdapter
-        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-
-
         return binding.root
 
     }
@@ -56,21 +41,37 @@ class ListGroupFragment : Fragment() {
             return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
         }
 
-        val rv_board = binding.rvListGourp
-
-        var itemList = ArrayList<GroupItem>()
 
         gustoViewModel.getTokens(requireActivity() as MainActivity)
         gustoViewModel.getGroups {result ->
             when(result) {
                 1 -> {
+                    var itemList = ArrayList<GroupItem>()
+                    val rv_board = binding.rvListGourp
                     itemList = gustoViewModel.myGroupList
-                    val boardAdapter = LisAdapter(itemList, callActivityFunction(), 0, gustoViewModel)
+                    val boardAdapter = LisAdapter(itemList, callActivityFunction(), 0, gustoViewModel,null)
                     boardAdapter.notifyDataSetChanged()
                     rv_board.adapter = boardAdapter
                     rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 } else -> {
-
+                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+    fun checkGroups() {
+        gustoViewModel.getGroups {result ->
+            when(result) {
+                1 -> {
+                    var itemList = ArrayList<GroupItem>()
+                    val rv_board = binding.rvListGourp
+                    itemList = gustoViewModel.myGroupList
+                    val boardAdapter = LisAdapter(itemList, (requireActivity() as MainActivity).getCon(), 0, gustoViewModel,null)
+                    boardAdapter.notifyDataSetChanged()
+                    rv_board.adapter = boardAdapter
+                    rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                } else -> {
+                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -10,7 +10,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
-import android.os.Parcelable
 import android.os.SystemClock
 import android.os.ext.SdkExtensions
 import android.provider.MediaStore
@@ -98,7 +97,7 @@ class util {
          * @return null
          */
         fun setImage(imageView: ImageView, url : String, context: Context) {
-            Glide.with(context).load(url).placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).into(imageView)
+            Glide.with(context).load(url).placeholder(R.drawable.gst_dummypic).error(R.drawable.gst_dummypic).into(imageView)
         }
 
 
@@ -160,7 +159,16 @@ class util {
             })
             mDialogView.findViewById<TextView>(R.id.tv_dialog_one_desc).text  = desc
         }
-        fun setPopupTwo(context: Context, title: String, theView : View, desc : String, flag : String){
+        /**
+         * 작업자 : 민디, 버루
+         * 이 메서드는 버튼이 두개인 팝업 띄우기
+         * @param context 해당 context
+         * @param title 제목 text
+         * @param desc 제목 desc
+         * @param option  0 (예, 아니요), 1(확인, 취소)
+         * @return 0 or 1 [0 예(확인), 1 아니요(취소)]
+         */
+        fun setPopupTwo(context: Context, title: String,  desc : String, option : Int, callback: (Int) -> Unit){
             val mDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_two_button, null)
             val mBuilder = AlertDialog.Builder(context)
                 .setView(mDialogView)
@@ -180,19 +188,24 @@ class util {
             val popupWidth = (screenWidth * 0.8).toInt()
             mBuilder?.window?.setLayout(popupWidth, WindowManager.LayoutParams.WRAP_CONTENT)
 
-            //flag별 동작 적용
-
+            if(option==1) {
+                mDialogView.findViewById<TextView>(R.id.btn_dialog_two_no).text = "취소"
+                mDialogView.findViewById<TextView>(R.id.btn_dialog_two_yes).text = "확인"
+            }
             mDialogView.findViewById<TextView>(R.id.tv_dialog_two_text).text = title
-            mDialogView.findViewById<TextView>(R.id.tv_dialog_two_desc).text = desc
-            mDialogView.findViewById<TextView>(R.id.btn_dialog_two_no).text = "no"
-            mDialogView.findViewById<TextView>(R.id.btn_dialog_two_yes).text = "yes"
-
-            mDialogView.findViewById<TextView>(R.id.btn_dialog_two_no).setOnClickListener {
-                mBuilder.dismiss()
+            if(desc!="") {
+                mDialogView.findViewById<TextView>(R.id.tv_dialog_two_desc).text = desc
+                mDialogView.findViewById<TextView>(R.id.tv_dialog_two_desc).visibility = View.VISIBLE
             }
 
             mDialogView.findViewById<TextView>(R.id.btn_dialog_two_yes).setOnClickListener {
                 mBuilder.dismiss()
+                callback(0)
+            }
+
+            mDialogView.findViewById<TextView>(R.id.btn_dialog_two_no).setOnClickListener {
+                mBuilder.dismiss()
+                callback(1)
             }
         }
 

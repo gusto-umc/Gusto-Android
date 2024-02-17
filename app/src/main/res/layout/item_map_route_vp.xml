@@ -45,10 +45,10 @@
                     android:layout_weight="1"/>
                 <ImageView
                     android:id="@+id/btn_bookmark"
-                    android:layout_width="29dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/arrow_right_bold"/>
+                    android:src="@drawable/save_x_img"/>
             </LinearLayout>
             <TextView
                 android:id="@+id/tv_rest_loc"
@@ -72,9 +72,10 @@
                     android:layout_height="52dp"
                     app:cardCornerRadius="8dp">
                     <ImageView
+                        android:id="@+id/iv_1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/ic_launcher_background"/>
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
@@ -83,9 +84,10 @@
                     android:layout_marginHorizontal="12dp"
                     app:cardCornerRadius="8dp">
                     <ImageView
+                        android:id="@+id/iv_2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/ic_launcher_background"/>
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
@@ -93,9 +95,10 @@
                     android:layout_height="52dp"
                     app:cardCornerRadius="8dp">
                     <ImageView
+                        android:id="@+id/iv_3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/ic_launcher_background"/>
                 </androidx.cardview.widget.CardView>
 

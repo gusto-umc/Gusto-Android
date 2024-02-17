@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
@@ -28,17 +30,37 @@ class GroupRouteStoresFragment : Fragment() {
 
         val bundle = Bundle()
         binding.fabEdit.setOnClickListener {
-            fun callActivityFunction(): NavController {
-                return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
+            gustoViewModel.getRouteMap() { result ->
+                when (result) {
+                    1 -> {
+                        fun callActivityFunction(): NavController {
+                            return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
+                        }
+                        bundle.putBoolean("edit",true)
+                        callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutMapFragment,bundle)
+                    }
+                    else -> {
+                        Toast.makeText(context,"서버와의 연결 불안정", Toast.LENGTH_SHORT ).show()
+                    }
+                }
             }
-            bundle.putBoolean("edit",true)
-            callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutMapFragment,bundle)
+
         }
         binding.fabMap.setOnClickListener {
-            fun callActivityFunction(): NavController {
-                return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
+            gustoViewModel.getRouteMap() { result ->
+                when (result) {
+                    1 -> {
+                        fun callActivityFunction(): NavController {
+                            return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
+                        }
+                        callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutMapFragment)
+                    }
+                    else -> {
+                        Toast.makeText(context,"서버와의 연결 불안정", Toast.LENGTH_SHORT ).show()
+                    }
+                }
             }
-            callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutMapFragment)
+
         }
         return binding.root
     }
@@ -53,11 +75,6 @@ class GroupRouteStoresFragment : Fragment() {
 
         rv_board.adapter = boardAdapter
         rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-    }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
 
     }
 

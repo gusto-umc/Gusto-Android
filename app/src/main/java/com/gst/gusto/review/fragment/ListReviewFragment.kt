@@ -5,11 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.ResponseListReview
 import com.gst.gusto.databinding.FragmentListReviewBinding
 import com.gst.gusto.review.adapter.ListReviewAdapter
 import com.gst.gusto.review.adapter.ListReviewData
@@ -21,6 +24,7 @@ class ListReviewFragment : Fragment() {
 
     lateinit var binding: FragmentListReviewBinding
     lateinit var adapter: ListReviewAdapter
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,70 +35,67 @@ class ListReviewFragment : Fragment() {
 
         // 클릭 리스너 부분
         adapter = ListReviewAdapter(itemClickListener = {
-            val bundle = Bundle()
-            bundle.putInt("reviewId",0)     //리뷰 아이디 넘겨 주면 됨
-            bundle.putString("page","review")
-            findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail,bundle)
+            if(it.viewType == ListReviewType.LISTREVIEW){
+                val bundle = Bundle()
+                bundle.putLong("reviewId", it.reviewId)     //리뷰 아이디 넘겨 주면 됨
+                bundle.putString("page","review")
+                findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail,bundle)
+            } else {
+                // 리뷰 작성 버튼
+            }
+
         })
 
         binding.apply{
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(activity)
         }
+        
+        gustoViewModel.getTokens(requireActivity() as MainActivity)
+        gustoViewModel.timeLineView(null, 31) { result , response ->
+            when(result){
+                1 -> {
+                    adapter.setData(list = getData(response))
+                } else -> {
 
-        adapter.setData(list = testData())
-        // Log.d("testData", testData().toString())
+                }
+            }
 
+        }
+        
         return binding.root
     }
 
-    // 테스트 데이터 세팅
-    fun testData(): ArrayList<ListReviewData> {
-        var reviewList: ArrayList<ListReviewData> = ArrayList()
-
-        // 테스트 데이터
-        val testDateList = arrayOf(
-            "12/03","12/05","12/06",
-            "12/08","12/11","12/12",
-            "12/16","12/17","12/20",
-            "12/22","12/12","12/24",
-            "12/25","12/28","12/30"
-        )
-        val testNameList = arrayOf(
-            "구스또 레스토랑", "구스또 식당", "구스또",
-            "구스또 레스토랑", "구스또 식당", "구스또 식당",
-            "구스또 레스토랑", "구스또", "구스또",
-            "구스또 레스토랑", "구스또 식당", "구스또",
-            "구스또 레스토랑", "구스또", "구스또 식당"
-        )
-        val testVisitList = arrayOf(
-            "3번 방문", "5번 방문", "10번 방문",
-            "3번 방문", "5번 방문", "10번 방문",
-            "3번 방문", "5번 방문", "10번 방문",
-            "3번 방문", "5번 방문", "10번 방문",
-            "3번 방문", "5번 방문", "10번 방문"
-        )
-        val testImageList = arrayOf(
-            R.drawable.review_gallery_test, R.drawable.review_gallery_test2, R.drawable.review_gallery_test,
-            R.drawable.review_gallery_test, R.drawable.review_gallery_test, R.drawable.review_gallery_test2,
-            R.drawable.review_gallery_test2, R.drawable.review_gallery_test, R.drawable.review_gallery_test,
-            R.drawable.review_gallery_test, R.drawable.review_gallery_test2, R.drawable.review_gallery_test2,
-            R.drawable.review_gallery_test2, R.drawable.review_gallery_test, R.drawable.review_gallery_test2,
-            R.drawable.review_gallery_test, R.drawable.review_gallery_test2, R.drawable.review_gallery_test,
-            R.drawable.review_gallery_test, R.drawable.review_gallery_test, R.drawable.review_gallery_test2,
-            R.drawable.review_gallery_test2, R.drawable.review_gallery_test, R.drawable.review_gallery_test,
-            R.drawable.review_gallery_test, R.drawable.review_gallery_test2, R.drawable.review_gallery_test2,
-            R.drawable.review_gallery_test2, R.drawable.review_gallery_test, R.drawable.review_gallery_test2,
-        )
-
-        for(i in 0 .. 14){
-            reviewList.add(ListReviewData(testDateList[i], testNameList[i], testVisitList[i], testImageList[i], testImageList[i], testImageList[i], ListReviewType.LISTREVIEW))
-        }
-        val NowTime = System.currentTimeMillis()
+    fun getData(response: ResponseListReview?): ArrayList<ListReviewData> {
+        val reviewList: ArrayList<ListReviewData> = ArrayList()
         val DF = SimpleDateFormat("MM/dd", Locale.KOREAN)
-        val result = DF.format(NowTime).toString()
+        Log.d("response", response?.reviews.toString())
 
-        reviewList.add(ListReviewData(result, "","",0,0,0, ListReviewType.LISTBUTTON))
+        var imageview1 = ""
+        var imageview2 = ""
+        var imageview3 = ""
+
+        response?.reviews?.let {
+            for(data in it){
+                val date = DF.format(data.visitedAt).toString()
+                val name = data.storeName
+                val visit = data.visitedCount.toString()
+                // Log.d("img", data.imgs.toString())
+                if(data.images != null){
+                    imageview1 = data.images.getOrNull(0).toString()
+                    imageview2 = data.images.getOrNull(1).toString()
+                    imageview3 = data.images.getOrNull(2).toString()
+                }
+
+
+                val reviewData = ListReviewData(date, name, visit, imageview1, imageview2, imageview3, data.reviewId)
+                reviewList.add(reviewData)
+            }
+        }
+
+        val NowTime = System.currentTimeMillis()
+        val result = DF.format(NowTime).toString()
+        reviewList.add(ListReviewData(result, "","","","","", 0, ListReviewType.LISTBUTTON))
 
         return reviewList
     }
