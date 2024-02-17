@@ -97,7 +97,7 @@ class util {
          * @param context 해당 CONTEXT
          * @return null
          */
-        fun setImage(imageView: ImageView, url : String, context: Context) {
+        fun setImage(imageView: ImageView, url : String?, context: Context) {
             Glide.with(context).load(url).placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).into(imageView)
         }
 

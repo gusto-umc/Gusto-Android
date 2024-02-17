@@ -33,6 +33,8 @@ class GustoViewModel: ViewModel() {
 
     // 자신의 루트 리스트 - (val title : String, val people : Int, val food : Int, val route : Int)
     val myRouteList = ArrayList<GroupItem>()
+    var routeName = ""
+
     // 루트 생성 데이터
     var requestRoutesData : RequestCreateRoute? = null
     // 자신의 그룹 리스트
@@ -201,6 +203,7 @@ class GustoViewModel: ViewModel() {
                             // ordinal 속성을 기준으로 리스트를 정렬
                             list.sortBy { it.ordinal }
                         }
+                        routeName = responseBody.routeName
                         callback(1)
                     } else callback(2)
 

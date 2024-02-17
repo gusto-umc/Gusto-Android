@@ -182,6 +182,12 @@ interface GustoApi {
         @Part("info") info: RequestCreateReview
     ):Call<ResponseBody>
 
+    @GET("feeds/{reviewId}") // 먹스또 피드 상세 보기
+    fun getFeedReview(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("reviewId") reviewId : Long
+    )
+
     //USERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSER
 
     @POST("users/follow/{nickname}") // 팔로우하기

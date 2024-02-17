@@ -287,3 +287,22 @@ data class RegionDocument(
     @SerializedName("x") val longitude: Double,
     @SerializedName("y") val latitude: Double
 )
+
+data class StoreData(
+    @SerializedName("storeId") val storeId: Long,
+    @SerializedName("storeName") val storeName: String,
+    @SerializedName("address") val address: String,
+    @SerializedName("nickName") val nickName: String,
+    @SerializedName("profileImage") val profileImage: String,
+    @SerializedName("likeCnt") val likeCnt: Int,
+    @SerializedName("likeCheck") val likeCheck: Boolean,
+    @SerializedName("images") val images: List<String>,
+    @SerializedName("menuName") val menuName: String,
+    @SerializedName("hashTags") val hashTags: String,
+    @SerializedName("taste") val taste: Int,
+    @SerializedName("spiciness") val spiciness: Int,
+    @SerializedName("mood") val mood: Int,
+    @SerializedName("toilet") val toilet: Int,
+    @SerializedName("parking") val parking: Int,
+    @SerializedName("comment") val comment: String
+)

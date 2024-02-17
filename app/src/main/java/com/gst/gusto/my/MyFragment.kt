@@ -95,7 +95,7 @@ class MyFragment : Fragment() {
                                     followed = false
                                     btnProfileEdit.backgroundTintList = colorStateOnList
                                     btnProfileEdit.text = "팔로우"
-                                    tvFollowingNum.text ="${tvFollowingNum.text.toString().toInt()-1}"
+                                    tvFollowerNum.text ="${tvFollowerNum.text.toString().toInt()-1}"
                                     binding.btnProfileEdit.setTextColor(Color.parseColor("#FFFFFF"))
                                 }
                             }
@@ -107,7 +107,7 @@ class MyFragment : Fragment() {
                                     followed = true
                                     btnProfileEdit.backgroundTintList = colorStateOffList
                                     btnProfileEdit.text = "팔로잉"
-                                    tvFollowingNum.text ="${tvFollowingNum.text.toString().toInt()+1}"
+                                    tvFollowerNum.text ="${tvFollowerNum.text.toString().toInt()+1}"
                                     binding.btnProfileEdit.setTextColor(Color.parseColor("#717171"))
                                 }
                             }
