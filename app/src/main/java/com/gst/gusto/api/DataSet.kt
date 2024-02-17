@@ -274,7 +274,20 @@ data class RequestCreateReview(
     @SerializedName("toilet") val toilet : Int?,
     @SerializedName("parking") val parking : Int?,
     @SerializedName("comment") val comment : String?
-  )
+)
+
+// insta (gallery) review 조회- reviews
+data class ResponseInstaReviews(
+    @SerializedName("reviewId") val reviewId: Long,
+    @SerializedName("images") val images: String,
+)
+
+// insta (gallery) review 조회
+data class ResponseInstaReview(
+    @SerializedName("reviews") val reviews: List<ResponseInstaReviews>,
+    @SerializedName("hasNext") val hasNext: Boolean
+)
+
 // 가게 정보 조회(짧은 화면)
 data class ResponseStoreDetailQuick(
     @SerializedName("pinId") val pinId : Long,
