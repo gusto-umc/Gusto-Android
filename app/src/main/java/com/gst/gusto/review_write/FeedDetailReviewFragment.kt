@@ -150,6 +150,7 @@ class FeedDetailReviewFragment : Fragment() {
             }
             it.isSelected = !it.isSelected
         }
+        if(feedDetail.likeCheck) binding.btnHeart.callOnClick()
     }
 
     private fun addChip(text:String) {

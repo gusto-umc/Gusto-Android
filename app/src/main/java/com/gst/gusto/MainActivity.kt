@@ -40,16 +40,14 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            val currentDestinationId = destination.id
-
-
+            var currentDestinationId = destination.id
             if (previousDestinationId == currentDestinationId) {
                 // 현재 목적지와 이전 목적지가 같은 경우
                 // 선택한 탭이 이미 화면에 표시 중이므로 초기 화면으로 이동
                 while (navController.currentDestination?.id != R.id.fragment_list&&navController.currentDestination?.id != R.id.fragment_map&&
                         navController.currentDestination?.id != R.id.fragment_review&&navController.currentDestination?.id != R.id.fragment_feed&&
                         navController.currentDestination?.id != R.id.fragment_my) {
-                    previousDestinationId = -1
+                    currentDestinationId = -1
                     navController.popBackStack()
                 }
             }

@@ -5,9 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -73,6 +75,19 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                 // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
                 when (selectedItem) {
                     1 -> {
+                        for(storeId in gustoViewModel.addRoute) {
+                            Log.d("viewmodel","check ${returnList.size+1}")
+                            gustoViewModel.addRouteStore(storeId,returnList.size+1) { result ->
+                                when (result) {
+                                    1 -> {
+
+                                    }
+                                    else -> {
+                                        Toast.makeText(context,"서버와의 연결 불안정", Toast.LENGTH_SHORT ).show()
+                                    }
+                                }
+                            }
+                        }
                         gustoViewModel.markerListLiveData.value?.let { it1 -> deepCopy(it1) }
                     }
                 }
@@ -86,7 +101,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         val viewPager = binding.vpSlider
 
         // 이미지 슬라이드
-        val adapter = RouteViewPagerAdapter(itemList,requireActivity() as MainActivity)
+        val adapter = RouteViewPagerAdapter(itemList,requireActivity() as MainActivity,0)
         viewPager.adapter = adapter
 
         viewPager.offscreenPageLimit = 1
@@ -138,6 +153,8 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         super.onDestroy()
         gustoViewModel.groupFragment = 1
         gustoViewModel.markerListLiveData.value?.clear()
+        gustoViewModel.addRoute.clear()
+        gustoViewModel.removeRoute.clear()
         for(data in returnList) {
             gustoViewModel.markerListLiveData.value?.add(data)
         }

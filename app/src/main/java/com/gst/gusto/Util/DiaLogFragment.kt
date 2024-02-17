@@ -6,7 +6,6 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,6 +75,7 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                         false
                     )
                 )
+                gustoViewModel.addRoute.add(5)  // storeId
                 gustoViewModel.markerListLiveData.value = itemList
                 boardAdapter.notifyItemInserted(itemList.size-1)
                 if(itemList.size==6) {

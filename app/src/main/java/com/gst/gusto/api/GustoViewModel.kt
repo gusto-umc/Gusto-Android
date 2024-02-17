@@ -1,8 +1,6 @@
 package com.gst.gusto.api
 
-import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,11 +9,9 @@ import com.gst.gusto.MainActivity
 import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.RestItem
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -35,7 +31,11 @@ class GustoViewModel: ViewModel() {
 
     // 자신의 루트 리스트 - (val title : String, val people : Int, val food : Int, val route : Int)
     val myRouteList = ArrayList<GroupItem>()
+    // 루트 이름
     var routeName = ""
+    // 루트 편집 정보
+    var removeRoute = ArrayList<Long>()
+    var addRoute = ArrayList<Long>()
 
     // 루트 생성 데이터
     var requestRoutesData : RequestCreateRoute? = null
@@ -245,9 +245,28 @@ class GustoViewModel: ViewModel() {
         })
     }
     // 루트 내 식당 삭제
-    fun deleteRouteStore(routeListId : Int,callback: (Int) -> Unit){
+    fun deleteRouteStore(routeListId : Long,callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
         service.deleteRouteStore(xAuthToken, routeListId).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel", "Successful response: ${response}")
+                    callback(1)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2)
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(2)
+            }
+        })
+    }
+    // 루트 내 식당 추가 (공통)
+    fun addRouteStore(storeId : Long, ordinal : Int,callback: (Int) -> Unit){
+        Log.e("token",xAuthToken)
+        service.addRouteStore(xAuthToken,currentRouteId,RouteList(storeId,ordinal,null,null,null,null,null)).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Log.d("viewmodel", "Successful response: ${response}")

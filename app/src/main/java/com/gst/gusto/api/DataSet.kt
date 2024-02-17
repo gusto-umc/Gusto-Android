@@ -21,13 +21,14 @@ data class RouteList(
     @SerializedName("storeId") val storeId : Long,
     @SerializedName("ordinal") val ordinal : Int,
     // 루트 상세 조회
-    @SerializedName("routeListId") val routeListId : Int?,
+    @SerializedName("routeListId") val routeListId : Long?,
     @SerializedName("storeName") val storeName : String?,
     @SerializedName("address") val address : String?,
     // 루트 지도 조회
     @SerializedName("longitude") val longitude : Double?,
     @SerializedName("latitude") val latitude : Double?
 )
+
 // 루트 상세 조회
 data class ResponseRouteDetail(
     @SerializedName("routeId") val routeId : Long,

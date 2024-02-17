@@ -36,12 +36,6 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("routeId") routeId : Long
     ):Call<List<RouteList>>
-/* 통합 됨
-    @GET("routeLists/{routeId}") // 내 루트 상세 조회
-    fun getRouteDetail(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Path("routeId") routeId : Long
-    ):Call<ResponseRouteDetail>*/
     @DELETE("routes/{routeId}") // 내 루트 삭제
     fun deleteRoute(
         @Header("X-AUTH-TOKEN") token : String,
@@ -50,7 +44,14 @@ interface GustoApi {
     @DELETE("routeLists/{routeListId}") // 루트 내 식당 삭제
     fun deleteRouteStore(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("routeListId") routeListId : Int
+        @Path("routeListId") routeListId : Long
+    ):Call<ResponseBody>
+
+    @POST("routeLists/{routeId}") // 루트 내 식당 추가 (공통)
+    fun addRouteStore(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("routeId") routeId : Long,
+        @Body body : RouteList
     ):Call<ResponseBody>
 
     //GROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUP
