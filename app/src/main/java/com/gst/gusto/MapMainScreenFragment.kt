@@ -24,11 +24,6 @@ class MapMainScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // SearchView 참조
-        val searchView = binding.search
-
-        // SearchView에 리스너 추가
-
 
     }
 }

@@ -29,10 +29,13 @@
         app:behavior_peekHeight="60dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-        <!-- fragment_area.xml 내용 추가 -->
-        <include layout="@layout/fragment_area"
-            android:id="@+id/fragment_area"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <include layout="@layout/fragment_area"
+                android:id="@+id/fragment_area"/>
+        </ScrollView>
     </LinearLayout>
 
     <ImageButton
@@ -48,6 +51,5 @@
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="60dp"
         android:layout_marginRight="30dp"/>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
