@@ -33,11 +33,15 @@ class ReviewAdd6Fragment : Fragment() {
     ): View? {
         binding = FragmentReviewAdd6Binding.inflate(inflater, container, false)
 
-
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
         binding.btnNext.setOnClickListener {
+            gustoViewModel.taste = howList[0]
+            gustoViewModel.spiciness = howList[1]
+            gustoViewModel.mood = howList[2]
+            gustoViewModel.toilet = howList[3]
+            gustoViewModel.parking = howList[4]
             findNavController().navigate(R.id.action_reviewAdd6Fragment_to_reviewAdd7Fragment)
             Log.d("howList",howList.toString())
         }

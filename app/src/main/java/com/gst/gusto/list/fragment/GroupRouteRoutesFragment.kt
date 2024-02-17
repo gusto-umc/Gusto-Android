@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupMRouteRoutesBinding
+import com.gst.gusto.list.adapter.GroupAdapter
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.LisAdapter
 
@@ -18,6 +21,7 @@ class GroupRouteRoutesFragment : Fragment() {
 
     lateinit var binding: FragmentListGroupMRouteRoutesBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
+    var itemList = ArrayList<GroupItem>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,22 +39,39 @@ class GroupRouteRoutesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val rv_board = binding.rv
+        gustoViewModel.getGroupRoutes {result, data ->
+            when(result) {
+                1 -> {
+                    if(data !=null) {
+                        val rv_board = binding.rv
+                        itemList = data
+                        val boardAdapter = LisAdapter(itemList,null,2,gustoViewModel,this)
+                        boardAdapter.notifyDataSetChanged()
 
-        val itemList = ArrayList<GroupItem>()
-
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 0, 5, 0))
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 0, 4, 24))
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 0, 2, 0))
-        itemList.add(GroupItem(0, "성수동 맛집 맵", 0, 8, 24))
-
-        val boardAdapter = LisAdapter(itemList,null,2,gustoViewModel)
-        boardAdapter.notifyDataSetChanged()
-
-        rv_board.adapter = boardAdapter
-        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
+                        rv_board.adapter = boardAdapter
+                        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    }
+                }
+            }
+        }
     }
+    fun checkRoutes() {
+        gustoViewModel.getGroupRoutes {result, data ->
+            when(result) {
+                1 -> {
+                    if(data !=null) {
+                        val rv_board = binding.rv
+                        itemList = data
+                        val boardAdapter = LisAdapter(itemList, null, 2, gustoViewModel,this)
+                        boardAdapter.notifyDataSetChanged()
 
-
+                        rv_board.adapter = boardAdapter
+                        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    }
+                } else -> {
+                Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+            }
+            }
+        }
+    }
 }

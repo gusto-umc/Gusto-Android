@@ -10,9 +10,12 @@ import android.location.Geocoder
 import android.location.Location
 import android.util.Log
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.LocationServices
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import net.daum.mf.map.api.CameraUpdateFactory
 import net.daum.mf.map.api.MapPOIItem
@@ -26,7 +29,7 @@ class mapUtil {
     companion object {
         data class MarkerItem(
             val storeId: Long,
-            val ordinal: Int,
+            var ordinal: Int,
             val routeListId: Int,
             var latitude: Double,
             var longitude: Double,
@@ -65,27 +68,20 @@ class mapUtil {
                 fusedLocationProviderClient.lastLocation
                     .addOnSuccessListener { success: Location? ->
                         success?.let { location ->
-                            val geocoder = Geocoder(context)
-                            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                            Log.d("viewmodel","${location.latitude}, ${location.longitude}")
+                            (activity as MainActivity).gustoViewModel.getRegionInfo( location.longitude, location.latitude)  {result ->
+                                when(result) {
+                                    1 -> {
 
-                            if (addresses != null) {
-                                val address = addresses[0]
-                                val currentAddress = address.getAddressLine(0) // 필요에 따라 세부 정보를 더 가져올 수 있습니다
-
-                                // currentAddress를 필요에 따라 사용하세요
-                                Log.d("현재 주소: ", "$currentAddress")
-                                Log.d("좌표","${location.latitude}, ${location.longitude}")
-                                //MapView.setMapTilePersistentCacheEnabled(true)  //다운로드한 지도를 캐시에 저장
-                                if(option =="map") {
-                                    mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude), true)
-                                    mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving)
-                                    mapView.setShowCurrentLocationMarker(true)
-                                } else if(option == "route") {
-
+                                    }
                                 }
-                                //mapView.setCurrentLocationEventListener()
-                                //mapView.setCurrentLocationRadius(10)
-                                //mapView.setCurrentLocationRadiusStrokeColor(Color.BLUE)
+                            }
+                            if(option =="map") {
+                                mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude), true)
+                                mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving)
+                                mapView.setShowCurrentLocationMarker(true)
+                            } else if(option == "route") {
+
                             }
                         }
                     }
@@ -108,6 +104,22 @@ class mapUtil {
 
                 mapView.addPOIItem(marker)
             }
+        }
+        fun setStores(mapView : MapView,markerList: ArrayList<MarkerItem>) {
+            mapView.removeAllPOIItems()
+            for(data in markerList) {
+                val marker = MapPOIItem()
+                marker.itemName = data.ordinal.toString()
+                marker.tag = data.ordinal // id
+                marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
+                marker.markerType = MapPOIItem.MarkerType.CustomImage
+                marker.customImageResourceId = R.drawable.marker_color_small_img
+                marker.isShowCalloutBalloonOnTouch = false
+
+                mapView.addPOIItem(marker)
+            }
+
+            mapView.moveCamera(CameraUpdateFactory.newMapPoint(MapPoint.mapPointWithGeoCoord(markerList[0].latitude, markerList[0].longitude)))
         }
         fun setRoute(mapView: MapView, markerList: List<MarkerItem>) {
             mapView.removeAllPOIItems()
