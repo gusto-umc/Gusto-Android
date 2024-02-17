@@ -9,19 +9,20 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.Model.CategorySimple
 import com.gst.gusto.ListView.Model.StoreSearch
+import com.gst.gusto.api.ResponseAllCategory
 import com.gst.gusto.databinding.ItemMapCategoryChooseBinding
 
-class CategoryChooseAdapter() : ListAdapter<CategorySimple, CategoryChooseAdapter.ViewHolder>(
+class CategoryChooseAdapter() : ListAdapter<ResponseAllCategory, CategoryChooseAdapter.ViewHolder>(
     DiffCallback) {
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<CategorySimple>(){
-            override fun areItemsTheSame(oldItem: CategorySimple, newItem: CategorySimple): Boolean {
+        private val DiffCallback = object : DiffUtil.ItemCallback<ResponseAllCategory>(){
+            override fun areItemsTheSame(oldItem: ResponseAllCategory, newItem: ResponseAllCategory): Boolean {
                 //아이템  id 가 같은지 확인
-                return oldItem.id == newItem.id
+                return oldItem.myCategoryId == newItem.myCategoryId
             }
 
-            override fun areContentsTheSame(oldItem: CategorySimple, newItem: CategorySimple): Boolean {
+            override fun areContentsTheSame(oldItem: ResponseAllCategory, newItem: ResponseAllCategory): Boolean {
                 //아이템 내용이 같은 지 확인
                 return oldItem == newItem
             }
@@ -30,14 +31,14 @@ class CategoryChooseAdapter() : ListAdapter<CategorySimple, CategoryChooseAdapte
     }
 
     inner class ViewHolder(private val binding : ItemMapCategoryChooseBinding) : RecyclerView.ViewHolder(binding.root){
-        var data : CategorySimple? = null
+        var data : ResponseAllCategory? = null
 
-        fun bind(category : CategorySimple){
+        fun bind(category : ResponseAllCategory){
             data = category
 
-            binding.ivItemCategoryChooseIcon.setImageResource(category.categoryIcon)
+            //binding.ivItemCategoryChooseIcon.setImageResource(category.categoryIcon)
             binding.tvItemCategoryChooseTitle.text = category.categoryName
-            binding.tvItemCategoryChooseCount.text = "${category.storeCount}개"
+            binding.tvItemCategoryChooseCount.text = "${category.pinCnt}개"
         }
         val layoutItem = binding.root
     }
@@ -57,7 +58,7 @@ class CategoryChooseAdapter() : ListAdapter<CategorySimple, CategoryChooseAdapte
     }
 
     interface OnItemClickListener {
-        fun onClick(v: View, dataSet: CategorySimple)
+        fun onClick(v: View, dataSet: ResponseAllCategory)
     }
     // (3) 외부에서 클릭 시 이벤트 설정
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {

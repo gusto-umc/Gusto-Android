@@ -13,21 +13,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.Model.CategorySimple
 import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.ResponseMapCategory
 import com.gst.gusto.databinding.ItemListviewCategoryEditBinding
 
-class ListViewEditCategoryAdapter (private var flag : String, private val parentView : View) : ListAdapter<CategorySimple, ListViewEditCategoryAdapter.ViewHolder>(
+class ListViewEditCategoryAdapter (private var flag : String, private val parentView : View) : ListAdapter<ResponseMapCategory, ListViewEditCategoryAdapter.ViewHolder>(
     DiffCallback) {
 
 
+    var viewModel : GustoViewModel? = null
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<CategorySimple>(){
-            override fun areItemsTheSame(oldItem: CategorySimple, newItem: CategorySimple): Boolean {
+        private val DiffCallback = object : DiffUtil.ItemCallback<ResponseMapCategory>(){
+            override fun areItemsTheSame(oldItem: ResponseMapCategory, newItem: ResponseMapCategory): Boolean {
                 //아이템  id 가 같은지 확인
-                return oldItem.id == newItem.id
+                return oldItem.myCategoryId == newItem.myCategoryId
             }
 
-            override fun areContentsTheSame(oldItem: CategorySimple, newItem: CategorySimple): Boolean {
+            override fun areContentsTheSame(oldItem: ResponseMapCategory, newItem: ResponseMapCategory): Boolean {
                 //아이템 내용이 같은 지 확인
                 return oldItem == newItem
             }
@@ -37,13 +40,13 @@ class ListViewEditCategoryAdapter (private var flag : String, private val parent
 
 
     inner class ViewHolder(private val binding : ItemListviewCategoryEditBinding) : RecyclerView.ViewHolder(binding.root){
-        var data : CategorySimple? = null
+        var data : ResponseMapCategory? = null
 
-        fun bind(simple: CategorySimple){
+        fun bind(simple: ResponseMapCategory){
             data = simple
             binding.ivItemCategoryEdit.setImageResource(R.drawable.category_icon_1)
             binding.tvItemCategoryEditTitle.text = simple.categoryName
-            binding.tvItemCategoryEditCount.text = "${simple.storeCount}개"
+            binding.tvItemCategoryEditCount.text = "${simple.pinCnt}개"
         }
         val updownLayout = binding.layoutItemCategoryEditUpdown
         val storeRv = binding.rvItemCategoryShowStore
@@ -61,7 +64,7 @@ class ListViewEditCategoryAdapter (private var flag : String, private val parent
         val cateId = holder.bind(getItem(position))
 
         holder.updownLayout.setOnClickListener {
-            if(holder.data?.storeCount != 0){
+            if(holder.data?.pinCnt != 0){
                 if(openFlag){
                     holder.storeRv.visibility = View.GONE
                     holder.ivUpDown.setImageResource(R.drawable.arrow_down_2_img)
@@ -74,15 +77,22 @@ class ListViewEditCategoryAdapter (private var flag : String, private val parent
                     /**
                      * storeRv 연결
                      */
-                    //서버 연결 예정
-                    var sampleStoreData : MutableList<Store> = arrayListOf<Store>(
-                        Store(id = 0, storeName = "구스토 레스토랑", location = "메롱시 메로나동 바밤바 24-6 3층", visitCount = 3, storePhoto = 1, serverCategory = null, isSaved = null),
-                        Store(id = 1, storeName = "Gusto Restaurant", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = 7, storePhoto = 1, serverCategory = null, isSaved = null)
-                    )
-                    val mStoreAdapter = ListViewStoreAdapter("edit", parentView)
-                    mStoreAdapter.submitList(sampleStoreData!!)
-                    holder.storeRv.adapter = mStoreAdapter
-                    holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
+                    viewModel!!.getMapStores(holder.data!!.myCategoryId, townName = "성수1가1동"){
+                            result ->
+                        when(result){
+                            0 -> {
+                                //성공
+                                val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
+                                mStoreAdapter.submitList(viewModel!!.myMapStoreList!!)
+                                holder.storeRv.adapter = mStoreAdapter
+                                holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
+                            }
+                            1 -> {
+                                //실패
+                                Log.d("store checking", "fail")
+                            }
+                        }
+                    }
                 }
             }
             else {
@@ -90,7 +100,7 @@ class ListViewEditCategoryAdapter (private var flag : String, private val parent
             }
         }
 
-        if(holder.data?.storeCount!! <= 0) {
+        if(holder.data?.pinCnt!! <= 0) {
             Log.d("0개", "체")
             holder.ivUpDown.imageTintList = ColorStateList.valueOf(Color.parseColor("#ECECEC"))
         }

@@ -15,4 +15,9 @@
         <item name="android:textSize">10sp</item>
     </style>
 
+    <!--ratingbar custom-->
+    <style name="CustomRatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@drawable/custom_ratingbar</item>
+    </style>
+
 </resources>

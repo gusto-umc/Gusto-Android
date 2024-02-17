@@ -124,7 +124,8 @@
                             android:fontFamily="@font/pretendard_bold"
                             android:text="126"
                             android:textColor="#929292"
-                            android:textSize="10sp" />
+                            android:textSize="10sp"
+                            android:layout_gravity="center_horizontal"/>
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/ly_title"
@@ -147,6 +148,7 @@
                             android:textSize="10sp" />
 
                         <TextView
+                            android:id="@+id/tv_review_store_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -180,19 +182,131 @@
                     android:textSize="14sp" />
 
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_hows"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="88dp"
-                    android:overScrollMode="never" />
+                    android:textColor="@color/main_C"
+                    android:text="맛슐랭"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="8dp"
+                    />
+                <RatingBar
+                    android:id="@+id/ratingbar_taste"
+                    style="@style/CustomRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:max="5"
+                    android:numStars="5"
+                    android:rating="3"
+                    android:stepSize="1"
+                    android:isIndicator="true"
+                    android:layout_gravity="center_horizontal"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/main_C"
+                    android:text="맵기"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="8dp"
+                    />
+                <RatingBar
+                    android:id="@+id/ratingbar_spiceness"
+                    style="@style/CustomRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:max="5"
+                    android:numStars="5"
+                    android:rating="3"
+                    android:stepSize="1"
+                    android:isIndicator="true"
+                    android:layout_gravity="center_horizontal"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/main_C"
+                    android:text="분위기"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="8dp"
+                    />
+
+                <RatingBar
+                    android:id="@+id/ratingbar_mood"
+                    style="@style/CustomRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:max="5"
+                    android:numStars="5"
+                    android:rating="3"
+                    android:stepSize="1"
+                    android:isIndicator="true"
+                    android:layout_gravity="center_horizontal"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/main_C"
+                    android:text="화장실"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="8dp"
+                    />
+
+                <RatingBar
+                    android:id="@+id/ratingbar_toilet"
+                    style="@style/CustomRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:max="5"
+                    android:numStars="5"
+                    android:rating="3"
+                    android:stepSize="1"
+                    android:isIndicator="true"
+                    android:layout_gravity="center_horizontal"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/main_C"
+                    android:text="주차장"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="8dp"
+                    />
+
+                <RatingBar
+                    android:id="@+id/ratingbar_parking"
+                    style="@style/CustomRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:max="5"
+                    android:numStars="5"
+                    android:rating="3"
+                    android:stepSize="1"
+                    android:isIndicator="true"
+                    android:layout_gravity="center_horizontal"
+                    />
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="13dp"
+                    android:layout_marginTop="28dp"
                     android:layout_marginBottom="8dp"
                     android:fontFamily="@font/pretendard_bold"
                     android:text="메모"

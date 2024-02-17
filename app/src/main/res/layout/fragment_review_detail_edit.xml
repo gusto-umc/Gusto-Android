@@ -64,6 +64,7 @@
                 android:textColor="@color/sub_m"
                 android:textSize="10sp" />
             <TextView
+                android:id="@+id/tv_review_store_name_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -103,28 +104,213 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <EditText
-                android:id="@+id/et_menu"
+                android:id="@+id/edt_menu"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:paddingLeft="8dp"
                 android:layout_marginHorizontal="40dp"
-                android:textColor="@color/gray_3"
-                android:textSize="14sp"
-                android:fontFamily="@font/pretendard_medium"
-                android:inputType="text"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/background_radius_5_stroke_1"
                 android:backgroundTint="@color/main_C"
-                android:hint="수타면 파수타"
-                android:maxLines="1"
                 android:ellipsize="end"
-                android:layout_marginBottom="16dp"/>
+                android:fontFamily="@font/pretendard_medium"
+                android:hint="수타면 파수타"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingLeft="8dp"
+                android:textColor="@color/gray_3"
+                android:textSize="14sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_hows"
+            <androidx.constraintlayout.widget.ConstraintLayout
+
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/background_radius_5_stroke_1"
+                android:backgroundTint="@color/main_C"
                 android:layout_marginHorizontal="40dp"
-                android:overScrollMode="never"/>
+                android:layout_marginBottom="16dp"
+                >
+                <TextView
+                    android:id="@+id/tv_taste"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="맛슐랭"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/pretendard_medium"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="8dp"
+                    />
+                <RatingBar
+                    android:id="@+id/ratingbar_taste_edit"
+                    style="@style/CustomRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:max="5"
+                    android:numStars="5"
+                    android:rating="3"
+                    android:stepSize="1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_taste"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="2dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/background_radius_5_stroke_1"
+                android:backgroundTint="@color/main_C"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginBottom="16dp"
+                >
+                <TextView
+                    android:id="@+id/tv_spiceness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="맵기"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/pretendard_medium"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="8dp"
+                    />
+                <RatingBar
+                    android:id="@+id/ratingbar_spiceness_edit"
+                    style="@style/CustomRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:max="5"
+                    android:numStars="5"
+                    android:rating="3"
+                    android:stepSize="1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_spiceness"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="2dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/background_radius_5_stroke_1"
+                android:backgroundTint="@color/main_C"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginBottom="16dp"
+                >
+                <TextView
+                    android:id="@+id/tv_mood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="분위기"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/pretendard_medium"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="8dp"
+                    />
+                <RatingBar
+                    android:id="@+id/ratingbar_mood_edit"
+                    style="@style/CustomRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:max="5"
+                    android:numStars="5"
+                    android:rating="3"
+                    android:stepSize="1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_mood"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="2dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/background_radius_5_stroke_1"
+                android:backgroundTint="@color/main_C"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginBottom="16dp"
+                >
+                <TextView
+                    android:id="@+id/tv_toilet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="화장실"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/pretendard_medium"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="8dp"
+                    />
+                <RatingBar
+                    android:id="@+id/ratingbar_toilet_edit"
+                    style="@style/CustomRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:max="5"
+                    android:numStars="5"
+                    android:rating="3"
+                    android:stepSize="1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_toilet"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="2dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/background_radius_5_stroke_1"
+                android:backgroundTint="@color/main_C"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginBottom="16dp"
+                >
+                <TextView
+                    android:id="@+id/tv_parking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="주차장"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/pretendard_medium"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="8dp"
+                    />
+                <RatingBar
+                    android:id="@+id/ratingbar_parking_edit"
+                    style="@style/CustomRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:max="5"
+                    android:numStars="5"
+                    android:rating="3"
+                    android:stepSize="1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_parking"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="2dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -152,7 +338,7 @@
                     android:layout_marginBottom="8dp">
 
                     <EditText
-                        android:id="@+id/et_memo"
+                        android:id="@+id/edt_memo"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         android:layout_width="match_parent"

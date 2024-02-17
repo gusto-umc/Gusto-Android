@@ -8,17 +8,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.CategorySimple
 import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.ListView.adapter.ListViewCategoryAdapter
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentRouteSearchBinding
 import com.gst.gusto.search.adapter.SearchStoreAdapter
 
 class RouteSearchFragment : Fragment() {
 
     private lateinit var binding : FragmentRouteSearchBinding
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     private var sampleRouteCategoryData = arrayListOf<CategorySimple>(
         CategorySimple(0, "카페", 0, 2),
@@ -59,7 +62,8 @@ class RouteSearchFragment : Fragment() {
          * 1. category Rv 연결, store Rv 연결
          */
         val mCategoryAdapter = ListViewCategoryAdapter("route", requireFragmentManager(), view)
-        mCategoryAdapter.submitList(sampleRouteCategoryData)
+        mCategoryAdapter.submitList(gustoViewModel.myMapCategoryList)
+        mCategoryAdapter.viewModel = gustoViewModel
         binding.rvRouteCategory.adapter = mCategoryAdapter
         binding.rvRouteCategory.layoutManager = LinearLayoutManager(this.requireActivity())
 

@@ -39,28 +39,28 @@ class MapListViewSaveFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //방문 O Rv 연결
-        val mSaveOAdapter = ListViewStoreAdapter("save", view)
-        mSaveOAdapter.submitList(sampleSaveOArray)
-        mSaveOAdapter.setItemClickListener(object : ListViewStoreAdapter.OnItemClickListener{
-            override fun onClick(v: View, dataSet: Store) {
-                Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_storeDetailFragment)
-            }
-
-        })
-        binding.rvMapSaveVisited.adapter = mSaveOAdapter
-        binding.rvMapSaveVisited.layoutManager = LinearLayoutManager(this.requireActivity())
+//        val mSaveOAdapter = ListViewStoreAdapter("save", view)
+//        mSaveOAdapter.submitList(sampleSaveOArray)
+//        mSaveOAdapter.setItemClickListener(object : ListViewStoreAdapter.OnItemClickListener{
+//            override fun onClick(v: View, dataSet: Store) {
+//                Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_storeDetailFragment)
+//            }
+//
+//        })
+//        binding.rvMapSaveVisited.adapter = mSaveOAdapter
+//        binding.rvMapSaveVisited.layoutManager = LinearLayoutManager(this.requireActivity())
 
         //방문 X Rv 연결
-        val mSaveXAdapter = ListViewStoreAdapter("save", view)
-        mSaveXAdapter.submitList(sampleSaveOArray)
-        mSaveXAdapter.setItemClickListener(object : ListViewStoreAdapter.OnItemClickListener{
-            override fun onClick(v: View, dataSet: Store) {
-                Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_storeDetailFragment)
-            }
-
-        })
-        binding.rvMapSaveUnvisited.adapter = mSaveXAdapter
-        binding.rvMapSaveUnvisited.layoutManager = LinearLayoutManager(this.requireActivity())
+//        val mSaveXAdapter = ListViewStoreAdapter("save", view)
+//        mSaveXAdapter.submitList(sampleSaveOArray)
+//        mSaveXAdapter.setItemClickListener(object : ListViewStoreAdapter.OnItemClickListener{
+//            override fun onClick(v: View, dataSet: Store) {
+//                Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_storeDetailFragment)
+//            }
+//
+//        })
+//        binding.rvMapSaveUnvisited.adapter = mSaveXAdapter
+//        binding.rvMapSaveUnvisited.layoutManager = LinearLayoutManager(this.requireActivity())
 
         //뒤로가기 클리 리스너
         binding.ivMapMapBack.setOnClickListener{
