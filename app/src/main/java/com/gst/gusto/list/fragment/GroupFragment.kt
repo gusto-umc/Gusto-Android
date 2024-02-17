@@ -86,6 +86,8 @@ class GroupFragment : Fragment() {
             gustoViewModel.getGroupMembers {result ->
                 when(result) {
                     1 -> {
+
+                        gustoViewModel.followListTitleName= "그룹 리스트&루트"
                         findNavController().navigate(R.id.action_groupFragment_to_followListFragment)
                     }
                     else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()

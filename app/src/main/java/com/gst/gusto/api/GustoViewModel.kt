@@ -64,7 +64,7 @@ class GustoViewModel: ViewModel() {
 
     // 리뷰 작성 필요 변수
     var visitedAt: String? = null
-    var img: File? = null
+    var imageFiles = ArrayList<File>()
     var menuName: String? = null
     var hashTagId: String? = null
     var taste: Int? = null
@@ -76,6 +76,7 @@ class GustoViewModel: ViewModel() {
 
     // 팔로우 리스트
     var followList: List<Member> = listOf()
+    var followListTitleName = "팔로잉 중"
 
     // 가게 정보 보기 아이디 리스트
     val storeIdList = ArrayList<Long>().apply {
@@ -97,8 +98,6 @@ class GustoViewModel: ViewModel() {
     lateinit var currentFeedData :ResponseFeedDetail
     // 현재 피드 리뷰 작성자 닉네임
     var currentFeedNickname = ""
-
-
 
 
     // 토큰 얻는 함수
@@ -364,7 +363,7 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
-    // 그룹 내 루트 목록 조회
+    // 그룹 내 루트 목록
     fun getGroupRoutes(callback: (Int,ArrayList<GroupItem>?) -> Unit){
         service.getGroupRoutes(xAuthToken,currentGroupId).enqueue(object : Callback<List<Routes>> {
             override fun onResponse(call: Call<List<Routes>>, response: Response<List<Routes>>) {
@@ -703,18 +702,20 @@ class GustoViewModel: ViewModel() {
     }
     // 리뷰 작성
     fun createReview(callback: (Int) -> Unit){
-        val data = RequestCreateReview(1,visitedAt,menuName,hashTagId,taste,spiciness,mood,toilet,parking,comment)
-        val fileToUpload: MultipartBody.Part? = if (img != null) {
-            val file = img!!
-            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
-            MultipartBody.Part.createFormData("uploaded_file", file.name, requestFile)
-        } else {
-            null
+        val data = RequestCreateReview(myStoreDetail?.storeId!!.toLong(),visitedAt,menuName,hashTagId,taste,spiciness,mood,toilet,parking,comment)
+        val filesToUpload: MutableList<MultipartBody.Part> = mutableListOf()
+
+        // 이미지 파일들을 반복하면서 MultipartBody.Part 리스트에 추가
+        imageFiles?.forEach { imgFile ->
+            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), imgFile)
+            val filePart = MultipartBody.Part.createFormData("image", imgFile.name, requestFile)
+            filesToUpload.add(filePart)
         }
         Log.e("token",xAuthToken)
         Log.d("viewmodel",data.toString())
-        Log.d("viewmodel",img.toString())
-        service.createReview(xAuthToken,fileToUpload,data).enqueue(object : Callback<ResponseBody> {
+        Log.d("viewmodel",imageFiles.toString())
+        Log.d("viewmodel",imageFiles.toString())
+        service.createReview(xAuthToken,filesToUpload,data).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Log.d("viewmodel", "Successful response: ${response}")

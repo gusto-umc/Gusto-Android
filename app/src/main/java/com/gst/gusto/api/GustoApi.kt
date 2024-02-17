@@ -76,7 +76,7 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("groupId") groupId : Long
     ):Call<List<ResponseStore>>
-    @GET("routes/{groupId}") // 그룹 내 루트 목록 조회
+    @GET("routes/groups/{groupId}") // 그룹 내 루트 목록
     fun getGroupRoutes(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("groupId") groupId : Long
@@ -189,7 +189,7 @@ interface GustoApi {
     @POST("reviews") // 리뷰 작성
     fun createReview(
         @Header("X-AUTH-TOKEN") token : String,
-        @Part image: MultipartBody.Part?,
+        @Part image: List<MultipartBody.Part>?,
         @Part("info") info: RequestCreateReview
     ):Call<ResponseBody>
 
