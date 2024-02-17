@@ -58,31 +58,58 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                 // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
                 when (selectedItem) {
                     1 -> {
-                        val tmpList =ArrayList<RouteList>()
-                        var ordinal = returnList.size+1
-                        for(storeId in gustoViewModel.addRoute) {
-                            tmpList.add(RouteList(storeId,ordinal++,null,null,null,null,null))
-                        }
-                        gustoViewModel.addRouteStore(tmpList) { result ->
-                            when (result) {
-                                1 -> {
-                                    gustoViewModel.getGroupRouteDetail(gustoViewModel.currentRouteId) { result ->
-                                        when (result) {
-                                            1 -> {
+                        if(gustoViewModel.addRoute.size>0) {
+                            val tmpList =ArrayList<RouteList>()
+                            var ordinal = returnList.size+1
+                            for(storeId in gustoViewModel.addRoute) {
+                                tmpList.add(RouteList(storeId,ordinal++,null,null,null,null,null))
+                            }
+                            gustoViewModel.addRouteStore(tmpList) { result ->
+                                when (result) {
+                                    1 -> {
+                                        gustoViewModel.getGroupRouteDetail(gustoViewModel.currentRouteId) { result ->
+                                            when (result) {
+                                                1 -> {
 
-                                            }
-                                            else -> {
-                                                Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                                }
+                                                else -> {
+                                                    Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                else -> {
-                                    Toast.makeText(context,"서버와의 연결 불안정", Toast.LENGTH_SHORT ).show()
+                                    else -> {
+                                        Toast.makeText(context,"서버와의 연결 불안정", Toast.LENGTH_SHORT ).show()
+                                    }
                                 }
                             }
                         }
-                        gustoViewModel.
+                        if(gustoViewModel.removeRoute.size>0) {
+                            var num = 0
+                            for(routeListId in gustoViewModel.removeRoute) {
+                                gustoViewModel.deleteRouteStore(routeListId) { result ->
+                                    when (result) {
+                                        1 -> {
+                                            num++
+                                            if(num == gustoViewModel.removeRoute.size) {
+                                                gustoViewModel.getGroupRouteDetail(gustoViewModel.currentRouteId) { result ->
+                                                    when (result) {
+                                                        1 -> {
+                                                        }
+                                                        else -> {
+                                                            Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else -> {
+                                            Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
                     }
                 }

@@ -65,7 +65,7 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
             binding1.btnPlus.setOnClickListener {
                 itemList.add(
                     mapUtil.Companion.MarkerItem(
-                        0,
+                        tmp,
                         0,
                         0,
                         37.6219001,

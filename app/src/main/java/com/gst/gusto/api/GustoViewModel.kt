@@ -92,7 +92,7 @@ class GustoViewModel: ViewModel() {
     var dong = ""
 
     // 현재 피드 리뷰 아이디
-    var currentFeedReviewId = 2L
+    var currentFeedReviewId = -1L
     // 현재 피드 리뷰 데이터
     lateinit var currentFeedData :ResponseFeedDetail
 
@@ -251,7 +251,7 @@ class GustoViewModel: ViewModel() {
         service.deleteRouteStore(xAuthToken, routeListId).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    Log.d("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel", "Successful response(Remove): ${response}")
                     callback(1)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -270,7 +270,7 @@ class GustoViewModel: ViewModel() {
         service.addRouteStore(xAuthToken,currentRouteId,addList).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    Log.d("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel", "Successful response(Add): ${response}")
                     callback(1)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
