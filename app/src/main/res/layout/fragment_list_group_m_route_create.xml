@@ -12,6 +12,20 @@
         android:background="@drawable/background_radius_top_30"
         android:orientation="vertical">
 
+        <EditText
+            android:id="@+id/et_route_name"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="30dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="@font/pretendard_bold"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray_7"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="18dp"
+            android:background="@android:color/transparent"
+            android:hint="루트 이름을 입력하세요" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_routes"
             android:layout_width="match_parent"
