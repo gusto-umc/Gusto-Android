@@ -357,4 +357,4 @@ data class ResponseCalReview(
 data class ResponseFeedReview(
     @SerializedName("reviewId") val reviewId: Long,
     @SerializedName("images") val images: String
-
+)
