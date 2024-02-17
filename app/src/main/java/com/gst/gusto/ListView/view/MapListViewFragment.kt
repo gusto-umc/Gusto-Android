@@ -259,6 +259,23 @@ class MapListViewFragment : Fragment() {
             getMapCategories()
         })
 
+        /**
+         * 닉네임 저장 테스트
+         */
+        gustoViewModel.getSavedStores("성수1가1동", null){
+                result ->
+            when(result){
+                0 -> {
+                    //success
+                    Toast.makeText(context, "saved 성공", Toast.LENGTH_SHORT).show()
+                }
+                1 -> {
+                    //fail
+                    Toast.makeText(context, "saved 실패", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
     }
     fun goShow(){
         binding.layoutListviewOrder.visibility = View.VISIBLE

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragment_map">
+    app:startDestination="@id/searchFragment">
 
     <!-- Map 화면의 프래그먼트들 -->
     <fragment
@@ -374,8 +374,9 @@
             android:id="@+id/action_storeDetailFragment_to_fragment_feed_review_detail"
             app:destination="@id/fragment_feed_detail_review" />
         <action
-            android:id="@+id/action_storeDetailFragment_to_mapListViewSaveFragment"
-            app:destination="@id/mapListViewSaveFragment" />
+            android:id="@+id/action_storeDetailFragment_to_fragment_review_detail"
+            app:destination="@id/fragment_review_detail" />
+
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

@@ -321,6 +321,12 @@ interface GustoApi {
      */
 
     //1. 검색 결과
+    @GET("stores/search")
+    fun getSearch(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("keyword") keyword : String
+    ) : Call<List<ResponseSearch1>>
+
     @GET("users/follower") // 팔로워 조회
     fun getFollower(
         @Header("X-AUTH-TOKEN") token : String
