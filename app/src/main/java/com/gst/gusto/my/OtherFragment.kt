@@ -41,7 +41,7 @@ class OtherFragment : Fragment() {
         binding = FragmentMyBinding.inflate(inflater, container, false)
         initViewPager()
 
-        val nickname = arguments?.getString("nickname", "my") ?: "my"
+        val nickname = gustoViewModel.currentFeedNickname
 
         gustoViewModel.getUserProfile(nickname) { result, data ->
             when(result) {

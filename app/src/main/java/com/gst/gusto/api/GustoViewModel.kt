@@ -95,6 +95,8 @@ class GustoViewModel: ViewModel() {
     var currentFeedReviewId = -1L
     // 현재 피드 리뷰 데이터
     lateinit var currentFeedData :ResponseFeedDetail
+    // 현재 피드 리뷰 작성자 닉네임
+    var currentFeedNickname = ""
 
 
 
