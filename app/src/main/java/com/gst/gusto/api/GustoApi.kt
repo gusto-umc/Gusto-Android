@@ -186,7 +186,7 @@ interface GustoApi {
     fun getFeedReview(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("reviewId") reviewId : Long
-    )
+    ):Call<ResponseFeedDetail>
 
     //USERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSER
 

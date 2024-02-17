@@ -30,6 +30,8 @@ class GustoViewModel: ViewModel() {
     private val service = retrofit.create(GustoApi::class.java)
     private var xAuthToken = ""
     private var refreshToken = ""
+    // 해쉬 태그
+    val hashTag = listOf<String>("#따뜻함","#여기서는 화장실 금지","#쾌적","#귀여워","#깨끗함","#인스타","#힙함","#나름 괜찮아","#넓음","#분위기","#가성비")
 
     // 자신의 루트 리스트 - (val title : String, val people : Int, val food : Int, val route : Int)
     val myRouteList = ArrayList<GroupItem>()
@@ -87,6 +89,11 @@ class GustoViewModel: ViewModel() {
 
     // 현재 동
     var dong = ""
+
+    // 현재 피드 리뷰 아이디
+    var currentFeedReviewId = 2L
+    // 현재 피드 리뷰 데이터
+    lateinit var currentFeedData :ResponseFeedDetail
 
 
 
@@ -577,9 +584,9 @@ class GustoViewModel: ViewModel() {
     }
 
     // 리뷰 좋아요 취소
-    fun unlickReview(reviewId: Long,callback: (Int) -> Unit){
+    fun unlickReview(callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
-        service.unlickReview(xAuthToken,reviewId).enqueue(object : Callback<ResponseBody> {
+        service.unlickReview(xAuthToken,currentFeedReviewId).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Log.d("viewmodel", "Successful response: ${response}")
@@ -597,9 +604,9 @@ class GustoViewModel: ViewModel() {
     }
 
     // 리뷰 좋아요
-    fun lickReview(reviewId: Long,callback: (Int) -> Unit){
+    fun lickReview(callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
-        service.lickReview(xAuthToken,reviewId).enqueue(object : Callback<ResponseBody> {
+        service.lickReview(xAuthToken,currentFeedReviewId).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Log.d("viewmodel", "Successful response: ${response}")
@@ -669,6 +676,32 @@ class GustoViewModel: ViewModel() {
                 }
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3)
+            }
+        })
+    }
+    // 먹스또 피드 상세 보기
+    fun getFeedReview(callback: (Int) -> Unit){
+        Log.e("token",xAuthToken)
+        service.getFeedReview(xAuthToken,currentFeedReviewId).enqueue(object : Callback<ResponseFeedDetail> {
+            override fun onResponse(call: Call<ResponseFeedDetail>, response: Response<ResponseFeedDetail>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if(responseBody!=null) {
+                        Log.d("viewmodel", "Successful response: ${response}")
+                        currentFeedData = responseBody
+                        callback(1)
+                    } else {
+                        Log.e("viewmodel", "Unsuccessful response: ${response}")
+                        callback(3)
+                    }
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3)
+                }
+            }
+            override fun onFailure(call: Call<ResponseFeedDetail>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
                 callback(3)
             }

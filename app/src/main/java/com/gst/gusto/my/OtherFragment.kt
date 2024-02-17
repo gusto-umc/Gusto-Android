@@ -26,7 +26,7 @@ import com.gst.gusto.my.adapter.MyViewpagerAdapter
 import com.gst.gusto.my.fragment.MyListFragment
 import com.gst.gusto.start.StartActivity
 
-class MyFragment : Fragment() {
+class OtherFragment : Fragment() {
 
     lateinit var binding: FragmentMyBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
@@ -41,8 +41,9 @@ class MyFragment : Fragment() {
         binding = FragmentMyBinding.inflate(inflater, container, false)
         initViewPager()
 
+        val nickname = arguments?.getString("nickname", "my") ?: "my"
 
-        gustoViewModel.getUserProfile("my") { result, data ->
+        gustoViewModel.getUserProfile(nickname) { result, data ->
             when(result) {
                 1 -> {
                     if(data!=null) {
@@ -54,6 +55,15 @@ class MyFragment : Fragment() {
                         binding.tvFollowerNum.text = "${data.follower}"
                         //setImage(binding.ivProfileImage)
                         followed = data.followed
+                        if(data.followed) {
+                            binding.btnProfileEdit.backgroundTintList = colorStateOffList
+                            binding.btnProfileEdit.text = "팔로잉"
+                            binding.btnProfileEdit.setTextColor(Color.parseColor("#717171"))
+                        } else {
+                            binding.btnProfileEdit.backgroundTintList = colorStateOnList
+                            binding.btnProfileEdit.text = "팔로우"
+                            binding.btnProfileEdit.setTextColor(Color.parseColor("#FFFFFF"))
+                        }
                     }
                 }
             }
@@ -66,27 +76,31 @@ class MyFragment : Fragment() {
                 startActivity(intent)
             }
             btnProfileEdit.setOnClickListener {
-                val intent = Intent(requireContext(), MyProfileEditActivity::class.java)
-                startActivity(intent)
-            }
-            btnFollowerList.setOnClickListener {
-                gustoViewModel.getFollower {result ->
-                    when(result) {
-                        1 -> {
-                            findNavController().navigate(R.id.action_myFragment_to_followList)
+                if(followed) {
+                    gustoViewModel.unFollow(nickname) { result ->
+                        when(result) {
+                            1 -> {
+                                followed = false
+                                btnProfileEdit.backgroundTintList = colorStateOnList
+                                btnProfileEdit.text = "팔로우"
+                                tvFollowerNum.text ="${tvFollowerNum.text.toString().toInt()-1}"
+                                binding.btnProfileEdit.setTextColor(Color.parseColor("#FFFFFF"))
+                            }
                         }
-                        else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                     }
-                }
-            }
-            btnFollowingList.setOnClickListener {
-                gustoViewModel.getFollowing {result ->
-                    when(result) {
-                        1 -> {
-                            findNavController().navigate(R.id.action_myFragment_to_followList)
+                } else {
+                    gustoViewModel.follow(nickname) { result ->
+                        when(result) {
+                            1 -> {
+                                followed = true
+                                btnProfileEdit.backgroundTintList = colorStateOffList
+                                btnProfileEdit.text = "팔로잉"
+                                tvFollowerNum.text ="${tvFollowerNum.text.toString().toInt()+1}"
+                                binding.btnProfileEdit.setTextColor(Color.parseColor("#717171"))
+                            }
                         }
-                        else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                     }
+
                 }
             }
             //임시 로그인
@@ -95,7 +109,7 @@ class MyFragment : Fragment() {
                 startActivity(intent)
             }
             btnBack.setOnClickListener {
-                //findNavController().popBackStack()
+                findNavController().popBackStack()
             }
         }
         return binding.root
@@ -104,6 +118,9 @@ class MyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.btnProfileEdit.text = "팔로잉"
+        binding.btnOption.visibility =View.GONE
 
     }
     private fun initViewPager() {

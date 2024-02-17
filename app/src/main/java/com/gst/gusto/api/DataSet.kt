@@ -288,7 +288,7 @@ data class RegionDocument(
     @SerializedName("y") val latitude: Double
 )
 
-data class StoreData(
+data class ResponseFeedDetail(
     @SerializedName("storeId") val storeId: Long,
     @SerializedName("storeName") val storeName: String,
     @SerializedName("address") val address: String,
