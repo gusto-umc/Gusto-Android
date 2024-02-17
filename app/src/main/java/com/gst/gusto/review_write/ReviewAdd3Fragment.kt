@@ -72,6 +72,7 @@ class ReviewAdd3Fragment : Fragment() {
             binding.cvImgae3,
             binding.cvImgae4
         )
+        gustoViewModel.imageFiles.clear()
 
         var imagesOn = false
 
@@ -111,8 +112,7 @@ class ReviewAdd3Fragment : Fragment() {
                 }
 
                 for (j in 0 .. uri.size-1) {
-                    gustoViewModel.img = convertContentToFile(requireContext(),uri[j])
-
+                    gustoViewModel.imageFiles?.add(convertContentToFile(requireContext(),uri[j]))
                     setImage(imageViews[j],uri[j].toString(),requireContext())
                 }
                 for (j in uri.size .. 3) {

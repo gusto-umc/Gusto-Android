@@ -73,6 +73,7 @@ class MyFragment : Fragment() {
                 gustoViewModel.getFollower {result ->
                     when(result) {
                         1 -> {
+                            gustoViewModel.followListTitleName= "팔로워"
                             findNavController().navigate(R.id.action_myFragment_to_followList)
                         }
                         else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
@@ -83,6 +84,7 @@ class MyFragment : Fragment() {
                 gustoViewModel.getFollowing {result ->
                     when(result) {
                         1 -> {
+                            gustoViewModel.followListTitleName= "팔로잉 중"
                             findNavController().navigate(R.id.action_myFragment_to_followList)
                         }
                         else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()

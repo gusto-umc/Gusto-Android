@@ -78,7 +78,7 @@ class FeedDetailReviewFragment : Fragment() {
             imageList.add(image)
         }
         binding.tvMenuName.text = feedDetail.menuName
-        for(tagNum in feedDetail.hashTags.split(",").map{it.toInt()}) {
+        for(tagNum in feedDetail.hashTags.split(",").mapNotNull { it.toIntOrNull() }) {
             addChip(gustoViewModel.hashTag[tagNum-1])
         }
         binding.tvMemo.text = feedDetail.comment

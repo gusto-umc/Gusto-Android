@@ -350,7 +350,10 @@
         tools:layout="@layout/fragment_my_follow_list">
         <action
             android:id="@+id/action_followList_to_myFragment"
-            app:destination="@id/fragment_my" />
+            app:destination="@id/fragment_my"/>
+        <action
+            android:id="@+id/action_followList_to_otherFragment"
+            app:destination="@id/fragment_other"/>
     </fragment>
     <fragment
         android:id="@+id/mapListViewFragment"
