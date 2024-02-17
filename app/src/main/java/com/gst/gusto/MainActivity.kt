@@ -16,6 +16,7 @@ import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.ActivityMainBinding
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var navController: NavController
     lateinit var navHostFragment: NavHostFragment
     val gustoViewModel : GustoViewModel by viewModels()
+    private var previousDestinationId: Int = -1
     private val TAG = "SOL_LOG"
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +39,27 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.findNavController()
         binding.bottomNavigationView.setupWithNavController(navController)
 
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val currentDestinationId = destination.id
+
+
+            if (previousDestinationId == currentDestinationId) {
+                // 현재 목적지와 이전 목적지가 같은 경우
+                // 선택한 탭이 이미 화면에 표시 중이므로 초기 화면으로 이동
+                while (navController.currentDestination?.id != R.id.fragment_list&&navController.currentDestination?.id != R.id.fragment_map&&
+                        navController.currentDestination?.id != R.id.fragment_review&&navController.currentDestination?.id != R.id.fragment_feed&&
+                        navController.currentDestination?.id != R.id.fragment_my) {
+                    previousDestinationId = -1
+                    navController.popBackStack()
+                }
+            }
+            // 이전 목적지 업데이트
+            previousDestinationId = currentDestinationId
+        }
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener { item->
+            item.onNavDestinationSelected(navController)
+            true
+        }
         // 카카오 해쉬키 얻기
         try {
             val information = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)

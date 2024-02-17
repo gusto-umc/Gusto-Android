@@ -68,8 +68,8 @@ class LisAdapter(
             holder.tv_people.text = "${itemList[position].numMembers}명"
             holder.tv_food.text = "맛집 : ${itemList[position].numRestaurants}개"
             holder.tv_route.text = "루트 : ${itemList[position].numRoutes}개"
+            holder.btn_remove.visibility = View.GONE
         }
-        if(option==0 || option==3) holder.btn_remove.visibility = View.GONE
 
         holder.item.setOnTouchListener { view, event ->
             when (event.action) {
@@ -146,10 +146,24 @@ class LisAdapter(
                 }
 
             } else if(option == 3){
-                CoroutineScope(Dispatchers.Main).launch {
-                    delay(50)
-                    Navigation.findNavController(holder.itemView).navigate(R.id.action_myRouteRoutesFragment_to_myRouteStoresFragment)
+                gustoViewModel.getGroupRouteDetail(itemList[position].groupId) { result ->
+                    when (result) {
+                        1 -> {
+                            gustoViewModel.currentRouteId = itemList[position].groupId
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(50)
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    delay(50)
+                                    Navigation.findNavController(holder.itemView).navigate(R.id.action_myRouteRoutesFragment_to_myRouteStoresFragment)
+                                }
+                            }
+                        }
+                        else -> {
+                            Toast.makeText(holder.itemView.context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                        }
+                    }
                 }
+
             }
         }
         holder.btn_remove.setOnClickListener {
