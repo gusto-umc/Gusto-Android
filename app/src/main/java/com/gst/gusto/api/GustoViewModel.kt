@@ -791,7 +791,7 @@ class GustoViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
-                    Log.e("viewmodel", response.body().toString())
+                    Log.d("getStoreDetail", response.body()!!.reviews.toString())
                     myStoreDetail = response.body()
                     callback(0)
                 } else {

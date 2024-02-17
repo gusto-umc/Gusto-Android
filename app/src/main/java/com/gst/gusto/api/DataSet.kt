@@ -155,7 +155,17 @@ data class ResponseStoreDetail(
 
 //가게 상세 리뷰 -> 수정 필요
 data class ResponseReviews(
-    @SerializedName("date") val date : String
+    @SerializedName("reviewId") val reviewId : Int,
+    @SerializedName("visitedAt") val visitedAt : String,
+    @SerializedName("profileImage") val profileImage : String,
+    @SerializedName("nickname") val nickname : String,
+    @SerializedName("liked") val liked : Int,
+    @SerializedName("comment") val comment : String?,
+    @SerializedName("img1") val img1 : String?,
+    @SerializedName("img2") val img2 : String?,
+    @SerializedName("img3") val img3 : String?,
+    @SerializedName("img4") val img4 : String?
+
 )
 
 //가게 조회
