@@ -20,7 +20,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.time.LocalDate
-import java.util.Date
 
 class GustoViewModel: ViewModel() {
     private val retrofit = Retrofit.Builder().baseUrl(BuildConfig.API_BASE)
@@ -93,9 +92,11 @@ class GustoViewModel: ViewModel() {
     var dong = ""
 
     // 현재 피드 리뷰 아이디
-    var currentFeedReviewId = 2L
+    var currentFeedReviewId = -1L
     // 현재 피드 리뷰 데이터
     lateinit var currentFeedData :ResponseFeedDetail
+    // 현재 피드 리뷰 작성자 닉네임
+    var currentFeedNickname = ""
 
 
 
@@ -252,7 +253,7 @@ class GustoViewModel: ViewModel() {
         service.deleteRouteStore(xAuthToken, routeListId).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    Log.d("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel", "Successful response(Remove): ${response}")
                     callback(1)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -266,12 +267,12 @@ class GustoViewModel: ViewModel() {
         })
     }
     // 루트 내 식당 추가 (공통)
-    fun addRouteStore(storeId : Long, ordinal : Int,callback: (Int) -> Unit){
+    fun addRouteStore(addList: ArrayList<RouteList>,  callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
-        service.addRouteStore(xAuthToken,currentRouteId,RouteList(storeId,ordinal,null,null,null,null,null)).enqueue(object : Callback<ResponseBody> {
+        service.addRouteStore(xAuthToken,currentRouteId,addList).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    Log.d("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel", "Successful response(Add): ${response}")
                     callback(1)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")

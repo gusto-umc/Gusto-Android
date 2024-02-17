@@ -51,9 +51,8 @@ class FeedDetailReviewFragment : Fragment() {
             findNavController().popBackStack()
         }
         binding.btnProfile.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("nickname","mindddy")
-            findNavController().navigate(R.id.action_feedDetailReview_to_otherFragment,bundle)
+            if(gustoViewModel.currentFeedNickname!="")
+                findNavController().navigate(R.id.action_feedDetailReview_to_otherFragment)
         }
         binding.restInfo.setOnClickListener {
             findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
@@ -71,6 +70,7 @@ class FeedDetailReviewFragment : Fragment() {
         binding.tvRestName.text = feedDetail.storeName
         binding.tvRestLoc.text = feedDetail.address
         binding.tvNickname.text = feedDetail.nickName
+        gustoViewModel.currentFeedNickname = feedDetail.nickName
         setImage(binding.ivProfileImage,feedDetail.profileImage,requireContext())
         binding.tvHeartNum.text = "${feedDetail.likeCnt}"
         val imageList = mutableListOf<String>()
@@ -79,7 +79,7 @@ class FeedDetailReviewFragment : Fragment() {
         }
         binding.tvMenuName.text = feedDetail.menuName
         for(tagNum in feedDetail.hashTags.split(",").map{it.toInt()}) {
-            addChip(gustoViewModel.hashTag[tagNum])
+            addChip(gustoViewModel.hashTag[tagNum-1])
         }
         binding.tvMemo.text = feedDetail.comment
 
@@ -141,16 +141,21 @@ class FeedDetailReviewFragment : Fragment() {
                 likeIt = 2
                 binding.ivHeart.setColorFilter(null)
                 it.startAnimation(scaleDownAnimation)
+                binding.tvHeartNum.text = (binding.tvHeartNum.text.toString().toInt()-1).toString()
             } else {
                 // 좋아요
                 likeIt = 1
                 val color = ContextCompat.getColor(requireContext(), R.color.main_C)
                 binding.ivHeart.setColorFilter(color)
                 it.startAnimation(scaleUpAnimation)
+                binding.tvHeartNum.text = (binding.tvHeartNum.text.toString().toInt()+1).toString()
             }
             it.isSelected = !it.isSelected
         }
-        if(feedDetail.likeCheck) binding.btnHeart.callOnClick()
+        if(feedDetail.likeCheck) {
+            binding.btnHeart.callOnClick()
+            binding.tvHeartNum.text = (binding.tvHeartNum.text.toString().toInt()-1).toString()
+        }
     }
 
     private fun addChip(text:String) {

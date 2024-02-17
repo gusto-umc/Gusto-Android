@@ -118,6 +118,7 @@ class LisAdapter(
                     nc?.navigate(R.id.action_listFragment_to_groupFragment)
                 }
             } else if(option == 1){
+                // 루트 리스트 들어가기
                 gustoViewModel.getGroupRouteDetail(itemList[position].groupId) { result ->
                     when (result) {
                         1 -> {
@@ -133,6 +134,7 @@ class LisAdapter(
                     }
                 }
             } else if(option == 2){
+                // 그룹에서 루트 리스트 들어가기
                 gustoViewModel.getGroupRouteDetail(itemList[position].groupId) { result ->
                     when (result) {
                         1 -> {
@@ -146,6 +148,7 @@ class LisAdapter(
                 }
 
             } else if(option == 3){
+                // 마이에서 루트 리스트 들어가기
                 gustoViewModel.getGroupRouteDetail(itemList[position].groupId) { result ->
                     when (result) {
                         1 -> {

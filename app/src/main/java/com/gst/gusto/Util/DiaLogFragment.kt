@@ -61,11 +61,11 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
 
             binding1.rvRoutes.adapter = boardAdapter
             binding1.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
+            var tmp = 4L
             binding1.btnPlus.setOnClickListener {
                 itemList.add(
                     mapUtil.Companion.MarkerItem(
-                        0,
+                        tmp,
                         0,
                         0,
                         37.6219001,
@@ -75,7 +75,7 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                         false
                     )
                 )
-                gustoViewModel.addRoute.add(5)  // storeId
+                gustoViewModel.addRoute.add(tmp++)  // storeId
                 gustoViewModel.markerListLiveData.value = itemList
                 boardAdapter.notifyItemInserted(itemList.size-1)
                 if(itemList.size==6) {
