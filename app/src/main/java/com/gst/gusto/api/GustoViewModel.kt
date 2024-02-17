@@ -740,6 +740,7 @@ class GustoViewModel: ViewModel() {
     var myAllStoreList : List<ResponseStoreListItem>? = null
 
     var myStoreDetail : ResponseStoreDetail? = null
+    var myDetailReviews = mutableListOf<ResponseReviews>()
 
     //가게 카테고리 추가(찜) -> 확인 완, 수정 필요
     fun addPin(categoryId: Long, storeLong: Long, callback: (Int) -> Unit){
@@ -793,6 +794,9 @@ class GustoViewModel: ViewModel() {
                     Log.e("viewmodel", "Successful response: ${response}")
                     Log.d("getStoreDetail", response.body()!!.reviews.toString())
                     myStoreDetail = response.body()
+                    for(i in response.body()!!.reviews){
+                        myDetailReviews.add(ResponseReviews(reviewId = i.reviewId, visitedAt = i.visitedAt, profileImage = i.profileImage, nickname = i.nickname, liked = i.liked, comment = i.comment, img1 = i.img1, img2 = i.img2, img3 = i.img3, img4 = i.img4))
+                    }
                     callback(0)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
