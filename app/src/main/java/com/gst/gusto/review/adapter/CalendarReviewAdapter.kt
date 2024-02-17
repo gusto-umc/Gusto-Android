@@ -5,10 +5,14 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.api.ResponseCalReview
+import com.gst.gusto.api.ResponseCalReviews
 import com.gst.gusto.databinding.ItemReviewCalendarBinding
 
-class CalendarReviewAdapter(var imageList: Array<Int>, val context: Context?, private val itemClickListener: (Array<Int>) -> Unit) : RecyclerView.Adapter<CalendarReviewAdapter.ViewHolder>() {
+class CalendarReviewAdapter(var calendarList: List<ResponseCalReviews?>, val context: Context?, private val itemClickListener: (Long) -> Unit) : RecyclerView.Adapter<CalendarReviewAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): CalendarReviewAdapter.ViewHolder {
@@ -17,26 +21,27 @@ class CalendarReviewAdapter(var imageList: Array<Int>, val context: Context?, pr
         return ViewHolder(binding, itemClickListener)
     }
 
-    override fun onBindViewHolder(holder: CalendarReviewAdapter.ViewHolder, position: Int) {
-        // val width = (context?.resources?.displayMetrics?.widthPixels ?: 0) / 3
-        // holder.imageview.layoutParams = LinearLayoutCompat.LayoutParams(width, width)
-        if(imageList[position] == 0){
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        setImage(holder.imageview,
+            (calendarList[position]?.images?.get(0) ?: null).toString(), holder.itemView.context)
+        /*if(calendarList[position] == 0){
             holder.imageview.setBackgroundColor(Color.parseColor("#ECECEC"))
         } else {
-            holder.imageview.setImageResource(imageList[position])
-        }
+            holder.imageview.setImageResource(calendarList[position])
+        }*/
 
     }
 
-    override fun getItemCount(): Int = imageList.size
+    override fun getItemCount(): Int = calendarList.size
 
 
-    inner class ViewHolder(val binding: ItemReviewCalendarBinding, private val itemClickListener: (Array<Int>) -> Unit) : RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(val binding: ItemReviewCalendarBinding, private val itemClickListener: (Long) -> Unit) : RecyclerView.ViewHolder(binding.root){
         val imageview : ImageView = binding.reviewImageView
 
         init {
             imageview.setOnClickListener{
-                itemClickListener.invoke(imageList)
+                itemClickListener.invoke(calendarList[position]?.reviewId ?: 0)
             }
         }
 

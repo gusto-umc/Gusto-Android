@@ -14,6 +14,9 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
+import java.time.LocalDate
+import java.util.Date
 
 
 interface GustoApi {
@@ -191,5 +194,11 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String
     ):Call<List<Member>>
 
-
+    @GET("reviews/calView") // 리뷰 모아보기 - 2 (cal view)
+    fun calView(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("reviewId") reviewId: Long?,
+        @Query("size") size: Int,
+        @Query("date") date: LocalDate
+    ):Call<ResponseCalReview>
 }

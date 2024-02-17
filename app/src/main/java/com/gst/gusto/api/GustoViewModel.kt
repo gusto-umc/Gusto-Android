@@ -21,6 +21,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
+import java.time.LocalDate
+import java.util.Date
 
 class GustoViewModel: ViewModel() {
     private val retrofit = Retrofit.Builder().baseUrl(BuildConfig.API_BASE)
@@ -667,5 +669,28 @@ class GustoViewModel: ViewModel() {
         })
     }
 
-
+    // 리뷰 모아보기 - 2 (cal view)
+    fun calView(reviewId: Long?, size: Int, date: LocalDate, callback: (Int, ResponseCalReview?) -> Unit){
+        service.calView(xAuthToken, reviewId, size, date).enqueue(object : Callback<ResponseCalReview> {
+            override fun onResponse(call: Call<ResponseCalReview>, response: Response<ResponseCalReview>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if(responseBody!=null) {
+                        Log.e("viewmodel", "1 Successful response: ${response}")
+                        callback(1, responseBody)
+                    } else {
+                        Log.e("viewmodel", "2 Successful response: ${response}")
+                        callback(2, null)
+                    }
+                }else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3, null)
+                }
+            }
+            override fun onFailure(call: Call<ResponseCalReview>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3, null)
+            }
+        })
+    }
 }

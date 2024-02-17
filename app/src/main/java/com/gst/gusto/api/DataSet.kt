@@ -1,6 +1,8 @@
 package com.gst.gusto.api
 
 import com.google.gson.annotations.SerializedName
+import java.time.LocalDate
+import java.util.Date
 
 
 // 내 루트 조회
@@ -115,4 +117,16 @@ data class RequestCreateReview(
     @SerializedName("toilet") val toilet : Int?,
     @SerializedName("parking") val parking : Int?,
     @SerializedName("comment") val comment : String?,
+)
+
+// cal Review (calendar Review) 조회- reviews
+data class ResponseCalReviews(
+    @SerializedName("reviewId") val reviewId: Long,
+    @SerializedName("visitedDate") val visitedDate: String,
+    @SerializedName("images") val images: List<String>
+)
+
+// cal Review (calendar Review) 조회
+data class ResponseCalReview(
+     @SerializedName("reviews") val reviews: List<ResponseCalReviews>
 )

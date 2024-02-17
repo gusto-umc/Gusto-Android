@@ -1,16 +1,29 @@
 package com.gst.gusto.review.fragment
 
-import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.ResponseCalReviews
 import com.gst.gusto.databinding.FragmentCalendarReviewBinding
 import com.gst.gusto.review.adapter.CalendarReviewAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.YearMonth
+import kotlin.coroutines.resume
 
 
 class CalendarReviewFragment : Fragment() {
@@ -18,21 +31,7 @@ class CalendarReviewFragment : Fragment() {
     lateinit var binding: FragmentCalendarReviewBinding
     lateinit var adapter: CalendarReviewAdapter
 
-    // 테스트 이미지의 id
-    val testImageList = arrayOf(
-        R.drawable.review_gallery_test, R.drawable.review_gallery_test2, R.drawable.review_gallery_test,
-        R.drawable.review_gallery_test, R.drawable.review_gallery_test, R.drawable.review_gallery_test2,
-        R.drawable.review_gallery_test2, R.drawable.review_gallery_test, R.drawable.review_gallery_test,
-        R.drawable.review_gallery_test, R.drawable.review_gallery_test2, R.drawable.review_gallery_test2,
-        R.drawable.review_gallery_test2, 0, R.drawable.review_gallery_test2,
-        R.drawable.review_gallery_test, R.drawable.review_gallery_test2, R.drawable.review_gallery_test,
-        0, R.drawable.review_gallery_test, R.drawable.review_gallery_test2,
-        R.drawable.review_gallery_test2, R.drawable.review_gallery_test, R.drawable.review_gallery_test,
-        R.drawable.review_gallery_test, 0, R.drawable.review_gallery_test2,
-        R.drawable.review_gallery_test2, R.drawable.review_gallery_test, 0,
-        R.drawable.review_gallery_test, R.drawable.review_gallery_test2, R.drawable.review_gallery_test2,
-        0, R.drawable.review_gallery_test
-    )
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,21 +39,59 @@ class CalendarReviewFragment : Fragment() {
     ): View? {
         binding = FragmentCalendarReviewBinding.inflate(inflater, container, false)
 
-        // 클릭 리스너 부분
+        initView()
+        getData()
 
-        adapter = CalendarReviewAdapter(testImageList, context,
-            itemClickListener = {
-                val bundle = Bundle()
-                bundle.putInt("reviewId",0)     //리뷰 아이디 넘겨 주면 됨
-                bundle.putString("page","review")
-                findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail,bundle)
-            })
+        return binding.root
+    }
+
+    fun initView(){
+        adapter = CalendarReviewAdapter(ArrayList(), context,
+                itemClickListener = { reviewId ->
+                    val bundle = Bundle()
+                    bundle.putLong("reviewId", reviewId)     // 리뷰 아이디 넘겨 주면 됨
+                    bundle.putString("page","review")
+                    findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail, bundle)
+                })
+
         binding.apply {
             recyclerView.adapter = adapter
             recyclerView.layoutManager = GridLayoutManager(activity, 7)
             adapter.notifyDataSetChanged()
         }
-
-        return binding.root
     }
+
+    fun getData(){
+
+        val daysInMonth = YearMonth.now().lengthOfMonth()
+
+        val calList = List<ResponseCalReviews?>(daysInMonth){null}.toMutableList()
+
+        for(day in 1..daysInMonth){
+            val dates = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
+
+            gustoViewModel.getTokens(requireActivity() as MainActivity)
+            gustoViewModel.calView(null, 100, dates) { result, response ->
+                if (result == 1) {
+                    // response?.reviews?.get(0)?.let { calList.add(it)}
+                    response?.reviews?.let{
+                        it.forEach { item ->
+                            val date = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, day)
+                            if(item.visitedDate == date.toString()){
+                                calList[(day - 1)] = ResponseCalReviews(item.reviewId, item.visitedDate, item.images)
+                            }
+                        }
+                    }
+
+                }
+                Log.d("listResponse", response.toString())
+                adapter.calendarList = calList
+                adapter.notifyDataSetChanged()
+                Log.d("listCal", calList.toString())
+            }
+        }
+
+
+    }
+
 }

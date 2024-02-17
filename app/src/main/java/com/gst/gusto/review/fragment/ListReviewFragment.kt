@@ -43,7 +43,7 @@ class ListReviewFragment : Fragment() {
         }
 
         adapter.setData(list = testData())
-        Log.d("testData", testData().toString())
+        // Log.d("testData", testData().toString())
 
         return binding.root
     }
