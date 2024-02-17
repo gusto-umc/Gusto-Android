@@ -75,7 +75,7 @@
                         android:id="@+id/iv_1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/ic_launcher_background"/>
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
@@ -87,7 +87,7 @@
                         android:id="@+id/iv_2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/ic_launcher_background"/>
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
@@ -98,7 +98,7 @@
                         android:id="@+id/iv_3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/ic_launcher_background"/>
                 </androidx.cardview.widget.CardView>
 
