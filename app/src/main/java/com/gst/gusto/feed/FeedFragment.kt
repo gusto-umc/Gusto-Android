@@ -21,11 +21,7 @@ class FeedFragment : Fragment() {
 
     // 테스트 이미지의 id
     val testImageList = arrayOf(
-        R.drawable.review_gallery_test, R.drawable.review_gallery_test2, R.drawable.review_gallery_test,
-        R.drawable.review_gallery_test, R.drawable.review_gallery_test, R.drawable.review_gallery_test2,
-        R.drawable.review_gallery_test2, R.drawable.review_gallery_test, R.drawable.review_gallery_test,
-        R.drawable.review_gallery_test, R.drawable.review_gallery_test2, R.drawable.review_gallery_test2,
-        R.drawable.review_gallery_test2, R.drawable.review_gallery_test, R.drawable.review_gallery_test2,
+       "hello"
     )
 
     val bundle = Bundle()
@@ -36,14 +32,14 @@ class FeedFragment : Fragment() {
     ): View? {
         binding = FragmentFeedBinding.inflate(inflater, container, false)
 
-        // feed 이미지클릭 리스너 부분
+        /*// feed 이미지클릭 리스너 부분
         adapter = GalleryReviewAdapter(testImageList, context,
             itemClickListener = {
                 val bundle = Bundle()
                 bundle.putInt("reviewId",0)     //리뷰 아이디 넘겨 주면 됨
                 bundle.putString("page","feed")
                 findNavController().navigate(R.id.action_feedFragment_to_feedDetailReviewFragment,bundle)
-            })
+            })*/
 
         binding.apply {
             recyclerView.adapter = adapter

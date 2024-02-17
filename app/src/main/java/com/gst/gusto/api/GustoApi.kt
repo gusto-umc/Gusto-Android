@@ -330,6 +330,14 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String
     ):Call<List<Member>>
 
+
+    @GET("reviews/instaView") // 리뷰 모아보기 - 1 (insta view)
+    fun instaView(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("reviewId") reviewId: Long?,
+        @Query("size") size: Int
+    ):Call<ResponseInstaReview>
+
     //STORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORE
 
     @GET("stores/{storeId}") // 가게 정보 조회(잛은 화면)

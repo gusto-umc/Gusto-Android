@@ -1191,5 +1191,30 @@ class GustoViewModel: ViewModel() {
             })
     }
 
+    // 리뷰 모아보기-1 (Insta view)
+    fun instaView(reviewId: Long?, size: Int, callback: (Int, ResponseInstaReview?) -> Unit){
+        service.instaView(xAuthToken, reviewId, size).enqueue(object : Callback<ResponseInstaReview> {
+            override fun onResponse(call: Call<ResponseInstaReview>, response: Response<ResponseInstaReview>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if(responseBody!=null) {
+                        Log.e("viewmodel", "1 Successful response: ${response}")
+                        callback(1, responseBody)
+                    } else {
+                        Log.e("viewmodel", "2 Successful response: ${response}")
+                        callback(2, null)
+                    }
+                }else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3, null)
+                }
+            }
+            override fun onFailure(call: Call<ResponseInstaReview>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3, null)
+            }
+        })
+    }
+
 
 }
