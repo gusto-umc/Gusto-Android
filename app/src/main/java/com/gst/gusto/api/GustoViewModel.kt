@@ -19,6 +19,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
+import java.time.LocalDate
+import java.util.Date
 
 class GustoViewModel: ViewModel() {
     private val retrofit = Retrofit.Builder().baseUrl(BuildConfig.API_BASE)
@@ -747,7 +749,7 @@ class GustoViewModel: ViewModel() {
         })
     }
     // 언팔로우하기
-    fun unFollow(nickname: String,callback: (Int) -> Unit){
+    fun unFollow(nickname: String, callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
         service.unFollow(xAuthToken,nickname).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -1248,4 +1250,105 @@ class GustoViewModel: ViewModel() {
     }
 
 
+    // 리뷰 모아보기-1 (Insta view)
+    fun instaView(reviewId: Long?, size: Int, callback: (Int, ResponseInstaReview?) -> Unit){
+        service.instaView(xAuthToken, reviewId, size).enqueue(object : Callback<ResponseInstaReview> {
+            override fun onResponse(call: Call<ResponseInstaReview>, response: Response<ResponseInstaReview>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if(responseBody!=null) {
+                        Log.e("viewmodel", "1 Successful response: ${response}")
+                        callback(1, responseBody)
+                    } else {
+                        Log.e("viewmodel", "2 Successful response: ${response}")
+                        callback(2, null)
+                    }
+                }else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3, null)
+                }
+            }
+            override fun onFailure(call: Call<ResponseInstaReview>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3, null)
+            }
+        })
+    }
+    // 리뷰 모아보기-3 (timeline view)
+    fun timeLineView(reviewId: Long?, size: Int, callback: (Int, ResponseListReview?) -> Unit){
+        Log.e("token",xAuthToken)
+        service.timelineView(xAuthToken, reviewId, size).enqueue(object : Callback<ResponseListReview> {
+            override fun onResponse(call: Call<ResponseListReview>, response: Response<ResponseListReview>) {
+
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if(responseBody!=null) {
+                        Log.e("viewmodel", "1 Successful response: ${response}")
+                        callback(1, responseBody)
+                    } else {
+                        Log.e("viewmodel", "2 Successful response: ${response}")
+                        callback(2, null)
+                    }
+                }else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3, null)
+                }
+            }
+            override fun onFailure(call: Call<ResponseListReview>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3, null)
+            }
+        })
+    }
+
+
+    // 리뷰 모아보기 - 2 (cal view)
+    fun calView(reviewId: Long?, size: Int, date: LocalDate, callback: (Int, ResponseCalReview?) -> Unit){
+        service.calView(xAuthToken, reviewId, size, date).enqueue(object : Callback<ResponseCalReview> {
+            override fun onResponse(call: Call<ResponseCalReview>, response: Response<ResponseCalReview>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if(responseBody!=null) {
+                        Log.e("viewmodel", "1 Successful response: ${response}")
+                        callback(1, responseBody)
+                    } else {
+                        Log.e("viewmodel", "2 Successful response: ${response}")
+                        callback(2, null)
+                    }
+                }else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3, null)
+                }
+            }
+            override fun onFailure(call: Call<ResponseCalReview>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3, null)
+            }
+        })
+    }
+
+    // 먹스또 랜덤 피드
+    fun feed(callback: (Int, ArrayList<ResponseFeedReview>?) -> Unit){
+        service.feed(xAuthToken).enqueue(object : Callback<ArrayList<ResponseFeedReview>> {
+            override fun onResponse(call: Call<ArrayList<ResponseFeedReview>>, response: Response<ArrayList<ResponseFeedReview>>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if(responseBody!=null) {
+                        Log.e("viewmodel", "1 Successful response: ${response}")
+                        callback(1, responseBody)
+                    } else {
+                        Log.e("viewmodel", "2 Successful response: ${response}")
+                        callback(2, null)
+                    }
+                }else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3, null)
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<ResponseFeedReview>>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3, null)
+            }
+        })
+    }
 }

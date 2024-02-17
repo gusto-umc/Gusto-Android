@@ -17,6 +17,8 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.time.LocalDate
+import java.util.Date
 
 
 interface GustoApi {
@@ -203,6 +205,13 @@ interface GustoApi {
         @Path("nickname") nickname : String
     ):Call<ResponseBody>
 
+    @GET("reviews/timelineView") // 리뷰 모아보기-3 (timeline view)
+    fun timelineView(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("reviewId") reviewId: Long?,
+        @Query("size") size: Int
+    ):Call<ResponseListReview>
+
     /**
      * 리스트 - 카테고리
      */
@@ -337,6 +346,22 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String
     ):Call<List<Member>>
 
+
+    @GET("reviews/calView") // 리뷰 모아보기 - 2 (cal view)
+    fun calView(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("reviewId") reviewId: Long?,
+        @Query("size") size: Int,
+        @Query("date") date: LocalDate
+    ):Call<ResponseCalReview>
+
+    @GET("reviews/instaView") // 리뷰 모아보기 - 1 (insta view)
+    fun instaView(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("reviewId") reviewId: Long?,
+        @Query("size") size: Int
+    ):Call<ResponseInstaReview>
+
     //STORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORE
 
     @GET("stores/{storeId}") // 가게 정보 조회(잛은 화면)
@@ -352,4 +377,10 @@ interface GustoApi {
         @Query("x") longitude: String,
         @Query("y") latitude: String
     ): Call<RegionInfoResponse>
+
+    @GET("feeds") // 먹스또 랜덤 피드
+    fun feed(
+        @Header("X-AUTH-TOKEN") token: String
+    ):Call<ArrayList<ResponseFeedReview>>
+
 }
