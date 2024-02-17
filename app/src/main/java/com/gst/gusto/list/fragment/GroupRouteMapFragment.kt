@@ -152,7 +152,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         binding.fabEdit.visibility = View.GONE
         binding.fabList.visibility = View.GONE
         if (poiItem != null) {
-            binding.vpSlider.currentItem = poiItem.itemName.toInt()
+            binding.vpSlider.currentItem = poiItem.itemName.toInt()-1
         }
     }
     override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?) {}

@@ -68,10 +68,10 @@ class ReviewAdd5Fragment : Fragment() {
             for (i in 0 until chipGroup.childCount) {
                 val chip = chipGroup.getChildAt(i) as Chip
                 if (chip.isChecked) {
-                    tmpString += (", "+(i+1))
+                    tmpString += (","+(i+1))
                 }
             }
-            if(tmpString !="") gustoViewModel.hashTagId = tmpString.substring(2)
+            if(tmpString !="") gustoViewModel.hashTagId = tmpString.substring(1)
             findNavController().navigate(R.id.action_reviewAdd5Fragment_to_reviewAdd6Fragment)
         }
 

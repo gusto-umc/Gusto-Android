@@ -6,16 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.MapMainScreenFragment
 import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.Util.mapUtil.Companion.setMapInit
+import com.gst.gusto.Util.mapUtil.Companion.setMarker
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMapBinding
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -26,8 +30,13 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
 
     lateinit var binding: FragmentMapBinding
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+
+
     private val TAG = "SOL_LOG"
     lateinit var mapView : MapView
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 5000
 
@@ -49,17 +58,11 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapBinding.inflate(inflater, container, false)
-
         val view = binding.root
-
 
         // BottomSheet 설정
         val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-
-        chipGroup = binding.fragmentMapMainScreen.chipGroup
-
-
 
         // BottomSheet 상태 변화 감지
         bottomSheetBehavior.addBottomSheetCallback(object :
@@ -69,6 +72,13 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     BottomSheetBehavior.STATE_HIDDEN -> {
                         // BottomSheet가 숨겨진 경우 fragment_map_main_screen.xml을 보여줌
                         showMainScreenFragment()
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        // BottomSheet가 펼쳐진 경우 AreaFragment로 이동
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_map, AreaFragment())
+                            .addToBackStack(null) //뒤로가기
+                            .commit()
                     }
                     else -> {
                         // 다른 상태에서는 fragment_map_main_screen.xml을 숨김
@@ -82,29 +92,61 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         })
 
 
+        ////    카테고리    ////
+
         // 버튼 클릭 리스너 설정
-        binding.listViewBtn.setOnClickListener {
-            // 네비게이션 컨트롤러를 사용하여 다른 프래그먼트로 이동
-            //navController.navigate(R.id.listFragment)
+        val totalBtn = view.findViewById<Chip>(R.id.total_btn)
+        totalBtn.setOnClickListener {
+            // 현재 버튼의 텍스트를 가져옴
+            val currentText = totalBtn.text.toString()
+            // 다음 순서로 변경
+            val nextText = when (currentText) {
+                "전체" -> "가본 곳 만"
+                "가본 곳 만" -> "가본 곳 제외"
+                else -> "전체"
+            }
+            // 변경된 텍스트 설정
+            totalBtn.text = nextText
         }
 
-        // 칩그룹에 칩 클릭 리스너 추가
-        chipGroup.setOnCheckedChangeListener { group, checkedId ->
-            // 이전에 활성화된 칩이 있으면 해당 칩의 색상을 변경
-            if (previousChipId != -1) {
-                val previousChip = group.findViewById<Chip>(previousChipId)
-                previousChip.setChipBackgroundColorResource(R.color.white)
-            }
-            // 현재 클릭된 칩의 색상 변경
-            val currentChip = group.findViewById<Chip>(checkedId)
-            currentChip.setChipBackgroundColorResource(R.color.chip_select_color)
-            // 클릭된 칩의 ID를 이전 칩의 ID로 저장
-            previousChipId = checkedId
+
+        // 칩 그룹 초기화
+        chipGroup = binding.fragmentMapMainScreen.chipGroup
+
+        // 각 칩에 대한 클릭 리스너 설정
+        view.findViewById<Chip>(R.id.cafe_btn).setOnClickListener {
+            handleChipClick(it as Chip)
+        }
+        view.findViewById<Chip>(R.id.Italian_btn).setOnClickListener {
+            handleChipClick(it as Chip)
+        }
+        view.findViewById<Chip>(R.id.Japanese_btn).setOnClickListener {
+            handleChipClick(it as Chip)
+        }
+        view.findViewById<Chip>(R.id.Izakaya_btn).setOnClickListener {
+            handleChipClick(it as Chip)
         }
 
         return view
     }
 
+    // 클릭된 칩의 처리를 담당하는 함수
+    private fun handleChipClick(chip: Chip) {
+        // 이전에 활성화된 칩이 있으면 해당 칩의 색상을 변경
+        if (previousChipId != -1) {
+            val previousChip = chipGroup.findViewById<Chip>(previousChipId)
+            // 이전에 활성화된 칩
+            previousChip.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_C))
+            previousChip.setChipBackgroundColorResource(R.color.chip_select_color)
+            previousChip.setChipIconResource(R.drawable.streamline_bean)
+        }
+        // 현재 클릭된 칩의 색상 변경
+        chip.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+        chip.setChipBackgroundColorResource(R.color.main_C)
+        chip.setChipIconResource(R.drawable.streamline_coffee_bean_white)
+        // 클릭된 칩의 ID를 이전 칩의 ID로 저장
+        previousChipId = chip.id
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -147,20 +189,20 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         markerList.add(MarkerItem(0, 0,0, 37.6215101, 127.0751410, "", "", false))
         markerList.add(MarkerItem(0, 0,0, 37.6245301, 127.0740210, "", "", false))
         markerList.add(MarkerItem(0, 0,0, 37.6215001, 127.0743010, "", "", false))
-/*
-        mapView = MapView(requireContext())
 
-        mapView.setPOIItemEventListener(this)
-        mapView.setMapViewEventListener(this)
-
-        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map")
-
-        setMarker(mapView,markerList)*/
+//        mapView = MapView(requireContext())
+//
+//        mapView.setPOIItemEventListener(this)
+//        mapView.setMapViewEventListener(this)
+//
+//        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map")
+//
+//        setMarker(mapView,markerList)
     }
     override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
         // 마커 클릭 시 이벤트
         Log.d("MapViewEventListener","ccc")
-
+        findNavController().navigate(R.id.action_fragment_map_to_mapViewpagerFragment)
     }
     override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?) {}
     override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?, buttonType: MapPOIItem.CalloutBalloonButtonType?) {}
@@ -202,6 +244,15 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     override fun onMapViewDragEnded(p0: MapView?, p1: MapPoint?) {
         Log.d(TAG, "지도 드래그가 종료되었습니다.")
+        if (p1 != null) {
+            gustoViewModel.getRegionInfo(p1.mapPointGeoCoord.longitude, p1.mapPointGeoCoord.latitude)  {result ->
+                when(result) {
+                    1 -> {
+                        Log.d("viewmodel",gustoViewModel.dong)
+                    }
+                }
+            }
+        }
     }
 
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
