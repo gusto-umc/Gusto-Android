@@ -101,7 +101,7 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
                             Log.d("viewmodel",data.toString())
                             val tmpData = mapUtil.Companion.MarkerItem(
                                 data.storeId,
-                                0,
+                                1,
                                 0,
                                 data.latitude,
                                 data.longitude,
@@ -112,7 +112,7 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
                             if(id== gustoViewModel.selectStoreId) {
                                 markers.add(tmpData)
                             } else {
-                                tmpData.ordinal = index+1
+                                tmpData.ordinal = index+2
                                 markers.add(tmpData)
                             }
                         }

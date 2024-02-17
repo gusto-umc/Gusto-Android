@@ -24,7 +24,7 @@ data class RouteList(
     @SerializedName("storeName") val storeName : String?,
     @SerializedName("address") val address : String?,
     // 루트 지도 조회
-    @SerializedName("longtitude") val longtitude : Double?,
+    @SerializedName("longitude") val longitude : Double?,
     @SerializedName("latitude") val latitude : Double?
 )
 // 루트 상세 조회
@@ -116,7 +116,7 @@ data class RequestCreateReview(
     @SerializedName("mood") val mood : Int?,
     @SerializedName("toilet") val toilet : Int?,
     @SerializedName("parking") val parking : Int?,
-    @SerializedName("comment") val comment : String?,
+    @SerializedName("comment") val comment : String?
 )
 // 가게 정보 조회(짧은 화면)
 data class ResponseStoreDetailQuick(

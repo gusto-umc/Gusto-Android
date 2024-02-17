@@ -79,7 +79,7 @@ class GustoViewModel: ViewModel() {
     }
 
     // 선택한 음식점
-    var selectStoreId =  0L
+    var selectStoreId =  2L
 
     // 현재 동
     var dong = ""
@@ -149,10 +149,11 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     val responseBody = response.body()
                     if(responseBody !=null) {
+                        Log.d("viewmodel",responseBody.toString())
                         for(data in responseBody) {
                             val tmp = markerListLiveData.value?.get(data.ordinal-1)
                             if (tmp != null) {
-                                tmp.longitude = data.longtitude!!
+                                tmp.longitude = data.longitude!!
                                 tmp.latitude = data.latitude!!
                             }
                         }
