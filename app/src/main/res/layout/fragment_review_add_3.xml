@@ -55,15 +55,15 @@
 
         <TextView
             android:id="@+id/tv_upload1"
-            android:layout_width="140dp"
-            android:layout_height="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:layout_marginBottom="6dp"
             android:textColor="@color/black"
             android:fontFamily="@font/pretendard_black"
             android:textSize="20sp"
-            android:text=" 찍은 사진들을    업로드 해주세요!" />
+            android:text=" 찍은 사진들을\n업로드 해주세요!" />
 
         <LinearLayout
             android:layout_marginHorizontal="23dp"

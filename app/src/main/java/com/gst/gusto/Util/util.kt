@@ -10,7 +10,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
-import android.os.Parcelable
 import android.os.SystemClock
 import android.os.ext.SdkExtensions
 import android.provider.MediaStore
@@ -97,8 +96,8 @@ class util {
          * @param context 해당 CONTEXT
          * @return null
          */
-        fun setImage(imageView: ImageView, url : String, context: Context) {
-            Glide.with(context).load(url).placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_background).into(imageView)
+        fun setImage(imageView: ImageView, url : String?, context: Context) {
+            Glide.with(context).load(url).placeholder(R.drawable.gst_dummypic).error(R.drawable.gst_dummypic).into(imageView)
         }
 
 
@@ -237,6 +236,14 @@ class util {
             }
 
         }
+
+        /**
+         * 작업자 : 버루
+         * 이 메서드는 사진 uri을받아서 File 형식으로 바꿔주는 코드이다
+         * @param ctx 해당 context
+         * @param uri 사진 uri
+         * @return File 형식 데이터
+         */
         @SuppressLint("Range")
         @Throws(Exception::class)
         fun convertContentToFile(ctx: Context, uri: Uri): File {

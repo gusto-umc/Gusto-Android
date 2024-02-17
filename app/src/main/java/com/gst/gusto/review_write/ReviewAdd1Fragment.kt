@@ -13,6 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.dpToPixels
+import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd1Binding
 
@@ -31,7 +32,7 @@ class ReviewAdd1Fragment : Fragment() {
         activity = requireActivity() as MainActivity
 
         binding.btnExit.setOnClickListener {
-            activity.hideBottomNavigation(false)
+
             findNavController().popBackStack()
         }
 
@@ -50,7 +51,6 @@ class ReviewAdd1Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         activity.hideBottomNavigation(true)
         binding.lyRest.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
@@ -61,13 +61,19 @@ class ReviewAdd1Fragment : Fragment() {
                     val length =
                         if (width > height) (height - marginInPixels).toInt() else (width - marginInPixels).toInt()
 
-                    val layoutParams = binding.ivRest.layoutParams
+                    val layoutParams = binding.cvRest.layoutParams
                     layoutParams.width = length
                     layoutParams.height = length
-                    binding.ivRest.layoutParams = layoutParams
+                    binding.cvRest.layoutParams = layoutParams
                 }
                 return true
             }
         })
+        setImage(binding.ivRest, gustoViewModel.myStoreDetail?.reviewImg4?.get(0),requireContext())
+        gustoViewModel
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        activity.hideBottomNavigation(false)
     }
 }

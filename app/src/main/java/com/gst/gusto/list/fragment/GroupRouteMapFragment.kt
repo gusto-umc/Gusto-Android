@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -20,8 +21,13 @@ import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.RouteList
 import com.gst.gusto.databinding.FragmentListGroupMRouteMapBinding
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.daum.mf.map.api.CameraUpdateFactory
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -52,7 +58,59 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                 // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
                 when (selectedItem) {
                     1 -> {
-                        gustoViewModel.markerListLiveData.value?.let { it1 -> deepCopy(it1) }
+                        if(gustoViewModel.addRoute.size>0) {
+                            val tmpList =ArrayList<RouteList>()
+                            var ordinal = returnList.size+1
+                            for(storeId in gustoViewModel.addRoute) {
+                                tmpList.add(RouteList(storeId,ordinal++,null,null,null,null,null))
+                            }
+                            gustoViewModel.addRouteStore(tmpList) { result ->
+                                when (result) {
+                                    1 -> {
+                                        gustoViewModel.getGroupRouteDetail(gustoViewModel.currentRouteId) { result ->
+                                            when (result) {
+                                                1 -> {
+
+                                                }
+                                                else -> {
+                                                    Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else -> {
+                                        Toast.makeText(context,"서버와의 연결 불안정", Toast.LENGTH_SHORT ).show()
+                                    }
+                                }
+                            }
+                        }
+                        if(gustoViewModel.removeRoute.size>0) {
+                            var num = 0
+                            for(routeListId in gustoViewModel.removeRoute) {
+                                gustoViewModel.deleteRouteStore(routeListId) { result ->
+                                    when (result) {
+                                        1 -> {
+                                            num++
+                                            if(num == gustoViewModel.removeRoute.size) {
+                                                gustoViewModel.getGroupRouteDetail(gustoViewModel.currentRouteId) { result ->
+                                                    when (result) {
+                                                        1 -> {
+                                                        }
+                                                        else -> {
+                                                            Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else -> {
+                                            Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                     }
                 }
             }, R.layout.bottomsheetdialog_routes, gustoViewModel,requireActivity() as MainActivity)
@@ -69,15 +127,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
 
         val editMode = arguments?.getBoolean("edit", false) ?: false
         if(editMode) {
-            val dialogFragment = DiaLogFragment({ selectedItem ->
-                // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
-                when (selectedItem) {
-                    1 -> {
-                        gustoViewModel.markerListLiveData.value?.let { it1 -> deepCopy(it1) }
-                    }
-                }
-            }, R.layout.bottomsheetdialog_routes, gustoViewModel,requireActivity() as MainActivity)
-            dialogFragment.show(parentFragmentManager, dialogFragment.tag)
+            binding.fabEdit.callOnClick()
         }
 
         val itemList = gustoViewModel.markerListLiveData.value as ArrayList<MarkerItem>
@@ -86,7 +136,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         val viewPager = binding.vpSlider
 
         // 이미지 슬라이드
-        val adapter = RouteViewPagerAdapter(itemList,requireActivity() as MainActivity)
+        val adapter = RouteViewPagerAdapter(itemList,requireActivity() as MainActivity,0)
         viewPager.adapter = adapter
 
         viewPager.offscreenPageLimit = 1
@@ -137,10 +187,9 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
     override fun onDestroy() {
         super.onDestroy()
         gustoViewModel.groupFragment = 1
-        gustoViewModel.markerListLiveData.value?.clear()
-        for(data in returnList) {
-            gustoViewModel.markerListLiveData.value?.add(data)
-        }
+        gustoViewModel.addRoute.clear()
+        gustoViewModel.removeRoute.clear()
+
     }
 
     override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {

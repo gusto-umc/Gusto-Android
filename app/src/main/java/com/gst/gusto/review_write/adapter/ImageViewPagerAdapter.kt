@@ -1,7 +1,6 @@
 package com.gst.gusto.review_write.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.setImage
 
-class ImageViewPagerAdapter(private val imageList: List<Int>) : RecyclerView.Adapter<ImageViewPagerAdapter.ReviewDetailViewHolder>() {
+class ImageViewPagerAdapter(private val imageList: List<String>) : RecyclerView.Adapter<ImageViewPagerAdapter.ReviewDetailViewHolder>() {
     val imageViewList = ArrayList<ImageView>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewDetailViewHolder {
@@ -22,7 +21,7 @@ class ImageViewPagerAdapter(private val imageList: List<Int>) : RecyclerView.Ada
 
     override fun onBindViewHolder(holder: ReviewDetailViewHolder, position: Int) {
         val imageResId = imageList[position]
-        holder.imageView.setImageResource(imageResId)
+        setImage(holder.imageView,imageList[position],holder.itemView.context)
     }
 
     override fun getItemCount(): Int {

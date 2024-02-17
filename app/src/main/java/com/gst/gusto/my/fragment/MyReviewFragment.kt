@@ -2,14 +2,19 @@ package com.gst.clock.Fragment
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.ResponseInstaReviews
 import com.gst.gusto.databinding.FragmentMyReviewBinding
 import com.gst.gusto.review.adapter.GalleryReviewAdapter
 import com.gst.gusto.review.adapter.GridItemDecoration
@@ -19,14 +24,7 @@ class MyReviewFragment : Fragment() {
     lateinit var binding: FragmentMyReviewBinding
     lateinit var adapter: GalleryReviewAdapter
 
-    // 테스트 이미지의 id
-    val testImageList = arrayOf(
-        R.drawable.review_gallery_test, R.drawable.review_gallery_test2, R.drawable.review_gallery_test,
-        R.drawable.review_gallery_test, R.drawable.review_gallery_test, R.drawable.review_gallery_test2,
-        R.drawable.review_gallery_test2, R.drawable.review_gallery_test, R.drawable.review_gallery_test,
-        R.drawable.review_gallery_test, R.drawable.review_gallery_test2, R.drawable.review_gallery_test2,
-        R.drawable.review_gallery_test2, R.drawable.review_gallery_test, R.drawable.review_gallery_test2,
-    )
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,27 +32,48 @@ class MyReviewFragment : Fragment() {
     ): View? {
         binding = FragmentMyReviewBinding.inflate(inflater, container, false)
 
-        // 클릭 리스너 부분
+        initView()
+        getData()
 
-        adapter = GalleryReviewAdapter(testImageList, context,
-            itemClickListener = {
+        return binding.root
+
+    }
+
+    fun initView(){
+
+        adapter = GalleryReviewAdapter(ArrayList(), context,
+            itemClickListener = { reviewId ->
                 val bundle = Bundle()
-                bundle.putInt("reviewId",0)     //리뷰 아이디 넘겨 주면 됨
-                bundle.putString("page","my")
+                bundle.putLong("reviewId", reviewId)     //리뷰 아이디 넘겨 주면 됨
+                bundle.putString("page","review")
                 findNavController().navigate(R.id.action_myFragment_to_reviewDetail,bundle)
-        })
+            })
+
         binding.apply {
+            // 클릭 리스너 부분
             recyclerView.adapter = adapter
             val size = resources.getDimensionPixelSize(R.dimen.one_dp)
             val color = Color.WHITE
             val itemDecoration = GridItemDecoration(size, color)
             recyclerView.addItemDecoration(itemDecoration)
             recyclerView.layoutManager = GridLayoutManager(activity, 3)
-            adapter.notifyDataSetChanged()
         }
+    }
 
-        return binding.root
 
+    fun getData() {
+        gustoViewModel.getTokens(requireActivity() as MainActivity)
+        gustoViewModel.instaView(null, 30) { result, response ->
+            if (result == 1) {
+                val galleryList = ArrayList<ResponseInstaReviews>()
+                response?.reviews?.forEach { review ->
+                    galleryList.add(ResponseInstaReviews(review.reviewId, review.images))
+                }
+                adapter.galleryList = galleryList
+                adapter.notifyDataSetChanged()
+            }
+            Log.d("listResponse", response.toString())
+        }
     }
 
 }

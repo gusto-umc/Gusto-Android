@@ -17,9 +17,19 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.time.LocalDate
+import java.util.Date
 
 
 interface GustoApi {
+    //MAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAP
+    @GET("stores/map") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+    fun getCurrentMapStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("townName") townName : String,
+        @Query("myCategoryId") myCategoryId : String?
+    ):Call<List<RouteList>>
+
     //ROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTE
     @GET("routes") // 내 루트 조회
     fun getMyRoute(
@@ -36,21 +46,22 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("routeId") routeId : Long
     ):Call<List<RouteList>>
-/* 통합 됨
-    @GET("routeLists/{routeId}") // 내 루트 상세 조회
-    fun getRouteDetail(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Path("routeId") routeId : Long
-    ):Call<ResponseRouteDetail>*/
     @DELETE("routes/{routeId}") // 내 루트 삭제
     fun deleteRoute(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("routeId") routeId : Long
     ):Call<ResponseBody>
-    @DELETE("routeLists/{routeListId}") // 루트 내 식당 삭제
+    @DELETE("routeLists/{routeListId}") // 루트 내 식당(경로) 삭제
     fun deleteRouteStore(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("routeListId") routeListId : Int
+        @Path("routeListId") routeListId : Long
+    ):Call<ResponseBody>
+
+    @POST("routeLists/{routeId}") // 루트 내 식당 추가 (공통)
+    fun addRouteStore(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("routeId") routeId : Long,
+        @Body body : List<RouteList>
     ):Call<ResponseBody>
 
     //GROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUP
@@ -65,7 +76,7 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("groupId") groupId : Long
     ):Call<List<ResponseStore>>
-    @GET("routes/{groupId}") // 그룹 내 루트 목록 조회
+    @GET("routes/groups/{groupId}") // 그룹 내 루트 목록
     fun getGroupRoutes(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("groupId") groupId : Long
@@ -178,9 +189,15 @@ interface GustoApi {
     @POST("reviews") // 리뷰 작성
     fun createReview(
         @Header("X-AUTH-TOKEN") token : String,
-        @Part image: MultipartBody.Part?,
+        @Part image: List<MultipartBody.Part>?,
         @Part("info") info: RequestCreateReview
     ):Call<ResponseBody>
+
+    @GET("feeds/{reviewId}") // 먹스또 피드 상세 보기
+    fun getFeedReview(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("reviewId") reviewId : Long
+    ):Call<ResponseFeedDetail>
 
     //USERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSER
 
@@ -195,6 +212,13 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("nickname") nickname : String
     ):Call<ResponseBody>
+
+    @GET("reviews/timelineView") // 리뷰 모아보기-3 (timeline view)
+    fun timelineView(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("reviewId") reviewId: Long?,
+        @Query("size") size: Int
+    ):Call<ResponseListReview>
 
     /**
      * 리스트 - 카테고리
@@ -336,6 +360,22 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String
     ):Call<List<Member>>
 
+
+    @GET("reviews/calView") // 리뷰 모아보기 - 2 (cal view)
+    fun calView(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("reviewId") reviewId: Long?,
+        @Query("size") size: Int,
+        @Query("date") date: LocalDate
+    ):Call<ResponseCalReview>
+
+    @GET("reviews/instaView") // 리뷰 모아보기 - 1 (insta view)
+    fun instaView(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("reviewId") reviewId: Long?,
+        @Query("size") size: Int
+    ):Call<ResponseInstaReview>
+
     //STORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORE
 
     @GET("stores/{storeId}") // 가게 정보 조회(잛은 화면)
@@ -351,4 +391,10 @@ interface GustoApi {
         @Query("x") longitude: String,
         @Query("y") latitude: String
     ): Call<RegionInfoResponse>
+
+    @GET("feeds") // 먹스또 랜덤 피드
+    fun feed(
+        @Header("X-AUTH-TOKEN") token: String
+    ):Call<ArrayList<ResponseFeedReview>>
+
 }

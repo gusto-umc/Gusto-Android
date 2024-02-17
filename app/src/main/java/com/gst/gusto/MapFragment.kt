@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -19,6 +20,7 @@ import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.Util.mapUtil.Companion.setMapInit
 import com.gst.gusto.Util.mapUtil.Companion.setMarker
+import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMapBinding
 import net.daum.mf.map.api.MapPOIItem
@@ -33,10 +35,11 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
-
     private val TAG = "SOL_LOG"
     lateinit var mapView : MapView
     private val gustoViewModel : GustoViewModel by activityViewModels()
+
+    val markerList = ArrayList<MarkerItem>()
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 5000
 
@@ -185,19 +188,16 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     override fun onResume() {
         super.onResume()
 
-        val markerList = ArrayList<MarkerItem>()
-        markerList.add(MarkerItem(0, 0,0, 37.6215101, 127.0751410, "", "", false))
-        markerList.add(MarkerItem(0, 0,0, 37.6245301, 127.0740210, "", "", false))
-        markerList.add(MarkerItem(0, 0,0, 37.6215001, 127.0743010, "", "", false))
 
-//        mapView = MapView(requireContext())
-//
-//        mapView.setPOIItemEventListener(this)
-//        mapView.setMapViewEventListener(this)
-//
-//        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map")
-//
-//        setMarker(mapView,markerList)
+
+        mapView = MapView(requireContext())
+
+        mapView.setPOIItemEventListener(this)
+        mapView.setMapViewEventListener(this)
+
+        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map")
+
+        setMarker(mapView,markerList)
     }
     override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
         // 마커 클릭 시 이벤트
@@ -244,19 +244,30 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     override fun onMapViewDragEnded(p0: MapView?, p1: MapPoint?) {
         Log.d(TAG, "지도 드래그가 종료되었습니다.")
+
+    }
+
+    override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
         if (p1 != null) {
             gustoViewModel.getRegionInfo(p1.mapPointGeoCoord.longitude, p1.mapPointGeoCoord.latitude)  {result ->
                 when(result) {
                     1 -> {
                         Log.d("viewmodel",gustoViewModel.dong)
+                        gustoViewModel.getCurrentMapStores {result, datas ->
+                            when(result) {
+                                1 -> {
+                                    if(datas!=null) {
+                                        for(data in datas) {
+                                            markerList.add(MarkerItem(data.storeId, 0,0, data.latitude!!, data.longitude!!, "", "", false))
+                                        }
+                                    }
+                                }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     }
                 }
             }
         }
-    }
-
-    override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
-        Log.d(TAG, "지도 이동이 완료되었습니다.")
     }
 
 

@@ -6,12 +6,12 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
@@ -51,6 +51,8 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val behavior = BottomSheetBehavior.from(requireView().parent as View)
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
         if(layout == R.layout.bottomsheetdialog_routes) {
             val itemList = gustoViewModel.markerListLiveData.value as ArrayList
 
@@ -59,11 +61,11 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
 
             binding1.rvRoutes.adapter = boardAdapter
             binding1.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
+            var tmp = 4L
             binding1.btnPlus.setOnClickListener {
                 itemList.add(
                     mapUtil.Companion.MarkerItem(
-                        0,
+                        tmp,
                         0,
                         0,
                         37.6219001,
@@ -73,6 +75,7 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                         false
                     )
                 )
+                gustoViewModel.addRoute.add(tmp++)  // storeId
                 gustoViewModel.markerListLiveData.value = itemList
                 boardAdapter.notifyItemInserted(itemList.size-1)
                 if(itemList.size==6) {

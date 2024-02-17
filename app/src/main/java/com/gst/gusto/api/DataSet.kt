@@ -1,8 +1,7 @@
 package com.gst.gusto.api
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serial
-
+import java.util.Date
 
 // 내 루트 조회
 data class Routes(
@@ -21,13 +20,14 @@ data class RouteList(
     @SerializedName("storeId") val storeId : Long,
     @SerializedName("ordinal") val ordinal : Int,
     // 루트 상세 조회
-    @SerializedName("routeListId") val routeListId : Int?,
+    @SerializedName("routeListId") val routeListId : Long?,
     @SerializedName("storeName") val storeName : String?,
     @SerializedName("address") val address : String?,
     // 루트 지도 조회
-    @SerializedName("longtitude") val longtitude : Double?,
+    @SerializedName("longitude") val longitude : Double?,
     @SerializedName("latitude") val latitude : Double?
 )
+
 // 루트 상세 조회
 data class ResponseRouteDetail(
     @SerializedName("routeId") val routeId : Long,
@@ -104,6 +104,28 @@ data class ResponseProfile(
     @SerializedName("following") val following : Int,
     @SerializedName("follower") val follower : Int,
     @SerializedName("followed") val followed : Boolean
+)
+
+// list (timeline) review Request-Body
+data class RequestBodyListReview(
+    @SerializedName("reviewId") val reviewId: Long,
+    @SerializedName("size") val size: Int
+)
+
+
+// list (timeline) review 조회- reviews
+data class ResponseListReviews(
+    @SerializedName("reviewId") val reviewId: Long,
+    @SerializedName("storeName") val storeName: String,
+    @SerializedName("visitedAt") val visitedAt: Date,
+    @SerializedName("visitedCount") val visitedCount: Int,
+    @SerializedName("images") val images: List<String>,
+    )
+
+// list (timeline) review 조회
+data class ResponseListReview(
+    @SerializedName("reviews") val reviews: List<ResponseListReviews>,
+    @SerializedName("hasNext") val hasNext: Boolean
 )
 
 //카테고리 추가, 수정 request body
@@ -250,8 +272,21 @@ data class RequestCreateReview(
     @SerializedName("mood") val mood : Int?,
     @SerializedName("toilet") val toilet : Int?,
     @SerializedName("parking") val parking : Int?,
-    @SerializedName("comment") val comment : String?
-  )
+@SerializedName("comment") val comment : String?
+)
+
+// insta (gallery) review 조회- reviews
+data class ResponseInstaReviews(
+    @SerializedName("reviewId") val reviewId: Long,
+    @SerializedName("images") val images: String,
+)
+
+// insta (gallery) review 조회
+data class ResponseInstaReview(
+    @SerializedName("reviews") val reviews: List<ResponseInstaReviews>,
+    @SerializedName("hasNext") val hasNext: Boolean
+)
+
 
 //검색결과
 data class ResponseSearch(
@@ -266,6 +301,7 @@ data class ResponseSearch1(
     @SerializedName("reviews") val reviews : List<ResponseSearch>,
     @SerializedName("hasNext") val hasNext : Boolean
 )
+
 // 가게 정보 조회(짧은 화면)
 data class ResponseStoreDetailQuick(
     @SerializedName("pinId") val pinId : Long,
@@ -300,4 +336,40 @@ data class RegionDocument(
     @SerializedName("code") val code: String,
     @SerializedName("x") val longitude: Double,
     @SerializedName("y") val latitude: Double
+)
+
+data class ResponseFeedDetail(
+    @SerializedName("storeId") val storeId: Long,
+    @SerializedName("storeName") val storeName: String,
+    @SerializedName("address") val address: String,
+    @SerializedName("nickName") val nickName: String,
+    @SerializedName("profileImage") val profileImage: String,
+    @SerializedName("likeCnt") val likeCnt: Int,
+    @SerializedName("likeCheck") val likeCheck: Boolean,
+    @SerializedName("images") val images: List<String>,
+    @SerializedName("menuName") val menuName: String,
+    @SerializedName("hashTags") val hashTags: String,
+    @SerializedName("taste") val taste: Int,
+    @SerializedName("spiciness") val spiciness: Int,
+    @SerializedName("mood") val mood: Int,
+    @SerializedName("toilet") val toilet: Int,
+    @SerializedName("parking") val parking: Int,
+    @SerializedName("comment") val comment: String
+  )
+// cal Review (calendar Review) 조회- reviews
+data class ResponseCalReviews(
+    @SerializedName("reviewId") val reviewId: Long,
+    @SerializedName("visitedDate") val visitedDate: String,
+    @SerializedName("images") val images: String
+)
+
+// cal Review (calendar Review) 조회
+data class ResponseCalReview(
+     @SerializedName("reviews") val reviews: List<ResponseCalReviews>
+)
+
+// 먹스또 랜덤 피드
+data class ResponseFeedReview(
+    @SerializedName("reviewId") val reviewId: Long,
+    @SerializedName("images") val images: String
 )

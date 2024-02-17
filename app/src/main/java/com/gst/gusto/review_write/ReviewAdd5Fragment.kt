@@ -49,7 +49,7 @@ class ReviewAdd5Fragment : Fragment() {
     private val progressPoint = 400
     private val gustoViewModel : GustoViewModel by activityViewModels()
     lateinit var  chipGroup: ChipGroup
-    private val hashTag = listOf<String>("#따뜻함","#여기서는 화장실 금지","#쾌적","#귀여워","#깨끗함","#인스타","#힙함","#나름 괜찮아","#넓음","#분위기","#가성비")
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,8 +81,8 @@ class ReviewAdd5Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        for(i in 0.. hashTag.size-1) {
-            addChip(hashTag[i])
+        for(i in 0.. gustoViewModel.hashTag.size-1) {
+            addChip(gustoViewModel.hashTag[i])
         }
     }
     override fun onPause() {

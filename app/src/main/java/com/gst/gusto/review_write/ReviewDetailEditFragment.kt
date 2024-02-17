@@ -74,13 +74,7 @@ class ReviewDetailEditFragment : Fragment() {
 
         // 이미지 슬라이드
         val viewPager = binding.vpImgSlider
-        val imageList = mutableListOf<Int>(
-            R.drawable.review_gallery_test,
-            R.drawable.review_gallery_test2,
-            R.drawable.review_gallery_test,
-            R.color.white
-            // Add more images as needed
-        )
+        val imageList = mutableListOf<String>()
 
         val adapter = ImageViewPagerAdapter(imageList)
         viewPager.adapter = adapter

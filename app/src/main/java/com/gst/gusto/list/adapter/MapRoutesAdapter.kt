@@ -46,15 +46,17 @@ class MapRoutesAdapter(
                 holder.btn_remove.visibility = View.VISIBLE
             }
             holder.btn_remove.setOnClickListener {
-                itemList.remove(itemList[position])
                 lyAddRoute.visibility = View.VISIBLE
-                notifyItemRemoved(position)
-                notifyItemRangeChanged(position,getItemCount())
                 if(activity!=null) {
                     val parentActivity = activity as MainActivity
-                    parentActivity.getViewModel().markerListLiveData.value = itemList
-
+                    val gustoVM = parentActivity.gustoViewModel
+                    if(gustoVM.addRoute.contains(itemList[position].storeId)) gustoVM.addRoute.remove(itemList[position].storeId)
+                    else gustoVM.removeRoute.add(itemList[position].routeListId)
+                    itemList.remove(itemList[position])
+                    gustoVM.markerListLiveData.value = itemList
                 }
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position,getItemCount())
             }
         } else {
             if(activity!=null) {

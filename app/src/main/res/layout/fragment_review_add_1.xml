@@ -64,7 +64,7 @@
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/iv_rest"
+                    android:id="@+id/cv_rest"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -73,7 +73,7 @@
                     app:cardCornerRadius="15dp">
 
                     <ImageView
-                        android:id="@+id/iv_imgae4"
+                        android:id="@+id/iv_rest"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
