@@ -123,7 +123,7 @@ data class RequestCreateReview(
 data class ResponseCalReviews(
     @SerializedName("reviewId") val reviewId: Long,
     @SerializedName("visitedDate") val visitedDate: String,
-    @SerializedName("images") val images: List<String>
+    @SerializedName("images") val images: String
 )
 
 // cal Review (calendar Review) 조회

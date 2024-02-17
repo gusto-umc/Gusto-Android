@@ -24,12 +24,7 @@ class CalendarReviewAdapter(var calendarList: List<ResponseCalReviews?>, val con
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         setImage(holder.imageview,
-            (calendarList[position]?.images?.get(0) ?: null).toString(), holder.itemView.context)
-        /*if(calendarList[position] == 0){
-            holder.imageview.setBackgroundColor(Color.parseColor("#ECECEC"))
-        } else {
-            holder.imageview.setImageResource(calendarList[position])
-        }*/
+            (calendarList[position]?.images?: null).toString(), holder.itemView.context)
 
     }
 

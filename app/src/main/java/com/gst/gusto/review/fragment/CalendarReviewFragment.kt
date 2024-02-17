@@ -57,7 +57,6 @@ class CalendarReviewFragment : Fragment() {
         binding.apply {
             recyclerView.adapter = adapter
             recyclerView.layoutManager = GridLayoutManager(activity, 7)
-            adapter.notifyDataSetChanged()
         }
     }
 
@@ -73,7 +72,6 @@ class CalendarReviewFragment : Fragment() {
             gustoViewModel.getTokens(requireActivity() as MainActivity)
             gustoViewModel.calView(null, 100, dates) { result, response ->
                 if (result == 1) {
-                    // response?.reviews?.get(0)?.let { calList.add(it)}
                     response?.reviews?.let{
                         it.forEach { item ->
                             val date = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, day)
