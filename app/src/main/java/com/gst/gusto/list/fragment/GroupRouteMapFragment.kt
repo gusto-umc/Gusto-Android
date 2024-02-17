@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -22,8 +21,13 @@ import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.RouteList
 import com.gst.gusto.databinding.FragmentListGroupMRouteMapBinding
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.daum.mf.map.api.CameraUpdateFactory
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -54,7 +58,32 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                 // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
                 when (selectedItem) {
                     1 -> {
-                        gustoViewModel.markerListLiveData.value?.let { it1 -> deepCopy(it1) }
+                        val tmpList =ArrayList<RouteList>()
+                        var ordinal = returnList.size+1
+                        for(storeId in gustoViewModel.addRoute) {
+                            tmpList.add(RouteList(storeId,ordinal++,null,null,null,null,null))
+                        }
+                        gustoViewModel.addRouteStore(tmpList) { result ->
+                            when (result) {
+                                1 -> {
+                                    gustoViewModel.getGroupRouteDetail(gustoViewModel.currentRouteId) { result ->
+                                        when (result) {
+                                            1 -> {
+
+                                            }
+                                            else -> {
+                                                Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                            }
+                                        }
+                                    }
+                                }
+                                else -> {
+                                    Toast.makeText(context,"서버와의 연결 불안정", Toast.LENGTH_SHORT ).show()
+                                }
+                            }
+                        }
+                        gustoViewModel.
+
                     }
                 }
             }, R.layout.bottomsheetdialog_routes, gustoViewModel,requireActivity() as MainActivity)
@@ -71,28 +100,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
 
         val editMode = arguments?.getBoolean("edit", false) ?: false
         if(editMode) {
-            val dialogFragment = DiaLogFragment({ selectedItem ->
-                // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
-                when (selectedItem) {
-                    1 -> {
-                        for(storeId in gustoViewModel.addRoute) {
-                            Log.d("viewmodel","check ${returnList.size+1}")
-                            gustoViewModel.addRouteStore(storeId,returnList.size+1) { result ->
-                                when (result) {
-                                    1 -> {
-
-                                    }
-                                    else -> {
-                                        Toast.makeText(context,"서버와의 연결 불안정", Toast.LENGTH_SHORT ).show()
-                                    }
-                                }
-                            }
-                        }
-                        gustoViewModel.markerListLiveData.value?.let { it1 -> deepCopy(it1) }
-                    }
-                }
-            }, R.layout.bottomsheetdialog_routes, gustoViewModel,requireActivity() as MainActivity)
-            dialogFragment.show(parentFragmentManager, dialogFragment.tag)
+            binding.fabEdit.callOnClick()
         }
 
         val itemList = gustoViewModel.markerListLiveData.value as ArrayList<MarkerItem>
@@ -152,12 +160,9 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
     override fun onDestroy() {
         super.onDestroy()
         gustoViewModel.groupFragment = 1
-        gustoViewModel.markerListLiveData.value?.clear()
         gustoViewModel.addRoute.clear()
         gustoViewModel.removeRoute.clear()
-        for(data in returnList) {
-            gustoViewModel.markerListLiveData.value?.add(data)
-        }
+
     }
 
     override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {

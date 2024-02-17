@@ -20,7 +20,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.time.LocalDate
-import java.util.Date
 
 class GustoViewModel: ViewModel() {
     private val retrofit = Retrofit.Builder().baseUrl(BuildConfig.API_BASE)
@@ -266,9 +265,9 @@ class GustoViewModel: ViewModel() {
         })
     }
     // 루트 내 식당 추가 (공통)
-    fun addRouteStore(storeId : Long, ordinal : Int,callback: (Int) -> Unit){
+    fun addRouteStore(addList: ArrayList<RouteList>,  callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
-        service.addRouteStore(xAuthToken,currentRouteId,RouteList(storeId,ordinal,null,null,null,null,null)).enqueue(object : Callback<ResponseBody> {
+        service.addRouteStore(xAuthToken,currentRouteId,addList).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Log.d("viewmodel", "Successful response: ${response}")
