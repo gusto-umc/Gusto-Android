@@ -135,6 +135,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         return view
     }
+
+    // 마이 리스트에서 불러와서 칩그룹 만들기 //
     private fun addChip(text:String) {
         val chip = Chip(requireContext())
 

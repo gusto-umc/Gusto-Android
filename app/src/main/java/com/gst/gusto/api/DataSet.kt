@@ -144,7 +144,7 @@ data class Meta(
 
 data class RegionDocument(
     @SerializedName("region_type") val regionType: String,
-    @SerializedName("address_name") val addressName: String,
+    @SerializedName("address_내 카테고리 전체 조회name") val addressName: String,
     @SerializedName("region_1depth_name") val region1DepthName: String,
     @SerializedName("region_2depth_name") val region2DepthName: String,
     @SerializedName("region_3depth_name") val region3DepthName: String,
@@ -152,4 +152,12 @@ data class RegionDocument(
     @SerializedName("code") val code: String,
     @SerializedName("x") val longitude: Double,
     @SerializedName("y") val latitude: Double
+)
+
+// 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+data class LocalCategoryResponse (
+    @SerializedName("storeId") val storeId: Int,
+    @SerializedName("storeName") val storeName: String,
+    @SerializedName("longtitude") val longitude: Double,
+    @SerializedName("latitude") val latitude: Double
 )

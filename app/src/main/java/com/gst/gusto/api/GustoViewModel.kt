@@ -1,6 +1,5 @@
 package com.gst.gusto.api
 
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,11 +8,9 @@ import com.gst.gusto.MainActivity
 import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.RestItem
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -84,6 +81,10 @@ class GustoViewModel: ViewModel() {
     // 현재 동
     var dong = ""
 
+    //방문 여부
+    var whetherVisit : Int?= null
+    //카테고리 별(null가능)
+    var category : Int?= null
 
 
 
@@ -809,6 +810,11 @@ class GustoViewModel: ViewModel() {
                 callback(3)
             }
         })
+    }
+
+    //현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+    fun LocalCategory(callback: (Int) -> Unit){
+
     }
 
 }

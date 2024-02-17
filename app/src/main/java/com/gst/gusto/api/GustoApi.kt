@@ -1,8 +1,6 @@
 package com.gst.gusto.api
 
-import com.google.gson.annotations.SerializedName
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -218,4 +216,16 @@ interface GustoApi {
         @Query("x") longitude: String,
         @Query("y") latitude: String
     ): Call<RegionInfoResponse>
+
+
+    // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+    @GET("stores/map?townName={townName}&myCategoryId={myCategoryId}&visit={visitedStatus}")
+    fun LocalCategory(
+        @Query("storeId") storeId: Int,
+        @Query("storeName") storeName: String,
+        @Query("longtitude") longitude: Double,
+        @Query("latitude") latitude: Double
+    ): Call<LocalCategoryResponse>
+
+
 }
