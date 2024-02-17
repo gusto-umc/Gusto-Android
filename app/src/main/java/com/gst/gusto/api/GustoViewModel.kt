@@ -1015,6 +1015,10 @@ class GustoViewModel: ViewModel() {
     var myAllStoreList : List<ResponseStoreListItem>? = null
 
     var myStoreDetail : ResponseStoreDetail? = null
+    var storeDetailReviews = ArrayList<ResponseReviews>()
+    var detailReviewLastId : Int? = null
+
+    var userNickname : String = "Gusto"
 
     //가게 카테고리 추가(찜) -> 확인 완, 수정 필요
     fun addPin(categoryId: Long, storeLong: Long, callback: (Int) -> Unit){
@@ -1058,8 +1062,8 @@ class GustoViewModel: ViewModel() {
         })
     }
     //가게 상세 조회 -> 수정 필요
-    fun getStoreDetail(storeId: Long, reviewId : Int?, callback: (Int) -> Unit){
-        service.getStoreDetail(xAuthToken, storeId, reviewId).enqueue(object : Callback<ResponseStoreDetail>{
+    fun getStoreDetail(storeId: Long, callback: (Int) -> Unit){
+        service.getStoreDetail(xAuthToken, storeId, detailReviewLastId).enqueue(object : Callback<ResponseStoreDetail>{
             override fun onResponse(
                 call: Call<ResponseStoreDetail>,
                 response: Response<ResponseStoreDetail>
@@ -1068,8 +1072,26 @@ class GustoViewModel: ViewModel() {
                     Log.e("viewmodel", "Successful response: ${response}")
                     Log.d("getStoreDetail", response.body()!!.reviews.toString())
                     myStoreDetail = response.body()
+                    if(detailReviewLastId == null){
+                        for (i in response.body()!!.reviews){
+                            detailReviewLastId = i.reviewId
+                            storeDetailReviews.add(i)
+                            Log.d("reviewId check first", i.toString())
+                            Log.d("reviewId check first", detailReviewLastId.toString())
+                        }
+                    }
+                    else{
+                        Log.d("reviewId check", "more")
+                        for (i in response.body()!!.reviews){
+                            detailReviewLastId = i.reviewId
+                            storeDetailReviews.add(i)
+                            Log.d("reviewId check more", i.toString())
+                            Log.d("reviewId check more", detailReviewLastId.toString())
+                        }
+                    }
                     callback(0)
-                } else {
+                }
+                else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
                     callback(1)
                 }
@@ -1141,6 +1163,7 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     Log.e("getSavedStores", "Successful response: ${response}")
                     Log.d("getSavedStores", response.body()!![0].toString())
+                    userNickname = response.body()!![0].nickname
                     callback(0)
                 } else {
                     Log.e("getSavedStores", "Unsuccessful response: ${response}")
@@ -1234,7 +1257,31 @@ class GustoViewModel: ViewModel() {
     /**
      * 검색 api 함수 - mindy
      */
+    var mapSearchArray = ArrayList<ResponseSearch>()
     //검색 결과 -> 작성 예정
+    fun getSearchResult(keyword : String, callback: (Int) -> Unit){
+        service.getSearch(xAuthToken, keyword).enqueue(object : Callback<List<ResponseSearch1>>{
+            override fun onResponse(
+                call: Call<List<ResponseSearch1>>,
+                response: Response<List<ResponseSearch1>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d("getSearchResult", "Successful response: ${response}")
+                    callback(0)
+                    Log.d("getSearchResultss", response.body()!!.toString())
+                } else {
+                    Log.e("getSearchResult", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<List<ResponseSearch1>>, t: Throwable) {
+                Log.e("getSearchResult", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
 
 
     // 행정 구역

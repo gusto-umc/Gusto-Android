@@ -1,18 +1,24 @@
 package com.gst.gusto.store_detail.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.databinding.ItemStoreDetailReviewPhotoBinding
 
 
-class StoreDetailReviewPhotoAdapter (val dataSet : ArrayList<Int>) : RecyclerView.Adapter<StoreDetailReviewPhotoAdapter.ViewHolder>(){
+class StoreDetailReviewPhotoAdapter (val dataSet : ArrayList<String?>) : RecyclerView.Adapter<StoreDetailReviewPhotoAdapter.ViewHolder>(){
 
+    var mContext : Context? = null
     inner class ViewHolder(private val binding: ItemStoreDetailReviewPhotoBinding) : RecyclerView.ViewHolder(binding.root){
-        var data : Int? = null
+        var data : String? = null
 
-        fun bind(photo : Int){
-            binding.ivItemStoreDetailReviewPhoto.setImageResource(photo)
+        fun bind(photo : String?){
+            //binding.ivItemStoreDetailReviewPhoto.setImageResource(photo)
+            if(!photo.isNullOrBlank()){
+                setImage(binding.ivItemStoreDetailReviewPhoto, photo, mContext!!)
+            }
         }
     }
 

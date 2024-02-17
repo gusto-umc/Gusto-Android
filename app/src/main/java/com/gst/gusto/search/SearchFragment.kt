@@ -1,21 +1,26 @@
 package com.gst.gusto.search
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.search.adapter.SearchStoreAdapter
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentSearchBinding
 
 class SearchFragment : Fragment() {
 
     private lateinit var binding : FragmentSearchBinding
+    private val gustoViewModel : GustoViewModel by activityViewModels()
+
     private val sampleResultArray = arrayListOf<StoreSearch>(
         StoreSearch(1, "구스또 1호점", "양식", R.drawable.sample_store_4_img),
         StoreSearch(2, "구스또 2호점", "양식", R.drawable.sample_store_2_img),
@@ -54,6 +59,19 @@ class SearchFragment : Fragment() {
                 binding.fabSearchMap.visibility = View.GONE
             } else {
                 // 서버 연결 후 검샥 결과 response
+                gustoViewModel.getSearchResult(binding.edtSearchSearchbox.text.toString()){
+                    result ->
+                    when(result){
+                        0 -> {
+                            //success
+                            Log.d("search result", gustoViewModel.mapSearchArray.toString())
+                        }
+                        1 -> {
+                            //fail
+                            Log.d("search result", "fail")
+                        }
+                    }
+                }
                 //데이터셋 저장 후 연결(공백일 때 동작 확인)
                 mSearshResultAdapter.submitList(sampleResultArray)
                 mSearshResultAdapter.setItemClickListener(object :

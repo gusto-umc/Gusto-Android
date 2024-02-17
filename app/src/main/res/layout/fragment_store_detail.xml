@@ -8,6 +8,7 @@
         tools:context=".store_detail.StoreDetailFragment">
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollview_store_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
@@ -90,6 +91,17 @@
                         />
 
                     <ImageView
+                        android:id="@+id/iv_store_detail_map"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/map_img"
+                        app:layout_constraintTop_toTopOf="@id/tv_store_detail_name"
+                        app:layout_constraintEnd_toStartOf="@id/iv_store_detail_save"
+                        android:layout_marginEnd="8dp"
+
+                        />
+
+                    <ImageView
                         android:id="@+id/iv_store_detail_save"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
@@ -126,7 +138,18 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="26dp"
                     />
+                <TextView
+                    android:id="@+id/tv_review_load"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_1"
+                    android:textSize="10sp"
+                    android:text="더보기"
+                    android:gravity="center_horizontal"
+                    android:paddingVertical="20dp"
+                    />
                 <View
+                    android:id="@+id/view_bottom"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     />
@@ -134,29 +157,34 @@
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
+
+
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/layout_map_listview_fab"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:paddingHorizontal="49dp">
+            android:layout_alignParentEnd="true"
+            >
 
 
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_store_detail_add"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="리뷰 작성하기"
-                android:textSize="15sp"
-                android:paddingVertical="13dp"
-                android:fontFamily="@font/pretendard_semibold"
-                android:gravity="center"
-                android:textColor="@color/white"
-                app:shapeAppearance="@style/Widget.MaterialComponents.FloatingActionButton"
-                android:backgroundTint="@color/sub_m"
-                android:layout_marginHorizontal="80dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="30dp"
                 android:layout_marginBottom="40dp"
+                android:backgroundTint="@color/sub_m"
+                app:fabCustomSize="60dp"
+                android:src="@drawable/review_add_img"
+                android:elevation="4dp"
+                app:maxImageSize="24dp"
+                app:tint="@color/white"
+                app:shapeAppearance="@style/Widget.MaterialComponents.FloatingActionButton"
+                app:fabSize="normal"
+                app:borderWidth="0dp"
                 />
+
         </LinearLayout>
 
 
