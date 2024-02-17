@@ -25,8 +25,7 @@ class GalleryReviewAdapter(var galleryList: ArrayList<ResponseInstaReviews>, val
     override fun onBindViewHolder(holder: GalleryReviewAdapter.ViewHolder, position: Int) {
         val width = (context?.resources?.displayMetrics?.widthPixels ?: 0) / 3
         holder.imageview.layoutParams = LinearLayoutCompat.LayoutParams(width, width)
-        setImage(holder.imageview, galleryList[position].images[0], holder.itemView.context)
-        Log.d("plz", galleryList[position].images[0])
+        setImage(holder.imageview, galleryList[position].images, holder.itemView.context)
     }
 
     override fun getItemCount(): Int = galleryList.size

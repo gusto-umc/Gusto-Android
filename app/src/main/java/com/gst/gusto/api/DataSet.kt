@@ -120,7 +120,7 @@ data class RequestCreateReview(
 // insta (gallery) review 조회- reviews
 data class ResponseInstaReviews(
     @SerializedName("reviewId") val reviewId: Long,
-    @SerializedName("images") val images: List<String>,
+    @SerializedName("images") val images: String,
 )
 
 // insta (gallery) review 조회
