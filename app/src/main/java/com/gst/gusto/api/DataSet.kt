@@ -216,7 +216,12 @@ data class ResponseMyReview(
     @SerializedName("menuName") val menuName : String?,
     @SerializedName("hashTags") val hashTags : String?,
     @SerializedName("taste") val taste : Int,
-      @SerializedName("likeCnt") val likeCnt : Int
+    @SerializedName("spiciness") val spiciness : Int?,
+    @SerializedName("mood") val mood : Int?,
+    @SerializedName("toilet") val toilet : Int?,
+    @SerializedName("parking") val parking : Int?,
+    @SerializedName("comment") val comment : String?,
+    @SerializedName("likeCnt") val likeCnt : Int
 )
 
 data class ResponseMyReview2(
@@ -245,7 +250,7 @@ data class RequestCreateReview(
     @SerializedName("mood") val mood : Int?,
     @SerializedName("toilet") val toilet : Int?,
     @SerializedName("parking") val parking : Int?,
-    @SerializedName("comment") val comment : String?,
+    @SerializedName("comment") val comment : String?
   )
 // 가게 정보 조회(짧은 화면)
 data class ResponseStoreDetailQuick(

@@ -188,5 +188,11 @@ class StoreDetailFragment : Fragment() {
          * 리뷰 페이징
          */
 
+
+        /**
+         * map icon 클릭리스너
+         */
+
+
     }
 }
