@@ -384,7 +384,7 @@ class GustoViewModel: ViewModel() {
         service.getGroup(xAuthToken,currentGroupId).enqueue(object : Callback<ResponseGroup> {
             override fun onResponse(call: Call<ResponseGroup>, response: Response<ResponseGroup>) {
                 if (response.isSuccessful) {
-                    Log.d("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel", "Successful response: ${response}, data : ${response.body()!!}")
                     callback(1, response.body()!!)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -480,7 +480,7 @@ class GustoViewModel: ViewModel() {
         service.transferOwnership(xAuthToken,currentGroupId, NewOwner(newOwner)).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    Log.d("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel", "Successful response: ${response}, id:${newOwner}")
                     callback(1)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
