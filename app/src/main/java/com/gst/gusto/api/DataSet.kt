@@ -21,20 +21,21 @@ data class RouteList(
     @SerializedName("storeId") val storeId : Long,
     @SerializedName("ordinal") val ordinal : Int,
     // 루트 상세 조회
-    @SerializedName("routeListId") val routeListId : Int,
-    @SerializedName("storeName") val storeName : String,
-    @SerializedName("address") val address : String,
+    @SerializedName("routeListId") val routeListId : Int?,
+    @SerializedName("storeName") val storeName : String?,
+    @SerializedName("address") val address : String?,
     // 루트 지도 조회
-    @SerializedName("longtitude") val longtitude : Double,
-    @SerializedName("latitude") val latitude : Double
+    @SerializedName("longtitude") val longtitude : Double?,
+    @SerializedName("latitude") val latitude : Double?
 )
 // 루트 상세 조회
 data class ResponseRouteDetail(
-    @SerializedName("routeName") val routeName : Int,
+    @SerializedName("routeId") val routeId : Long,
+    @SerializedName("routeName") val routeName : String,
     @SerializedName("routes") val routes : List<RouteList>
 )
 data class StoredId(
-    @SerializedName("storedId") val storedId : Long
+    @SerializedName("storeId") val storeId : Long
 )
 
 // 그룹 조회
@@ -42,6 +43,7 @@ data class ResponseGetGroups(
     @SerializedName("groupId") val groupId : Long,
     @SerializedName("groupName") val groupName : String,
     @SerializedName("numMembers") val numMembers : Int,
+    @SerializedName("isOwner") val isOwner : Boolean,
     @SerializedName("numRestaurants") val numRestaurants : Int,
     @SerializedName("numRoutes") val numRoutes : Int
 )
@@ -52,7 +54,7 @@ data class ResponseStore(
     @SerializedName("storeProfileImg") val storeProfileImg : String,
     @SerializedName("userProfileImg") val userProfileImg : String,
     @SerializedName("address") val address : String,
-    @SerializedName("groupListId") val groupListId : Int
+    @SerializedName("groupListId") val groupListId : Long
 )
 
 // 그룹 조회
@@ -62,12 +64,15 @@ data class ResponseGroup(
     @SerializedName("groupScript") val groupScript : String,
     @SerializedName("owner") val owner : Int,
     @SerializedName("notice") val notice : String,
-    @SerializedName("owner") val groupMembers : List<Member>
+    @SerializedName("groupMembers") val groupMembers : List<Member>
 )
 data class Member(
     @SerializedName("groupMemberId") val groupMemberId : Int,
     @SerializedName("nickname") val nickname : String,
-    @SerializedName("profileImg") val profileImg : String
+    @SerializedName("profileImg") val profileImg : String,
+
+    // 팔로워 조회
+    @SerializedName("followId") val followId : Int
 )
 data class NewOwner(
     @SerializedName("newOwner") val newOwner : Int
@@ -83,8 +88,7 @@ data class RequestCreateGroup(
 )
 // 그룹 참여
 data class RequestJoinGroup(
-    @SerializedName("groupId") val groupId : Long,
-    @SerializedName("invitationCode") val invitationCode : String
+    @SerializedName("code") val code : String
 )
 // 초대 코드 조회
 data class ResoponseInvititionCode(
@@ -95,8 +99,9 @@ data class ResoponseInvititionCode(
 // 프로필 조회
 data class ResponseProfile(
     @SerializedName("nickname") val nickname : String,
+    @SerializedName("profileImg") val profileImg : String,
     @SerializedName("review") val review : Int,
-    @SerializedName("pin") val pin : Int,
+    @SerializedName("following") val following : Int,
     @SerializedName("follower") val follower : Int,
     @SerializedName("followed") val followed : Boolean
 )
@@ -184,12 +189,7 @@ data class ResponseMyReview(
     @SerializedName("menuName") val menuName : String?,
     @SerializedName("hashTagId") val hashTagId : List<Int>?,
     @SerializedName("taste") val taste : Int,
-    @SerializedName("spiciness") val spiciness : Int?,
-    @SerializedName("mood") val mood : Int?,
-    @SerializedName("toilet") val toilet : Int?,
-    @SerializedName("parking") val parking : Int?,
-    @SerializedName("comment") val comment : String?,
-    @SerializedName("likeCnt") val likeCnt : Int
+      @SerializedName("likeCnt") val likeCnt : Int
 )
 
 //리뷰 수정완 -> 확인 완
@@ -203,5 +203,51 @@ data class RequestMyReview(
     @SerializedName("comment") val comment : String?
 )
 
+// 리뷰 작성
+data class RequestCreateReview(
+    @SerializedName("storeId") val storeId : Long,
+    @SerializedName("visitedAt") val visitedAt : String?,
+    @SerializedName("menuName") val menuName : String?,
+    @SerializedName("hashTagId") val hashTagId : String?,
+    @SerializedName("taste") val taste : Int?,
+    @SerializedName("spiciness") val spiciness : Int?,
+    @SerializedName("mood") val mood : Int?,
+    @SerializedName("toilet") val toilet : Int?,
+    @SerializedName("parking") val parking : Int?,
+    @SerializedName("comment") val comment : String?,
+  )
+// 가게 정보 조회(짧은 화면)
+data class ResponseStoreDetailQuick(
+    @SerializedName("pinId") val pinId : Long,
+    @SerializedName("storeId") val storeId : Long,
+    @SerializedName("storeName") val storeName : String,
+    @SerializedName("address") val address : String,
+    @SerializedName("longitude") val longitude : Double,
+    @SerializedName("latitude") val latitude : Double,
+    //@SerializedName("businessDay") val businessDay : Double,
+    @SerializedName("contact") val contact : String,
+    @SerializedName("reviewImg3") val reviewImg3 : List<String>,
+    @SerializedName("pin") val pin : Boolean
+)
 
+// 카카오 행정구역
+data class RegionInfoResponse(
+    @SerializedName("meta") val meta: Meta,
+    @SerializedName("documents") val documents: List<RegionDocument>
+)
 
+data class Meta(
+    @SerializedName("total_count") val totalCount: Int
+)
+
+data class RegionDocument(
+    @SerializedName("region_type") val regionType: String,
+    @SerializedName("address_name") val addressName: String,
+    @SerializedName("region_1depth_name") val region1DepthName: String,
+    @SerializedName("region_2depth_name") val region2DepthName: String,
+    @SerializedName("region_3depth_name") val region3DepthName: String,
+    @SerializedName("region_4depth_name") val region4DepthName: String?,
+    @SerializedName("code") val code: String,
+    @SerializedName("x") val longitude: Double,
+    @SerializedName("y") val latitude: Double
+)

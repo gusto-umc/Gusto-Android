@@ -10,20 +10,23 @@
         android:id="@+id/kakao_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <include
-        layout="@layout/fragment_map_main_screen"
-        android:id="@+id/fragment_map_main_screen"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"/>
 
     <!-- BottomSheet -->
+    <include
+        android:id="@+id/fragment_map_main_screen"
+        layout="@layout/fragment_map_main_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        app:layout_anchor="@+id/kakao_map"
+        app:layout_anchorGravity="center" />
+
     <LinearLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        app:behavior_peekHeight="50dp"
+        app:behavior_peekHeight="60dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <!-- fragment_area.xml 내용 추가 -->
@@ -32,14 +35,19 @@
 
     </LinearLayout>
 
-    <!-- ImageButton -->
     <ImageButton
         android:id="@+id/list_view_btn"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/list_view"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/fab_list_img"
+        android:background="@drawable/background_radius_10"
+        android:elevation="4dp"
+        android:scaleType="centerCrop"
+        android:padding="10dp"
+        android:contentDescription="목록보기"
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="60dp"
         android:layout_marginRight="30dp"/>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

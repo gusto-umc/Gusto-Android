@@ -55,7 +55,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                         gustoViewModel.markerListLiveData.value?.let { it1 -> deepCopy(it1) }
                     }
                 }
-            }, R.layout.routes_bottomsheetdialog, gustoViewModel,requireActivity() as MainActivity)
+            }, R.layout.bottomsheetdialog_routes, gustoViewModel,requireActivity() as MainActivity)
             dialogFragment.show(parentFragmentManager, dialogFragment.tag)
 
             //findNavController().navigate(R.id.fragment_group_m_route_edit)
@@ -76,7 +76,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                         gustoViewModel.markerListLiveData.value?.let { it1 -> deepCopy(it1) }
                     }
                 }
-            }, R.layout.routes_bottomsheetdialog, gustoViewModel,requireActivity() as MainActivity)
+            }, R.layout.bottomsheetdialog_routes, gustoViewModel,requireActivity() as MainActivity)
             dialogFragment.show(parentFragmentManager, dialogFragment.tag)
         }
 
@@ -152,7 +152,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         binding.fabEdit.visibility = View.GONE
         binding.fabList.visibility = View.GONE
         if (poiItem != null) {
-            binding.vpSlider.currentItem = poiItem.itemName.toInt()
+            binding.vpSlider.currentItem = poiItem.itemName.toInt()-1
         }
     }
     override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?) {}

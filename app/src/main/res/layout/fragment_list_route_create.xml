@@ -73,16 +73,18 @@
                     android:gravity="center_vertical"
                     android:text="루트" />
 
-                <TextView
-                    android:id="@+id/textView4"
+                <EditText
+                    android:id="@+id/et_route_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:fontFamily="@font/pretendard_bold"
                     android:textColor="@color/white"
+                    android:textColorHint="@color/gray_2"
                     android:gravity="center_vertical"
                     android:layout_marginBottom="20dp"
-                    android:text="루트 이름을 입력하세요" />
+                    android:background="@android:color/transparent"
+                    android:hint="루트 이름을 입력하세요" />
             </LinearLayout>
         </LinearLayout>
 

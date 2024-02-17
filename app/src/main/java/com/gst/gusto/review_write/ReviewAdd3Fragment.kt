@@ -1,36 +1,30 @@
 package com.gst.clock.Fragment
 
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.ext.SdkExtensions.getExtensionVersion
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.util.TypedValue
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.view.inputmethod.EditorInfo
-import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
+import com.gst.gusto.Util.util.Companion.convertContentToFile
 import com.gst.gusto.Util.util.Companion.dpToPixels
 import com.gst.gusto.Util.util.Companion.isPhotoPickerAvailable
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd3Binding
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -118,6 +112,8 @@ class ReviewAdd3Fragment : Fragment() {
                 }
 
                 for (j in 0 .. uri.size-1) {
+                    gustoViewModel.img = convertContentToFile(requireContext(),uri[j])
+
                     setImage(imageViews[j],uri[j].toString(),requireContext())
                 }
                 for (j in uri.size .. 3) {

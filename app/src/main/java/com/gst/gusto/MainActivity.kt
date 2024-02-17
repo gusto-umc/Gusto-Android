@@ -3,24 +3,20 @@ package com.gst.gusto
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
-import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.ActivityMainBinding
-import net.daum.mf.map.api.MapView
 import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
@@ -28,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var navController: NavController
     lateinit var navHostFragment: NavHostFragment
-    private val gustoViewModel : GustoViewModel by viewModels()
+    val gustoViewModel : GustoViewModel by viewModels()
     private val TAG = "SOL_LOG"
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,9 +50,6 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.d(TAG, "Exception -> $e")
         }
-
-
-
     }
 
     fun getCon(): NavController {

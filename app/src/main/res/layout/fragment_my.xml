@@ -51,7 +51,6 @@
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/iv_profile_image"
             android:layout_marginLeft="38dp"
             android:layout_marginRight="41dp"
             android:layout_width="93dp"
@@ -60,6 +59,7 @@
             app:cardCornerRadius="50dp">
 
             <ImageView
+                android:id="@+id/iv_profile_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_launcher_background"/>
@@ -117,6 +117,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/btn_following_list"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:layout_width="wrap_content"
@@ -130,12 +131,12 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/pretendard_semibold"
                         android:gravity="center"
-                        android:text="찜"
+                        android:text="팔로잉"
                         android:textColor="@color/gray_3"
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/tv_pin_num"
+                        android:id="@+id/tv_following_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -147,7 +148,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/btn_following_list"
+                    android:id="@+id/btn_follower_list"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:layout_width="wrap_content"
