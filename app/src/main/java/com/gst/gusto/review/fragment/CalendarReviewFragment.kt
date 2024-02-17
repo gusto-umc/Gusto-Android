@@ -57,6 +57,8 @@ class CalendarReviewFragment : Fragment() {
         binding.apply {
             recyclerView.adapter = adapter
             recyclerView.layoutManager = GridLayoutManager(activity, 7)
+
+            monthTextView.text = "${LocalDate.now().monthValue}월"
         }
     }
 
