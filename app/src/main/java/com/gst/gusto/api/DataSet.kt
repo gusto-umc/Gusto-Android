@@ -117,7 +117,8 @@ data class RequestAddCategory(
 data class RequestEditCategory(
     @SerializedName("myCategoryName") var myCategoryName : String,
     @SerializedName("myCategoryIcon") var myCategoryIcon : Int,
-    @SerializedName("publishCategory") var publishCategory : String
+    @SerializedName("publishCategory") var publishCategory : String,
+    @SerializedName("myCategoryScript") var myCategoryScript : String
 )
 
 
@@ -159,7 +160,17 @@ data class ResponseStoreDetail(
 
 //가게 상세 리뷰 -> 수정 필요
 data class ResponseReviews(
-    @SerializedName("date") val date : String
+    @SerializedName("reviewId") val reviewId : Int,
+    @SerializedName("visitedAt") val visitedAt : String,
+    @SerializedName("profileImage") val profileImage : String,
+    @SerializedName("nickname") val nickname : String,
+    @SerializedName("liked") val liked : Int,
+    @SerializedName("comment") val comment : String?,
+    @SerializedName("img1") val img1 : String?,
+    @SerializedName("img2") val img2 : String?,
+    @SerializedName("img3") val img3 : String?,
+    @SerializedName("img4") val img4 : String?
+
 )
 
 //가게 조회
@@ -175,21 +186,46 @@ data class ResponseStoreListItem(
 data class ResponseSavedStore(
     @SerializedName("nickname") val nickname : String,
     @SerializedName("numPinStores") val numPinStores : Int,
-    @SerializedName("visitedStores") val visitedStores : List<ResponseStoreListItem>,
-    @SerializedName("unvisitedStores") val unvisitedStores : List<ResponseStoreListItem>
+    @SerializedName("visitedStores") val visitedStores : List<ResponseVisitedStoreData>,
+    @SerializedName("unvisitedStores") val unvisitedStores : List<ResponseUnvisitedStoreData>
 )
 
+data class ResponseUnvisitedStoreData(
+    @SerializedName("numPinStores") val numPinStores : Int,
+    @SerializedName("unvisitedStores") val unvisitedStores : List<ResponseSavedStoreData>
+)
+
+data class ResponseVisitedStoreData(
+    @SerializedName("numPinStores") val numPinStores : Int,
+    @SerializedName("visitedStores") val visitedStores : List<ResponseSavedStoreData>
+)
+
+data class ResponseSavedStoreData(
+    @SerializedName("storeId") val storeId : Int,
+    @SerializedName("categoryName") val categoryName : String,
+    @SerializedName("storeName") val storeName : String,
+    @SerializedName("address") val address : String,
+    @SerializedName("reviewImg") val reviewImg : String
+)
 //리뷰 상세
 data class ResponseMyReview(
-    @SerializedName("storeId") val storeId : Int,
+    @SerializedName("storeId") val storeId : Long,
     @SerializedName("storeName") val storeName : String,
-    @SerializedName("nickName") val nickName : String,
     @SerializedName("visitedAt") var visitedAt : String?,
-    @SerializedName("img") val img : List<String>?,
+    @SerializedName("images") val img : List<String>?,
     @SerializedName("menuName") val menuName : String?,
-    @SerializedName("hashTagId") val hashTagId : List<Int>?,
+    @SerializedName("hashTags") val hashTags : String?,
     @SerializedName("taste") val taste : Int,
-      @SerializedName("likeCnt") val likeCnt : Int
+    @SerializedName("spiciness") val spiciness : Int?,
+    @SerializedName("mood") val mood : Int?,
+    @SerializedName("toilet") val toilet : Int?,
+    @SerializedName("parking") val parking : Int?,
+    @SerializedName("comment") val comment : String?,
+    @SerializedName("likeCnt") val likeCnt : Int
+)
+
+data class ResponseMyReview2(
+    @SerializedName("storeId") val storeId : Long
 )
 
 //리뷰 수정완 -> 확인 완
@@ -214,7 +250,7 @@ data class RequestCreateReview(
     @SerializedName("mood") val mood : Int?,
     @SerializedName("toilet") val toilet : Int?,
     @SerializedName("parking") val parking : Int?,
-    @SerializedName("comment") val comment : String?,
+    @SerializedName("comment") val comment : String?
   )
 // 가게 정보 조회(짧은 화면)
 data class ResponseStoreDetailQuick(

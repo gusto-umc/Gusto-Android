@@ -147,6 +147,33 @@
                             />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/layout_listview_select_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginStart="24dp"
+                        >
+                        <CheckBox
+                            android:id="@+id/cb_map_listview_all_one"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/checkbox_custom"
+                            android:button="@null"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="전체 선택"
+                            android:textSize="10sp"
+                            android:textColor="@color/gray_3"
+                            android:layout_marginStart="15dp"
+                            android:layout_gravity="center"
+                            />
+                    </LinearLayout>
+
 
 
 

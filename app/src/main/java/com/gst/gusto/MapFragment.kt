@@ -190,14 +190,14 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         markerList.add(MarkerItem(0, 0,0, 37.6245301, 127.0740210, "", "", false))
         markerList.add(MarkerItem(0, 0,0, 37.6215001, 127.0743010, "", "", false))
 
-        mapView = MapView(requireContext())
-
-        mapView.setPOIItemEventListener(this)
-        mapView.setMapViewEventListener(this)
-
-        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map")
-
-        setMarker(mapView,markerList)
+//        mapView = MapView(requireContext())
+//
+//        mapView.setPOIItemEventListener(this)
+//        mapView.setMapViewEventListener(this)
+//
+//        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map")
+//
+//        setMarker(mapView,markerList)
     }
     override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
         // 마커 클릭 시 이벤트
