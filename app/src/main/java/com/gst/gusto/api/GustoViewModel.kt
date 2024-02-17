@@ -889,7 +889,7 @@ class GustoViewModel: ViewModel() {
     var myReviewId : Long? = null
     //리뷰 1건 조회 -> 확인 완
     fun getReview(reviewId : Int, callback: (Int) -> Unit){
-        service.getReview(xAuthToken, 4).enqueue(object : Callback<ResponseMyReview>{
+        service.getReview(xAuthToken, reviewId).enqueue(object : Callback<ResponseMyReview>{
             override fun onResponse(
                 call: Call<ResponseMyReview>,
                 response: Response<ResponseMyReview>
@@ -897,7 +897,7 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     Log.e("getReview", "Successful response: ${response}")
                     Log.e("getReview", response.body()!!.toString())
-                    //myReview = response.body()!!
+                    myReview = response.body()!!
                     callback(0)
                 } else {
                     Log.e("getReview", "Unsuccessful response: ${response}")

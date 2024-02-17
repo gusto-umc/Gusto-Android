@@ -97,90 +97,82 @@ class ReviewDetailFragment : Fragment() {
          */
         var reviewId = 1
         gustoViewModel.myReviewId = reviewId.toLong()
+
         gustoViewModel.getReview(reviewId){
             result ->
             when(result){
                 0 -> {
+                    if(gustoViewModel.myReview != null){
+                        val reviewDate = LocalDate.parse(gustoViewModel.myReview!!.visitedAt)
+                        binding.tvDay.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
+                        binding.tvReviewStoreName.text = gustoViewModel.myReview!!.storeName
+                        binding.tvHeartNum.text = gustoViewModel.myReview!!.likeCnt.toString()
+                        //이미지 처리
+                        if(!gustoViewModel.myReview!!.img.isNullOrEmpty()){
+                            var reviewImageList : MutableList<Int>? = null
 
+                        }
+                        else{
+                            settingImages(imageList)
+                        }
+                        //메뉴
+                        binding.tvMenu.text = if(gustoViewModel.myReview!!.menuName.isNullOrBlank()){
+                            ""
+                        }
+                        else{
+                            gustoViewModel.myReview!!.menuName
+                        }
+                        //taste 처리
+                        binding.ratingbarTaste.rating = gustoViewModel.myReview!!.taste.toFloat()
+                        //spiceness 처리
+                        if(gustoViewModel.myReview!!.spiciness == null){
+                            binding.ratingbarSpiceness.visibility = View.INVISIBLE
+                        }
+                        else{
+                            binding.ratingbarSpiceness.visibility = View.VISIBLE
+                            binding.ratingbarSpiceness.rating = gustoViewModel.myReview!!.taste.toFloat()
+                        }
+                        //mood 처리
+                        if(gustoViewModel.myReview!!.mood == null){
+                            binding.ratingbarMood.visibility = View.INVISIBLE
+                        }
+                        else{
+                            binding.ratingbarMood.visibility = View.VISIBLE
+                            binding.ratingbarMood.rating = gustoViewModel.myReview!!.mood!!.toFloat()
+                        }
+                        //toilet 처리
+                        if(gustoViewModel.myReview!!.toilet == null){
+                            binding.ratingbarToilet.visibility = View.INVISIBLE
+                        }
+                        else{
+                            binding.ratingbarToilet.visibility = View.VISIBLE
+                            binding.ratingbarToilet.rating = gustoViewModel.myReview!!.toilet!!.toFloat()
+                        }
+                        //parking 처리-> 더미데이터가 null이라서 임의 처리, 추후 보완 예정
+                        if(gustoViewModel.myReview!!.parking == null){
+                            binding.ratingbarParking.visibility = View.INVISIBLE
+                        }
+                        else{
+                            binding.ratingbarParking.visibility = View.VISIBLE
+                            binding.ratingbarParking.rating = gustoViewModel.myReview!!.parking!!.toFloat()
+                        }
+                        //comment 처리
+                        binding.tvMemo.text = if(gustoViewModel.myReview!!.comment == null){
+                            ""
+                        }
+                        else{
+                            gustoViewModel.myReview!!.comment
+                        }
+
+                    }else{
+                        Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    }
                 }
-                1 -> {}
+                1 -> {
+                    Toast.makeText(context, "리뷰 상세 GET 실패", Toast.LENGTH_SHORT).show()
+                }
             }
         }
-//        gustoViewModel.getReview(reviewId){
-//            result ->
-//            when(result){
-//                0 -> {
-//                    if(gustoViewModel.myReview != null){
-//                        val reviewDate = LocalDate.parse(gustoViewModel.myReview!!.visitedAt)
-//                        binding.tvDay.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
-//                        binding.tvReviewStoreName.text = gustoViewModel.myReview!!.storeName
-//                        binding.tvHeartNum.text = gustoViewModel.myReview!!.likeCnt.toString()
-//                        //이미지 처리
-//                        if(!gustoViewModel.myReview!!.img.isNullOrEmpty()){
-//                            var reviewImageList : MutableList<Int>? = null
-//
-//                        }
-//                        else{
-//                            settingImages(imageList)
-//                        }
-//                        //메뉴
-//                        binding.tvMenu.text = if(gustoViewModel.myReview!!.menuName.isNullOrBlank()){
-//                            ""
-//                        }
-//                        else{
-//                            gustoViewModel.myReview!!.menuName
-//                        }
-//                        //taste 처리
-//                        binding.ratingbarTaste.rating = gustoViewModel.myReview!!.taste.toFloat()
-//                        //spiceness 처리
-//                        if(gustoViewModel.myReview!!.spiciness == null){
-//                            binding.ratingbarSpiceness.visibility = View.INVISIBLE
-//                        }
-//                        else{
-//                            binding.ratingbarSpiceness.visibility = View.VISIBLE
-//                            binding.ratingbarSpiceness.rating = gustoViewModel.myReview!!.taste.toFloat()
-//                        }
-//                        //mood 처리
-//                        if(gustoViewModel.myReview!!.mood == null){
-//                            binding.ratingbarMood.visibility = View.INVISIBLE
-//                        }
-//                        else{
-//                            binding.ratingbarMood.visibility = View.VISIBLE
-//                            binding.ratingbarMood.rating = gustoViewModel.myReview!!.mood!!.toFloat()
-//                        }
-//                        //toilet 처리
-//                        if(gustoViewModel.myReview!!.toilet == null){
-//                            binding.ratingbarToilet.visibility = View.INVISIBLE
-//                        }
-//                        else{
-//                            binding.ratingbarToilet.visibility = View.VISIBLE
-//                            binding.ratingbarToilet.rating = gustoViewModel.myReview!!.toilet!!.toFloat()
-//                        }
-//                        //parking 처리-> 더미데이터가 null이라서 임의 처리, 추후 보완 예정
-//                        if(gustoViewModel.myReview!!.parking == null){
-//                            binding.ratingbarParking.visibility = View.INVISIBLE
-//                        }
-//                        else{
-//                            binding.ratingbarParking.visibility = View.VISIBLE
-//                            binding.ratingbarParking.rating = gustoViewModel.myReview!!.parking!!.toFloat()
-//                        }
-//                        //comment 처리
-//                        binding.tvMemo.text = if(gustoViewModel.myReview!!.comment == null){
-//                            ""
-//                        }
-//                        else{
-//                            gustoViewModel.myReview!!.comment
-//                        }
-//
-//                    }else{
-//                        Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//                1 -> {
-//                    Toast.makeText(context, "리뷰 상세 GET 실패", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
 
 
         binding.btnPopup.setOnClickListener {
