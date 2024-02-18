@@ -805,6 +805,9 @@ class GustoViewModel: ViewModel() {
                     followList = response.body()!!
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
+                }else if(response.code()==404){
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
                     callback(3)
@@ -825,6 +828,9 @@ class GustoViewModel: ViewModel() {
                     followList = response.body()!!
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
+                } else if(response.code()==404){
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
                     callback(3)
