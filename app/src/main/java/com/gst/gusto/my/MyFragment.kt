@@ -46,6 +46,7 @@ class MyFragment : Fragment() {
                         setImage(binding.ivProfileImage,data.profileImg,requireContext())
                         gustoViewModel.profileNickname = ""
                         binding.tvNickname.text = data.nickname
+                        binding.tvReviewNum.text = data.review.toString()
                         binding.tvReviewNum.text = "${data.review}"
                         binding.tvFollowingNum.text = "${data.following}"
                         binding.tvFollowerNum.text = "${data.follower}"

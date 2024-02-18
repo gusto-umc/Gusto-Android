@@ -70,8 +70,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
 
-
-
         ////    카테고리    ////
 
         // 버튼 클릭 리스너 설정
@@ -196,27 +194,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 }
             }
         }
-
-    }
-    private fun showMainScreenFragment() {
-        // fragment_map_main_screen.xml을 보이게 하는 작업
-        val mainScreenFragment = MapMainScreenFragment()
-        childFragmentManager.beginTransaction()
-            .replace(R.id.fragment_map, mainScreenFragment)
-            .commit()
-    }
-
-    private fun hideMainScreenFragment() {
-        // fragment_map_main_screen.xml을 숨기는 작업
-        val mainScreenFragment =
-            childFragmentManager.findFragmentById(R.id.fragment_map) as? MapMainScreenFragment
-        mainScreenFragment?.let {
-            childFragmentManager.beginTransaction().remove(it).commit()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
         val viewPager = binding.vpSlider
 
         // 이미지 슬라이드
@@ -255,6 +232,24 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         })
 
     }
+    /*
+    private fun showMainScreenFragment() {
+        // fragment_map_main_screen.xml을 보이게 하는 작업
+        val mainScreenFragment = MapMainScreenFragment()
+        childFragmentManager.beginTransaction()
+            .replace(R.id.fragment_map, mainScreenFragment)
+            .commit()
+    }
+
+    private fun hideMainScreenFragment() {
+        // fragment_map_main_screen.xml을 숨기는 작업
+        val mainScreenFragment =
+            childFragmentManager.findFragmentById(R.id.fragment_map) as? MapMainScreenFragment
+        mainScreenFragment?.let {
+            childFragmentManager.beginTransaction().remove(it).commit()
+        }
+    }
+*/
     override fun onResume() {
         super.onResume()
         mapView = MapView(requireContext())
