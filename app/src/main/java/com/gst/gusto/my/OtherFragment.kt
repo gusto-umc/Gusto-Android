@@ -31,7 +31,6 @@ class OtherFragment : Fragment() {
     private val colorStateOffList = ColorStateList.valueOf(Color.parseColor("#ECECEC"))
     private var followed = false
 
-    val otherReviewFragment = OtherReviewFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +38,7 @@ class OtherFragment : Fragment() {
     ): View? {
         binding = FragmentMyBinding.inflate(inflater, container, false)
 
-        initViewPager()
+
 
         val nickname = gustoViewModel.currentFeedNickname
 
@@ -65,7 +64,7 @@ class OtherFragment : Fragment() {
                             binding.btnProfileEdit.text = "팔로우"
                             binding.btnProfileEdit.setTextColor(Color.parseColor("#FFFFFF"))
                         }
-                        otherReviewFragment.getData()
+                        initViewPager()
                     }
                 }
             }
@@ -121,7 +120,7 @@ class OtherFragment : Fragment() {
     private fun initViewPager() {
         //ViewPager2 Adapter 셋팅
         var viewPager2Adatper = MyViewpagerAdapter(requireActivity())
-        viewPager2Adatper.addFragment(otherReviewFragment)
+        viewPager2Adatper.addFragment(OtherReviewFragment())
         viewPager2Adatper.addFragment(MyListFragment())
         viewPager2Adatper.addFragment(MyRouteFragment())
         //Adapter 연결

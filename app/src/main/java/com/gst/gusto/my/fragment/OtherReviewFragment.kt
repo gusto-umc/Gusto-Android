@@ -33,7 +33,7 @@ class OtherReviewFragment : Fragment() {
         binding = FragmentMyReviewBinding.inflate(inflater, container, false)
 
         initView()
-        // getData()
+        getData()
 
         return binding.root
 
