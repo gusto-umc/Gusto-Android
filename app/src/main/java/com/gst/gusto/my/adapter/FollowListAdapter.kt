@@ -27,8 +27,13 @@ class FollowListAdapter(val itemList: List<Member>, val fragment : MyFollowListF
         holder.tv_name.text = currentItem.nickname
         setImage(holder.iv_img,itemList[position].profileImg,holder.itemView.context)
         holder.itemView.setOnClickListener {
-            fragment.gustoViewModel.currentFeedNickname = itemList[position].nickname
-            fragment.findNavController().navigate(R.id.action_followList_to_otherFragment)
+            if(fragment.gustoViewModel.userNickname == itemList[position].nickname) {
+                fragment.findNavController().navigate(R.id.action_followList_to_myFragment)
+            } else {
+                fragment.gustoViewModel.currentFeedNickname = itemList[position].nickname
+                fragment.findNavController().navigate(R.id.action_followList_to_otherFragment)
+            }
+
         }
     }
 

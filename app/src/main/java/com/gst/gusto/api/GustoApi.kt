@@ -66,6 +66,7 @@ interface GustoApi {
 
 
 
+
     //GROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUP
 
     @GET("groups") // 그룹 리스트 조회
@@ -158,6 +159,13 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("routeId") routeId : Long?,
         @Query("groupId") groupId : Long?
+    ):Call<ResponseRouteDetail>
+
+    @GET("routeLists/{routeId}") // 타인의 루트 상세 조회
+    fun getOtherRouteDetail(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("routeId") routeId : Long,
+        @Query("nickname") nickname : String
     ):Call<ResponseRouteDetail>
 
     @DELETE("groups/routes/{routeId}") // 그룹 루트 삭제
@@ -406,5 +414,13 @@ interface GustoApi {
         @Query("keyword") keyword: String,
         @Query("hashTags") hashTags: List<Long>?
     ):Call<ResponseFeedSearchReviews>
+
+    @GET("reviews") // 타인 리뷰 모아보기
+    fun otherInstaView(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("nickName") nickname: String,
+        @Query("reviewId") reviewId: Long?,
+        @Query("size") size: Int
+    ):Call<ResponseInstaReview>
 
 }

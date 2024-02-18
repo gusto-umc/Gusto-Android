@@ -87,9 +87,10 @@ class FeedFragment : Fragment() {
     fun getData() {
 
         val feedList = ArrayList<ResponseFeedReview>()
-        
+
         gustoViewModel.feed() { result, response ->
             if (result == 1) {
+                feedList.clear()
                 response?.forEach {
                     feedList.add(ResponseFeedReview(it.reviewId, it.images))
                 }
