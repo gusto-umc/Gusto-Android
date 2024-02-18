@@ -178,9 +178,10 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         binding.fragmentMapMainScreen.ivMapSearchbox.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_searchFragment)
         }
-        binding.fragmentMapMainScreen.edtMapSearch.setOnClickListener {
+        binding.fragmentMapMainScreen.tvMapSearch.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_searchFragment)
         }
+
         /**
          * 카테고리 전체 조회 - mindy
          */
@@ -190,7 +191,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             when(result){
                 0 -> {
                     //success
-                    Toast.makeText(context, "카테고리 가져오기 성공", Toast.LENGTH_SHORT).show()
                 }
                 1 -> {
                     //fail
@@ -203,15 +203,18 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
          * 현재 카테고리 선택이 구현 보류로 categoryId에 null 넣고 추후 보완 예정
          */
         //리스트 별로 저장
-        // 전체 response 저장 변수 :
-        // 방문X 리스트 저장 변수 :
-        // 방문 O 리스트 저장 변수 :
-        //닉네임 저장
+        // 방문X 리스트 저장 변수 : gustoViewModel.mapUnvisitedList
+        // 방문X 개수 : gustoViewModel.mapUnvisitedCnt
+        // 방문 O 리스트 저장 변수 : gustoViewModel.mapVisitedList
+        // 방문o 개수 : gustoViewModel.mapVisitedCnt
+        //닉네임 변수 : gustoViewModel.userNickname
         gustoViewModel.getSavedStores("성수1가1동", null){
             result ->
             when(result){
                 0 -> {}
-                1 -> {}
+                1 -> {
+                    Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

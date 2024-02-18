@@ -21,8 +21,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             >
 
-            <EditText
-                android:id="@+id/edt_map_search"
+            <TextView
+                android:id="@+id/tv_map_search"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:hint="맛집 검색"
@@ -35,7 +35,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/iv_map_searchbox"
-                android:enabled="false"
+                android:gravity="center_vertical"
                 />
 
             <ImageView
