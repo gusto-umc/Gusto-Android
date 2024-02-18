@@ -22,6 +22,14 @@ import java.util.Date
 
 
 interface GustoApi {
+    //MAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAP
+    @GET("stores/map") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+    fun getCurrentMapStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("townName") townName : String,
+        @Query("myCategoryId") myCategoryId : String?
+    ):Call<List<RouteList>>
+
     //ROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTE
     @GET("routes") // 내 루트 조회
     fun getMyRoute(
@@ -68,7 +76,7 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("groupId") groupId : Long
     ):Call<List<ResponseStore>>
-    @GET("routes/{groupId}") // 그룹 내 루트 목록 조회
+    @GET("routes/groups/{groupId}") // 그룹 내 루트 목록
     fun getGroupRoutes(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("groupId") groupId : Long
@@ -181,7 +189,7 @@ interface GustoApi {
     @POST("reviews") // 리뷰 작성
     fun createReview(
         @Header("X-AUTH-TOKEN") token : String,
-        @Part image: MultipartBody.Part?,
+        @Part image: List<MultipartBody.Part>?,
         @Part("info") info: RequestCreateReview
     ):Call<ResponseBody>
 

@@ -236,6 +236,14 @@ class util {
             }
 
         }
+
+        /**
+         * 작업자 : 버루
+         * 이 메서드는 사진 uri을받아서 File 형식으로 바꿔주는 코드이다
+         * @param ctx 해당 context
+         * @param uri 사진 uri
+         * @return File 형식 데이터
+         */
         @SuppressLint("Range")
         @Throws(Exception::class)
         fun convertContentToFile(ctx: Context, uri: Uri): File {

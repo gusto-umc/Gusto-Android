@@ -31,13 +31,16 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
+        </activity>
+        <activity android:name=".start.StartActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".start.StartActivity" />
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="160e833f29df2c137b5db8865a983993" />

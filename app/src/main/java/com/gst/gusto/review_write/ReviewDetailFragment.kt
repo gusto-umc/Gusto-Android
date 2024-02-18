@@ -52,7 +52,6 @@ class ReviewDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        gustoViewModel.getTokens(requireActivity() as MainActivity)
 
         /**
          * 이미지 슬라이드 기본 설정

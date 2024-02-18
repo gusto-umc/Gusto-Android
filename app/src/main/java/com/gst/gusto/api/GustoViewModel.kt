@@ -64,7 +64,7 @@ class GustoViewModel: ViewModel() {
 
     // 리뷰 작성 필요 변수
     var visitedAt: String? = null
-    var img: File? = null
+    var imageFiles = ArrayList<File>()
     var menuName: String? = null
     var hashTagId: String? = null
     var taste: Int? = null
@@ -76,6 +76,7 @@ class GustoViewModel: ViewModel() {
 
     // 팔로우 리스트
     var followList: List<Member> = listOf()
+    var followListTitleName = "팔로잉 중"
 
     // 가게 정보 보기 아이디 리스트
     val storeIdList = ArrayList<Long>().apply {
@@ -97,7 +98,7 @@ class GustoViewModel: ViewModel() {
     lateinit var currentFeedData :ResponseFeedDetail
     // 현재 피드 리뷰 작성자 닉네임
     var currentFeedNickname = ""
-
+  
     // 먹스또 피드 검색 데이터
     val searchFeedData:MutableLiveData<ResponseFeedSearchReviews?> = MutableLiveData<ResponseFeedSearchReviews?>().apply{
         value = null
@@ -109,6 +110,33 @@ class GustoViewModel: ViewModel() {
         refreshToken = activity.getSharedPref().second
     }
 
+    // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+    fun getCurrentMapStores(callback: (Int,List<RouteList>?) -> Unit){
+        Log.e("token",xAuthToken)
+        Log.d("viewmodel","view : ${dong}")
+        service.getCurrentMapStores(xAuthToken,dong,null).enqueue(object : Callback<List<RouteList>> {
+            override fun onResponse(call: Call<List<RouteList>>, response: Response<List<RouteList>>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    myRouteList.clear()
+                    if(responseBody!=null) {
+                        Log.d("viewmodel", "Successful response: ${response}")
+                        callback(1,responseBody)
+                    } else {
+                        Log.e("viewmodel", "Unsuccessful response: ${response}")
+                        callback(3,null)
+                    }
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3,null)
+                }
+            }
+            override fun onFailure(call: Call<List<RouteList>>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3,null)
+            }
+        })
+    }
 
     // 내 루트 조회
     fun getMyRoute(callback: (Int) -> Unit){
@@ -339,7 +367,7 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
-    // 그룹 내 루트 목록 조회
+    // 그룹 내 루트 목록
     fun getGroupRoutes(callback: (Int,ArrayList<GroupItem>?) -> Unit){
         service.getGroupRoutes(xAuthToken,currentGroupId).enqueue(object : Callback<List<Routes>> {
             override fun onResponse(call: Call<List<Routes>>, response: Response<List<Routes>>) {
@@ -678,18 +706,20 @@ class GustoViewModel: ViewModel() {
     }
     // 리뷰 작성
     fun createReview(callback: (Int) -> Unit){
-        val data = RequestCreateReview(1,visitedAt,menuName,hashTagId,taste,spiciness,mood,toilet,parking,comment)
-        val fileToUpload: MultipartBody.Part? = if (img != null) {
-            val file = img!!
-            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
-            MultipartBody.Part.createFormData("uploaded_file", file.name, requestFile)
-        } else {
-            null
+        val data = RequestCreateReview(myStoreDetail?.storeId!!.toLong(),visitedAt,menuName,hashTagId,taste,spiciness,mood,toilet,parking,comment)
+        val filesToUpload: MutableList<MultipartBody.Part> = mutableListOf()
+
+        // 이미지 파일들을 반복하면서 MultipartBody.Part 리스트에 추가
+        imageFiles?.forEach { imgFile ->
+            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), imgFile)
+            val filePart = MultipartBody.Part.createFormData("image", imgFile.name, requestFile)
+            filesToUpload.add(filePart)
         }
         Log.e("token",xAuthToken)
         Log.d("viewmodel",data.toString())
-        Log.d("viewmodel",img.toString())
-        service.createReview(xAuthToken,fileToUpload,data).enqueue(object : Callback<ResponseBody> {
+        Log.d("viewmodel",imageFiles.toString())
+        Log.d("viewmodel",imageFiles.toString())
+        service.createReview(xAuthToken,filesToUpload,data).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Log.d("viewmodel", "Successful response: ${response}")
@@ -779,6 +809,9 @@ class GustoViewModel: ViewModel() {
                     followList = response.body()!!
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
+                }else if(response.code()==404){
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
                     callback(3)
@@ -799,6 +832,9 @@ class GustoViewModel: ViewModel() {
                     followList = response.body()!!
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
+                } else if(response.code()==404){
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
                     callback(3)
@@ -1216,7 +1252,7 @@ class GustoViewModel: ViewModel() {
         private const val BASE_URL = "https://dapi.kakao.com/"
         private const val REST_API_KEY = "70da0c4f2b9dfd637641a4dd22039969"
     }
-    fun getRegionInfo(x: Double,y : Double, callback: (Int) -> Unit) {
+    fun getRegionInfo(x: Double,y : Double, callback: (Int,String) -> Unit) {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -1233,21 +1269,21 @@ class GustoViewModel: ViewModel() {
                         if (responseBody != null) {
                             Log.d("viewmodel", "Successful response: ${response}")
                             dong = responseBody.documents.get(1).region3DepthName
-                            callback(1)
+                            callback(1,responseBody.documents.get(1).addressName)
                         } else {
                             Log.e("viewmodel", "Unsuccessful response: ${response}")
-                            callback(3)
+                            callback(3,"알 수 없음")
                         }
 
                     } else {
                         Log.e("viewmodel", "Unsuccessful response: ${response}")
-                        callback(3)
+                        callback(3,"알 수 없음")
                     }
                 }
 
                 override fun onFailure(call: Call<RegionInfoResponse>, t: Throwable) {
                     Log.e("viewmodel", "Failed to make the request", t)
-                    callback(3)
+                    callback(3,"알 수 없음")
                 }
             })
     }

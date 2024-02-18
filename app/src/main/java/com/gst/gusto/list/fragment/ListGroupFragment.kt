@@ -41,8 +41,6 @@ class ListGroupFragment : Fragment() {
             return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
         }
 
-
-        gustoViewModel.getTokens(requireActivity() as MainActivity)
         gustoViewModel.getGroups {result ->
             when(result) {
                 1 -> {
