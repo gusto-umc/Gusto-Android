@@ -1021,6 +1021,11 @@ class GustoViewModel: ViewModel() {
 
     var userNickname : String = "Gusto"
 
+    var mapVisitedList : List<ResponseSavedStoreData>? = null
+    var mapUnvisitedList : List<ResponseSavedStoreData>? = null
+    var mapVisitedCnt = 0
+    var mapUnvisitedCnt = 0
+
     //가게 카테고리 추가(찜) -> 확인 완, 수정 필요
     fun addPin(categoryId: Long, storeLong: Long, callback: (Int) -> Unit){
         var pinData = RequestPin(storeId = storeLong)
@@ -1166,7 +1171,12 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     Log.e("getSavedStores", "Successful response: ${response}")
                     Log.d("getSavedStores", response.body()!![0].toString())
-                    userNickname = response.body()!![0].nickname
+                    val data = response.body()!![0]
+                    userNickname = data.nickname
+                    mapVisitedList = data.visitedStores[0].visitedStores
+                    mapVisitedCnt = data.visitedStores[0].numPinStores
+                    mapUnvisitedList = data.unvisitedStores[0].unvisitedStores
+                    mapUnvisitedCnt = data.unvisitedStores[0].numPinStores
                     callback(0)
                 } else {
                     Log.e("getSavedStores", "Unsuccessful response: ${response}")
