@@ -38,6 +38,9 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.edtSearchSearchbox.requestFocus()
+        util.openKeyboard(requireActivity())
+
         /**
          * Rv 어댑터 연결, 클릭 리스너 설정, 검색 클릭 리스너
          */

@@ -1,5 +1,6 @@
 package com.gst.gusto.ListView.adapter
 
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -84,6 +85,13 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
                 //루트 페이지로 이동
                 Log.d("route search", holder.data!!.storeId.toString() )
                 Navigation.findNavController(parentView).popBackStack()
+            }
+        }
+        else if(flag == "my"){
+            holder.cvStore.setOnClickListener {
+                //store detail로 이동
+                gustoViewModel!!.selectedDetailStoreId = holder.data!!.storeId
+                Navigation.findNavController(parentView).navigate(R.id.action_myFragment_to_storeDetailFragment)
             }
         }
 

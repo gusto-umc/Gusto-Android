@@ -268,5 +268,10 @@ class util {
             imm.hideSoftInputFromWindow(activity.window.decorView.applicationWindowToken, 0)
         }
 
+        fun openKeyboard(activity: Activity){
+            val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        }
+
     }
 }

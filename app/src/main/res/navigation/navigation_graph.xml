@@ -450,4 +450,12 @@
         android:id="@+id/routeSearchFragment"
         android:name="com.gst.gusto.search.RouteSearchFragment"
         android:label="RouteSearchFragment" />
+    <fragment
+        android:id="@+id/myListFragment"
+        android:name="com.gst.gusto.my.fragment.MyListFragment"
+        android:label="MyListFragment" >
+        <action
+            android:id="@+id/action_myListFragment_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment" />
+    </fragment>
 </navigation>

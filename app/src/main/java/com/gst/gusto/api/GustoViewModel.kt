@@ -1277,7 +1277,7 @@ class GustoViewModel: ViewModel() {
                 response: Response<List<ResponseStoreListItem>>
             ) {
                 if (response.isSuccessful) {
-                    Log.e("viewmodel", "Successful response: ${response}")
+                    Log.e("getAllUserStores", response.body()!!.toString())
                     myAllStoreList = response.body()!!
                     callback(0)
                 } else {

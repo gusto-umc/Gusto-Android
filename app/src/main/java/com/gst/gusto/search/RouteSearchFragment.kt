@@ -43,6 +43,9 @@ class RouteSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.edtRouteSearchbox.requestFocus()
+        util.openKeyboard(requireActivity())
+
         /**
          * category server 연결
          */
