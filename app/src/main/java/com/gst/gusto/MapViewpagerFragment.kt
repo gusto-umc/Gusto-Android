@@ -86,7 +86,7 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
 
-        mapUtil.setMapInit(mapView, binding.kakaoMapSearch, requireContext(), requireActivity(),"route")
+        mapUtil.setMapInit(mapView, binding.kakaoMapSearch, requireContext(), requireActivity(),"route",this)
 
         var num = 2
         for( id in gustoViewModel.storeIdList) {
