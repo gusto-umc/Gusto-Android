@@ -138,7 +138,7 @@ class ReviewDetailEditFragment : Fragment() {
             val comment = binding.edtMemo.text.toString()
 
 
-            gustoViewModel.editReview(gustoViewModel.myReviewId!!, taste = taste, spiceness = spiceness, mood = mood, toilet = toilet, parking = parking, menuName = menu, comment = comment, img = img){
+            gustoViewModel.editReview(1L, taste = taste, spiceness = spiceness, mood = mood, toilet = toilet, parking = parking, menuName = menu, comment = comment, img = img){
                 result ->
                 when(result){
                     0 -> {}

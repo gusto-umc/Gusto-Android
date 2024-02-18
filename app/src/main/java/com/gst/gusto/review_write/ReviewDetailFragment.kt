@@ -94,8 +94,9 @@ class ReviewDetailFragment : Fragment() {
         var reviewId = arguments?.getInt("reviewId")
         gustoViewModel.myReviewId = reviewId?.toLong()
 
-        reviewId?.toLong()?.let {
-            gustoViewModel.getReview(it){
+        gustoViewModel.myReviewId?.let {
+
+            gustoViewModel.getReview(1L){
                 result ->
                 when(result){
                     0 -> {

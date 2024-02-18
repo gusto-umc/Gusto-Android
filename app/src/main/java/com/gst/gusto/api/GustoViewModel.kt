@@ -1062,7 +1062,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //가게 상세 조회 -> 수정 필요
+    //가게 상세 조회 -> 완
     fun getStoreDetail(storeId: Long, callback: (Int) -> Unit){
         service.getStoreDetail(xAuthToken, storeId, detailReviewLastVisitedAt, detailReviewLastId).enqueue(object : Callback<ResponseStoreDetail>{
             override fun onResponse(
@@ -1107,7 +1107,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //카테고리 별 가게 조회 - 위치기반
+    //카테고리 별 가게 조회 - 위치기반 -> 완
     fun getMapStores(categoryId: Int, townName: String, callback: (Int) -> Unit){
         service.getMapStores(xAuthToken, categoryId = categoryId, townName = townName).enqueue(object :Callback<List<ResponseStoreListItem>>{
             override fun onResponse(
@@ -1132,7 +1132,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //카테고리 별 가게 조회 - 전체
+    //카테고리 별 가게 조회 - 전체 -> 완
     fun getAllStores(categoryId: Int, nickname: String, callback: (Int) -> Unit){
         service.getAllStores(xAuthToken, nickname = nickname, categoryId = categoryId).enqueue(object : Callback<List<ResponseStoreListItem>>{
             override fun onResponse(
@@ -1156,7 +1156,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //저장된 맛집 리스트 -> 수정 예정
+    //저장된 맛집 리스트 -> 완
     fun getSavedStores(townName: String, categoryId : Int?, callback: (Int) -> Unit){
         service.getSavedStores(xAuthToken, townName = "성수1가1동", categoryId = 3).enqueue(object : Callback<List<ResponseSavedStore>>{
             override fun onResponse(

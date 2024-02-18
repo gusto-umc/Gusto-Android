@@ -236,7 +236,7 @@ data class ResponseMyReview(
     @SerializedName("visitedAt") var visitedAt : String?,
     @SerializedName("images") val img : List<String>?,
     @SerializedName("menuName") val menuName : String?,
-    @SerializedName("hashTags") val hashTags : String?,
+//    @SerializedName("hashTags") val hashTags : String?,
     @SerializedName("taste") val taste : Int,
     @SerializedName("spiciness") val spiciness : Int?,
     @SerializedName("mood") val mood : Int?,
