@@ -58,6 +58,11 @@ class LoginFragment : Fragment() {
             Log.d("안녕", BuildConfig.API_BASE)
             binding.wv.loadUrl(BuildConfig.API_BASE+"oauth/authorize/naver")
         }
+        binding.btnNoLogin.setOnClickListener {
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
         return binding.root
 
     }

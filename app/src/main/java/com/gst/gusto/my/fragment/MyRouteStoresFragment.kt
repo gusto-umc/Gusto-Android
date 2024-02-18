@@ -35,7 +35,7 @@ class MyRouteStoresFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         itemList = gustoViewModel.markerListLiveData.value!!
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyGone,null)
+        val boardAdapter = MapRoutesAdapter(itemList,binding.lyGone,requireActivity(),1)
         boardAdapter.notifyDataSetChanged()
 
         binding.recyclerView.adapter = boardAdapter

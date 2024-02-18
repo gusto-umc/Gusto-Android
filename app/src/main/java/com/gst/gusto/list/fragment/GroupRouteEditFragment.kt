@@ -40,7 +40,7 @@ class GroupRouteEditFragment : Fragment() {
 
         val itemList = gustoViewModel.markerListLiveData.value as ArrayList
 
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute,requireActivity())
+        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute,requireActivity(),0)
         boardAdapter.notifyDataSetChanged()
 
         binding.rvRoutes.adapter = boardAdapter
@@ -65,7 +65,7 @@ class GroupRouteEditFragment : Fragment() {
 
         mapView = MapView(requireContext())
 
-        mapUtil.setMapInit(mapView, binding.kakaoRouteMap, requireContext(), requireActivity(),"route")
+        mapUtil.setMapInit(mapView, binding.kakaoRouteMap, requireContext(), requireActivity(),"route",this)
         //mapUtil.setRoute(mapView, itemList)
 
         gustoViewModel.markerListLiveData.observe(viewLifecycleOwner, Observer { markers ->

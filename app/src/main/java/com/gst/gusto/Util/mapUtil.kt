@@ -11,6 +11,7 @@ import android.util.Log
 import android.widget.RelativeLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.google.android.gms.location.LocationServices
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
@@ -25,21 +26,21 @@ import net.daum.mf.map.api.MapView
 class mapUtil {
     companion object {
         data class MarkerItem(
-                val storeId: Long,
-                var ordinal: Int,
-                val routeListId: Long,
-                var latitude: Double,
-                var longitude: Double,
-                val storeName: String,
-                val address: String,
-                val bookMark: Boolean
+            val storeId: Long,
+            var ordinal: Int,
+            val routeListId: Long,
+            var latitude: Double,
+            var longitude: Double,
+            val storeName: String,
+            var address: String,
+            var bookMark: Boolean
         )
 
         private val MAPPERMISSIONS = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
-        private val LOCATION_PERMISSION_REQUEST_CODE = 5000
+        val LOCATION_PERMISSION_REQUEST_CODE = 5000
         private val ROUTE_MARKER_IMAGES = arrayOf(
             R.drawable.route_marker_1_img,
             R.drawable.route_marker_2_img,
@@ -49,12 +50,11 @@ class mapUtil {
             R.drawable.route_marker_6_img
         )
         @SuppressLint("MissingPermission")
-        fun setMapInit(mapView : MapView,kakaoMap : RelativeLayout,context : Context,activity : Activity,option : String)  {
+        fun setMapInit(mapView : MapView,kakaoMap : RelativeLayout,context : Context,activity : Activity,option : String,fragment: Fragment)  {
             kakaoMap.addView(mapView)
 
             if (!hasPermission(context)) {
-                ActivityCompat.requestPermissions(
-                    activity,
+                fragment.requestPermissions(
                     MAPPERMISSIONS,
                     LOCATION_PERMISSION_REQUEST_CODE
                 )
@@ -81,11 +81,12 @@ class mapUtil {
             }
         }
 
+
         fun setMarker(mapView : MapView,markerList: ArrayList<MarkerItem>) {
             mapView.removeAllPOIItems()
             for(data in markerList) {
                 val marker = MapPOIItem()
-                marker.itemName = "Default Marker"
+                marker.itemName = data.ordinal.toString()
                 marker.tag = data.ordinal // id
                 marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
                 marker.markerType = MapPOIItem.MarkerType.CustomImage
@@ -106,11 +107,12 @@ class mapUtil {
                 marker.markerType = MapPOIItem.MarkerType.CustomImage
                 marker.customImageResourceId = R.drawable.marker_color_small_img
                 marker.isShowCalloutBalloonOnTouch = false
+                marker.showAnimationType = MapPOIItem.ShowAnimationType.DropFromHeaven
 
                 mapView.addPOIItem(marker)
             }
-
-            mapView.moveCamera(CameraUpdateFactory.newMapPoint(MapPoint.mapPointWithGeoCoord(markerList[0].latitude, markerList[0].longitude)))
+            if(!markerList.isEmpty())
+                mapView.moveCamera(CameraUpdateFactory.newMapPoint(MapPoint.mapPointWithGeoCoord(markerList[0].latitude, markerList[0].longitude)))
         }
         fun setRoute(mapView: MapView, markerList: List<MarkerItem>) {
             mapView.removeAllPOIItems()
@@ -123,7 +125,7 @@ class mapUtil {
                 marker.itemName = data.ordinal.toString()
                 marker.setCustomImageAnchor(0.5f,0.5f)
                 marker.tag = data.ordinal // id
-
+                marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                 marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
                 marker.markerType = MapPOIItem.MarkerType.CustomImage
                 marker.customImageResourceId = ROUTE_MARKER_IMAGES[index]
