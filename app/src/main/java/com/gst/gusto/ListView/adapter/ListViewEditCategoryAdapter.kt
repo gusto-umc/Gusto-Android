@@ -93,6 +93,16 @@ class ListViewEditCategoryAdapter (private var flag : String, private val parent
             }
         }
 
+        holder.updownLayout.setOnClickListener {
+            if(holder.cb.isChecked){
+                holder.cb.isChecked = false
+            }
+            else{
+                holder.cb.isChecked = true
+            }
+
+        }
+
 
 //        holder.updownLayout.setOnClickListener {
 //            if(holder.data?.pinCnt != 0){

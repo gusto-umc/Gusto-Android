@@ -191,6 +191,7 @@ class ReviewDetailFragment : Fragment() {
                         //성공
                         Toast.makeText(context, "리뷰를 성공적으로 삭제했습니다.", Toast.LENGTH_SHORT).show()
                         Navigation.findNavController(view).popBackStack()
+
                     }
                     1 -> {
                         //실페

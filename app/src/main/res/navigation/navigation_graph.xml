@@ -400,6 +400,10 @@
         <action
             android:id="@+id/action_searchFragment_to_fragment_map"
             app:destination="@id/fragment_map" />
+        <action
+            android:id="@+id/action_searchFragment_to_fragment_map_viewpager3"
+            app:destination="@id/fragment_map_viewpager" />
+
     </fragment>
     <fragment
         android:id="@+id/mapListViewSaveFragment"
