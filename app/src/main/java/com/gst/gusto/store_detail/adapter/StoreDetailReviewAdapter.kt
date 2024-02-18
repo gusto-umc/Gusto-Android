@@ -67,10 +67,18 @@ class StoreDetailReviewAdapter () : ListAdapter<ResponseReviews, StoreDetailRevi
             val reviewDate = LocalDate.parse(review.visitedAt)
             binding.tvStoreReviewDate.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
             //리뷰 사진들
-            photoArray.add(review.img1)
-            photoArray.add(review.img2)
-            photoArray.add(review.img3)
-            photoArray.add(review.img4)
+            if(review.img1 != null){
+                photoArray.add(review.img1)
+            }
+            if(review.img2 != null){
+                photoArray.add(review.img2)
+            }
+            if(review.img3 != null){
+                photoArray.add(review.img3)
+            }
+            if(review.img4 != null){
+                photoArray.add(review.img4)
+            }
 
         }
         val layoutItem = binding.layoutReviewItemAll
