@@ -58,7 +58,7 @@ class MapListViewFragment : Fragment() {
 
 
         fun getMapCategories(){
-            gustoViewModel.getMapCategory("성수1가1동"){
+            gustoViewModel.getMapCategory(gustoViewModel.dong){
                     result ->
                 when(result){
                     0 -> {

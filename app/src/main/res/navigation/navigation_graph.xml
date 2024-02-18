@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/fragment_map">
+    app:startDestination="@id/searchFragment">
     <!-- Map 화면의 프래그먼트들 -->
     <fragment
         android:id="@+id/fragment_map"
@@ -393,6 +393,9 @@
         <action
             android:id="@+id/action_storeDetailFragment_to_fragment_map_viewpager"
             app:destination="@id/fragment_map_viewpager" />
+        <action
+            android:id="@+id/action_storeDetailFragment_to_routeSearchFragment"
+            app:destination="@id/routeSearchFragment" />
 
     </fragment>
     <fragment
@@ -443,4 +446,8 @@
             android:id="@+id/action_myRouteStoresFragment_to_myRouteRoutesFragment"
             app:destination="@id/myRouteRoutesFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/routeSearchFragment"
+        android:name="com.gst.gusto.search.RouteSearchFragment"
+        android:label="RouteSearchFragment" />
 </navigation>

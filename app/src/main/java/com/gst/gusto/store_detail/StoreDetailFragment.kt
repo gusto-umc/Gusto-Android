@@ -16,6 +16,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.internal.NavigationMenu
 import com.gst.gusto.ListView.Model.StoreDetail
 import com.gst.gusto.ListView.Model.StoreDetailReview
 import com.gst.gusto.ListView.adapter.CategoryChooseBottomSheetDialog
@@ -221,7 +222,7 @@ class StoreDetailFragment : Fragment() {
 
 
         /**
-         * 리뷰 페이징 test
+         * 리뷰 페이징 더보기
          */
         binding.tvReviewLoad.setOnClickListener {
             gustoViewModel.getStoreDetail(sampleStoreId.toLong()){
@@ -239,6 +240,13 @@ class StoreDetailFragment : Fragment() {
                     }
                 }
             }
+        }
+
+        /**
+         * search route 테스트
+         */
+        binding.tvStoreDetailName.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_routeSearchFragment)
         }
 
 

@@ -951,7 +951,7 @@ class GustoViewModel: ViewModel() {
 
     //내 우치 장소보기 카테고리 array
     var myMapCategoryList : List<ResponseMapCategory>? = null
-    var myAllCategoryList : List<ResponseAllCategory>? = null
+    var myAllCategoryList : List<ResponseMapCategory>? = null
 
     private val _cateEditFlag = MutableLiveData<Boolean?>(false)
     val cateEditFlag: LiveData<Boolean?>
@@ -1066,10 +1066,10 @@ class GustoViewModel: ViewModel() {
     }
     //타인 카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
     fun getAllCategory(nickname: String, callback: (Int) -> Unit){
-        service.getAllCategory(xAuthToken, nickname = nickname).enqueue(object : Callback<List<ResponseAllCategory>>{
+        service.getAllCategory(xAuthToken, nickname = nickname).enqueue(object : Callback<List<ResponseMapCategory>>{
             override fun onResponse(
-                call: Call<List<ResponseAllCategory>>,
-                response: Response<List<ResponseAllCategory>>
+                call: Call<List<ResponseMapCategory>>,
+                response: Response<List<ResponseMapCategory>>
             ) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
@@ -1082,7 +1082,7 @@ class GustoViewModel: ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<List<ResponseAllCategory>>, t: Throwable) {
+            override fun onFailure(call: Call<List<ResponseMapCategory>>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
                 callback(1)
             }
@@ -1091,10 +1091,10 @@ class GustoViewModel: ViewModel() {
     }
     //타인 카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
     fun getAllUserCategory(callback: (Int) -> Unit){
-        service.getAllCategory(xAuthToken, nickname = null).enqueue(object : Callback<List<ResponseAllCategory>>{
+        service.getAllCategory(xAuthToken, nickname = null).enqueue(object : Callback<List<ResponseMapCategory>>{
             override fun onResponse(
-                call: Call<List<ResponseAllCategory>>,
-                response: Response<List<ResponseAllCategory>>
+                call: Call<List<ResponseMapCategory>>,
+                response: Response<List<ResponseMapCategory>>
             ) {
                 if (response.isSuccessful) {
                     Log.e("getAllUserCategory", "Successful response: ${response}")
@@ -1107,7 +1107,7 @@ class GustoViewModel: ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<List<ResponseAllCategory>>, t: Throwable) {
+            override fun onFailure(call: Call<List<ResponseMapCategory>>, t: Throwable) {
                 Log.e("getAllUserCategory", "Failed to make the request", t)
                 callback(1)
             }
@@ -1297,7 +1297,7 @@ class GustoViewModel: ViewModel() {
     var savedStoreIdList = ArrayList<Long>()
     var unsavedStoreIdList = ArrayList<Long>()
     fun getSavedStores(townName: String, categoryId : Int?, callback: (Int) -> Unit){
-        service.getSavedStores(xAuthToken, townName = "성수1가1동", categoryId = null).enqueue(object : Callback<List<ResponseSavedStore>>{
+        service.getSavedStores(xAuthToken, townName = dong, categoryId = null).enqueue(object : Callback<List<ResponseSavedStore>>{
             override fun onResponse(
                 call: Call<List<ResponseSavedStore>>,
                 response: Response<List<ResponseSavedStore>>

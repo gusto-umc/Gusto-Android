@@ -81,23 +81,45 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                     /**
                      * storeRv 연결
                      */
-                    viewModel!!.getMapStores(holder.data!!.myCategoryId, townName = "성수1가1동"){
-                        result ->
-                        when(result){
-                            0 -> {
-                                //성공
-                                val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
-                                mStoreAdapter.submitList(viewModel!!.myMapStoreList!!)
-                                mStoreAdapter.gustoViewModel = viewModel
-                                holder.storeRv.adapter = mStoreAdapter
-                                holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
-                            }
-                            1 -> {
-                                //실패
-                                Log.d("store checking", "fail")
+                    if(flag == "route"){
+                        viewModel!!.getAllUserStores(holder.data!!.myCategoryId){
+                            result ->
+                            when(result){
+                                0 -> {
+                                    //success
+                                    val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
+                                    mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
+                                    mStoreAdapter.gustoViewModel = viewModel
+                                    holder.storeRv.adapter = mStoreAdapter
+                                    holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
+                                }
+                                1 -> {
+                                    //실패
+                                    Log.d("store checking", "fail")
+                                }
                             }
                         }
                     }
+                    else{
+                        viewModel!!.getMapStores(holder.data!!.myCategoryId, townName = viewModel!!.dong){
+                                result ->
+                            when(result){
+                                0 -> {
+                                    //성공
+                                    val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
+                                    mStoreAdapter.submitList(viewModel!!.myMapStoreList!!)
+                                    mStoreAdapter.gustoViewModel = viewModel
+                                    holder.storeRv.adapter = mStoreAdapter
+                                    holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
+                                }
+                                1 -> {
+                                    //실패
+                                    Log.d("store checking", "fail")
+                                }
+                            }
+                        }
+                    }
+
 
                 }
             }

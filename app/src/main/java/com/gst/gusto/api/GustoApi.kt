@@ -268,7 +268,7 @@ interface GustoApi {
     fun getAllCategory(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("nickname") nickname : String?
-    ) : Call<List<ResponseAllCategory>>
+    ) : Call<List<ResponseMapCategory>>
 
     /**
      * 가게

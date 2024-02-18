@@ -1,6 +1,7 @@
 package com.gst.gusto.Util
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.database.Cursor
@@ -256,6 +257,15 @@ class util {
             } finally {
                 cursor?.close()
             }
+        }
+
+        /**
+         * 작업자 : 민지
+         * 키보드 내리기 함수
+         */
+        fun hideKeyboard(activity: Activity){
+            val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(activity.window.decorView.applicationWindowToken, 0)
         }
 
     }

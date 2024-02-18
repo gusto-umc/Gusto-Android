@@ -78,10 +78,12 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
             holder.tvCountCategory.text = "${holder.data!!.reviewCnt}번 방문했어요"
         }
         else if(flag == "route"){
-            holder.tvCountCategory.text = "${holder.data!!.reviewCnt}"
+            holder.tvCountCategory.text = "${holder.data!!.reviewCnt}번 방문했어요"
 
             holder.cvStore.setOnClickListener {
                 //루트 페이지로 이동
+                Log.d("route search", holder.data!!.storeId.toString() )
+                Navigation.findNavController(parentView).popBackStack()
             }
         }
 
@@ -94,14 +96,4 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
         }
 
     }
-
-    interface OnItemClickListener {
-        fun onClick(v: View, dataSet: ResponseStoreListItem)
-    }
-    // (3) 외부에서 클릭 시 이벤트 설정
-    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
-        this.itemClickListener = onItemClickListener
-    }
-    // (4) setItemClickListener로 설정한 함수 실행
-    private lateinit var itemClickListener : OnItemClickListener
 }
