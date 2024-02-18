@@ -66,7 +66,7 @@ class GustoViewModel: ViewModel() {
     var visitedAt: String? = null
     var imageFiles = ArrayList<File>()
     var menuName: String? = null
-    var hashTagId: String? = null
+    var hashTagId: ArrayList<Long>? = null
     var taste: Int? = null
     var spiciness: Int? = null
     var mood: Int? = null
