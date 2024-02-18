@@ -29,8 +29,6 @@ class MyFragment : Fragment() {
     lateinit var binding: FragmentMyBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
 
-    private val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#F27781"))
-    private val colorStateOffList = ColorStateList.valueOf(Color.parseColor("#ECECEC"))
     private var followed = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

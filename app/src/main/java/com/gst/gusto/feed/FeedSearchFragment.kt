@@ -124,7 +124,6 @@ class FeedSearchFragment() : Fragment() {
     }
 
     fun getData(keyword: String, hashTags: List<Long>?) {
-        gustoViewModel.getTokens(requireActivity() as MainActivity)
         gustoViewModel.feedSearch(keyword, hashTags) { result, response ->
             if (result == 1) {
                 if (response != null) {
