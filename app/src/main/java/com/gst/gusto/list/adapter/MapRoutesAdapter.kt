@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
@@ -18,10 +19,8 @@ import com.gst.gusto.Util.mapUtil
 
 class MapRoutesAdapter(
     val itemList: ArrayList<mapUtil.Companion.MarkerItem>, val lyAddRoute: ConstraintLayout,
-    val activity: Activity?,
-):
-    RecyclerView.Adapter<MapRoutesAdapter.ListViewHolder>(){
-
+    val activity: Activity?, val option : Int):RecyclerView.Adapter<MapRoutesAdapter.ListViewHolder>(){
+// option 0(루트 화면), 1(마이 화면)
     val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#A6A6A6"))
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_map_route_view, parent, false)
@@ -29,6 +28,7 @@ class MapRoutesAdapter(
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+        val parentActivity = activity as MainActivity
         holder.tv_rest_name.setText(itemList[position].storeName)
         holder.tv_route_order.text = (position+1).toString()
         holder.tv_rest_loc.text = itemList[position].address
@@ -47,8 +47,7 @@ class MapRoutesAdapter(
             }
             holder.btn_remove.setOnClickListener {
                 lyAddRoute.visibility = View.VISIBLE
-                if(activity!=null) {
-                    val parentActivity = activity as MainActivity
+                if(option!=1) {
                     val gustoVM = parentActivity.gustoViewModel
                     if(gustoVM.addRoute.contains(itemList[position].storeId)) gustoVM.addRoute.remove(itemList[position].storeId)
                     else gustoVM.removeRoute.add(itemList[position].routeListId)
@@ -59,20 +58,24 @@ class MapRoutesAdapter(
                 notifyItemRangeChanged(position,getItemCount())
             }
         } else {
-            if(activity!=null) {
-                val parentActivity = activity as MainActivity
+            if(option!=1) {
                 holder.itemView.setOnClickListener{
-                    if(activity!=null) {
-                        parentActivity.getCon().navigate(R.id.action_routeStoresFragment_to_storeDetailFragment)
-                        parentActivity.getViewModel().groupFragment = 1
-                    }
+                    parentActivity.getCon().navigate(R.id.action_routeStoresFragment_to_storeDetailFragment)
+                    parentActivity.getViewModel().groupFragment = 1
+
                 }
                 holder.tv_rest_name.setOnClickListener{
-                    if(activity!=null) {
-                        parentActivity.getCon().navigate(R.id.action_routeStoresFragment_to_storeDetailFragment)
-                        parentActivity.getViewModel().groupFragment = 1
-                    }
+                    parentActivity.getCon().navigate(R.id.action_routeStoresFragment_to_storeDetailFragment)
+                    parentActivity.getViewModel().groupFragment = 1
                 }
+            } else {
+                holder.itemView.setOnClickListener{
+                    parentActivity.getCon().navigate(R.id.action_myFragment_to_storeDetailFragment)
+                }
+                holder.tv_rest_name.setOnClickListener{
+                    parentActivity.getCon().navigate(R.id.action_myFragment_to_storeDetailFragment)
+                }
+
             }
         }
     }

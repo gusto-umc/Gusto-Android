@@ -72,6 +72,7 @@ class ListFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setFABClickEvent()
         navHostFragment = childFragmentManager.findFragmentById(R.id.fl_list_container) as NavHostFragment
@@ -80,7 +81,6 @@ class ListFragment : Fragment() {
 
         navHostFragment.navController.popBackStack()
         navHostFragment.navController.navigate(R.id.fragment_list_group)
-
 
     }
 

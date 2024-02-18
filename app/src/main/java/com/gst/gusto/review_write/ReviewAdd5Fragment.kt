@@ -63,15 +63,13 @@ class ReviewAdd5Fragment : Fragment() {
         chipGroup = binding.chipGroup
 
         binding.btnNext.setOnClickListener {
-            var tmpString = ""
-
+            gustoViewModel.hashTagId = ArrayList<Long>()
             for (i in 0 until chipGroup.childCount) {
                 val chip = chipGroup.getChildAt(i) as Chip
                 if (chip.isChecked) {
-                    tmpString += (","+(i+1))
+                    gustoViewModel.hashTagId!!.add(i.toLong()+1)
                 }
             }
-            if(tmpString !="") gustoViewModel.hashTagId = tmpString.substring(1)
             findNavController().navigate(R.id.action_reviewAdd5Fragment_to_reviewAdd6Fragment)
         }
 

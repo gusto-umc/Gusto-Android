@@ -37,7 +37,7 @@ class GroupRouteCreateFragment : Fragment() {
 
         gustoViewModel.requestRoutesData = null
 
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute,null)
+        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute,null,0)
         boardAdapter.notifyDataSetChanged()
 
         binding.rvRoutes.adapter = boardAdapter

@@ -47,6 +47,7 @@
             android:id="@+id/list_view_btn"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_marginBottom="10dp"
             android:src="@drawable/fab_list_img"
             android:background="@drawable/background_radius_10"
             android:elevation="4dp"

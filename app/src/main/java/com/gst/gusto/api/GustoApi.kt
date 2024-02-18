@@ -35,6 +35,11 @@ interface GustoApi {
     fun getMyRoute(
         @Header("X-AUTH-TOKEN") token : String
     ):Call<List<Routes>>
+    @GET("routes/{nickname}") // 타인의 루트 조회
+    fun getOtherRoute(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("nickname") nickname : String
+    ):Call<List<Routes>>
 
     @POST("routes") // 루트 생성 or 그룹 내 루트 추가
     fun createRoute(
@@ -63,6 +68,8 @@ interface GustoApi {
         @Path("routeId") routeId : Long,
         @Body body : List<RouteList>
     ):Call<ResponseBody>
+
+
 
     //GROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUP
 
@@ -397,5 +404,12 @@ interface GustoApi {
     fun feed(
         @Header("X-AUTH-TOKEN") token: String
     ):Call<ArrayList<ResponseFeedReview>>
+
+    @GET("feeds/search") // 맛집 & 해시태그 검색 엔진
+    fun feedSearch(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("keyword") keyword: String,
+        @Query("hashTags") hashTags: List<Long>?
+    ):Call<ResponseFeedSearchReviews>
 
 }

@@ -2,6 +2,7 @@ package com.gst.clock.Fragment
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,14 +74,18 @@ class FeedDetailReviewFragment : Fragment() {
         gustoViewModel.currentFeedNickname = feedDetail.nickName
         setImage(binding.ivProfileImage,feedDetail.profileImage,requireContext())
         binding.tvHeartNum.text = "${feedDetail.likeCnt}"
+        Log.d("viewmodel","heart num : ${feedDetail}")
         val imageList = mutableListOf<String>()
         for(image in feedDetail.images) {
             imageList.add(image)
         }
         binding.tvMenuName.text = feedDetail.menuName
-        for(tagNum in feedDetail.hashTags.split(",").mapNotNull { it.toIntOrNull() }) {
-            addChip(gustoViewModel.hashTag[tagNum-1])
+        if(feedDetail.hashTags!=null) {
+            for(tagNum in feedDetail.hashTags) {
+                addChip(gustoViewModel.hashTag[tagNum.toInt()-1])
+            }
         }
+
         binding.tvMemo.text = feedDetail.comment
 
         val viewPager = binding.vpImgSlider

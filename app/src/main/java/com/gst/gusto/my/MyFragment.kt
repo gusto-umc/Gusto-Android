@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.gst.clock.Fragment.MyReviewFragment
-import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
@@ -24,7 +23,6 @@ import com.gst.gusto.my.activity.MyProfileEditActivity
 import com.gst.gusto.my.activity.MySettingActivity
 import com.gst.gusto.my.adapter.MyViewpagerAdapter
 import com.gst.gusto.my.fragment.MyListFragment
-import com.gst.gusto.start.StartActivity
 
 class MyFragment : Fragment() {
 
@@ -39,8 +37,6 @@ class MyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMyBinding.inflate(inflater, container, false)
-        initViewPager()
-
 
         gustoViewModel.getUserProfile("my") { result, data ->
             when(result) {
@@ -48,6 +44,7 @@ class MyFragment : Fragment() {
                     if(data!=null) {
                         Log.d("viewmodel",data.toString())
                         setImage(binding.ivProfileImage,data.profileImg,requireContext())
+                        gustoViewModel.profileNickname = ""
                         binding.tvNickname.text = data.nickname
                         binding.tvReviewNum.text = "${data.review}"
                         binding.tvFollowingNum.text = "${data.following}"
@@ -76,7 +73,7 @@ class MyFragment : Fragment() {
                             gustoViewModel.followListTitleName= "팔로워"
                             findNavController().navigate(R.id.action_myFragment_to_followList)
                         }
-                        else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                        3 -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -87,7 +84,7 @@ class MyFragment : Fragment() {
                             gustoViewModel.followListTitleName= "팔로잉 중"
                             findNavController().navigate(R.id.action_myFragment_to_followList)
                         }
-                        else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                        3 -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -101,7 +98,7 @@ class MyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        initViewPager()
     }
     private fun initViewPager() {
 
@@ -114,7 +111,6 @@ class MyFragment : Fragment() {
         //Adapter 연결
         binding.viewpager.apply {
             adapter = viewPager2Adatper
-
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
