@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.gst.clock.Fragment.MyReviewFragment
+import com.gst.clock.Fragment.OtherReviewFragment
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMyBinding
@@ -29,12 +30,16 @@ class OtherFragment : Fragment() {
     private val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#F27781"))
     private val colorStateOffList = ColorStateList.valueOf(Color.parseColor("#ECECEC"))
     private var followed = false
+
+    val otherReviewFragment = OtherReviewFragment()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMyBinding.inflate(inflater, container, false)
 
+        initViewPager()
 
         val nickname = gustoViewModel.currentFeedNickname
 
@@ -60,6 +65,7 @@ class OtherFragment : Fragment() {
                             binding.btnProfileEdit.text = "팔로우"
                             binding.btnProfileEdit.setTextColor(Color.parseColor("#FFFFFF"))
                         }
+                        otherReviewFragment.getData()
                     }
                 }
             }
@@ -111,12 +117,11 @@ class OtherFragment : Fragment() {
 
         binding.btnProfileEdit.text = "팔로잉"
         binding.btnOption.visibility =View.GONE
-        initViewPager()
     }
     private fun initViewPager() {
         //ViewPager2 Adapter 셋팅
         var viewPager2Adatper = MyViewpagerAdapter(requireActivity())
-        viewPager2Adatper.addFragment(MyReviewFragment())
+        viewPager2Adatper.addFragment(otherReviewFragment)
         viewPager2Adatper.addFragment(MyListFragment())
         viewPager2Adatper.addFragment(MyRouteFragment())
         //Adapter 연결

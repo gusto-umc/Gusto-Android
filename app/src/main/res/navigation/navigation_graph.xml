@@ -341,6 +341,9 @@
         android:name="com.gst.gusto.my.OtherFragment"
         android:label="FragmentOther"
         tools:layout="@layout/fragment_my">
+        <action
+            android:id="@+id/action_otherFragment_to_reviewDetail"
+            app:destination="@+id/fragment_review_detail" />
     </fragment>
     <fragment
         android:id="@+id/fragment_my_profile"
