@@ -71,6 +71,7 @@ interface GustoApi {
 
 
 
+
     //GROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUP
 
     @GET("groups") // 그룹 리스트 조회
@@ -163,6 +164,13 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("routeId") routeId : Long?,
         @Query("groupId") groupId : Long?
+    ):Call<ResponseRouteDetail>
+
+    @GET("routeLists/{routeId}") // 타인의 루트 상세 조회
+    fun getOtherRouteDetail(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("routeId") routeId : Long,
+        @Query("nickname") nickname : String
     ):Call<ResponseRouteDetail>
 
     @DELETE("groups/routes/{routeId}") // 그룹 루트 삭제
