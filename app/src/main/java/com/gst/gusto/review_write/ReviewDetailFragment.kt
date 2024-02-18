@@ -109,10 +109,9 @@ class ReviewDetailFragment : Fragment() {
                             binding.tvHeartNum.text = gustoViewModel.myReview!!.likeCnt.toString()
                             //이미지 처리
                             if(!gustoViewModel.myReview!!.img.isNullOrEmpty()){
-                                var reviewImageList : MutableList<String>? = null
-                                //settingImages(gustoViewModel.myReview!!.img) 이걸로 담아야햄
-                            } else{
                                 settingImages(imageList)
+                            } else{
+                                settingImages(gustoViewModel.myReview!!.img!!)
                             }
                             //메뉴
                             binding.tvMenu.text = if(gustoViewModel.myReview!!.menuName.isNullOrBlank()){

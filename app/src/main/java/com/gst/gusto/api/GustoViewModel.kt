@@ -1236,7 +1236,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //리뷰 삭제 -> 확인 완
+    //리뷰 삭제
     fun deleteReview(reviewId: Long, callback: (Int) -> Unit){
         service.deleteReview(xAuthToken, reviewId).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

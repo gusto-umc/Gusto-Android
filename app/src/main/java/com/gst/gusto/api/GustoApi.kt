@@ -334,7 +334,7 @@ interface GustoApi {
         @Part("info") info: RequestMyReview
     ) : Call<Void>
 
-    //3. 리뷰 삭제 -> 확인 완료
+    //3. 리뷰 삭제
     @DELETE("reviews/{reviewId}")
     fun deleteReview(
         @Header("X-AUTH-TOKEN") token : String,

@@ -57,7 +57,6 @@ class ReviewDetailEditFragment : Fragment() {
         binding.tvDay.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
         binding.tvReviewStoreNameEdit.text = editReview!!.storeName
 
-        // 사진 적용 -> 예정
 
         //ratingbar 적용
         binding.ratingbarTasteEdit.rating = editReview!!.taste.toFloat()
@@ -75,6 +74,13 @@ class ReviewDetailEditFragment : Fragment() {
         // 이미지 슬라이드
         val viewPager = binding.vpImgSlider
         val imageList = mutableListOf<String>()
+        //이미지 처리
+        if(!gustoViewModel.myReview!!.img.isNullOrEmpty()){
+            for(i in gustoViewModel.myReview!!.img!!){
+                imageList.add(i)
+            }
+        }
+
 
         val adapter = ImageViewPagerAdapter(imageList)
         viewPager.adapter = adapter
