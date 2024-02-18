@@ -353,8 +353,14 @@ data class ResponseCalReview(
      @SerializedName("reviews") val reviews: List<ResponseCalReviews>
 )
 
-// 먹스또 랜덤 피드
+// 먹스또 랜덤 피드 | 맛집 & 해시태그 검색 엔진
 data class ResponseFeedReview(
     @SerializedName("reviewId") val reviewId: Long,
     @SerializedName("images") val images: String
 )
+
+// 맛집 & 해시태그 검색 엔진- reviews
+data class ResponseFeedSearchReviews(
+    @SerializedName("reviews") val reviews: ArrayList<ResponseFeedReview>
+)
+

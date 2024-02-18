@@ -383,4 +383,11 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token: String
     ):Call<ArrayList<ResponseFeedReview>>
 
+    @GET("feeds/search") // 맛집 & 해시태그 검색 엔진
+    fun feedSearch(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("keyword") keyword: String,
+        @Query("hashTags") hashTags: List<Long>?
+    ):Call<ResponseFeedSearchReviews>
+
 }
