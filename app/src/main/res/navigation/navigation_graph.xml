@@ -390,6 +390,9 @@
         <action
             android:id="@+id/action_storeDetailFragment_to_fragment_review_detail"
             app:destination="@id/fragment_review_detail" />
+        <action
+            android:id="@+id/action_storeDetailFragment_to_fragment_map_viewpager"
+            app:destination="@id/fragment_map_viewpager" />
 
     </fragment>
     <fragment
@@ -402,6 +405,10 @@
         <action
             android:id="@+id/action_searchFragment_to_fragment_map"
             app:destination="@id/fragment_map" />
+        <action
+            android:id="@+id/action_searchFragment_to_fragment_map_viewpager3"
+            app:destination="@id/fragment_map_viewpager" />
+
     </fragment>
     <fragment
         android:id="@+id/mapListViewSaveFragment"
@@ -413,6 +420,9 @@
         <action
             android:id="@+id/action_mapListViewSaveFragment_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_mapListViewSaveFragment_to_fragment_map_viewpager"
+            app:destination="@id/fragment_map_viewpager" />
     </fragment>
     <fragment
         android:id="@+id/myRouteRoutesFragment"

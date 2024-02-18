@@ -74,9 +74,11 @@ class SearchFragment : Fragment() {
                                     //fab visibility 설정
                                     binding.fabSearchMap.visibility = View.GONE
                                     //데이터 넣기
+                                    gustoViewModel.selectStoreId = dataSet.storeId
+                                    gustoViewModel.storeIdList = gustoViewModel.mapSearchStoreIdArray
                                     //페이지 이동
                                     Navigation.findNavController(view)
-                                        .navigate(R.id.action_searchFragment_to_storeDetailFragment)
+                                        .navigate(R.id.action_searchFragment_to_fragment_map_viewpager3)
                                 }
 
                             })
@@ -104,9 +106,11 @@ class SearchFragment : Fragment() {
          * 지도보기 fab 클릭 리스너
          */
         binding.fabSearchMap.setOnClickListener{
-            //데이터 버장
+            //데이터 저장
+            gustoViewModel.selectStoreId = gustoViewModel.mapSearchStoreIdArray[0]
+            gustoViewModel.storeIdList = gustoViewModel.mapSearchStoreIdArray
             //페이지 이동
-            Navigation.findNavController(view).navigate(R.id.action_searchFragment_to_fragment_map)
+           Navigation.findNavController(view).navigate(R.id.action_searchFragment_to_fragment_map_viewpager3)
         }
     }
 }

@@ -62,7 +62,6 @@ class MapListViewFragment : Fragment() {
                     result ->
                 when(result){
                     0 -> {
-                        Toast.makeText(context, "연결 성공", Toast.LENGTH_SHORT).show()
                         /**
                          * 카테고리Show 연결
                          * 아이템 클릭 리스너
@@ -127,6 +126,10 @@ class MapListViewFragment : Fragment() {
         /**
          * 전체선택 클릭 리스너 - 카테고리
          */
+        binding.layoutListviewSelect.setOnClickListener {
+            binding.cbMapListviewAll.isChecked = true
+        }
+
         binding.cbMapListviewAll.setOnCheckedChangeListener { buttonView, isChecked ->
 
             if(!isChecked){
@@ -177,7 +180,6 @@ class MapListViewFragment : Fragment() {
                 when(it){
                     0 -> {
                         //추가 성공
-                        Toast.makeText(context, "추가 성공", Toast.LENGTH_SHORT).show()
                         //카테고리 새로 받아와서 연결시키기
                         getMapCategories()
                     }
@@ -205,7 +207,6 @@ class MapListViewFragment : Fragment() {
                     when(result){
                         0 -> {
                             //success
-                            Toast.makeText(context, "삭제 성공", Toast.LENGTH_SHORT).show()
                             getMapCategories()
                         }
                         1 -> {
@@ -225,30 +226,29 @@ class MapListViewFragment : Fragment() {
         /**
          * 전체 카테고리, 가게 테스트
          */
-        binding.tvTestAll.setOnClickListener {
-            gustoViewModel.getAllCategory("gusto"){
-                result ->
-                when(result){
-                    0 ->{}
-                    1 -> {}
-                }
-            }
-            gustoViewModel.getAllStores(6, nickname = "gusto"){
-                result ->
-                when(result){
-                    0 -> {
-                        //성공
-                        Log.d("all stores", "success")
-                        Log.d("all stores", gustoViewModel.myAllStoreList.toString())
-                    }
-                    1 -> {
-                        //실패
-                        Log.e("all stores", "fail")
-                    }
-                }
-            }
-        }
-
+//        binding.tvTestAll.setOnClickListener {
+//            gustoViewModel.getAllCategory("gusto"){
+//                result ->
+//                when(result){
+//                    0 ->{}
+//                    1 -> {}
+//                }
+//            }
+//            gustoViewModel.getAllStores(6, nickname = "gusto"){
+//                result ->
+//                when(result){
+//                    0 -> {
+//                        //성공
+//                        Log.d("all stores", "success")
+//                        Log.d("all stores", gustoViewModel.myAllStoreList.toString())
+//                    }
+//                    1 -> {
+//                        //실패
+//                        Log.e("all stores", "fail")
+//                    }
+//                }
+//            }
+//        }
 
         /**
          * 편집 시 리스트 새로 불러오기
@@ -256,24 +256,6 @@ class MapListViewFragment : Fragment() {
         gustoViewModel.cateEditFlag.observe(viewLifecycleOwner, Observer {
             getMapCategories()
         })
-
-        /**
-         * 닉네임 저장 테스트
-         */
-        gustoViewModel.getSavedStores("성수1가1동", null){
-                result ->
-            when(result){
-                0 -> {
-                    //success
-                    Toast.makeText(context, gustoViewModel.userNickname, Toast.LENGTH_SHORT).show()
-                    Toast.makeText(context, "saved 성공", Toast.LENGTH_SHORT).show()
-                }
-                1 -> {
-                    //fail
-                    Toast.makeText(context, "saved 실패", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
 
     }
     fun goShow(){

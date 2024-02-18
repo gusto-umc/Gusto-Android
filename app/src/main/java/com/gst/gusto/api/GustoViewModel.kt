@@ -80,7 +80,7 @@ class GustoViewModel: ViewModel() {
     var followListTitleName = "팔로잉 중"
 
     // 가게 정보 보기 아이디 리스트
-    val storeIdList = ArrayList<Long>().apply {
+    var storeIdList = ArrayList<Long>().apply {
         add(1)
         add(2)
         add(3)
@@ -1064,7 +1064,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
+    //타인 카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
     fun getAllCategory(nickname: String, callback: (Int) -> Unit){
         service.getAllCategory(xAuthToken, nickname = nickname).enqueue(object : Callback<List<ResponseAllCategory>>{
             override fun onResponse(
@@ -1089,10 +1089,36 @@ class GustoViewModel: ViewModel() {
 
         })
     }
+    //타인 카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
+    fun getAllUserCategory(callback: (Int) -> Unit){
+        service.getAllCategory(xAuthToken, nickname = null).enqueue(object : Callback<List<ResponseAllCategory>>{
+            override fun onResponse(
+                call: Call<List<ResponseAllCategory>>,
+                response: Response<List<ResponseAllCategory>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.e("getAllUserCategory", "Successful response: ${response}")
+                    Log.d("getAllUserCategory", response.body()!!.toString())
+                    myAllCategoryList = response.body()!!
+                    callback(0)
+                } else {
+                    Log.e("getAllUserCategory", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<List<ResponseAllCategory>>, t: Throwable) {
+                Log.e("getAllUserCategory", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
 
     /**
      * 가게 api 함수 - mindy
      */
+    var selectedDetailStoreId = 1
     var myMapStoreList : List<ResponseStoreListItem>? = null
     var myAllStoreList : List<ResponseStoreListItem>? = null
 
@@ -1219,7 +1245,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //카테고리 별 가게 조회 - 전체 -> 완
+    //타인 카테고리 별 가게 조회 - 전체 -> 완
     fun getAllStores(categoryId: Int, nickname: String, callback: (Int) -> Unit){
         service.getAllStores(xAuthToken, nickname = nickname, categoryId = categoryId).enqueue(object : Callback<List<ResponseStoreListItem>>{
             override fun onResponse(
@@ -1243,9 +1269,35 @@ class GustoViewModel: ViewModel() {
 
         })
     }
+    // 내 카테고리 별 전체 가게 조회
+    fun getAllUserStores(categoryId: Int,  callback: (Int) -> Unit){
+        service.getAllStores(xAuthToken, nickname = null, categoryId = categoryId).enqueue(object : Callback<List<ResponseStoreListItem>>{
+            override fun onResponse(
+                call: Call<List<ResponseStoreListItem>>,
+                response: Response<List<ResponseStoreListItem>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.e("viewmodel", "Successful response: ${response}")
+                    myAllStoreList = response.body()!!
+                    callback(0)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<List<ResponseStoreListItem>>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
     //저장된 맛집 리스트 -> 완
+    var savedStoreIdList = ArrayList<Long>()
+    var unsavedStoreIdList = ArrayList<Long>()
     fun getSavedStores(townName: String, categoryId : Int?, callback: (Int) -> Unit){
-        service.getSavedStores(xAuthToken, townName = "성수1가1동", categoryId = 3).enqueue(object : Callback<List<ResponseSavedStore>>{
+        service.getSavedStores(xAuthToken, townName = "성수1가1동", categoryId = null).enqueue(object : Callback<List<ResponseSavedStore>>{
             override fun onResponse(
                 call: Call<List<ResponseSavedStore>>,
                 response: Response<List<ResponseSavedStore>>
@@ -1259,6 +1311,22 @@ class GustoViewModel: ViewModel() {
                     mapVisitedCnt = data.visitedStores[0].numPinStores
                     mapUnvisitedList = data.unvisitedStores[0].unvisitedStores
                     mapUnvisitedCnt = data.unvisitedStores[0].numPinStores
+                    if(!mapUnvisitedList.isNullOrEmpty()){
+                        for(i in mapUnvisitedList!!){
+                            unsavedStoreIdList.add(i.storeId.toLong())
+                        }
+                    }
+                    else{
+                        unsavedStoreIdList.clear()
+                    }
+                    if(!mapVisitedList.isNullOrEmpty()){
+                        for(i in mapVisitedList!!){
+                            savedStoreIdList.add(i.storeId.toLong())
+                        }
+                    }
+                    else{
+                        savedStoreIdList.clear()
+                    }
                     callback(0)
                 } else {
                     Log.e("getSavedStores", "Unsuccessful response: ${response}")
@@ -1362,6 +1430,7 @@ class GustoViewModel: ViewModel() {
      * 검색 api 함수 - mindy
      */
     var mapSearchArray = ArrayList<ResponseSearch>()
+    var mapSearchStoreIdArray = ArrayList<Long>()
     //검색 결과 -> 작성 예정
     fun getSearchResult(keyword : String, callback: (Int) -> Unit){
         service.getSearch(xAuthToken, keyword).enqueue(object : Callback<ArrayList<ResponseSearch>>{
@@ -1372,6 +1441,10 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     Log.d("getSearchResult", "Successful response: ${response}")
                     mapSearchArray = response.body()!!
+                    mapSearchStoreIdArray.clear()
+                    for(i in response.body()!!){
+                        mapSearchStoreIdArray.add(i.storeId)
+                    }
                     callback(0)
 
                 } else {
