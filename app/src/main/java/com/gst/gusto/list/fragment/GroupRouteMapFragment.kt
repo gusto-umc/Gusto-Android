@@ -39,7 +39,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
     private val TAG = "MapViewEventListener"
     lateinit var mapView : MapView
     private var returnList = ArrayList<MarkerItem>()
-
+    private var change = false
     private val gustoViewModel : GustoViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +58,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                 // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
                 when (selectedItem) {
                     1 -> {
+                        change = true
                         if(gustoViewModel.addRoute.size>0) {
                             val tmpList =ArrayList<RouteList>()
                             var ordinal = returnList.size+1
@@ -188,6 +189,12 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         gustoViewModel.groupFragment = 1
         gustoViewModel.addRoute.clear()
         gustoViewModel.removeRoute.clear()
+        if(!change) {
+            gustoViewModel.markerListLiveData.value?.clear()
+            for(data in returnList) {
+                gustoViewModel.markerListLiveData.value?.add(data)
+            }
+        }
 
     }
 

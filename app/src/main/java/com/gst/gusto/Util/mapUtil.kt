@@ -124,7 +124,7 @@ class mapUtil {
                 marker.itemName = data.ordinal.toString()
                 marker.setCustomImageAnchor(0.5f,0.5f)
                 marker.tag = data.ordinal // id
-
+                marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                 marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
                 marker.markerType = MapPOIItem.MarkerType.CustomImage
                 marker.customImageResourceId = ROUTE_MARKER_IMAGES[index]

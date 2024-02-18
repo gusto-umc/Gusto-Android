@@ -219,6 +219,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 if(!markerList.isEmpty()) {
                     val mapPoint = MapPoint.mapPointWithGeoCoord(markerList[position].latitude, markerList[position].longitude)
                     mapView.moveCamera(CameraUpdateFactory.newMapPoint(mapPoint,mapView.zoomLevelFloat))
+                } else {
+                    viewPager.visibility = View.GONE
                 }
             }
         })
