@@ -59,7 +59,7 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
         if(layout == R.layout.bottomsheetdialog_routes) {
             val itemList = gustoViewModel.markerListLiveData.value as ArrayList
 
-            val boardAdapter = MapRoutesAdapter(itemList,binding1.lyAddRoute,activity)
+            val boardAdapter = MapRoutesAdapter(itemList,binding1.lyAddRoute,activity,0)
             boardAdapter.notifyDataSetChanged()
 
             binding1.rvRoutes.adapter = boardAdapter

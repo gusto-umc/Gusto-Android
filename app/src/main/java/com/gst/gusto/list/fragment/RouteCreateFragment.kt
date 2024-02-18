@@ -57,7 +57,7 @@ class RouteCreateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         gustoViewModel.requestRoutesData = null
 
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute,requireActivity())
+        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute,requireActivity(),0)
         boardAdapter.notifyDataSetChanged()
 
         binding.rvRoutes.adapter = boardAdapter

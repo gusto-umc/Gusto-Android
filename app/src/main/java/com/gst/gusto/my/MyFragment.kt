@@ -37,8 +37,6 @@ class MyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMyBinding.inflate(inflater, container, false)
-        initViewPager()
-
 
         gustoViewModel.getUserProfile("my") { result, data ->
             when(result) {
@@ -46,6 +44,7 @@ class MyFragment : Fragment() {
                     if(data!=null) {
                         Log.d("viewmodel",data.toString())
                         setImage(binding.ivProfileImage,data.profileImg,requireContext())
+                        gustoViewModel.profileNickname = ""
                         binding.tvNickname.text = data.nickname
                         binding.tvReviewNum.text = "${data.review}"
                         binding.tvFollowingNum.text = "${data.following}"
@@ -99,7 +98,7 @@ class MyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        initViewPager()
     }
     private fun initViewPager() {
 

@@ -32,6 +32,7 @@ class GustoViewModel: ViewModel() {
 
     // 자신의 루트 리스트 - (val title : String, val people : Int, val food : Int, val route : Int)
     val myRouteList = ArrayList<GroupItem>()
+    val otherRouteList = ArrayList<GroupItem>()
     // 루트 이름
     var routeName = ""
     // 루트 편집 정보
@@ -92,6 +93,8 @@ class GustoViewModel: ViewModel() {
     // 현재 동
     var dong = ""
 
+    // 현재 프로필 닉네임
+    var profileNickname = ""
     // 현재 피드 리뷰 아이디
     var currentFeedReviewId = -1L
     // 현재 피드 리뷰 데이터
@@ -173,11 +176,11 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     // 성공적이라면 일단 서버와의 연결에 성공 했다는 것!
                     val responseBody = response.body()
-                    myRouteList.clear()
+                    otherRouteList.clear()
                     if(responseBody!=null) {
                         Log.d("viewmodel", "Successful response: ${response}")
                         for(data in responseBody) {
-                            myRouteList.add(GroupItem(data.routeId, data.routeName, 0, true,data.numStore, 0))
+                            otherRouteList.add(GroupItem(data.routeId, data.routeName, 0, true,data.numStore, 0))
                         }
                     }
                     callback(1)

@@ -34,7 +34,7 @@ class OtherFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMyBinding.inflate(inflater, container, false)
-        initViewPager()
+
 
         val nickname = gustoViewModel.currentFeedNickname
 
@@ -44,6 +44,7 @@ class OtherFragment : Fragment() {
                     if(data!=null) {
                         Log.d("viewmodel",data.toString())
                         setImage(binding.ivProfileImage,data.profileImg,requireContext())
+                        gustoViewModel.profileNickname= data.nickname
                         binding.tvNickname.text = data.nickname
                         binding.tvReviewNum.text = "${data.review}"
                         binding.tvFollowingNum.text = "${data.following}"
@@ -103,7 +104,6 @@ class OtherFragment : Fragment() {
             }
         }
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -111,12 +111,10 @@ class OtherFragment : Fragment() {
 
         binding.btnProfileEdit.text = "팔로잉"
         binding.btnOption.visibility =View.GONE
-
+        initViewPager()
     }
     private fun initViewPager() {
-
         //ViewPager2 Adapter 셋팅
-
         var viewPager2Adatper = MyViewpagerAdapter(requireActivity())
         viewPager2Adatper.addFragment(MyReviewFragment())
         viewPager2Adatper.addFragment(MyListFragment())
