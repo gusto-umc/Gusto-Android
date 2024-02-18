@@ -18,13 +18,6 @@ class MyViewpagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdap
     fun addFragment(fragment: Fragment) {
         fragments.add(fragment)
         notifyItemInserted(fragments.size - 1)
-        //TODO: notifyItemInserted!!
-    }
-
-    fun removeFragement() {
-        fragments.removeLast()
-        notifyItemRemoved(fragments.size)
-        //TODO: notifyItemRemoved!!
     }
 
 }

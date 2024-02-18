@@ -23,12 +23,18 @@
         <action
             android:id="@+id/action_fragment_map_to_mapViewpagerFragment"
             app:destination="@id/fragment_map_viewpager" />
+        <action
+            android:id="@+id/action_fragment_map_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/fragment_map_viewpager"
         android:name="com.gst.gusto.MapViewpagerFragment"
         android:label="FragmentMapViewpager"
         tools:layout="@layout/fragment_map_viewpager">
+        <action
+            android:id="@+id/action_fragment_map_viewpager_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment" />
     </fragment>
 
     <!-- List 화면의 프래그먼트들 -->

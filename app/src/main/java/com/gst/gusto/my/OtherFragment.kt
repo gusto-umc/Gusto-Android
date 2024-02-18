@@ -8,23 +8,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.gst.clock.Fragment.MyReviewFragment
-import com.gst.gusto.MainActivity
-import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMyBinding
-import com.gst.gusto.my.activity.MyProfileEditActivity
 import com.gst.gusto.my.activity.MySettingActivity
 import com.gst.gusto.my.adapter.MyViewpagerAdapter
 import com.gst.gusto.my.fragment.MyListFragment
-import com.gst.gusto.start.StartActivity
 
 class OtherFragment : Fragment() {
 

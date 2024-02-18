@@ -69,32 +69,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
-        // BottomSheet 상태 변화 감지
-        bottomSheetBehavior.addBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when (newState) {
-                    BottomSheetBehavior.STATE_HIDDEN -> {
-                        // BottomSheet가 숨겨진 경우 fragment_map_main_screen.xml을 보여줌
-                        showMainScreenFragment()
-                    }
-                    BottomSheetBehavior.STATE_EXPANDED -> {
-                        // BottomSheet가 펼쳐진 경우 AreaFragment로 이동
-                        requireActivity().supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_map, AreaFragment())
-                            .addToBackStack(null) //뒤로가기
-                            .commit()
-                    }
-                    else -> {
-                        // 다른 상태에서는 fragment_map_main_screen.xml을 숨김
-                        hideMainScreenFragment()
-                    }
-                }
-            }
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                // 슬라이딩 중일 때 추가 작업이 필요하면 여기에 추가
-            }
-        })
+
 
 
         ////    카테고리    ////
@@ -206,13 +181,15 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             }
         })
 
+    }
+    override fun onResume() {
+        super.onResume()
         mapView = MapView(requireContext())
 
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
 
         setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)
-
     }
     private fun showMainScreenFragment() {
         // fragment_map_main_screen.xml을 보이게 하는 작업
@@ -231,11 +208,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         }
     }
 
-    override fun onResume() {
-        super.onResume()
 
-
-    }
     override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
         // 마커 클릭 시 이벤트
         Log.d("MapViewEventListener","ccc")
@@ -250,10 +223,13 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     override fun onDraggablePOIItemMoved(mapView: MapView?, poiItem: MapPOIItem?, mapPoint: MapPoint?) {}
 
     override fun onPause() {
+        binding.kakaoMap.removeAllViews()
         super.onPause()
         Log.d("MapViewEventListener","onPause")
-        binding.kakaoMap.removeAllViews()
+        Log.e("viewmodel","DIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIE")
     }
+
+
 
     override fun onMapViewInitialized(p0: MapView?) {
         Log.d(TAG, "MapView가 초기화되었습니다.")
@@ -295,7 +271,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 when(result) {
                     1 -> {
                         Log.d("viewmodel",gustoViewModel.dong)
-                        binding.fragmentArea.userLoc.text = address
+                        if(binding.fragmentArea.userLoc.text =="현재 사용자의 위치")
+                            binding.fragmentArea.userLoc.text = address
                         gustoViewModel.getCurrentMapStores {result, datas ->
                             when(result) {
                                 1 -> {
@@ -308,7 +285,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                                     Log.d("viewmodel","${markerList}")
                                     setMarker(mapView,markerList)
                                     binding.vpSlider.adapter?.notifyDataSetChanged()
-                                }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                                }
+                                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
