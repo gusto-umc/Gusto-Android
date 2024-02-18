@@ -48,20 +48,11 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     val markerList = ArrayList<MarkerItem>()
 
-    private val LOCATION_PERMISSION_REQUEST_CODE = 5000
-
-    //private lateinit var naverMap: NaverMap
-    //private lateinit var locationSource: FusedLocationSource
-
     lateinit var  chipGroup: ChipGroup
 
     // 이전에 활성화된 칩을 저장하는 변수
     private var previousChipId: Int = -1
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -292,10 +283,11 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
         if (p1 != null) {
-            gustoViewModel.getRegionInfo(p1.mapPointGeoCoord.longitude, p1.mapPointGeoCoord.latitude)  {result ->
+            gustoViewModel.getRegionInfo(p1.mapPointGeoCoord.longitude, p1.mapPointGeoCoord.latitude)  {result, address ->
                 when(result) {
                     1 -> {
                         Log.d("viewmodel",gustoViewModel.dong)
+                        binding.fragmentArea.userLoc.text = address
                         gustoViewModel.getCurrentMapStores {result, datas ->
                             when(result) {
                                 1 -> {

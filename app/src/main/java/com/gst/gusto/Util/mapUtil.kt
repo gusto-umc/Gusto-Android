@@ -66,13 +66,6 @@ class mapUtil {
                     .addOnSuccessListener { success: Location? ->
                         success?.let { location ->
                             Log.d("viewmodel","${location.latitude}, ${location.longitude}")
-                            (activity as MainActivity).gustoViewModel.getRegionInfo( location.longitude, location.latitude)  {result ->
-                                when(result) {
-                                    1 -> {
-
-                                    }
-                                }
-                            }
                             if(option =="map") {
                                 mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude), true)
                                 mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving)
