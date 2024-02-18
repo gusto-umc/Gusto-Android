@@ -56,8 +56,6 @@ class MapListViewFragment : Fragment() {
         var cateShowAdapter : ListViewCategoryAdapter? = null
         var cateEditAdapter : ListViewEditCategoryAdapter? = null
 
-        gustoViewModel.getTokens(requireActivity() as MainActivity)
-
 
         fun getMapCategories(){
             gustoViewModel.getMapCategory("성수1가1동"){

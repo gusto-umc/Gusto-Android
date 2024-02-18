@@ -91,11 +91,6 @@ class MyFragment : Fragment() {
                     }
                 }
             }
-            //임시 로그인
-            btnLogin.setOnClickListener {
-                val intent = Intent(requireContext(), StartActivity::class.java)
-                startActivity(intent)
-            }
             btnBack.setOnClickListener {
                 //findNavController().popBackStack()
             }

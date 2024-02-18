@@ -30,12 +30,9 @@
             android:textSize="16sp"
             android:fontFamily="@font/pretendard_bold"/>
         <TextView
-            android:id="@+id/btn_login"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="로그인"
-            android:background="@color/sub1"/>
+            android:layout_weight="1"/>
         <ImageView
             android:id="@+id/btn_option"
             android:layout_width="54dp"
