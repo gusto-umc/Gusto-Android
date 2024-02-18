@@ -14,6 +14,7 @@ import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.search.adapter.SearchStoreAdapter
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.ResponseSearch
 import com.gst.gusto.databinding.FragmentSearchBinding
 
 class SearchFragment : Fragment() {
@@ -52,6 +53,7 @@ class SearchFragment : Fragment() {
          * Rv 어댑터 연결, 클릭 리스너 설정, 검색 클릭 리스너
          */
         val mSearshResultAdapter = SearchStoreAdapter()
+        mSearshResultAdapter.mContext = context
         binding.ivSearchSearchbox.setOnClickListener {
             //공백 확인
             if (binding.edtSearchSearchbox.text.isNullOrBlank()) {
@@ -64,7 +66,27 @@ class SearchFragment : Fragment() {
                     when(result){
                         0 -> {
                             //success
-                            Log.d("search result", gustoViewModel.mapSearchArray.toString())
+                            //데이터셋 저장 후 연결(공백일 때 동작 확인)
+                            mSearshResultAdapter.submitList(gustoViewModel.mapSearchArray)
+                            mSearshResultAdapter.setItemClickListener(object :
+                                SearchStoreAdapter.OnItemClickListener {
+                                override fun onClick(v: View, dataSet: ResponseSearch) {
+                                    //fab visibility 설정
+                                    binding.fabSearchMap.visibility = View.GONE
+                                    //데이터 넣기
+                                    //페이지 이동
+                                    Navigation.findNavController(view)
+                                        .navigate(R.id.action_searchFragment_to_storeDetailFragment)
+                                }
+
+                            })
+                            //visibility 설정, 어댑터 연결
+                            binding.rvSearchResult.visibility = View.VISIBLE
+                            binding.rvSearchResult.adapter = mSearshResultAdapter
+                            binding.rvSearchResult.layoutManager = LinearLayoutManager(this.requireActivity())
+                            //키보드 내리기
+                            // fab visibility 설정
+                            binding.fabSearchMap.visibility = View.VISIBLE
                         }
                         1 -> {
                             //fail
@@ -72,27 +94,7 @@ class SearchFragment : Fragment() {
                         }
                     }
                 }
-                //데이터셋 저장 후 연결(공백일 때 동작 확인)
-                mSearshResultAdapter.submitList(sampleResultArray)
-                mSearshResultAdapter.setItemClickListener(object :
-                    SearchStoreAdapter.OnItemClickListener {
-                    override fun onClick(v: View, dataSet: StoreSearch) {
-                        //fab visibility 설정
-                        binding.fabSearchMap.visibility = View.GONE
-                        //데이터 넣기
-                        //페이지 이동
-                        Navigation.findNavController(view)
-                            .navigate(R.id.action_searchFragment_to_storeDetailFragment)
-                    }
 
-                })
-                //visibility 설정, 어댑터 연결
-                binding.rvSearchResult.visibility = View.VISIBLE
-                binding.rvSearchResult.adapter = mSearshResultAdapter
-                binding.rvSearchResult.layoutManager = LinearLayoutManager(this.requireActivity())
-                //키보드 내리기
-                // fab visibility 설정
-                binding.fabSearchMap.visibility = View.VISIBLE
 
             }
             binding.edtSearchSearchbox.text.clear()

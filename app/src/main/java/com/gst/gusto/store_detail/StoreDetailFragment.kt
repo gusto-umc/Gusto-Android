@@ -62,6 +62,7 @@ class StoreDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var sampleStoreId = 1
         gustoViewModel.detailReviewLastId = null
+        gustoViewModel.detailReviewLastVisitedAt = null
         gustoViewModel.storeDetailReviews.clear()
         Log.d("reviewId check enter", gustoViewModel.detailReviewLastId.toString())
 
@@ -82,7 +83,7 @@ class StoreDetailFragment : Fragment() {
                 Log.d("review checking", gustoViewModel.detailReviewLastId.toString())
             }
             else{
-                binding.tvStoreDetailCategory.text = data!!.categoryName
+                binding.tvStoreDetailCategory.text = data!!.categoryString
                 binding.tvStoreDetailName.text = data!!.storeName
                 binding.tvStoreDetailAddress.text = data!!.address
                 if (data.pin){
@@ -159,12 +160,6 @@ class StoreDetailFragment : Fragment() {
             }
         }
 
-
-
-
-
-
-
         /**
          * 뒤로가기 버튼 클릭 리스너
          */
@@ -230,8 +225,8 @@ class StoreDetailFragment : Fragment() {
                 when(result){
                     0 -> {
                         //success
-                        Toast.makeText(context, "detail 성공", Toast.LENGTH_SHORT).show()
-                        Log.d("reviewsId", gustoViewModel.myStoreDetail!!.reviews.toString())
+                        Log.d("reviews more load", gustoViewModel.myStoreDetail!!.reviews.toString())
+                        Log.d("reviews more load", gustoViewModel.detailReviewLastId.toString())
                         loadReviews(gustoViewModel.storeDetailReviews)
                     }
                     1 -> {

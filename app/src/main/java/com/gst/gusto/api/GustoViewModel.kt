@@ -1017,6 +1017,7 @@ class GustoViewModel: ViewModel() {
     var myStoreDetail : ResponseStoreDetail? = null
     var storeDetailReviews = ArrayList<ResponseReviews>()
     var detailReviewLastId : Long? = null
+    var detailReviewLastVisitedAt : String? = null
 
     var userNickname : String = "Gusto"
 
@@ -1063,7 +1064,7 @@ class GustoViewModel: ViewModel() {
     }
     //가게 상세 조회 -> 수정 필요
     fun getStoreDetail(storeId: Long, callback: (Int) -> Unit){
-        service.getStoreDetail(xAuthToken, storeId, detailReviewLastId).enqueue(object : Callback<ResponseStoreDetail>{
+        service.getStoreDetail(xAuthToken, storeId, detailReviewLastVisitedAt, detailReviewLastId).enqueue(object : Callback<ResponseStoreDetail>{
             override fun onResponse(
                 call: Call<ResponseStoreDetail>,
                 response: Response<ResponseStoreDetail>
@@ -1075,6 +1076,7 @@ class GustoViewModel: ViewModel() {
                     if(detailReviewLastId == null){
                         for (i in response.body()!!.reviews){
                             detailReviewLastId = i.reviewId
+                            detailReviewLastVisitedAt = i.visitedAt
                             storeDetailReviews.add(i)
                             Log.d("reviewId check first", i.toString())
                             Log.d("reviewId check first", detailReviewLastId.toString())
@@ -1084,6 +1086,7 @@ class GustoViewModel: ViewModel() {
                         Log.d("reviewId check", "more")
                         for (i in response.body()!!.reviews){
                             detailReviewLastId = i.reviewId
+                            detailReviewLastVisitedAt = i.visitedAt
                             storeDetailReviews.add(i)
                             Log.d("reviewId check more", i.toString())
                             Log.d("reviewId check more", detailReviewLastId.toString())
@@ -1260,22 +1263,23 @@ class GustoViewModel: ViewModel() {
     var mapSearchArray = ArrayList<ResponseSearch>()
     //검색 결과 -> 작성 예정
     fun getSearchResult(keyword : String, callback: (Int) -> Unit){
-        service.getSearch(xAuthToken, keyword).enqueue(object : Callback<List<ResponseSearch1>>{
+        service.getSearch(xAuthToken, keyword).enqueue(object : Callback<ArrayList<ResponseSearch>>{
             override fun onResponse(
-                call: Call<List<ResponseSearch1>>,
-                response: Response<List<ResponseSearch1>>
+                call: Call<ArrayList<ResponseSearch>>,
+                response: Response<ArrayList<ResponseSearch>>
             ) {
                 if (response.isSuccessful) {
                     Log.d("getSearchResult", "Successful response: ${response}")
+                    mapSearchArray = response.body()!!
                     callback(0)
-                    Log.d("getSearchResultss", response.body()!!.toString())
+
                 } else {
                     Log.e("getSearchResult", "Unsuccessful response: ${response}")
                     callback(1)
                 }
             }
 
-            override fun onFailure(call: Call<List<ResponseSearch1>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<ResponseSearch>>, t: Throwable) {
                 Log.e("getSearchResult", "Failed to make the request", t)
                 callback(1)
             }

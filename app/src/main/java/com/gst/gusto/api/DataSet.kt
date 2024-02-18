@@ -172,7 +172,7 @@ data class RequestPin(
 data class ResponseStoreDetail(
     @SerializedName("storeId") val storeId : Int,
     @SerializedName("storeName") val storeName : String,
-    @SerializedName("categoryName") val categoryName : String,
+    @SerializedName("categoryString") val categoryString : String,
     @SerializedName("address") val address : String,
     @SerializedName("opening") val opening : Int,
     @SerializedName("pin") var pin : Boolean,
@@ -292,14 +292,9 @@ data class ResponseInstaReview(
 data class ResponseSearch(
     @SerializedName("storeId") val storeId : Long,
     @SerializedName("storeName") val storeName : String,
-    @SerializedName("foodCategory") val foodCategory : String,
-    @SerializedName("img") val img : String?,
+    @SerializedName("categoryName") val categoryName : String?,
+    @SerializedName("reviewImg") val reviewImg : String?,
     @SerializedName("address") val address : String
-)
-
-data class ResponseSearch1(
-    @SerializedName("reviews") val reviews : List<ResponseSearch>,
-    @SerializedName("hasNext") val hasNext : Boolean
 )
 
 // 가게 정보 조회(짧은 화면)

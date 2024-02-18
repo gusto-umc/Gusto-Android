@@ -284,7 +284,8 @@ interface GustoApi {
     fun getStoreDetail(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("storeId") storeId : Long,
-        @Query("reviewId") reviewId : Long?,
+        @Query("visitedAt") visitedAt : String?,
+        @Query("reviewId") reviewId : Long?
     ) : Call<ResponseStoreDetail>
 
     //4. 카테고리 별 가게 조회 - 위치기반 -> 확인 완, 보완 필(pinInd)
@@ -349,7 +350,7 @@ interface GustoApi {
     fun getSearch(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("keyword") keyword : String
-    ) : Call<List<ResponseSearch1>>
+    ) : Call<ArrayList<ResponseSearch>>
 
     @GET("users/follower") // 팔로워 조회
     fun getFollower(
