@@ -837,7 +837,7 @@ class GustoViewModel: ViewModel() {
             override fun onResponse(call: Call<List<Member>>, response: Response<List<Member>>) {
                 if (response.isSuccessful) {
                     followList = response.body()!!
-                    Log.d("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel", "Successful response: ${response} ${response.body()}")
                     callback(1)
                 }else if(response.code()==404){
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
