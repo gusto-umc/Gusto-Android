@@ -787,10 +787,7 @@ class GustoViewModel: ViewModel() {
             val filePart = MultipartBody.Part.createFormData("image", imgFile.name, requestFile)
             filesToUpload.add(filePart)
         }
-        Log.e("token",xAuthToken)
-        Log.d("viewmodel",data.toString())
-        Log.d("viewmodel",imageFiles.toString())
-        Log.d("viewmodel",imageFiles.toString())
+
         service.createReview(xAuthToken,filesToUpload,data).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {

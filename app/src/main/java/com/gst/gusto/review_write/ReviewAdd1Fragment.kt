@@ -42,7 +42,14 @@ class ReviewAdd1Fragment : Fragment() {
         }
 
         binding.btnSkip.setOnClickListener {
-
+            gustoViewModel.createReview() {result ->
+                when(result) {
+                    1 -> {
+                        activity.hideBottomNavigation(false)
+                        findNavController().popBackStack(R.id.storeDetailFragment,false)
+                    }
+                }
+            }
         }
 
         return binding.root
