@@ -35,19 +35,35 @@
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/list_view_btn"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@drawable/fab_list_img"
-        android:background="@drawable/background_radius_10"
-        android:elevation="4dp"
-        android:scaleType="centerCrop"
-        android:padding="10dp"
-        android:contentDescription="목록보기"
-        android:layout_gravity="bottom|right"
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:layout_marginBottom="60dp"
-        android:layout_marginRight="30dp"/>
+        android:orientation="vertical">
+        <ImageButton
+            android:id="@+id/list_view_btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/fab_list_img"
+            android:background="@drawable/background_radius_10"
+            android:elevation="4dp"
+            android:scaleType="centerCrop"
+            android:padding="10dp"
+            android:layout_gravity="right"
+            android:contentDescription="목록보기"
+            android:layout_marginRight="30dp"/>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_slider"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="191dp"
+            android:paddingHorizontal="10dp" />
+    </LinearLayout>
+
+
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

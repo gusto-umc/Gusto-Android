@@ -98,6 +98,7 @@ class mapUtil {
                 marker.markerType = MapPOIItem.MarkerType.CustomImage
                 marker.customImageResourceId = R.drawable.marker_color_small_img
                 marker.isShowCalloutBalloonOnTouch = false
+                marker.showAnimationType = MapPOIItem.ShowAnimationType.DropFromHeaven
 
                 mapView.addPOIItem(marker)
             }

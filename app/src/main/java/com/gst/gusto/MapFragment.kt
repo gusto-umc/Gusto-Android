@@ -12,9 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.gst.gusto.MainActivity
 import com.gst.gusto.MapMainScreenFragment
 import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
@@ -23,6 +28,8 @@ import com.gst.gusto.Util.mapUtil.Companion.setMarker
 import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMapBinding
+import com.gst.gusto.list.adapter.RouteViewPagerAdapter
+import net.daum.mf.map.api.CameraUpdateFactory
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -188,7 +195,38 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     override fun onResume() {
         super.onResume()
 
+        val viewPager = binding.vpSlider
 
+        // 이미지 슬라이드
+        val adapter = RouteViewPagerAdapter(markerList,requireActivity() as MainActivity,2)
+        viewPager.adapter = adapter
+
+        viewPager.offscreenPageLimit = 1
+        viewPager.clipToPadding = false
+        viewPager.clipChildren = false
+
+        viewPager.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER)
+
+        val compositePageTransformer = CompositePageTransformer()
+        compositePageTransformer.addTransformer(
+            MarginPageTransformer(
+                util.dpToPixels(4f, resources.displayMetrics).toInt()
+            )
+        )
+        compositePageTransformer.addTransformer(object : ViewPager2.PageTransformer {
+            override fun transformPage(page: View, position: Float) {
+
+            }
+        })
+        viewPager.setPageTransformer(compositePageTransformer)
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                // 페이지가 선택되었을 때의 작업 수행
+                val mapPoint = MapPoint.mapPointWithGeoCoord(markerList[position].latitude, markerList[position].longitude)
+                mapView.moveCamera(CameraUpdateFactory.newMapPoint(mapPoint,mapView.zoomLevelFloat))
+            }
+        })
 
         mapView = MapView(requireContext())
 
@@ -202,7 +240,11 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
         // 마커 클릭 시 이벤트
         Log.d("MapViewEventListener","ccc")
-        findNavController().navigate(R.id.action_fragment_map_to_mapViewpagerFragment)
+        binding.vpSlider.visibility = View.VISIBLE
+        if (poiItem != null) {
+            binding.vpSlider.currentItem = poiItem.itemName.toInt()-1
+        }
+        //findNavController().navigate(R.id.action_fragment_map_to_mapViewpagerFragment)
     }
     override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?) {}
     override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?, buttonType: MapPOIItem.CalloutBalloonButtonType?) {}
@@ -240,6 +282,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {
         Log.d(TAG, "지도 드래그가 시작되었습니다.")
+        binding.vpSlider.visibility = View.GONE
     }
 
     override fun onMapViewDragEnded(p0: MapView?, p1: MapPoint?) {
