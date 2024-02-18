@@ -267,6 +267,7 @@ class MapListViewFragment : Fragment() {
             when(result){
                 0 -> {
                     //success
+                    Toast.makeText(context, gustoViewModel.userNickname, Toast.LENGTH_SHORT).show()
                     Toast.makeText(context, "saved 성공", Toast.LENGTH_SHORT).show()
                 }
                 1 -> {

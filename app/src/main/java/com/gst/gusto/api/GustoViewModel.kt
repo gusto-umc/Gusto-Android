@@ -739,20 +739,20 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if(responseBody!=null) {
-                        Log.d("viewmodel", "Successful response: ${response}")
+                        Log.d("getFeedReview", "Successful response: ${response}")
                         currentFeedData = responseBody
                         callback(1)
                     } else {
-                        Log.e("viewmodel", "Unsuccessful response: ${response}")
+                        Log.e("getFeedReview success", "Unsuccessful response: ${response}")
                         callback(3)
                     }
                 } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    Log.e("getFeedReview Android", "Unsuccessful response: ${response}")
                     callback(3)
                 }
             }
             override fun onFailure(call: Call<ResponseFeedDetail>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
+                Log.e("getFeedReview server", "Failed to make the request", t)
                 callback(3)
             }
         })
@@ -1016,7 +1016,7 @@ class GustoViewModel: ViewModel() {
 
     var myStoreDetail : ResponseStoreDetail? = null
     var storeDetailReviews = ArrayList<ResponseReviews>()
-    var detailReviewLastId : Int? = null
+    var detailReviewLastId : Long? = null
 
     var userNickname : String = "Gusto"
 

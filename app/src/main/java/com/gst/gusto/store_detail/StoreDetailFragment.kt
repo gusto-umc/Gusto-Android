@@ -105,7 +105,7 @@ class StoreDetailFragment : Fragment() {
                     override fun onClick(v: View, dataSet: ResponseReviews) {
                         //데이터 넣기
                         val bundle = Bundle()
-                        bundle.putInt("reviewId",dataSet.reviewId)
+                        bundle.putLong("reviewId",dataSet.reviewId)
                         bundle.putString("reviewNickname", dataSet.nickname)//리뷰 아이디 넘겨 주면 됨
                         if(dataSet.nickname == gustoViewModel.userNickname){
                             // 내 리뷰인 경우
@@ -113,8 +113,15 @@ class StoreDetailFragment : Fragment() {
                         }
                         else{
                             //타 유저 리뷰인 경우
-                            gustoViewModel.currentFeedReviewId = dataSet.reviewId.toLong()
-                            Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_fragment_feed_review_detail,bundle)
+                            gustoViewModel.currentFeedReviewId = dataSet.reviewId
+                            Log.d("feedId checking", "dataSet : ${dataSet.reviewId}, currentFeedReviewId : ${gustoViewModel.currentFeedReviewId}")
+                            gustoViewModel.getFeedReview{ result ->
+                                when(result) {
+                                    1 -> {
+                                        findNavController().navigate(R.id.action_storeDetailFragment_to_fragment_feed_review_detail)
+                                    }
+                                }
+                            }
                         }
 
                     }

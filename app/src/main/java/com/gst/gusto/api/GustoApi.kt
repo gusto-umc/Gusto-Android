@@ -284,7 +284,7 @@ interface GustoApi {
     fun getStoreDetail(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("storeId") storeId : Long,
-        @Query("reviewId") reviewId : Int?,
+        @Query("reviewId") reviewId : Long?,
     ) : Call<ResponseStoreDetail>
 
     //4. 카테고리 별 가게 조회 - 위치기반 -> 확인 완, 보완 필(pinInd)
