@@ -172,6 +172,33 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
+    // 타인의 루트 조회
+    fun getOtherRoute(nickname: String,callback: (Int) -> Unit){
+        Log.e("token",xAuthToken)
+        service.getOtherRoute(xAuthToken,nickname).enqueue(object : Callback<List<Routes>> {
+            override fun onResponse(call: Call<List<Routes>>, response: Response<List<Routes>>) {
+                if (response.isSuccessful) {
+                    // 성공적이라면 일단 서버와의 연결에 성공 했다는 것!
+                    val responseBody = response.body()
+                    myRouteList.clear()
+                    if(responseBody!=null) {
+                        Log.d("viewmodel", "Successful response: ${response}")
+                        for(data in responseBody) {
+                            myRouteList.add(GroupItem(data.routeId, data.routeName, 0, true,data.numStore, 0))
+                        }
+                    }
+                    callback(1)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3)
+                }
+            }
+            override fun onFailure(call: Call<List<Routes>>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3)
+            }
+        })
+    }
     // 루트 생성/그룹 내 루트 추가
     fun createRoute(callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
@@ -1275,16 +1302,21 @@ class GustoViewModel: ViewModel() {
                         val responseBody = response.body()
                         if (responseBody != null) {
                             Log.d("viewmodel", "Successful response: ${response}")
-                            dong = responseBody.documents.get(1).region3DepthName
-                            callback(1,responseBody.documents.get(1).addressName)
+                            if(responseBody.documents.get(1).region3DepthName == dong) {
+                                callback(2,responseBody.documents.get(1).addressName)
+                            } else {
+                                dong = responseBody.documents.get(1).region3DepthName
+                                callback(1,responseBody.documents.get(1).addressName)
+                            }
+
                         } else {
                             Log.e("viewmodel", "Unsuccessful response: ${response}")
-                            callback(3,"알 수 없음")
+                            callback(3,"위치를 알 수 없음")
                         }
 
                     } else {
                         Log.e("viewmodel", "Unsuccessful response: ${response}")
-                        callback(3,"알 수 없음")
+                        callback(3,"위치를 알 수 없음")
                     }
                 }
 

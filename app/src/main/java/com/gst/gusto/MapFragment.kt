@@ -1,7 +1,9 @@
 package com.gst.clock.Fragment
 
+
 import MapRecyclerAdapter
 import android.graphics.Typeface
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -46,6 +48,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     lateinit var binding: FragmentMapBinding
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+
 
     private val TAG = "SOL_LOG"
     lateinit var mapView : MapView
@@ -106,6 +109,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 // 슬라이딩 중일 때 추가 작업이 필요하면 여기에 추가
             }
         })
+
 
 
         ////    카테고리    ////
@@ -279,6 +283,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         }
 
     }
+
     private fun showMainScreenFragment() {
         // BottomNavigationView를 보이게 하는 작업
         // binding.bottomNavigationView.visibility = View.VISIBLE
@@ -341,15 +346,34 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             }
         })
 
+    }
+    override fun onResume() {
+        super.onResume()
         mapView = MapView(requireContext())
 
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
 
-        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map")
-
-        setMarker(mapView,markerList)
+        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)
     }
+    private fun showMainScreenFragment() {
+        // fragment_map_main_screen.xml을 보이게 하는 작업
+        val mainScreenFragment = MapMainScreenFragment()
+        childFragmentManager.beginTransaction()
+            .replace(R.id.fragment_map, mainScreenFragment)
+            .commit()
+    }
+
+    private fun hideMainScreenFragment() {
+        // fragment_map_main_screen.xml을 숨기는 작업
+        val mainScreenFragment =
+            childFragmentManager.findFragmentById(R.id.fragment_map) as? MapMainScreenFragment
+        mainScreenFragment?.let {
+            childFragmentManager.beginTransaction().remove(it).commit()
+        }
+    }
+
+
     override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
         // 마커 클릭 시 이벤트
         Log.d("MapViewEventListener","ccc")
@@ -364,10 +388,13 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     override fun onDraggablePOIItemMoved(mapView: MapView?, poiItem: MapPOIItem?, mapPoint: MapPoint?) {}
 
     override fun onPause() {
+        binding.kakaoMap.removeAllViews()
         super.onPause()
         Log.d("MapViewEventListener","onPause")
-        binding.kakaoMap.removeAllViews()
+        Log.e("viewmodel","DIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIEDIE")
     }
+
+
 
     override fun onMapViewInitialized(p0: MapView?) {
         Log.d(TAG, "MapView가 초기화되었습니다.")
@@ -409,7 +436,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 when(result) {
                     1 -> {
                         Log.d("viewmodel",gustoViewModel.dong)
-                        binding.fragmentArea.userLoc.text = address
+                        if(binding.fragmentArea.userLoc.text =="현재 사용자의 위치")
+                            binding.fragmentArea.userLoc.text = address
                         gustoViewModel.getCurrentMapStores {result, datas ->
                             when(result) {
                                 1 -> {
@@ -422,11 +450,24 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                                     Log.d("viewmodel","${markerList}")
                                     setMarker(mapView,markerList)
                                     binding.vpSlider.adapter?.notifyDataSetChanged()
-                                }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                                }
+                                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
                 }
+            }
+        }
+    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == mapUtil.LOCATION_PERMISSION_REQUEST_CODE) {
+            // 권한 요청 코드가 일치하는 경우
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)
+            } else {
+                // 사용자가 권한을 거부한 경우 또는 권한이 부여되지 않은 경우
+                // 필요한 조치를 취하십시오. 예를 들어, 사용자에게 권한이 필요한 이유를 설명하는 다이얼로그를 표시하거나 기능을 비활성화할 수 있습니다.
             }
         }
     }
