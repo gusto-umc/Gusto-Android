@@ -263,6 +263,7 @@ data class RequestMyReview(
 
 // 리뷰 작성
 data class RequestCreateReview(
+    @SerializedName("skipCheck") val skipCheck : Boolean,
     @SerializedName("storeId") val storeId : Long,
     @SerializedName("visitedAt") val visitedAt : String?,
     @SerializedName("menuName") val menuName : String?,
@@ -272,7 +273,7 @@ data class RequestCreateReview(
     @SerializedName("mood") val mood : Int?,
     @SerializedName("toilet") val toilet : Int?,
     @SerializedName("parking") val parking : Int?,
-@SerializedName("comment") val comment : String?
+    @SerializedName("comment") val comment : String?
 )
 
 // insta (gallery) review 조회- reviews

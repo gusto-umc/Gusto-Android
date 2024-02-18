@@ -38,6 +38,7 @@ class ReviewAdd1Fragment : Fragment() {
 
         binding.btnNext.setOnClickListener {
             gustoViewModel.progress = 0
+            gustoViewModel.skipCheck = false
             findNavController().navigate(R.id.action_reviewAdd1Fragment_to_reviewAdd2Fragment)
         }
 
@@ -77,7 +78,7 @@ class ReviewAdd1Fragment : Fragment() {
             }
         })
         setImage(binding.ivRest, gustoViewModel.myStoreDetail?.reviewImg4?.get(0),requireContext())
-        gustoViewModel
+        binding.tvRest.text = gustoViewModel.myStoreDetail?.storeName
     }
     override fun onDestroy() {
         super.onDestroy()

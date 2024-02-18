@@ -64,6 +64,7 @@ class GustoViewModel: ViewModel() {
     var groupFragment = 0 // stores = 0 or routes = 1
 
     // 리뷰 작성 필요 변수
+    var skipCheck = true
     var visitedAt: String? = null
     var imageFiles = ArrayList<File>()
     var menuName: String? = null
@@ -778,7 +779,7 @@ class GustoViewModel: ViewModel() {
     }
     // 리뷰 작성
     fun createReview(callback: (Int) -> Unit){
-        val data = RequestCreateReview(myStoreDetail?.storeId!!.toLong(),visitedAt,menuName,hashTagId,taste,spiciness,mood,toilet,parking,comment)
+        val data = RequestCreateReview(skipCheck,myStoreDetail?.storeId!!.toLong(),visitedAt,menuName,hashTagId,taste,spiciness,mood,toilet,parking,comment)
         val filesToUpload: MutableList<MultipartBody.Part> = mutableListOf()
 
         // 이미지 파일들을 반복하면서 MultipartBody.Part 리스트에 추가
