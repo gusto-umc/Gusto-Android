@@ -6,19 +6,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseFeedReview
-import com.gst.gusto.api.ResponseInstaReviews
 import com.gst.gusto.databinding.FragmentFeedBinding
-import com.gst.gusto.review.adapter.GalleryReviewAdapter
 import com.gst.gusto.review.adapter.GridItemDecoration
 
 class FeedFragment : Fragment() {
@@ -37,10 +34,15 @@ class FeedFragment : Fragment() {
         binding = FragmentFeedBinding.inflate(inflater, container, false)
 
         initView()
-        getData()
+
 
         return binding.root
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        getData()
     }
 
     fun initView(){
@@ -83,19 +85,54 @@ class FeedFragment : Fragment() {
 
 
     fun getData() {
-        gustoViewModel.getTokens(requireActivity() as MainActivity)
+
+        val feedList = ArrayList<ResponseFeedReview>()
+        
         gustoViewModel.feed() { result, response ->
             if (result == 1) {
-                val feedList = ArrayList<ResponseFeedReview>()
-
                 response?.forEach {
                     feedList.add(ResponseFeedReview(it.reviewId, it.images))
                 }
                 adapter.feedList = feedList
                 adapter.notifyDataSetChanged()
             }
-            Log.d("listResponse", response.toString())
+            Log.d("feedResponse", feedList.toString())
         }
+
+        gustoViewModel.searchFeedData.observe(viewLifecycleOwner, Observer { value ->
+            feedList.clear()
+            gustoViewModel.searchFeedData?.value?.reviews?.forEach {
+                feedList.add(ResponseFeedReview(it.reviewId, it.images))
+            }
+            adapter.feedList = feedList
+            adapter.notifyDataSetChanged()
+            Log.d("feedResponse2", feedList.toString())
+        })
+
+        /*gustoViewModel.getTokens(requireActivity() as MainActivity)
+        if(gustoViewModel.searchFeedData == null){
+            gustoViewModel.feed() { result, response ->
+                if (result == 1) {
+                    response?.forEach {
+                        feedList.add(ResponseFeedReview(it.reviewId, it.images))
+                    }
+                    adapter.feedList = feedList
+                    adapter.notifyDataSetChanged()
+                }
+                Log.d("feedResponse", feedList.toString())
+            }
+        } else {
+            gustoViewModel.searchFeedData.observe(viewLifecycleOwner, Observer { value ->
+                feedList.clear()
+                gustoViewModel.searchFeedData?.value?.reviews?.forEach {
+                    feedList.add(ResponseFeedReview(it.reviewId, it.images))
+                }
+                adapter.feedList = feedList
+                adapter.notifyDataSetChanged()
+                Log.d("feedResponse2", feedList.toString())
+            })
+        }*/
+
     }
 
 }

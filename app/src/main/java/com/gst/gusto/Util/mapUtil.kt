@@ -25,14 +25,14 @@ import net.daum.mf.map.api.MapView
 class mapUtil {
     companion object {
         data class MarkerItem(
-                val storeId: Long,
-                var ordinal: Int,
-                val routeListId: Long,
-                var latitude: Double,
-                var longitude: Double,
-                val storeName: String,
-                val address: String,
-                val bookMark: Boolean
+            val storeId: Long,
+            var ordinal: Int,
+            val routeListId: Long,
+            var latitude: Double,
+            var longitude: Double,
+            val storeName: String,
+            var address: String,
+            var bookMark: Boolean
         )
 
         private val MAPPERMISSIONS = arrayOf(
@@ -66,13 +66,6 @@ class mapUtil {
                     .addOnSuccessListener { success: Location? ->
                         success?.let { location ->
                             Log.d("viewmodel","${location.latitude}, ${location.longitude}")
-                            (activity as MainActivity).gustoViewModel.getRegionInfo( location.longitude, location.latitude)  {result ->
-                                when(result) {
-                                    1 -> {
-
-                                    }
-                                }
-                            }
                             if(option =="map") {
                                 mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude), true)
                                 mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving)
@@ -92,12 +85,13 @@ class mapUtil {
             mapView.removeAllPOIItems()
             for(data in markerList) {
                 val marker = MapPOIItem()
-                marker.itemName = "Default Marker"
+                marker.itemName = data.ordinal.toString()
                 marker.tag = data.ordinal // id
                 marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
                 marker.markerType = MapPOIItem.MarkerType.CustomImage
                 marker.customImageResourceId = R.drawable.marker_color_small_img
                 marker.isShowCalloutBalloonOnTouch = false
+                marker.showAnimationType = MapPOIItem.ShowAnimationType.DropFromHeaven
 
                 mapView.addPOIItem(marker)
             }
@@ -112,11 +106,12 @@ class mapUtil {
                 marker.markerType = MapPOIItem.MarkerType.CustomImage
                 marker.customImageResourceId = R.drawable.marker_color_small_img
                 marker.isShowCalloutBalloonOnTouch = false
+                marker.showAnimationType = MapPOIItem.ShowAnimationType.DropFromHeaven
 
                 mapView.addPOIItem(marker)
             }
-
-            mapView.moveCamera(CameraUpdateFactory.newMapPoint(MapPoint.mapPointWithGeoCoord(markerList[0].latitude, markerList[0].longitude)))
+            if(!markerList.isEmpty())
+                mapView.moveCamera(CameraUpdateFactory.newMapPoint(MapPoint.mapPointWithGeoCoord(markerList[0].latitude, markerList[0].longitude)))
         }
         fun setRoute(mapView: MapView, markerList: List<MarkerItem>) {
             mapView.removeAllPOIItems()
@@ -129,7 +124,7 @@ class mapUtil {
                 marker.itemName = data.ordinal.toString()
                 marker.setCustomImageAnchor(0.5f,0.5f)
                 marker.tag = data.ordinal // id
-
+                marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
                 marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
                 marker.markerType = MapPOIItem.MarkerType.CustomImage
                 marker.customImageResourceId = ROUTE_MARKER_IMAGES[index]

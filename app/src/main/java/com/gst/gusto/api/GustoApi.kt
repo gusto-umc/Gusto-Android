@@ -3,6 +3,7 @@ package com.gst.gusto.api
 import android.widget.EditText
 import com.google.gson.annotations.SerializedName
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -389,6 +390,13 @@ interface GustoApi {
     fun feed(
         @Header("X-AUTH-TOKEN") token: String
     ):Call<ArrayList<ResponseFeedReview>>
+
+    @GET("feeds/search") // 맛집 & 해시태그 검색 엔진
+    fun feedSearch(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("keyword") keyword: String,
+        @Query("hashTags") hashTags: List<Long>?
+    ):Call<ResponseFeedSearchReviews>
 
 
 

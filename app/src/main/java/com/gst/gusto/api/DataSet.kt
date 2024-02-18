@@ -266,7 +266,7 @@ data class RequestCreateReview(
     @SerializedName("storeId") val storeId : Long,
     @SerializedName("visitedAt") val visitedAt : String?,
     @SerializedName("menuName") val menuName : String?,
-    @SerializedName("hashTagId") val hashTagId : String?,
+    @SerializedName("hashTagId") val hashTagId : List<Long>?,
     @SerializedName("taste") val taste : Int?,
     @SerializedName("spiciness") val spiciness : Int?,
     @SerializedName("mood") val mood : Int?,
@@ -333,7 +333,7 @@ data class ResponseFeedDetail(
     @SerializedName("likeCheck") val likeCheck: Boolean,
     @SerializedName("images") val images: List<String>,
     @SerializedName("menuName") val menuName: String,
-    @SerializedName("hashTags") val hashTags: String,
+    @SerializedName("hashTags") val hashTags: List<Long>?,
     @SerializedName("taste") val taste: Int,
     @SerializedName("spiciness") val spiciness: Int,
     @SerializedName("mood") val mood: Int,
@@ -353,11 +353,17 @@ data class ResponseCalReview(
      @SerializedName("reviews") val reviews: List<ResponseCalReviews>
 )
 
-// 먹스또 랜덤 피드
+// 먹스또 랜덤 피드 | 맛집 & 해시태그 검색 엔진
 data class ResponseFeedReview(
     @SerializedName("reviewId") val reviewId: Long,
     @SerializedName("images") val images: String
 )
+
+// 맛집 & 해시태그 검색 엔진- reviews
+data class ResponseFeedSearchReviews(
+    @SerializedName("reviews") val reviews: ArrayList<ResponseFeedReview>
+)
+
 
 
 // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)

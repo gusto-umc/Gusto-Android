@@ -1,6 +1,5 @@
 package com.gst.gusto.api
 
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -99,6 +98,11 @@ class GustoViewModel: ViewModel() {
     lateinit var currentFeedData :ResponseFeedDetail
     // 현재 피드 리뷰 작성자 닉네임
     var currentFeedNickname = ""
+
+    // 먹스또 피드 검색 데이터
+    val searchFeedData:MutableLiveData<ResponseFeedSearchReviews?> = MutableLiveData<ResponseFeedSearchReviews?>().apply{
+        value = null
+    }
 
     //방문 여부
     var whetherVisit : Int?= null
@@ -812,6 +816,9 @@ class GustoViewModel: ViewModel() {
                     followList = response.body()!!
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
+                }else if(response.code()==404){
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
                     callback(3)
@@ -832,6 +839,9 @@ class GustoViewModel: ViewModel() {
                     followList = response.body()!!
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
+                } else if(response.code()==404){
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
                     callback(3)
@@ -1249,7 +1259,7 @@ class GustoViewModel: ViewModel() {
         private const val BASE_URL = "https://dapi.kakao.com/"
         private const val REST_API_KEY = "70da0c4f2b9dfd637641a4dd22039969"
     }
-    fun getRegionInfo(x: Double,y : Double, callback: (Int) -> Unit) {
+    fun getRegionInfo(x: Double,y : Double, callback: (Int,String) -> Unit) {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -1266,21 +1276,21 @@ class GustoViewModel: ViewModel() {
                         if (responseBody != null) {
                             Log.d("viewmodel", "Successful response: ${response}")
                             dong = responseBody.documents.get(1).region3DepthName
-                            callback(1)
+                            callback(1,responseBody.documents.get(1).addressName)
                         } else {
                             Log.e("viewmodel", "Unsuccessful response: ${response}")
-                            callback(3)
+                            callback(3,"알 수 없음")
                         }
 
                     } else {
                         Log.e("viewmodel", "Unsuccessful response: ${response}")
-                        callback(3)
+                        callback(3,"알 수 없음")
                     }
                 }
 
                 override fun onFailure(call: Call<RegionInfoResponse>, t: Throwable) {
                     Log.e("viewmodel", "Failed to make the request", t)
-                    callback(3)
+                    callback(3,"알 수 없음")
                 }
             })
     }
@@ -1382,6 +1392,31 @@ class GustoViewModel: ViewModel() {
                 }
             }
             override fun onFailure(call: Call<ArrayList<ResponseFeedReview>>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3, null)
+            }
+        })
+    }
+
+    // 맛집 & 해시태그 검색 엔진
+    fun feedSearch(keyword: String, hashTags: List<Long>?, callback: (Int, ResponseFeedSearchReviews?) -> Unit){
+        service.feedSearch(xAuthToken, keyword, hashTags).enqueue(object : Callback<ResponseFeedSearchReviews> {
+            override fun onResponse(call: Call<ResponseFeedSearchReviews>, response: Response<ResponseFeedSearchReviews>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if(responseBody!=null) {
+                        Log.e("viewmodel", "1 Successful response: ${response}")
+                        callback(1, responseBody)
+                    } else {
+                        Log.e("viewmodel", "2 Successful response: ${response}")
+                        callback(2, null)
+                    }
+                }else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3, null)
+                }
+            }
+            override fun onFailure(call: Call<ResponseFeedSearchReviews>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
                 callback(3, null)
             }
