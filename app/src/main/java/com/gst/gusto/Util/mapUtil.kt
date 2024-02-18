@@ -11,6 +11,7 @@ import android.util.Log
 import android.widget.RelativeLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.google.android.gms.location.LocationServices
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
@@ -39,7 +40,7 @@ class mapUtil {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
-        private val LOCATION_PERMISSION_REQUEST_CODE = 5000
+        val LOCATION_PERMISSION_REQUEST_CODE = 5000
         private val ROUTE_MARKER_IMAGES = arrayOf(
             R.drawable.route_marker_1_img,
             R.drawable.route_marker_2_img,
@@ -49,12 +50,11 @@ class mapUtil {
             R.drawable.route_marker_6_img
         )
         @SuppressLint("MissingPermission")
-        fun setMapInit(mapView : MapView,kakaoMap : RelativeLayout,context : Context,activity : Activity,option : String)  {
+        fun setMapInit(mapView : MapView,kakaoMap : RelativeLayout,context : Context,activity : Activity,option : String,fragment: Fragment)  {
             kakaoMap.addView(mapView)
 
             if (!hasPermission(context)) {
-                ActivityCompat.requestPermissions(
-                    activity,
+                fragment.requestPermissions(
                     MAPPERMISSIONS,
                     LOCATION_PERMISSION_REQUEST_CODE
                 )
@@ -80,6 +80,7 @@ class mapUtil {
                     }
             }
         }
+
 
         fun setMarker(mapView : MapView,markerList: ArrayList<MarkerItem>) {
             mapView.removeAllPOIItems()

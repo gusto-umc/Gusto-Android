@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.gst.clock.Fragment.MyReviewFragment
-import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
@@ -24,7 +23,6 @@ import com.gst.gusto.my.activity.MyProfileEditActivity
 import com.gst.gusto.my.activity.MySettingActivity
 import com.gst.gusto.my.adapter.MyViewpagerAdapter
 import com.gst.gusto.my.fragment.MyListFragment
-import com.gst.gusto.start.StartActivity
 
 class MyFragment : Fragment() {
 
@@ -114,7 +112,6 @@ class MyFragment : Fragment() {
         //Adapter 연결
         binding.viewpager.apply {
             adapter = viewPager2Adatper
-
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)

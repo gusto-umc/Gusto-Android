@@ -173,7 +173,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         mapView.setMapViewEventListener(this)
 
 
-        mapUtil.setMapInit(mapView, binding.kakaoRouteMap, requireContext(), requireActivity(),"route")
+        mapUtil.setMapInit(mapView, binding.kakaoRouteMap, requireContext(), requireActivity(),"route",this)
 
         gustoViewModel.markerListLiveData.observe(viewLifecycleOwner, Observer { markers ->
             Log.d("itemList222",markers.toString())
