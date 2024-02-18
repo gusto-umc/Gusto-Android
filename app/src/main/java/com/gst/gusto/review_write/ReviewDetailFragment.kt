@@ -1,6 +1,7 @@
 package com.gst.clock.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,12 +92,13 @@ class ReviewDetailFragment : Fragment() {
         /**
          * 서버 데이터 연결
          */
-        var reviewId = arguments?.getInt("reviewId")
-        gustoViewModel.myReviewId = reviewId?.toLong()
+        var reviewId = arguments?.getLong("reviewId")
+        Log.d("review detail check", reviewId.toString())
+        gustoViewModel.myReviewId = reviewId
 
         gustoViewModel.myReviewId?.let {
 
-            gustoViewModel.getReview(1L){
+            gustoViewModel.getReview(it){
                 result ->
                 when(result){
                     0 -> {
