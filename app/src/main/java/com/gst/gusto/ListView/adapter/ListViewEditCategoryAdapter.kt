@@ -94,44 +94,44 @@ class ListViewEditCategoryAdapter (private var flag : String, private val parent
         }
 
 
-        holder.updownLayout.setOnClickListener {
-            if(holder.data?.pinCnt != 0){
-                if(openFlag){
-                    holder.storeRv.visibility = View.GONE
-                    holder.ivUpDown.setImageResource(R.drawable.arrow_down_2_img)
-                    openFlag = false
-                    //뷰모델에 신호 -> 해당 카테고리 외에 숨기기
-                }
-                else{
-                    //뷰모델에 신호 -> 모든 카테고리 활성화
-                    holder.storeRv.visibility = View.VISIBLE
-                    holder.ivUpDown.setImageResource(R.drawable.arrow_up_1_img)
-                    openFlag = true
-                    /**
-                     * storeRv 연결
-                     */
-                    viewModel!!.getMapStores(holder.data!!.myCategoryId, townName = "성수1가1동"){
-                            result ->
-                        when(result){
-                            0 -> {
-                                //성공
-                                val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
-                                mStoreAdapter.submitList(viewModel!!.myMapStoreList!!)
-                                holder.storeRv.adapter = mStoreAdapter
-                                holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
-                            }
-                            1 -> {
-                                //실패
-                                Log.d("store checking", "fail")
-                            }
-                        }
-                    }
-                }
-            }
-            else {
-
-            }
-        }
+//        holder.updownLayout.setOnClickListener {
+//            if(holder.data?.pinCnt != 0){
+//                if(openFlag){
+//                    holder.storeRv.visibility = View.GONE
+//                    holder.ivUpDown.setImageResource(R.drawable.arrow_down_2_img)
+//                    openFlag = false
+//                    //뷰모델에 신호 -> 해당 카테고리 외에 숨기기
+//                }
+//                else{
+//                    //뷰모델에 신호 -> 모든 카테고리 활성화
+//                    holder.storeRv.visibility = View.VISIBLE
+//                    holder.ivUpDown.setImageResource(R.drawable.arrow_up_1_img)
+//                    openFlag = true
+//                    /**
+//                     * storeRv 연결
+//                     */
+//                    viewModel!!.getMapStores(holder.data!!.myCategoryId, townName = "성수1가1동"){
+//                            result ->
+//                        when(result){
+//                            0 -> {
+//                                //성공
+//                                val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
+//                                mStoreAdapter.submitList(viewModel!!.myMapStoreList!!)
+//                                holder.storeRv.adapter = mStoreAdapter
+//                                holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
+//                            }
+//                            1 -> {
+//                                //실패
+//                                Log.d("store checking", "fail")
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            else {
+//
+//            }
+//        }
 
         if(holder.data?.pinCnt!! <= 0) {
             holder.ivUpDown.imageTintList = ColorStateList.valueOf(Color.parseColor("#ECECEC"))

@@ -257,7 +257,7 @@ interface GustoApi {
     @GET("myCategories")
     fun getAllCategory(
         @Header("X-AUTH-TOKEN") token : String,
-        @Query("nickname") nickname : String
+        @Query("nickname") nickname : String?
     ) : Call<List<ResponseAllCategory>>
 
     /**
@@ -300,7 +300,7 @@ interface GustoApi {
     @GET("myCategories/pins")
     fun getAllStores(
         @Header("X-AUTH-TOKEN") token : String,
-        @Query("nickname") nickname : String,
+        @Query("nickname") nickname : String?,
         @Query("myCategoryId") categoryId : Int
     ): Call<List<ResponseStoreListItem>>
 

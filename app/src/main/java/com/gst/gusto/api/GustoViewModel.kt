@@ -982,7 +982,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
+    //타인 카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
     fun getAllCategory(nickname: String, callback: (Int) -> Unit){
         service.getAllCategory(xAuthToken, nickname = nickname).enqueue(object : Callback<List<ResponseAllCategory>>{
             override fun onResponse(
@@ -1002,6 +1002,31 @@ class GustoViewModel: ViewModel() {
 
             override fun onFailure(call: Call<List<ResponseAllCategory>>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
+    //타인 카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
+    fun getAllUserCategory(callback: (Int) -> Unit){
+        service.getAllCategory(xAuthToken, nickname = null).enqueue(object : Callback<List<ResponseAllCategory>>{
+            override fun onResponse(
+                call: Call<List<ResponseAllCategory>>,
+                response: Response<List<ResponseAllCategory>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.e("getAllUserCategory", "Successful response: ${response}")
+                    Log.d("getAllUserCategory", response.body()!!.toString())
+                    myAllCategoryList = response.body()!!
+                    callback(0)
+                } else {
+                    Log.e("getAllUserCategory", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<List<ResponseAllCategory>>, t: Throwable) {
+                Log.e("getAllUserCategory", "Failed to make the request", t)
                 callback(1)
             }
 
@@ -1138,9 +1163,33 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //카테고리 별 가게 조회 - 전체 -> 완
+    //타인 카테고리 별 가게 조회 - 전체 -> 완
     fun getAllStores(categoryId: Int, nickname: String, callback: (Int) -> Unit){
         service.getAllStores(xAuthToken, nickname = nickname, categoryId = categoryId).enqueue(object : Callback<List<ResponseStoreListItem>>{
+            override fun onResponse(
+                call: Call<List<ResponseStoreListItem>>,
+                response: Response<List<ResponseStoreListItem>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.e("viewmodel", "Successful response: ${response}")
+                    myAllStoreList = response.body()!!
+                    callback(0)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<List<ResponseStoreListItem>>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
+    // 내 카테고리 별 전체 가게 조회
+    fun getAllUserStores(categoryId: Int,  callback: (Int) -> Unit){
+        service.getAllStores(xAuthToken, nickname = null, categoryId = categoryId).enqueue(object : Callback<List<ResponseStoreListItem>>{
             override fun onResponse(
                 call: Call<List<ResponseStoreListItem>>,
                 response: Response<List<ResponseStoreListItem>>
