@@ -60,7 +60,8 @@ class StoreDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var sampleStoreId = 1
+        var sampleStoreId = gustoViewModel.selectedDetailStoreId
+        var pinId : Int? = null
         gustoViewModel.detailReviewLastId = null
         gustoViewModel.detailReviewLastVisitedAt = null
         gustoViewModel.storeDetailReviews.clear()
@@ -86,6 +87,7 @@ class StoreDetailFragment : Fragment() {
                 binding.tvStoreDetailCategory.text = data!!.categoryString
                 binding.tvStoreDetailName.text = data!!.storeName
                 binding.tvStoreDetailAddress.text = data!!.address
+                pinId = data!!.pinId
                 if (data.pin){
                     binding.ivStoreDetailSave.setImageResource(R.drawable.save_o_img)
                 }
@@ -175,14 +177,14 @@ class StoreDetailFragment : Fragment() {
          * 찜 버튼 클릭 리스너
          */
         binding.ivStoreDetailSave.setOnClickListener {
-            if(sampleData.pin == 1){
-                gustoViewModel.deletePin(sampleStoreId){
+            if(gustoViewModel.myStoreDetail!!.pin){
+                gustoViewModel.deletePin(pinId!!){
                     result ->
                     when(result){
                         0-> {
                             //성공
                             binding.ivStoreDetailSave.setImageResource(R.drawable.save_x_img)
-                            sampleData.pin = 0
+                            gustoViewModel.myStoreDetail!!.pin = false
                         }
                         1 -> {
                             //실패
@@ -198,7 +200,7 @@ class StoreDetailFragment : Fragment() {
                         1 -> {
                             Log.d("bottomsheet", "카테고리 선택 click")
                             binding.ivStoreDetailSave.setImageResource(R.drawable.save_o_img)
-                            sampleData.pin = 1
+                            gustoViewModel.myStoreDetail!!.pin = true
                         }
                     }
                 }
@@ -242,6 +244,12 @@ class StoreDetailFragment : Fragment() {
         /**
          * map icon 클릭리스너
          */
+        binding.ivStoreDetailMap.setOnClickListener {
+            gustoViewModel.selectStoreId = gustoViewModel.selectedDetailStoreId.toLong()
+            gustoViewModel.storeIdList.clear()
+            gustoViewModel.storeIdList.add(gustoViewModel.selectStoreId)
+            Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_fragment_map_viewpager)
+        }
 
 
     }

@@ -34,38 +34,50 @@ class CategoryChooseBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomShe
         }
 
         //데이터 연결
-        categoryArray = viewModel!!.myAllCategoryList
+        viewModel!!.getAllUserCategory {
+            result ->
+            when(result){
+                0 -> {
+                    categoryArray = viewModel!!.myAllCategoryList
 
+                    //카테고리 댑터 선언 + 연결
+                    val dCategoryChooseAdapter = CategoryChooseAdapter()
+                    dCategoryChooseAdapter.setItemClickListener(object : CategoryChooseAdapter.OnItemClickListener{
+                        override fun onClick(v: View, dataSet: ResponseAllCategory) {
+                            //서버 연결 (찜)
+                            //storeId 받아오기!
+                            val storeId = viewModel!!.myStoreDetail!!.storeId
+                            viewModel!!.addPin(dataSet.myCategoryId.toLong(), storeId.toLong()){
+                                    result ->
+                                when(result){
+                                    0 -> {
+                                        //성공
+                                        itemClick(1)
+                                        dialog?.dismiss()
+                                    }
+                                    1 -> {
+                                        //실패
+                                        itemClick(0)
+                                        dialog?.dismiss()
+                                    }
 
-        //카테고리 댑터 선언 + 연결
-        val dCategoryChooseAdapter = CategoryChooseAdapter()
-        dCategoryChooseAdapter.setItemClickListener(object : CategoryChooseAdapter.OnItemClickListener{
-            override fun onClick(v: View, dataSet: ResponseAllCategory) {
-                //서버 연결 (찜)
-                val storeId = 4 // 혜성 카레
-                viewModel!!.addPin(dataSet.myCategoryId.toLong(), storeId.toLong()){
-                    result ->
-                    when(result){
-                        0 -> {
-                            //성공
-                            itemClick(1)
-                            dialog?.dismiss()
+                                }
+                            }
+
                         }
-                        1 -> {
-                            //실패
-                            itemClick(0)
-                            dialog?.dismiss()
-                        }
 
-                    }
+                    })
+                    val dChooseAdapter = CategoryChooseAdapter()
+                    dCategoryChooseAdapter.submitList(categoryArray)
+                    view?.findViewById<RecyclerView>(R.id.rv_category_choose)?.adapter = dCategoryChooseAdapter
+                    view?.findViewById<RecyclerView>(R.id.rv_category_choose)?.layoutManager = LinearLayoutManager(this.requireActivity())
+                }
+                1 -> {
+
                 }
 
             }
+        }
 
-        })
-        val dChooseAdapter = CategoryChooseAdapter()
-        dCategoryChooseAdapter.submitList(categoryArray)
-        view?.findViewById<RecyclerView>(R.id.rv_category_choose)?.adapter = dCategoryChooseAdapter
-        view?.findViewById<RecyclerView>(R.id.rv_category_choose)?.layoutManager = LinearLayoutManager(this.requireActivity())
     }
 }

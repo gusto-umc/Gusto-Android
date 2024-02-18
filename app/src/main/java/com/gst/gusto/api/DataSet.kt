@@ -176,6 +176,7 @@ data class ResponseStoreDetail(
     @SerializedName("address") val address : String,
     @SerializedName("opening") val opening : Int,
     @SerializedName("pin") var pin : Boolean,
+    @SerializedName("pinId") var pinId : Int,
     @SerializedName("reviewImg4") val reviewImg4: ArrayList<String>,
     @SerializedName("reviews") val reviews : MutableList<ResponseReviews>
 )
@@ -276,13 +277,13 @@ data class RequestCreateReview(
     @SerializedName("comment") val comment : String?
 )
 
-// insta (gallery) review 조회- reviews
+// insta (gallery) review 조회- reviews & MyReviewFragment와 OtherReviewFragment
 data class ResponseInstaReviews(
     @SerializedName("reviewId") val reviewId: Long,
     @SerializedName("images") val images: String,
 )
 
-// insta (gallery) review 조회
+// insta (gallery) review 조회 & MyReviewFragment와 OtherReviewFragment
 data class ResponseInstaReview(
     @SerializedName("reviews") val reviews: List<ResponseInstaReviews>,
     @SerializedName("hasNext") val hasNext: Boolean

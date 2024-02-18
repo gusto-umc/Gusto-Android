@@ -88,6 +88,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                                 //성공
                                 val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
                                 mStoreAdapter.submitList(viewModel!!.myMapStoreList!!)
+                                mStoreAdapter.gustoViewModel = viewModel
                                 holder.storeRv.adapter = mStoreAdapter
                                 holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
                             }

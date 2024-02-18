@@ -13,6 +13,7 @@ import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.ResponseSavedStoreData
 import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.CardWxampleBinding
+import com.gst.gusto.databinding.ItemListviewStoreCardBinding
 
 class SavedStoreListAdapter(private var flag : String, private val parentView : View) : ListAdapter<ResponseSavedStoreData, SavedStoreListAdapter.ViewHolder>(DiffCallback) {
 
@@ -32,22 +33,16 @@ class SavedStoreListAdapter(private var flag : String, private val parentView : 
         }
     }
 
-    inner class ViewHolder(private val binding : CardWxampleBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(private val binding : ItemListviewStoreCardBinding) : RecyclerView.ViewHolder(binding.root){
         var data : ResponseSavedStoreData? = null
         fun bind(store: ResponseSavedStoreData){
             data = store
-            setImage(binding.ivItemStoreImg, store.reviewImg, mContext!!)
-            binding.tvItemStoreTitle.text = store.storeName
-            binding.tvItemStoreLocation.text = store.address
-            binding.tvItemStoreCount.text = store.categoryName
+            setImage(binding.ivItemListviewCardImg, store.reviewImg, mContext!!)
+            binding.tvItemListviewCardTitle.text = store.storeName
+            binding.tvItemListviewCardLocation.text = store.address
+            binding.tvItemListviewCardCount.text = store.categoryName
         }
-        val cbEdit = binding.cbItemStoreEdit
-        val tvCountCategory = binding.tvItemStoreCount
-        val cvStore = binding.cvItemStoreEdit
-        val tvStoreName = binding.tvItemStoreTitle
-        val tvStoreLocation = binding.tvItemStoreLocation
-        var ivPhoto = binding.ivItemStoreImg
-        var layoutData = binding.layoutCardData
+        var layoutData = binding.cvItemListviewCard
     }
 
 
@@ -65,13 +60,12 @@ class SavedStoreListAdapter(private var flag : String, private val parentView : 
         parent: ViewGroup,
         viewType: Int
     ): SavedStoreListAdapter.ViewHolder {
-        val viewHolder = ViewHolder(CardWxampleBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        val viewHolder = ViewHolder(ItemListviewStoreCardBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         return viewHolder
     }
 
     override fun onBindViewHolder(holder: SavedStoreListAdapter.ViewHolder, position: Int) {
         holder.bind(getItem(position))
-        holder.cbEdit.visibility = View.GONE
 
         holder.layoutData.setOnClickListener {
             itemClickListener.onClick(it, holder.data!!)
