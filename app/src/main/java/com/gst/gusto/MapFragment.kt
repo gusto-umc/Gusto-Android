@@ -22,6 +22,7 @@ import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.MainActivity
 import com.gst.gusto.MapMainScreenFragment
 import com.gst.gusto.R
+import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.Util.mapUtil.Companion.setMapInit
 import com.gst.gusto.Util.mapUtil.Companion.setMarker
@@ -33,6 +34,7 @@ import net.daum.mf.map.api.CameraUpdateFactory
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
+import okhttp3.internal.notify
 
 
 class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEventListener {
@@ -214,8 +216,12 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 // 페이지가 선택되었을 때의 작업 수행
-                val mapPoint = MapPoint.mapPointWithGeoCoord(markerList[position].latitude, markerList[position].longitude)
-                mapView.moveCamera(CameraUpdateFactory.newMapPoint(mapPoint,mapView.zoomLevelFloat))
+                if(!markerList.isEmpty()) {
+                    val mapPoint = MapPoint.mapPointWithGeoCoord(markerList[position].latitude, markerList[position].longitude)
+                    mapView.moveCamera(CameraUpdateFactory.newMapPoint(mapPoint,mapView.zoomLevelFloat))
+                } else {
+                    viewPager.visibility = View.GONE
+                }
             }
         })
 
@@ -291,11 +297,15 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                         gustoViewModel.getCurrentMapStores {result, datas ->
                             when(result) {
                                 1 -> {
+                                    markerList.clear()
                                     if(datas!=null) {
-                                        for(data in datas) {
-                                            markerList.add(MarkerItem(data.storeId, 0,0, data.latitude!!, data.longitude!!, "", "", false))
+                                        for((index,data) in datas.withIndex()) {
+                                            markerList.add(MarkerItem(data.storeId, index+1,0, data.latitude!!, data.longitude!!, data.storeName!!, "", false))
                                         }
                                     }
+                                    Log.d("viewmodel","${markerList}")
+                                    setMarker(mapView,markerList)
+                                    binding.vpSlider.adapter?.notifyDataSetChanged()
                                 }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                             }
                         }
@@ -304,8 +314,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             }
         }
     }
-
-
 
 }
 
