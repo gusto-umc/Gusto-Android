@@ -13,19 +13,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.R
+import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.CardWxampleBinding
 import com.gst.gusto.databinding.ItemStoreCardBinding
 
-class ListViewStoreAdapter(private var flag : String, private val parentView : View) : ListAdapter<Store, ListViewStoreAdapter.ViewHolder>(DiffCallback) {
+class ListViewStoreAdapter(private var flag : String, private val parentView : View) : ListAdapter<ResponseStoreListItem, ListViewStoreAdapter.ViewHolder>(DiffCallback) {
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<Store>(){
-            override fun areItemsTheSame(oldItem: Store, newItem: Store): Boolean {
+        private val DiffCallback = object : DiffUtil.ItemCallback<ResponseStoreListItem>(){
+            override fun areItemsTheSame(oldItem: ResponseStoreListItem, newItem: ResponseStoreListItem): Boolean {
                 //아이템  id 가 같은지 확인
-                return oldItem.id == newItem.id
+                return oldItem.storeId == newItem.storeId
             }
 
-            override fun areContentsTheSame(oldItem: Store, newItem: Store): Boolean {
+            override fun areContentsTheSame(oldItem: ResponseStoreListItem, newItem: ResponseStoreListItem): Boolean {
                 //아이템 내용이 같은 지 확인
                 return oldItem == newItem
             }
@@ -34,12 +35,12 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
     }
 
     inner class ViewHolder(private val binding : CardWxampleBinding) : RecyclerView.ViewHolder(binding.root){
-        var data : Store? = null
-        fun bind(store: Store){
+        var data : ResponseStoreListItem? = null
+        fun bind(store: ResponseStoreListItem){
             data = store
             binding.ivItemStoreImg.setImageResource(R.drawable.sample_store_img)
             binding.tvItemStoreTitle.text = store.storeName
-            binding.tvItemStoreLocation.text = store.location
+            binding.tvItemStoreLocation.text = store.address
         }
         val cbEdit = binding.cbItemStoreEdit
         val tvCountCategory = binding.tvItemStoreCount
@@ -60,7 +61,7 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
 
         if(flag == "show"){
             holder.cbEdit.visibility = View.GONE
-            holder.tvCountCategory.text = "${holder.data?.visitCount}번 방문했어요"
+            holder.tvCountCategory.text = "${holder.data?.reviewCnt}번 방문했어요"
 
             holder.cvStore.setOnClickListener {
                 Navigation.findNavController(parentView).navigate(R.id.action_mapListViewFragment_to_storeDetailFragment)
@@ -70,10 +71,10 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
 
             holder.cbEdit.visibility = View.VISIBLE
             holder.cbEdit.isChecked = false
-            holder.tvCountCategory.text = "${holder.data!!.visitCount}번 방문했어요"
+            holder.tvCountCategory.text = "${holder.data!!.reviewCnt}번 방문했어요"
         }
         else if(flag == "route"){
-            holder.tvCountCategory.text = "${holder.data!!.serverCategory}"
+            holder.tvCountCategory.text = "${holder.data!!.reviewCnt}"
 
             holder.cvStore.setOnClickListener {
                 //루트 페이지로 이동
@@ -91,7 +92,7 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
     }
 
     interface OnItemClickListener {
-        fun onClick(v: View, dataSet: Store)
+        fun onClick(v: View, dataSet: ResponseStoreListItem)
     }
     // (3) 외부에서 클릭 시 이벤트 설정
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {

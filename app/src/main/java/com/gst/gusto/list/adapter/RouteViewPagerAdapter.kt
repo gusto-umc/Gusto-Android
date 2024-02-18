@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
@@ -18,7 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerItem>,val activity: MainActivity) : RecyclerView.Adapter<RouteViewPagerAdapter.ReviewDetailViewHolder>() {
+class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerItem>,val activity: MainActivity,val option : Int) : RecyclerView.Adapter<RouteViewPagerAdapter.ReviewDetailViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewDetailViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_map_route_vp, parent, false)
@@ -30,6 +31,7 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
         holder.tv_route_order.text = "${position+1}"
         holder.tv_rest_name.text = item.storeName
         holder.tv_rest_loc.text = item.address
+        if(option == 1) holder.cv_parent.visibility = View.GONE // 0(루트), 1(일반 지도)
 
         activity.gustoViewModel.getStoreDetailQuick(item.storeId) { result,data ->
             when (result) {
@@ -67,6 +69,7 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
         val iv_1: ImageView = itemView.findViewById(R.id.iv_1)
         val iv_2: ImageView = itemView.findViewById(R.id.iv_2)
         val iv_3: ImageView = itemView.findViewById(R.id.iv_3)
+        val cv_parent: CardView = itemView.findViewById(R.id.cv_parent)
 
     }
 }

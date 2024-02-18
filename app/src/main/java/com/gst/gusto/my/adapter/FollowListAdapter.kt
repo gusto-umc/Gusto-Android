@@ -5,13 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.clock.Fragment.MyFollowListFragment
 import com.gst.gusto.R
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.Member
 
 
-class FollowListAdapter(val itemList: List<Member>):
+class FollowListAdapter(val itemList: List<Member>, val fragment : MyFollowListFragment):
     RecyclerView.Adapter<FollowListAdapter.FollowListViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowListViewHolder {
@@ -23,6 +26,10 @@ class FollowListAdapter(val itemList: List<Member>):
         val currentItem = itemList[position]
         holder.tv_name.text = currentItem.nickname
         setImage(holder.iv_img,itemList[position].profileImg,holder.itemView.context)
+        holder.itemView.setOnClickListener {
+            fragment.gustoViewModel.currentFeedNickname = itemList[position].nickname
+            fragment.findNavController().navigate(R.id.action_followList_to_otherFragment)
+        }
     }
 
     override fun getItemCount(): Int {

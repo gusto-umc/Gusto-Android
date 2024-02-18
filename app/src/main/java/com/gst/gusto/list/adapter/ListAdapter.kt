@@ -68,8 +68,8 @@ class LisAdapter(
             holder.tv_people.text = "${itemList[position].numMembers}명"
             holder.tv_food.text = "맛집 : ${itemList[position].numRestaurants}개"
             holder.tv_route.text = "루트 : ${itemList[position].numRoutes}개"
+            holder.btn_remove.visibility = View.GONE
         }
-        if(option==0 || option==3) holder.btn_remove.visibility = View.GONE
 
         holder.item.setOnTouchListener { view, event ->
             when (event.action) {
@@ -118,6 +118,7 @@ class LisAdapter(
                     nc?.navigate(R.id.action_listFragment_to_groupFragment)
                 }
             } else if(option == 1){
+                // 루트 리스트 들어가기
                 gustoViewModel.getGroupRouteDetail(itemList[position].groupId) { result ->
                     when (result) {
                         1 -> {
@@ -133,6 +134,7 @@ class LisAdapter(
                     }
                 }
             } else if(option == 2){
+                // 그룹에서 루트 리스트 들어가기
                 gustoViewModel.getGroupRouteDetail(itemList[position].groupId) { result ->
                     when (result) {
                         1 -> {
@@ -146,14 +148,29 @@ class LisAdapter(
                 }
 
             } else if(option == 3){
-                CoroutineScope(Dispatchers.Main).launch {
-                    delay(50)
-                    Navigation.findNavController(holder.itemView).navigate(R.id.action_myRouteRoutesFragment_to_myRouteStoresFragment)
+                // 마이에서 루트 리스트 들어가기
+                gustoViewModel.getGroupRouteDetail(itemList[position].groupId) { result ->
+                    when (result) {
+                        1 -> {
+                            gustoViewModel.currentRouteId = itemList[position].groupId
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(50)
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    delay(50)
+                                    Navigation.findNavController(holder.itemView).navigate(R.id.action_myRouteRoutesFragment_to_myRouteStoresFragment)
+                                }
+                            }
+                        }
+                        else -> {
+                            Toast.makeText(holder.itemView.context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                        }
+                    }
                 }
+
             }
         }
         holder.btn_remove.setOnClickListener {
-            util.setPopupTwo(holder.itemView.context,"구스또레스토랑을\n그룹 맛집에서 삭제핫시겠습니까?","",1) { yesOrNo ->
+            util.setPopupTwo(holder.itemView.context,"구스또레스토랑을\n그룹 맛집에서 삭제하시겠습니까?","",1) { yesOrNo ->
                 when (yesOrNo) {
                     0 -> {
                         if(option==1) {

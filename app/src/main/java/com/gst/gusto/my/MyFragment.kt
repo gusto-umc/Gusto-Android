@@ -41,10 +41,8 @@ class MyFragment : Fragment() {
         binding = FragmentMyBinding.inflate(inflater, container, false)
         initViewPager()
 
-        val meMode = arguments?.getBoolean("me", true) ?: true
-        val nickname = arguments?.getString("nickname", "my") ?: "my"
 
-        gustoViewModel.getUserProfile(nickname) { result, data ->
+        gustoViewModel.getUserProfile("my") { result, data ->
             when(result) {
                 1 -> {
                     if(data!=null) {
@@ -56,25 +54,9 @@ class MyFragment : Fragment() {
                         binding.tvFollowerNum.text = "${data.follower}"
                         //setImage(binding.ivProfileImage)
                         followed = data.followed
-                        if(!meMode) {
-                            if(data.followed) {
-                                binding.btnProfileEdit.backgroundTintList = colorStateOffList
-                                binding.btnProfileEdit.text = "팔로잉"
-                                binding.btnProfileEdit.setTextColor(Color.parseColor("#717171"))
-                            } else {
-                                binding.btnProfileEdit.backgroundTintList = colorStateOnList
-                                binding.btnProfileEdit.text = "팔로우"
-                                binding.btnProfileEdit.setTextColor(Color.parseColor("#FFFFFF"))
-                            }
-                        }
                     }
                 }
             }
-        }
-
-        if(!meMode) {
-            binding.btnProfileEdit.text = "팔로잉"
-            binding.btnOption.visibility =View.GONE
         }
 
         binding.apply{
@@ -84,68 +66,38 @@ class MyFragment : Fragment() {
                 startActivity(intent)
             }
             btnProfileEdit.setOnClickListener {
-                if(meMode) {
-                    val intent = Intent(requireContext(), MyProfileEditActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    if(followed) {
-                        gustoViewModel.unFollow(nickname) { result ->
-                            when(result) {
-                                1 -> {
-                                    followed = false
-                                    btnProfileEdit.backgroundTintList = colorStateOnList
-                                    btnProfileEdit.text = "팔로우"
-                                    tvFollowingNum.text ="${tvFollowingNum.text.toString().toInt()-1}"
-                                    binding.btnProfileEdit.setTextColor(Color.parseColor("#FFFFFF"))
-                                }
-                            }
+                val intent = Intent(requireContext(), MyProfileEditActivity::class.java)
+                startActivity(intent)
+            }
+            btnFollowerList.setOnClickListener {
+                gustoViewModel.getFollower {result ->
+                    when(result) {
+                        1 -> {
+                            gustoViewModel.followListTitleName= "팔로워"
+                            findNavController().navigate(R.id.action_myFragment_to_followList)
                         }
-                    } else {
-                        gustoViewModel.follow(nickname) { result ->
-                            when(result) {
-                                1 -> {
-                                    followed = true
-                                    btnProfileEdit.backgroundTintList = colorStateOffList
-                                    btnProfileEdit.text = "팔로잉"
-                                    tvFollowingNum.text ="${tvFollowingNum.text.toString().toInt()+1}"
-                                    binding.btnProfileEdit.setTextColor(Color.parseColor("#717171"))
-                                }
-                            }
-                        }
-
+                        else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-            if(meMode) {
-                btnFollowerList.setOnClickListener {
-                    gustoViewModel.getFollower {result ->
-                        when(result) {
-                            1 -> {
-                                findNavController().navigate(R.id.action_myFragment_to_followList)
-                            }
-                            else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+            btnFollowingList.setOnClickListener {
+                gustoViewModel.getFollowing {result ->
+                    when(result) {
+                        1 -> {
+                            gustoViewModel.followListTitleName= "팔로잉 중"
+                            findNavController().navigate(R.id.action_myFragment_to_followList)
                         }
-                    }
-                }
-                btnFollowingList.setOnClickListener {
-                    gustoViewModel.getFollowing {result ->
-                        when(result) {
-                            1 -> {
-                                findNavController().navigate(R.id.action_myFragment_to_followList)
-                            }
-                            else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                        }
+                        else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-
             //임시 로그인
             btnLogin.setOnClickListener {
                 val intent = Intent(requireContext(), StartActivity::class.java)
                 startActivity(intent)
             }
             btnBack.setOnClickListener {
-                findNavController().popBackStack()
+                //findNavController().popBackStack()
             }
         }
         return binding.root

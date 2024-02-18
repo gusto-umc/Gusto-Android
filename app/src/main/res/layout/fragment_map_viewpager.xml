@@ -79,7 +79,7 @@
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_slider"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_marginBottom="26dp"
                 android:layout_width="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
