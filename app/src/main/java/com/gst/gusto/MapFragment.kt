@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -178,6 +179,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         /**
          * 저장된 맛집 조회 - mindy
          * 현재 카테고리 선택이 구현 보류로 categoryId에 null 넣고 추후 보완 예정
+         * live data observe
          */
         //리스트 별로 저장
         // 방문X 리스트 저장 변수 : gustoViewModel.mapUnvisitedList
@@ -185,15 +187,19 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         // 방문 O 리스트 저장 변수 : gustoViewModel.mapVisitedList
         // 방문o 개수 : gustoViewModel.mapVisitedCnt
         //닉네임 변수 : gustoViewModel.userNickname
-        gustoViewModel.getSavedStores("성수1가1동", null){
-            result ->
-            when(result){
-                0 -> {}
-                1 -> {
-                    Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+
+        gustoViewModel.dong.observe(viewLifecycleOwner, Observer {
+            gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
+                    result ->
+                when(result){
+                    0 -> {}
+                    1 -> {
+                        Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-        }
+        })
+
         val viewPager = binding.vpSlider
 
         // 이미지 슬라이드
@@ -338,15 +344,13 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             gustoViewModel.getRegionInfo(p1.mapPointGeoCoord.longitude, p1.mapPointGeoCoord.latitude)  {result, address ->
                 when(result) {
                     1 -> {
-                        Log.d("viewmodel",gustoViewModel.dong)
-                        binding.fragmentArea.userLoc.text = address
                         gustoViewModel.getCurrentMapStores {result, datas ->
                             when(result) {
                                 1 -> {
                                     markerList.clear()
                                     if(datas!=null) {
                                         for((index,data) in datas.withIndex()) {
-                                            markerList.add(MarkerItem(data.storeId, index+1,0, data.latitude!!, data.longitude!!, data.storeName!!, "", true))
+                                            markerList.add(MarkerItem(data.storeId, index+1,0, data.latitude!!, data.longitude!!, data.storeName!!, "", false))
                                         }
                                     }
                                     Log.d("viewmodel","${markerList}")

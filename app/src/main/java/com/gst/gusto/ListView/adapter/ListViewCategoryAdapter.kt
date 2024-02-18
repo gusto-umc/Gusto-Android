@@ -124,7 +124,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                         }
                     }
                     else{
-                        viewModel!!.getMapStores(holder.data!!.myCategoryId, townName = viewModel!!.dong){
+                        viewModel!!.getMapStores(holder.data!!.myCategoryId, townName = viewModel!!.dong.value!!){
                                 result ->
                             when(result){
                                 0 -> {

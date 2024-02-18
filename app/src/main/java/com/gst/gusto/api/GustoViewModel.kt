@@ -91,7 +91,15 @@ class GustoViewModel: ViewModel() {
     var selectStoreId =  2L
 
     // 현재 동
-    var dong = ""
+    private var _dong = MutableLiveData<String?>()
+    val dong : LiveData<String?>
+        get() = _dong
+
+    fun changeDong(new : String){
+        _dong.value = new
+    }
+
+    //var dong = ""
 
     // 현재 프로필 닉네임
     var profileNickname = ""
@@ -116,8 +124,8 @@ class GustoViewModel: ViewModel() {
     // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
     fun getCurrentMapStores(callback: (Int,List<RouteList>?) -> Unit){
         Log.e("token",xAuthToken)
-        Log.d("viewmodel","view : ${dong}")
-        service.getCurrentMapStores(xAuthToken,dong,null).enqueue(object : Callback<List<RouteList>> {
+        Log.d("viewmodel","view : ${_dong.value}")
+        service.getCurrentMapStores(xAuthToken,_dong.value!!,null).enqueue(object : Callback<List<RouteList>> {
             override fun onResponse(call: Call<List<RouteList>>, response: Response<List<RouteList>>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
@@ -1297,7 +1305,7 @@ class GustoViewModel: ViewModel() {
     var savedStoreIdList = ArrayList<Long>()
     var unsavedStoreIdList = ArrayList<Long>()
     fun getSavedStores(townName: String, categoryId : Int?, callback: (Int) -> Unit){
-        service.getSavedStores(xAuthToken, townName = dong, categoryId = null).enqueue(object : Callback<List<ResponseSavedStore>>{
+        service.getSavedStores(xAuthToken, townName = _dong.value!!, categoryId = null).enqueue(object : Callback<List<ResponseSavedStore>>{
             override fun onResponse(
                 call: Call<List<ResponseSavedStore>>,
                 response: Response<List<ResponseSavedStore>>
@@ -1483,10 +1491,10 @@ class GustoViewModel: ViewModel() {
                         val responseBody = response.body()
                         if (responseBody != null) {
                             Log.d("viewmodel", "Successful response: ${response}")
-                            if(responseBody.documents.get(1).region3DepthName == dong) {
+                            if(responseBody.documents.get(1).region3DepthName == _dong.value) {
                                 callback(2,responseBody.documents.get(1).addressName)
                             } else {
-                                dong = responseBody.documents.get(1).region3DepthName
+                                _dong.value = responseBody.documents.get(1).region3DepthName
                                 callback(1,responseBody.documents.get(1).addressName)
                             }
 
