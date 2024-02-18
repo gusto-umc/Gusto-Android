@@ -242,7 +242,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/first_visited"
+            android:id="@+id/prev_visited"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20px"

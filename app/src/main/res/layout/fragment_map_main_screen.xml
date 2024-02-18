@@ -8,30 +8,49 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/search"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginTop="27dp"
-            android:layout_marginBottom="17dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"
-            android:orientation="vertical">
-            <EditText
-                android:id="@+id/search"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:paddingLeft="8dp"
-                android:textColor="@color/gray_3"
-                android:textSize="14sp"
-                android:fontFamily="@font/pretendard_medium"
-                android:inputType="text"
-                android:background="@drawable/edit_text_border"
-                android:hint="맛집 검색"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:paddingRight="8dp"/>
+            android:layout_marginHorizontal="16dp"
+            android:background="@drawable/background_radius_5_stroke_1"
+            android:backgroundTint="@color/main_C"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
 
-        </LinearLayout>
+            <EditText
+                android:id="@+id/edt_map_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:hint="맛집 검색"
+                android:fontFamily="@font/pretendard_regular"
+                android:background="@null"
+                android:textSize="12sp"
+                android:singleLine="true"
+                android:layout_marginStart="15dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_map_searchbox"
+                android:enabled="false"
+                />
+
+            <ImageView
+                android:id="@+id/iv_map_searchbox"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/search_img"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

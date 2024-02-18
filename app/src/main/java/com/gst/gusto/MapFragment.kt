@@ -155,16 +155,27 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         binding.listViewBtn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
         }
-        /*
+
         //방문 o 클릭 리스너 -> 보완 예정
-        binding.fragmentArea.vis1.setOnClickListener {
+        binding.fragmentArea.firstVisit.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
         }
         //방문 x 클릭 리스너 -> 보완 예정
-        binding.fragmentArea.vis01.setOnClickListener {
+        binding.fragmentArea.prevVisited.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
         }
-         */
+
+        //검색화면 클릭 리스너
+        binding.fragmentMapMainScreen.search.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_searchFragment)
+        }
+        binding.fragmentMapMainScreen.ivMapSearchbox.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_searchFragment)
+        }
+        binding.fragmentMapMainScreen.edtMapSearch.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_searchFragment)
+        }
+
     }
     private fun showMainScreenFragment() {
         // fragment_map_main_screen.xml을 보이게 하는 작업
