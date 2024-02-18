@@ -83,7 +83,6 @@ class FeedFragment : Fragment() {
 
 
     fun getData() {
-        gustoViewModel.getTokens(requireActivity() as MainActivity)
         gustoViewModel.feed() { result, response ->
             if (result == 1) {
                 val feedList = ArrayList<ResponseFeedReview>()

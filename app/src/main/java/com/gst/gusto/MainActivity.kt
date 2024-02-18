@@ -68,18 +68,17 @@ class MainActivity : AppCompatActivity() {
                 }
                 val HASH_CODE = String(Base64.encode(md.digest(), 0))
 
-                val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                /*val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
                 val clipData = ClipData.newPlainText("viewmodel_data", " $HASH_CODE")
 
-                clipboardManager.setPrimaryClip(clipData)
+                clipboardManager.setPrimaryClip(clipData)*/
                 Log.d(TAG, "HASH_CODE -> $HASH_CODE")
             }
-
-
         } catch (e: Exception) {
             Log.d(TAG, "Exception -> $e")
         }
+        gustoViewModel.getTokens(this)
     }
 
     fun getCon(): NavController {

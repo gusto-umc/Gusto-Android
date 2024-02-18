@@ -148,8 +148,8 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         val compositePageTransformer = CompositePageTransformer()
         compositePageTransformer.addTransformer(
             MarginPageTransformer(
-            util.dpToPixels(4f, resources.displayMetrics).toInt()
-        )
+                util.dpToPixels(4f, resources.displayMetrics).toInt()
+            )
         )
         compositePageTransformer.addTransformer(object : ViewPager2.PageTransformer {
             override fun transformPage(page: View, position: Float) {

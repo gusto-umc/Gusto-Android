@@ -31,7 +31,7 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
         holder.tv_route_order.text = "${position+1}"
         holder.tv_rest_name.text = item.storeName
         holder.tv_rest_loc.text = item.address
-        if(option == 1) holder.cv_parent.visibility = View.GONE // 0(루트), 1(일반 지도)
+        if(option == 1||option == 2) holder.cv_parent.visibility = View.GONE // 0(루트), 1(검색 지도), 2(메인 지도)
 
         activity.gustoViewModel.getStoreDetailQuick(item.storeId) { result,data ->
             when (result) {
@@ -51,7 +51,9 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
             }
         }
         holder.btn_detail.setOnClickListener {
-            activity.getCon().navigate(R.id.action_groupMRoutMapFragment_to_storeDetailFragment)
+            if(option==0) activity.getCon().navigate(R.id.action_groupMRoutMapFragment_to_storeDetailFragment)
+            else if(option==1) activity.getCon().navigate(R.id.action_groupMRoutMapFragment_to_storeDetailFragment)
+            else if(option==2) activity.getCon().navigate(R.id.action_groupMRoutMapFragment_to_storeDetailFragment)
         }
         //holder.btn_bookmark
     }

@@ -1,11 +1,13 @@
 package com.gst.gusto.start
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
 import com.gst.gusto.databinding.StartFragmentCompleteBinding
@@ -24,7 +26,8 @@ class CompleteFragment : Fragment() {
         binding = StartFragmentCompleteBinding.inflate(inflater, container, false)
 
         binding.btnNext.setOnClickListener {
-            //findNavController().navigate(R.id.action_ageFragment_to_genderFragment)
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
             requireActivity().finish()
         }
 

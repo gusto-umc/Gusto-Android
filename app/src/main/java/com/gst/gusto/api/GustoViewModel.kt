@@ -1242,7 +1242,7 @@ class GustoViewModel: ViewModel() {
         private const val BASE_URL = "https://dapi.kakao.com/"
         private const val REST_API_KEY = "70da0c4f2b9dfd637641a4dd22039969"
     }
-    fun getRegionInfo(x: Double,y : Double, callback: (Int) -> Unit) {
+    fun getRegionInfo(x: Double,y : Double, callback: (Int,String) -> Unit) {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -1259,21 +1259,21 @@ class GustoViewModel: ViewModel() {
                         if (responseBody != null) {
                             Log.d("viewmodel", "Successful response: ${response}")
                             dong = responseBody.documents.get(1).region3DepthName
-                            callback(1)
+                            callback(1,responseBody.documents.get(1).addressName)
                         } else {
                             Log.e("viewmodel", "Unsuccessful response: ${response}")
-                            callback(3)
+                            callback(3,"알 수 없음")
                         }
 
                     } else {
                         Log.e("viewmodel", "Unsuccessful response: ${response}")
-                        callback(3)
+                        callback(3,"알 수 없음")
                     }
                 }
 
                 override fun onFailure(call: Call<RegionInfoResponse>, t: Throwable) {
                     Log.e("viewmodel", "Failed to make the request", t)
-                    callback(3)
+                    callback(3,"알 수 없음")
                 }
             })
     }

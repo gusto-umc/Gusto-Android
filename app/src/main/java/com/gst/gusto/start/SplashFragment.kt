@@ -30,7 +30,7 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            delay(2000) // 2000 밀리초(2초) 동안 지연
+            delay(0) // 2000 밀리초(2초) 동안 지연
             // 여기에 지연 후 수행할 코드 작성
             findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
         }

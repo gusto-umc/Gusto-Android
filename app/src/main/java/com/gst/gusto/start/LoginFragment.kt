@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.BuildConfig
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.databinding.StartFragmentLoginBinding
 import kotlinx.coroutines.Dispatchers
@@ -77,6 +78,8 @@ class LoginFragment : Fragment() {
                             }
                             0 -> {
                                 // 0은 회원가입 한 상태라 로그인
+                                val intent = Intent(requireContext(), MainActivity::class.java)
+                                startActivity(intent)
                                 requireActivity().finish()
                             }
                         }
