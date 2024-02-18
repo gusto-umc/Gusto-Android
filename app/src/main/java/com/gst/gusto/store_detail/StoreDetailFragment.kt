@@ -244,6 +244,12 @@ class StoreDetailFragment : Fragment() {
         /**
          * map icon 클릭리스너
          */
+        binding.ivStoreDetailMap.setOnClickListener {
+            gustoViewModel.selectStoreId = gustoViewModel.selectedDetailStoreId.toLong()
+            gustoViewModel.storeIdList.clear()
+            gustoViewModel.storeIdList.add(gustoViewModel.selectStoreId)
+            Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_fragment_map_viewpager)
+        }
 
 
     }

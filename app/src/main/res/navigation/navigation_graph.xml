@@ -388,6 +388,9 @@
         <action
             android:id="@+id/action_storeDetailFragment_to_fragment_review_detail"
             app:destination="@id/fragment_review_detail" />
+        <action
+            android:id="@+id/action_storeDetailFragment_to_fragment_map_viewpager"
+            app:destination="@id/fragment_map_viewpager" />
 
     </fragment>
     <fragment

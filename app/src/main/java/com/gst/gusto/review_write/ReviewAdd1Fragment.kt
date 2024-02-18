@@ -51,6 +51,9 @@ class ReviewAdd1Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //storeId : gustoViewModel.selectedDetailStoreId 사용하면 됨
+
         activity.hideBottomNavigation(true)
         binding.lyRest.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {

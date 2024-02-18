@@ -52,6 +52,7 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
             }
         }
         holder.btn_detail.setOnClickListener {
+            activity.gustoViewModel.selectedDetailStoreId = item.storeId.toInt()
             if(option==0) activity.getCon().navigate(R.id.action_groupMRoutMapFragment_to_storeDetailFragment)
             else if(option==1) activity.getCon().navigate(R.id.action_fragment_map_viewpager_to_storeDetailFragment)
             else if(option==2) activity.getCon().navigate(R.id.action_fragment_map_to_storeDetailFragment)
