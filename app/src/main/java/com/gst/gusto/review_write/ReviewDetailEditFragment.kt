@@ -1,5 +1,6 @@
 package com.gst.clock.Fragment
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -74,6 +75,8 @@ class ReviewDetailEditFragment : Fragment() {
         // 이미지 슬라이드
         val viewPager = binding.vpImgSlider
         val imageList = mutableListOf<String>()
+        imageList.clear()
+        gustoViewModel.reviewEditImg.clear()
         //이미지 처리
         if(!gustoViewModel.myReview!!.img.isNullOrEmpty()){
             for(i in gustoViewModel.myReview!!.img!!){
@@ -105,12 +108,20 @@ class ReviewDetailEditFragment : Fragment() {
         viewPager.setPageTransformer(compositePageTransformer)
 
 
+
         //사진 변경
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(4)) { uri ->
             // Callback is invoked after th user selects a media item or closes the photo picker.
             if (uri != null) {
                 for (j in 0 .. uri.size-1) {
                     adapter.setImageView(j,uri[j].toString(),requireContext())
+                    gustoViewModel.reviewEditImg.clear()
+                    gustoViewModel.reviewEditImg.add(
+                        util.convertContentToFile(
+                            requireContext(),
+                            uri[j]
+                        )
+                    )
                 }
 
             } else {

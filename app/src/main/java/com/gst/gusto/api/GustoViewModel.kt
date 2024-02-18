@@ -1188,6 +1188,7 @@ class GustoViewModel: ViewModel() {
 
     var myReview : ResponseMyReview? = null
     var myReviewId : Long? = null
+    var reviewEditImg = ArrayList<File>()
     //리뷰 1건 조회 -> 확인 완
     fun getReview(reviewId : Long, callback: (Int) -> Unit){
         service.getReview(xAuthToken, reviewId.toInt()).enqueue(object : Callback<ResponseMyReview>{
@@ -1217,8 +1218,16 @@ class GustoViewModel: ViewModel() {
     //리뷰 수정 -> 확인 완
     fun editReview(reviewId : Long, img : String?, menuName : String?, taste : Int, spiceness : Int, mood : Int, toilet : Int, parking : Int, comment : String?, callback: (Int) -> Unit){
         var requestBody = RequestMyReview(menuName = menuName, taste = taste, spiciness = spiceness, mood = mood, toilet = toilet, parking = parking, comment = comment)
+        val filesToUpload: MutableList<MultipartBody.Part> = mutableListOf()
+
+        // 이미지 파일들을 반복하면서 MultipartBody.Part 리스트에 추가
+        reviewEditImg?.forEach { imgFile ->
+            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), imgFile)
+            val filePart = MultipartBody.Part.createFormData("image", imgFile.name, requestFile)
+            filesToUpload.add(filePart)
+        }
         Log.d("edit checking", requestBody.toString())
-        service.editReview(xAuthToken, reviewId, null, requestBody).enqueue(object : Callback<Void>{
+        service.editReview(xAuthToken, reviewId, filesToUpload, requestBody).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
