@@ -46,24 +46,6 @@ class MapListViewSaveFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /**
-         * 데이터 연결
-         */
-        val sampleCategoryId : Int = 3
-        gustoViewModel.getSavedStores("성수1가1동", 3){
-            result ->
-            when(result){
-                0 -> {
-                    //success
-                    Toast.makeText(context, "saved 성공", Toast.LENGTH_SHORT).show()
-                }
-                1 -> {
-                    //fail
-                    Toast.makeText(context, "saved 실패", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
         //방문 O Rv 연결
         val mSaveOAdapter = SavedStoreListAdapter("save", view)
         mSaveOAdapter.mContext = context
