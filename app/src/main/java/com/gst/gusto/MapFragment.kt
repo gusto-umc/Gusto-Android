@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
@@ -81,13 +80,14 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                         // BottomSheet가 숨겨진 경우 fragment_map_main_screen.xml을 보여줌
                         showMainScreenFragment()
                     }
+                    /*
                     BottomSheetBehavior.STATE_EXPANDED -> {
                         // BottomSheet가 펼쳐진 경우 AreaFragment로 이동
                         requireActivity().supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_map, AreaFragment())
+                            .replace(R.layout.fragment_map, AreaFragment())
                             .addToBackStack(null) //뒤로가기
                             .commit()
-                    }
+                    }*/
                     else -> {
                         // 다른 상태에서는 fragment_map_main_screen.xml을 숨김
                         hideMainScreenFragment()
@@ -272,9 +272,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     }
     private fun showMainScreenFragment() {
-        // fragment_map_main_screen.xml을 보이게 하는 작업
-
-        binding.listViewBtn.visibility
+        // BottomNavigationView를 보이게 하는 작업
+        // binding.bottomNavigationView.visibility = View.VISIBLE
 
         val mainScreenFragment = MapMainScreenFragment()
         childFragmentManager.beginTransaction()
@@ -283,15 +282,15 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     }
 
     private fun hideMainScreenFragment() {
-        // fragment_map_main_screen.xml을 숨기는 작업
-
-        binding.listViewBtn.isGone
+        // BottomNavigationView를 숨기는 작업
+        // binding.bottomNavigationView.visibility = View.GONE
 
         val mainScreenFragment =
             childFragmentManager.findFragmentById(R.id.fragment_map) as? MapMainScreenFragment
         mainScreenFragment?.let {
             childFragmentManager.beginTransaction().remove(it).commit()
         }
+
     }
 
     override fun onResume() {
