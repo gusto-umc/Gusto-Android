@@ -52,7 +52,7 @@ class MapListViewSaveFragment : Fragment() {
         mSaveOAdapter.submitList(gustoViewModel.mapVisitedList)
         mSaveOAdapter.setItemClickListener(object : SavedStoreListAdapter.OnItemClickListener{
             override fun onClick(v: View, dataSet: ResponseSavedStoreData) {
-                Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_storeDetailFragment)
+                Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_fragment_map_viewpager)
             }
 
         })
@@ -66,7 +66,7 @@ class MapListViewSaveFragment : Fragment() {
         mSaveXAdapter.setItemClickListener(object : SavedStoreListAdapter.OnItemClickListener{
             override fun onClick(v: View, dataSet: ResponseSavedStoreData) {
                 gustoViewModel.selectedDetailStoreId = dataSet.storeId
-                Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_storeDetailFragment)
+                Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_fragment_map_viewpager)
             }
 
         })
