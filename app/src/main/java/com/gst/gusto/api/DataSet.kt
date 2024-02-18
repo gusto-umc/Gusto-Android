@@ -176,6 +176,7 @@ data class ResponseStoreDetail(
     @SerializedName("address") val address : String,
     @SerializedName("opening") val opening : Int,
     @SerializedName("pin") var pin : Boolean,
+    @SerializedName("pinId") var pinId : Int,
     @SerializedName("reviewImg4") val reviewImg4: ArrayList<String>,
     @SerializedName("reviews") val reviews : MutableList<ResponseReviews>
 )
