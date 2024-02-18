@@ -35,7 +35,6 @@ class OtherFragment : Fragment() {
     ): View? {
         binding = FragmentMyBinding.inflate(inflater, container, false)
 
-
         val nickname = gustoViewModel.currentFeedNickname
 
         gustoViewModel.getUserProfile(nickname) { result, data ->
