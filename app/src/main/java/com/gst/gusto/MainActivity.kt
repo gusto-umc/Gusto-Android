@@ -75,11 +75,10 @@ class MainActivity : AppCompatActivity() {
                 clipboardManager.setPrimaryClip(clipData)*/
                 Log.d(TAG, "HASH_CODE -> $HASH_CODE")
             }
-
-
         } catch (e: Exception) {
             Log.d(TAG, "Exception -> $e")
         }
+        gustoViewModel.getTokens(this)
     }
 
     fun getCon(): NavController {

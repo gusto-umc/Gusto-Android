@@ -43,7 +43,6 @@ class MapListViewSaveFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        gustoViewModel.getTokens(requireActivity() as MainActivity)
 
         /**
          * 데이터 연결
