@@ -339,15 +339,14 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 when(result) {
                     1 -> {
                         Log.d("viewmodel",gustoViewModel.dong)
-//                        if(binding.fragmentArea.userLoc.text =="현재 사용자의 위치")
-//                            binding.fragmentArea.userLoc.text = address
+                        binding.fragmentArea.userLoc.text = address
                         gustoViewModel.getCurrentMapStores {result, datas ->
                             when(result) {
                                 1 -> {
                                     markerList.clear()
                                     if(datas!=null) {
                                         for((index,data) in datas.withIndex()) {
-                                            markerList.add(MarkerItem(data.storeId, index+1,0, data.latitude!!, data.longitude!!, data.storeName!!, "", false))
+                                            markerList.add(MarkerItem(data.storeId, index+1,0, data.latitude!!, data.longitude!!, data.storeName!!, "", true))
                                         }
                                     }
                                     Log.d("viewmodel","${markerList}")

@@ -276,13 +276,13 @@ data class RequestCreateReview(
 @SerializedName("comment") val comment : String?
 )
 
-// insta (gallery) review 조회- reviews
+// insta (gallery) review 조회- reviews & MyReviewFragment와 OtherReviewFragment
 data class ResponseInstaReviews(
     @SerializedName("reviewId") val reviewId: Long,
     @SerializedName("images") val images: String,
 )
 
-// insta (gallery) review 조회
+// insta (gallery) review 조회 & MyReviewFragment와 OtherReviewFragment
 data class ResponseInstaReview(
     @SerializedName("reviews") val reviews: List<ResponseInstaReviews>,
     @SerializedName("hasNext") val hasNext: Boolean
