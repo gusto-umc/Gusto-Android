@@ -15,6 +15,7 @@ import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.ListView.adapter.ListViewCategoryAdapter
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.ResponseSearch
 import com.gst.gusto.databinding.FragmentRouteSearchBinding
 import com.gst.gusto.search.adapter.SearchStoreAdapter
 
@@ -86,21 +87,7 @@ class RouteSearchFragment : Fragment() {
             //서버 연결 -> rv에 데이터 연결
         }
 
-        /**
-         * 검색 결과 store Rv 연결, clickListener
-         */
-        val mSerachStoreAdapter = SearchStoreAdapter()
-        mSerachStoreAdapter.submitList(sampleResultArray)
-        mSerachStoreAdapter.setItemClickListener(object :SearchStoreAdapter.OnItemClickListener{
-            override fun onClick(v: View, dataSet: StoreSearch) {
-            //데이터 넘기기
-            //루t트 페이지로 넘어가기
-                Toast.makeText(context, dataSet.storeName, Toast.LENGTH_SHORT).show()
-            }
 
-        })
-        binding.rvRouteSearchResult.adapter = mSerachStoreAdapter
-        binding.rvRouteSearchResult.layoutManager = LinearLayoutManager(this.requireActivity())
 
     }
 }

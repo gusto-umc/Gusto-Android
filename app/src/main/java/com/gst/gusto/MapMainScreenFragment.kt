@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import com.gst.gusto.databinding.FragmentMapMainScreenBinding
 
 class MapMainScreenFragment : Fragment() {
@@ -24,10 +25,7 @@ class MapMainScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // SearchView 참조
-        val searchView = binding.search
 
-        // SearchView에 리스너 추가
 
 
     }

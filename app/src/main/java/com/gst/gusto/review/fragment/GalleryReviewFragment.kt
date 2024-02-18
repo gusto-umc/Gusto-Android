@@ -43,6 +43,7 @@ class GalleryReviewFragment : Fragment() {
         adapter = GalleryReviewAdapter(ArrayList(), context,
             itemClickListener = { reviewId ->
                 val bundle = Bundle()
+                Log.d("review id check", reviewId.toString())
                 bundle.putLong("reviewId", reviewId)     //리뷰 아이디 넘겨 주면 됨
                 bundle.putString("page","review")
                 findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail,bundle)

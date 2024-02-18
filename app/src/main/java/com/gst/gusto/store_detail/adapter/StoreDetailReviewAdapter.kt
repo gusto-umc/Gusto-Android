@@ -1,5 +1,6 @@
 package com.gst.gusto.store_detail.adapter
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.util.Log
@@ -11,22 +12,25 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.Model.StoreDetailReview
 import com.gst.gusto.R
+import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.api.ResponseReviews
 import com.gst.gusto.databinding.ItemStoreDetailReviewBinding
 import java.time.LocalDate
 
-class StoreDetailReviewAdapter () : ListAdapter<StoreDetailReview, StoreDetailReviewAdapter.ViewHolder>(
+class StoreDetailReviewAdapter () : ListAdapter<ResponseReviews, StoreDetailReviewAdapter.ViewHolder>(
     DiffCallback) {
 
+    var mContext : Context? = null
 
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<StoreDetailReview>(){
-            override fun areItemsTheSame(oldItem: StoreDetailReview, newItem: StoreDetailReview): Boolean {
+        private val DiffCallback = object : DiffUtil.ItemCallback<ResponseReviews>(){
+            override fun areItemsTheSame(oldItem: ResponseReviews, newItem: ResponseReviews): Boolean {
                 //아이템  id 가 같은지 확인
                 return oldItem.reviewId == newItem.reviewId
             }
 
-            override fun areContentsTheSame(oldItem: StoreDetailReview, newItem: StoreDetailReview): Boolean {
+            override fun areContentsTheSame(oldItem: ResponseReviews, newItem: ResponseReviews): Boolean {
                 //아이템 내용이 같은 지 확인
                 return oldItem == newItem
             }
@@ -36,26 +40,45 @@ class StoreDetailReviewAdapter () : ListAdapter<StoreDetailReview, StoreDetailRe
 
 
     inner class ViewHolder(private val binding : ItemStoreDetailReviewBinding) : RecyclerView.ViewHolder(binding.root){
-        var data : StoreDetailReview? = null
-        var photoArray : ArrayList<Int>? = null
+        var data : ResponseReviews? = null
+        var photoArray = ArrayList<String?>()
         var heartFlag = false
 
-        fun bind(review: StoreDetailReview){
+
+        fun bind(review: ResponseReviews){
             data = review
             //유저 사진
-            //binding.ivStoreDetailProfileImg.setImageResource()
+            setImage(binding.ivStoreDetailProfileImg, review.profileImage, mContext!!)
             //유저 이름
             binding.tvStoreDetailUsername.text = review.nickname
             //리뷰 코멘트
-            binding.tvStoreDetailReview.text = review.comment
+            if(review.comment != null){
+                binding.tvStoreDetailReview.text = review.comment
+            }
+            else{
+                binding.tvStoreDetailReview.visibility = View.INVISIBLE
+            }
+
             //하트 개수
             binding.tvStoreDetailHeartCount.text = review.liked.toString()
-            //하트 여부 -> 아직 데이터 없음
+            //하트 여부 -> 아직 데이터 없음, 데모데이 이후 구현
             //heartFlag = review.heart
             //방문일자
-            val reviewDate = LocalDate.parse(review.date)
+            val reviewDate = LocalDate.parse(review.visitedAt)
             binding.tvStoreReviewDate.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
-            //리뷰 사진들 -> 아직 없음.
+            //리뷰 사진들
+            if(review.img1 != null){
+                photoArray.add(review.img1)
+            }
+            if(review.img2 != null){
+                photoArray.add(review.img2)
+            }
+            if(review.img3 != null){
+                photoArray.add(review.img3)
+            }
+            if(review.img4 != null){
+                photoArray.add(review.img4)
+            }
 
         }
         val layoutItem = binding.layoutReviewItemAll
@@ -107,11 +130,12 @@ class StoreDetailReviewAdapter () : ListAdapter<StoreDetailReview, StoreDetailRe
         }
 
         //photoRv 연결하기
-        if(!holder.data?.photoArray.isNullOrEmpty()){
+        if(!holder.photoArray.isNullOrEmpty()){
             Log.d("reviewPhoto", "exist")
             holder.rvReviewPhoto.visibility = View.VISIBLE
             holder.ivSwipe.visibility = View.VISIBLE
-            val mReviewPhotoAdapter = StoreDetailReviewPhotoAdapter(holder.data!!.photoArray!!)
+            val mReviewPhotoAdapter = StoreDetailReviewPhotoAdapter(holder.photoArray!!)
+            mReviewPhotoAdapter.mContext = mContext
             holder.rvReviewPhoto.adapter = mReviewPhotoAdapter
         }
         else{
@@ -122,7 +146,7 @@ class StoreDetailReviewAdapter () : ListAdapter<StoreDetailReview, StoreDetailRe
     }
 
     interface OnItemClickListener {
-        fun onClick(v: View, dataSet: StoreDetailReview)
+        fun onClick(v: View, dataSet: ResponseReviews)
     }
     // (3) 외부에서 클릭 시 이벤트 설정
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {

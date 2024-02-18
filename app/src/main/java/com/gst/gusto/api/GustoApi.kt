@@ -291,7 +291,8 @@ interface GustoApi {
     fun getStoreDetail(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("storeId") storeId : Long,
-        @Query("reviewId") reviewId : Int?,
+        @Query("visitedAt") visitedAt : String?,
+        @Query("reviewId") reviewId : Long?
     ) : Call<ResponseStoreDetail>
 
     //4. 카테고리 별 가게 조회 - 위치기반 -> 확인 완, 보완 필(pinInd)
@@ -336,11 +337,11 @@ interface GustoApi {
     fun editReview(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("reviewId") reviewId : Long,
-        @Part image: MultipartBody.Part?,
+        @Part image: List<MultipartBody.Part>?,
         @Part("info") info: RequestMyReview
     ) : Call<Void>
 
-    //3. 리뷰 삭제 -> 확인 완료
+    //3. 리뷰 삭제
     @DELETE("reviews/{reviewId}")
     fun deleteReview(
         @Header("X-AUTH-TOKEN") token : String,
@@ -352,6 +353,12 @@ interface GustoApi {
      */
 
     //1. 검색 결과
+    @GET("stores/search")
+    fun getSearch(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("keyword") keyword : String
+    ) : Call<ArrayList<ResponseSearch>>
+
     @GET("users/follower") // 팔로워 조회
     fun getFollower(
         @Header("X-AUTH-TOKEN") token : String

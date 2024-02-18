@@ -59,6 +59,7 @@
         app:layout_constraintStart_toEndOf="@id/tv_item_store_search_title"
         />
     <TextView
+        android:visibility="invisible"
         android:id="@+id/tv_item_store_search_save_o"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

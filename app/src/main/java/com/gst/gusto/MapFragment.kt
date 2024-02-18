@@ -134,16 +134,89 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         binding.listViewBtn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
         }
-        /*
-        //방문 o 클릭 리스너 -> 보완 예정
-        binding.fragmentArea.vis1.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
-        }
-        //방문 x 클릭 리스너 -> 보완 예정
-        binding.fragmentArea.vis01.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
-        }
+
+        /**
+         * 방문 o 클릭 리스너 -> 보완 예정
          */
+        binding.fragmentArea.firstVisit.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
+        }
+        /**
+         * 방문 x 클릭 리스너 -> 보완 예정
+         */
+        binding.fragmentArea.prevVisited.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
+        }
+
+        /**
+         * 검색화면 클릭 리스너 - mindy
+         */
+        binding.fragmentMapMainScreen.search.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_searchFragment)
+        }
+        binding.fragmentMapMainScreen.ivMapSearchbox.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_searchFragment)
+        }
+        binding.fragmentMapMainScreen.tvMapSearch.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_searchFragment)
+        }
+
+        /**
+         * 카테고리 전체 조회 - mindy
+         */
+        // 데이터 넣어둔 변수 : gustoViewModel.myMapCategoryList
+        gustoViewModel.getMapCategory("성수1가1동"){
+            result ->
+            when(result){
+                0 -> {
+                    //success
+                }
+                1 -> {
+                    //fail
+                    Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        /**
+         * 저장된 맛집 조회 - mindy
+         * 현재 카테고리 선택이 구현 보류로 categoryId에 null 넣고 추후 보완 예정
+         */
+        //리스트 별로 저장
+        // 방문X 리스트 저장 변수 : gustoViewModel.mapUnvisitedList
+        // 방문X 개수 : gustoViewModel.mapUnvisitedCnt
+        // 방문 O 리스트 저장 변수 : gustoViewModel.mapVisitedList
+        // 방문o 개수 : gustoViewModel.mapVisitedCnt
+        //닉네임 변수 : gustoViewModel.userNickname
+        gustoViewModel.getSavedStores("성수1가1동", null){
+            result ->
+            when(result){
+                0 -> {}
+                1 -> {
+                    Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+    }
+    private fun showMainScreenFragment() {
+        // fragment_map_main_screen.xml을 보이게 하는 작업
+        val mainScreenFragment = MapMainScreenFragment()
+        childFragmentManager.beginTransaction()
+            .replace(R.id.fragment_map, mainScreenFragment)
+            .commit()
+    }
+
+    private fun hideMainScreenFragment() {
+        // fragment_map_main_screen.xml을 숨기는 작업
+        val mainScreenFragment =
+            childFragmentManager.findFragmentById(R.id.fragment_map) as? MapMainScreenFragment
+        mainScreenFragment?.let {
+            childFragmentManager.beginTransaction().remove(it).commit()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
         val viewPager = binding.vpSlider
 
         // 이미지 슬라이드
