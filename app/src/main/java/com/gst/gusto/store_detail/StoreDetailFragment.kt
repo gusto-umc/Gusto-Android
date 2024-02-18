@@ -113,6 +113,7 @@ class StoreDetailFragment : Fragment() {
                         }
                         else{
                             //타 유저 리뷰인 경우
+                            gustoViewModel.currentFeedReviewId = dataSet.reviewId.toLong()
                             Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_fragment_feed_review_detail,bundle)
                         }
 
