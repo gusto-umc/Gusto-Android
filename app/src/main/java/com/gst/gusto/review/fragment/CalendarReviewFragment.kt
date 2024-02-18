@@ -70,23 +70,6 @@ class CalendarReviewFragment : Fragment() {
         }
     }
 
-    /*fun getData(): ResponseCalReview? {
-
-        var responseList : ResponseCalReview? = null
-        val dates = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
-
-        gustoViewModel.calView(null, 100, dates) { result, response ->
-            if (result == 1) {
-                response?.let{
-                    responseList = response
-                }
-            }
-            Log.d("calResponse", responseList.toString())
-        }
-
-        return responseList
-    }*/
-
     fun getData(): LiveData<ResponseCalReview?> {
         val liveData = MutableLiveData<ResponseCalReview?>()
         val dates = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
