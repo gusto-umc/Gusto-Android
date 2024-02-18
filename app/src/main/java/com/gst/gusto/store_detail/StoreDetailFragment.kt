@@ -178,7 +178,7 @@ class StoreDetailFragment : Fragment() {
          */
         binding.ivStoreDetailSave.setOnClickListener {
             if(gustoViewModel.myStoreDetail!!.pin){
-                gustoViewModel.deletePin(pinId!!){
+                gustoViewModel.deletePin(gustoViewModel.myStoreDetail!!.pinId){
                     result ->
                     when(result){
                         0-> {
