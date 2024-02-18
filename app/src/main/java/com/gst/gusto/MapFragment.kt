@@ -2,8 +2,8 @@ package com.gst.clock.Fragment
 
 
 import MapRecyclerAdapter
-import android.graphics.Typeface
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,12 +15,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -39,7 +38,6 @@ import net.daum.mf.map.api.CameraUpdateFactory
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
-import okhttp3.internal.notify
 
 
 class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEventListener {
@@ -82,6 +80,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
+
+        /*
         // BottomSheet 상태 변화 감지
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
@@ -109,8 +109,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 // 슬라이딩 중일 때 추가 작업이 필요하면 여기에 추가
             }
         })
-
-
+        */
 
         ////    카테고리    ////
 
@@ -134,6 +133,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         chipGroup = binding.fragmentMapMainScreen.chipGroup
 
         // 각 칩에 대한 클릭 리스너 설정
+        /*
         view.findViewById<Chip>(R.id.cafe_btn).setOnClickListener {
             handleChipClick(it as Chip)
         }
@@ -146,18 +146,35 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         view.findViewById<Chip>(R.id.Izakaya_btn).setOnClickListener {
             handleChipClick(it as Chip)
         }
+         */
 
         return view
     }
 
     // 마이 리스트에서 불러와서 칩그룹 만들기 //
-    private fun addChip(text:String) {
+    fun getAllCategoryAndAddChips(nickname: String) {
+        gustoViewModel.getAllCategory(nickname) { result ->
+            if (result == 0) {
+                // 카테고리 목록을 성공적으로 가져왔을 때
+                for (category in gustoViewModel.myAllCategoryList!!) {
+                    addChip(category.categoryName)
+                    Log.d("call category", "Failed to get category list")
+                }
+            } else {
+                // 카테고리 목록을 가져오지 못했을 때
+                Log.d("call category", "Failed to get category list")
+            }
+        }
+    }
+
+    // 카테고리 만들기
+    private fun addChip(text: String) {
         val chip = Chip(requireContext())
 
         chip.isClickable = true
         chip.isCheckable = true
 
-        chip.text  = text
+        chip.text = text
         chip.chipBackgroundColor = ContextCompat.getColorStateList(requireContext(), R.color.chip_select_color)
         chip.chipStrokeColor = ContextCompat.getColorStateList(requireContext(), R.color.main_C)
         chip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chip_select_text_color))
@@ -168,6 +185,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         chipGroup.addView(chip)
     }
+
 
     // 클릭된 칩의 처리를 담당하는 함수
     private fun handleChipClick(chip: Chip) {
@@ -282,33 +300,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             recyclerView3.isVerticalScrollBarEnabled = false
         }
 
-    }
-
-    private fun showMainScreenFragment() {
-        // BottomNavigationView를 보이게 하는 작업
-        // binding.bottomNavigationView.visibility = View.VISIBLE
-
-        val mainScreenFragment = MapMainScreenFragment()
-        childFragmentManager.beginTransaction()
-            .replace(R.id.fragment_map, mainScreenFragment)
-            .commit()
-    }
-
-    private fun hideMainScreenFragment() {
-        // BottomNavigationView를 숨기는 작업
-        // binding.bottomNavigationView.visibility = View.GONE
-
-        val mainScreenFragment =
-            childFragmentManager.findFragmentById(R.id.fragment_map) as? MapMainScreenFragment
-        mainScreenFragment?.let {
-            childFragmentManager.beginTransaction().remove(it).commit()
-        }
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-
         val viewPager = binding.vpSlider
 
         // 이미지 슬라이드
@@ -347,6 +338,31 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         })
 
     }
+
+    /*
+    private fun showMainScreenFragment() {
+        // BottomNavigationView를 보이게 하는 작업
+        // binding.bottomNavigationView.visibility = View.VISIBLE
+
+        val mainScreenFragment = MapMainScreenFragment()
+        childFragmentManager.beginTransaction()
+            .replace(R.id.fragment_map, mainScreenFragment)
+            .commit()
+    }
+
+    private fun hideMainScreenFragment() {
+        // BottomNavigationView를 숨기는 작업
+        // binding.bottomNavigationView.visibility = View.GONE
+
+        val mainScreenFragment =
+            childFragmentManager.findFragmentById(R.id.fragment_map) as? MapMainScreenFragment
+        mainScreenFragment?.let {
+            childFragmentManager.beginTransaction().remove(it).commit()
+        }
+
+    }
+     */
+
     override fun onResume() {
         super.onResume()
         mapView = MapView(requireContext())

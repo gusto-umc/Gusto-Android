@@ -66,7 +66,7 @@ class GustoViewModel: ViewModel() {
     var visitedAt: String? = null
     var imageFiles = ArrayList<File>()
     var menuName: String? = null
-    var hashTagId: String? = null
+    var hashTagId: ArrayList<Long>? = null
     var taste: Int? = null
     var spiciness: Int? = null
     var mood: Int? = null
@@ -911,7 +911,7 @@ class GustoViewModel: ViewModel() {
 
     //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 
-    //내 우치 장소보기 카테고리 array
+    //내 위치 장소보기 카테고리 array
     var myMapCategoryList : List<ResponseMapCategory>? = null
     var myAllCategoryList : List<ResponseAllCategory>? = null
 
@@ -1458,5 +1458,32 @@ class GustoViewModel: ViewModel() {
     fun LocalCategory(callback: (Int) -> Unit){
 
     }
+
+    //내 카테고리 전체 조회 + 카테고리 담기
+    fun getMyMapCategory(townName: String, callback: (Int) -> Unit) {
+        service.getMapCategory(xAuthToken, townName = townName).enqueue(object : Callback<List<ResponseMapCategory>> {
+            override fun onResponse(
+                call: Call<List<ResponseMapCategory>>,
+                response: Response<List<ResponseMapCategory>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.e("viewmodel", response.body()!!.toString())
+                    Log.e("viewmodel", "Successful response: ${response}")
+                    myMapCategoryList = response.body()!! // 서버에서 받아온 카테고리 목록을 저장
+                    callback(0)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<List<ResponseMapCategory>>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
+
 
 }
