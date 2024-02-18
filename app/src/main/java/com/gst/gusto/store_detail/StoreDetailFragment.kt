@@ -195,12 +195,14 @@ class StoreDetailFragment : Fragment() {
             }
             else {
                 //카테고리 선택 팝업창 노출
-                val mChooseBottomSheetDialog = CategoryChooseBottomSheetDialog(){
-                    when(it){
+                val mChooseBottomSheetDialog = CategoryChooseBottomSheetDialog(null){
+                    result, rData ->
+                    when(result){
                         1 -> {
                             Log.d("bottomsheet", "카테고리 선택 click")
                             binding.ivStoreDetailSave.setImageResource(R.drawable.save_o_img)
                             gustoViewModel.myStoreDetail!!.pin = true
+                            gustoViewModel.myStoreDetail!!.pinId = rData!!.pinId
                         }
                     }
                 }

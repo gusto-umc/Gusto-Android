@@ -170,7 +170,7 @@ data class RequestPin(
 
 //가게 상세 조회
 data class ResponseStoreDetail(
-    @SerializedName("storeId") val storeId : Int,
+    @SerializedName("storeId") var storeId : Int,
     @SerializedName("storeName") val storeName : String,
     @SerializedName("categoryString") val categoryString : String,
     @SerializedName("address") val address : String,
@@ -300,7 +300,7 @@ data class ResponseSearch(
 
 // 가게 정보 조회(짧은 화면)
 data class ResponseStoreDetailQuick(
-    @SerializedName("pinId") val pinId : Long,
+    @SerializedName("pinId") var pinId : Long,
     @SerializedName("storeId") val storeId : Long,
     @SerializedName("storeName") val storeName : String,
     @SerializedName("address") val address : String,
@@ -309,7 +309,11 @@ data class ResponseStoreDetailQuick(
     //@SerializedName("businessDay") val businessDay : Double,
     @SerializedName("contact") val contact : String,
     @SerializedName("reviewImg3") val reviewImg3 : List<String>,
-    @SerializedName("pin") val pin : Boolean
+    @SerializedName("pin") var pin : Boolean
+)
+
+data class ResponseAddPin(
+    @SerializedName("pinId") var pinId: Int
 )
 
 // 카카오 행정구역

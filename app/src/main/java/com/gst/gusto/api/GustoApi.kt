@@ -272,7 +272,7 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("myCategoryId") myCategoryId : Long,
         @Body body: RequestPin
-    ) : Call<Void>
+    ) : Call<ResponseAddPin>
 
     //2. 가게 카테고리 삭제(찜 취소) -> 확인 완
     @DELETE("myCategories/pins")

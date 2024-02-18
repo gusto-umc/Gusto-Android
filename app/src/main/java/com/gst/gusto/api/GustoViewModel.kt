@@ -1093,22 +1093,22 @@ class GustoViewModel: ViewModel() {
     var mapUnvisitedCnt = 0
 
     //가게 카테고리 추가(찜) -> 확인 완, 수정 필요
-    fun addPin(categoryId: Long, storeLong: Long, callback: (Int) -> Unit){
+    fun addPin(categoryId: Long, storeLong: Long, callback: (Int, ResponseAddPin?) -> Unit){
         var pinData = RequestPin(storeId = storeLong)
-        service.addPin(xAuthToken, categoryId, pinData).enqueue(object : Callback<Void>{
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+        service.addPin(xAuthToken, categoryId, pinData).enqueue(object : Callback<ResponseAddPin>{
+            override fun onResponse(call: Call<ResponseAddPin>, response: Response<ResponseAddPin>) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
-                    callback(0)
+                    callback(0, response.body()!!)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(1)
+                    callback(1, null)
                 }
             }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseAddPin>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
-                callback(1)
+                callback(1, null)
             }
 
         })

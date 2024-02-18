@@ -12,9 +12,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.gst.gusto.ListView.Model.CategorySimple
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.ResponseAddPin
 import com.gst.gusto.api.ResponseAllCategory
 
-class CategoryChooseBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDialogFragment() {
+class CategoryChooseBottomSheetDialog(var flag : String?, val itemClick : (Int, ResponseAddPin?) -> Unit) : BottomSheetDialogFragment() {
 
     var viewModel : GustoViewModel? = null
 
@@ -29,7 +30,7 @@ class CategoryChooseBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomShe
         super.onViewCreated(view, savedInstanceState)
         //X 클릭리스너
         view?.findViewById<ImageView>(R.id.iv_category_choose_x)?.setOnClickListener {
-            itemClick(0)
+            itemClick(0, null)
             dialog?.dismiss()
         }
 
@@ -39,25 +40,24 @@ class CategoryChooseBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomShe
             when(result){
                 0 -> {
                     categoryArray = viewModel!!.myAllCategoryList
-
                     //카테고리 댑터 선언 + 연결
                     val dCategoryChooseAdapter = CategoryChooseAdapter()
                     dCategoryChooseAdapter.setItemClickListener(object : CategoryChooseAdapter.OnItemClickListener{
                         override fun onClick(v: View, dataSet: ResponseAllCategory) {
                             //서버 연결 (찜)
                             //storeId 받아오기!
-                            val storeId = viewModel!!.myStoreDetail!!.storeId
+                            val storeId = if(flag == null){viewModel!!.myStoreDetail!!.storeId} else{flag!!.toInt()}
                             viewModel!!.addPin(dataSet.myCategoryId.toLong(), storeId.toLong()){
-                                    result ->
+                                    result, data ->
                                 when(result){
                                     0 -> {
                                         //성공
-                                        itemClick(1)
+                                        itemClick(1, data)
                                         dialog?.dismiss()
                                     }
                                     1 -> {
                                         //실패
-                                        itemClick(0)
+                                        itemClick(0, data)
                                         dialog?.dismiss()
                                     }
 
