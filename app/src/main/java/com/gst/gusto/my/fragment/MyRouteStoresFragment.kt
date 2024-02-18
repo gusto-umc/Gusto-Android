@@ -34,6 +34,7 @@ class MyRouteStoresFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         itemList = gustoViewModel.markerListLiveData.value!!
         val boardAdapter = MapRoutesAdapter(itemList,binding.lyGone,requireActivity(),1)
         boardAdapter.notifyDataSetChanged()

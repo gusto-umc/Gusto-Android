@@ -288,6 +288,48 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
+    // 내 루트/그룹 루트 상세 조회 (공통)
+    fun getOtherRouteDetail(routeId : Long,profileNickname: String,callback: (Int) -> Unit){
+        service.getOtherRouteDetail(xAuthToken,routeId,profileNickname).enqueue(object : Callback<ResponseRouteDetail> {
+            override fun onResponse(call: Call<ResponseRouteDetail>, response: Response<ResponseRouteDetail>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel", "Successful response: ${response}")
+                    val responseBody = response.body()
+                    if(responseBody !=null) {
+                        markerListLiveData.value?.clear()
+                        for(data in responseBody.routes) {
+                            markerListLiveData.value?.add(
+                                mapUtil.Companion.MarkerItem(
+                                    data.storeId,
+                                    data.ordinal,
+                                    data.routeListId!!,
+                                    0.0,
+                                    0.0,
+                                    data.storeName!!,
+                                    data.address!!,
+                                    false
+                                )
+                            )
+                        }
+                        markerListLiveData.value?.let { list ->
+                            // ordinal 속성을 기준으로 리스트를 정렬
+                            list.sortBy { it.ordinal }
+                        }
+                        routeName = responseBody.routeName
+                        callback(1)
+                    } else callback(2)
+
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2)
+                }
+            }
+            override fun onFailure(call: Call<ResponseRouteDetail>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(2)
+            }
+        })
+    }
     // 내 루트 삭제
     fun deleteRoute(routeId: Long,callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
