@@ -43,9 +43,6 @@ class ReviewDetailFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        binding.lyTitle.setOnClickListener {
-            findNavController().navigate(R.id.action_reviewDetail_to_storeDetailFragment)
-        }
 
         return binding.root
 
@@ -106,6 +103,10 @@ class ReviewDetailFragment : Fragment() {
                             val reviewDate = LocalDate.parse(gustoViewModel.myReview!!.visitedAt)
                             binding.tvDay.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
                             binding.tvReviewStoreName.text = gustoViewModel.myReview!!.storeName
+                            binding.lyTitle.setOnClickListener {
+                                gustoViewModel.selectedDetailStoreId = gustoViewModel.myReview!!.storeId.toInt()
+                                findNavController().navigate(R.id.action_reviewDetail_to_storeDetailFragment)
+                            }
                             binding.tvHeartNum.text = gustoViewModel.myReview!!.likeCnt.toString()
                             //이미지 처리
                             if(!gustoViewModel.myReview!!.img.isNullOrEmpty()){

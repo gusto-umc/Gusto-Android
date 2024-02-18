@@ -65,6 +65,7 @@ class MapListViewSaveFragment : Fragment() {
         mSaveXAdapter.submitList(gustoViewModel.mapUnvisitedList)
         mSaveXAdapter.setItemClickListener(object : SavedStoreListAdapter.OnItemClickListener{
             override fun onClick(v: View, dataSet: ResponseSavedStoreData) {
+                gustoViewModel.selectedDetailStoreId = dataSet.storeId
                 Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_storeDetailFragment)
             }
 

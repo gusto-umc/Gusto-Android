@@ -60,7 +60,7 @@ class StoreDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var sampleStoreId = 1
+        var sampleStoreId = gustoViewModel.selectedDetailStoreId
         gustoViewModel.detailReviewLastId = null
         gustoViewModel.detailReviewLastVisitedAt = null
         gustoViewModel.storeDetailReviews.clear()

@@ -1011,6 +1011,7 @@ class GustoViewModel: ViewModel() {
     /**
      * 가게 api 함수 - mindy
      */
+    var selectedDetailStoreId = 1
     var myMapStoreList : List<ResponseStoreListItem>? = null
     var myAllStoreList : List<ResponseStoreListItem>? = null
 

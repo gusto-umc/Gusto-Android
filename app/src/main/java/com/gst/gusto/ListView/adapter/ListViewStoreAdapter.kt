@@ -64,6 +64,7 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
             holder.tvCountCategory.text = "${holder.data?.reviewCnt}번 방문했어요"
 
             holder.cvStore.setOnClickListener {
+                //뷰모델에 storeId 저장 -> detail 로 이동인 경우
                 Navigation.findNavController(parentView).navigate(R.id.action_mapListViewFragment_to_storeDetailFragment)
             }
         }
