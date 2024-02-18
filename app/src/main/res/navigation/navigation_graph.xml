@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_fragment_map_viewpager_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_fragment_map_viewpager_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
 
     <!-- List 화면의 프래그먼트들 -->
