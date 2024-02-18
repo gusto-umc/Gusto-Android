@@ -1,9 +1,6 @@
 package com.gst.gusto.api
 
-import android.widget.EditText
-import com.google.gson.annotations.SerializedName
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -13,12 +10,10 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
-import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.time.LocalDate
-import java.util.Date
 
 
 interface GustoApi {
@@ -314,9 +309,9 @@ interface GustoApi {
     //6. 저장된 맛집 리스트 -> cateogry 적용 X
     @GET("stores/pins")
     fun getSavedStores(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("myCategoryId") categoryId : Int,
-        @Query("townName") townName : String
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("myCategoryId") categoryId: Int?,
+        @Query("townName") townName: String
     ) : Call<List<ResponseSavedStore>>
 
 

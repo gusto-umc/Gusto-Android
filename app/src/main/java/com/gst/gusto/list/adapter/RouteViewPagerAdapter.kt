@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.ListView.adapter.CategoryChooseBottomSheetDialog
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil
@@ -56,6 +57,7 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
             else if(option==2) activity.getCon().navigate(R.id.action_fragment_map_to_storeDetailFragment)
         }
         //holder.btn_bookmark
+
     }
 
     override fun getItemCount(): Int {

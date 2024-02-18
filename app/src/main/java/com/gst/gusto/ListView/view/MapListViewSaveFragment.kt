@@ -25,10 +25,6 @@ class MapListViewSaveFragment : Fragment() {
 
     private lateinit var binding : FragmentMapListviewSaveBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
-    private var sampleSaveOArray = arrayListOf<Store>(
-        Store(id = 0, storeName = "구스토 레스토랑", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = null, storePhoto = 1, serverCategory ="양식", isSaved = false),
-        Store(id = 1, storeName = "Gusto Restaurant", location = "메롱시 메로나동 바밤바 24-6 1층", visitCount = null, storePhoto = 1, serverCategory = "양식", isSaved = true)
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +48,9 @@ class MapListViewSaveFragment : Fragment() {
         mSaveOAdapter.submitList(gustoViewModel.mapVisitedList)
         mSaveOAdapter.setItemClickListener(object : SavedStoreListAdapter.OnItemClickListener{
             override fun onClick(v: View, dataSet: ResponseSavedStoreData) {
+                gustoViewModel.selectStoreId = dataSet.storeId.toLong()
+                gustoViewModel.storeIdList.clear()
+                gustoViewModel.storeIdList = gustoViewModel.savedStoreIdList
                 Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_fragment_map_viewpager)
             }
 
@@ -65,7 +64,9 @@ class MapListViewSaveFragment : Fragment() {
         mSaveXAdapter.submitList(gustoViewModel.mapUnvisitedList)
         mSaveXAdapter.setItemClickListener(object : SavedStoreListAdapter.OnItemClickListener{
             override fun onClick(v: View, dataSet: ResponseSavedStoreData) {
-                gustoViewModel.selectedDetailStoreId = dataSet.storeId
+                gustoViewModel.selectStoreId = dataSet.storeId.toLong()
+                gustoViewModel.storeIdList.clear()
+                gustoViewModel.storeIdList = gustoViewModel.unsavedStoreIdList
                 Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_fragment_map_viewpager)
             }
 
@@ -77,6 +78,9 @@ class MapListViewSaveFragment : Fragment() {
         binding.ivMapMapBack.setOnClickListener{
             findNavController().popBackStack()
         }
+
+        //현재 위치(동) 받아오기
+        binding.tvMapSaveDong.text = gustoViewModel.dong
 
     }
 

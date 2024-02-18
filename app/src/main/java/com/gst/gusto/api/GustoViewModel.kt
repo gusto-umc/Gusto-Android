@@ -80,7 +80,7 @@ class GustoViewModel: ViewModel() {
     var followListTitleName = "팔로잉 중"
 
     // 가게 정보 보기 아이디 리스트
-    val storeIdList = ArrayList<Long>().apply {
+    var storeIdList = ArrayList<Long>().apply {
         add(1)
         add(2)
         add(3)
@@ -1252,8 +1252,10 @@ class GustoViewModel: ViewModel() {
         })
     }
     //저장된 맛집 리스트 -> 완
+    var savedStoreIdList = ArrayList<Long>()
+    var unsavedStoreIdList = ArrayList<Long>()
     fun getSavedStores(townName: String, categoryId : Int?, callback: (Int) -> Unit){
-        service.getSavedStores(xAuthToken, townName = "성수1가1동", categoryId = 3).enqueue(object : Callback<List<ResponseSavedStore>>{
+        service.getSavedStores(xAuthToken, townName = "성수1가1동", categoryId = null).enqueue(object : Callback<List<ResponseSavedStore>>{
             override fun onResponse(
                 call: Call<List<ResponseSavedStore>>,
                 response: Response<List<ResponseSavedStore>>
@@ -1267,6 +1269,22 @@ class GustoViewModel: ViewModel() {
                     mapVisitedCnt = data.visitedStores[0].numPinStores
                     mapUnvisitedList = data.unvisitedStores[0].unvisitedStores
                     mapUnvisitedCnt = data.unvisitedStores[0].numPinStores
+                    if(!mapUnvisitedList.isNullOrEmpty()){
+                        for(i in mapUnvisitedList!!){
+                            unsavedStoreIdList.add(i.storeId.toLong())
+                        }
+                    }
+                    else{
+                        unsavedStoreIdList.clear()
+                    }
+                    if(!mapVisitedList.isNullOrEmpty()){
+                        for(i in mapVisitedList!!){
+                            savedStoreIdList.add(i.storeId.toLong())
+                        }
+                    }
+                    else{
+                        savedStoreIdList.clear()
+                    }
                     callback(0)
                 } else {
                     Log.e("getSavedStores", "Unsuccessful response: ${response}")
@@ -1370,6 +1388,7 @@ class GustoViewModel: ViewModel() {
      * 검색 api 함수 - mindy
      */
     var mapSearchArray = ArrayList<ResponseSearch>()
+    var mapSearchStoreIdArray = ArrayList<Long>()
     //검색 결과 -> 작성 예정
     fun getSearchResult(keyword : String, callback: (Int) -> Unit){
         service.getSearch(xAuthToken, keyword).enqueue(object : Callback<ArrayList<ResponseSearch>>{
@@ -1380,6 +1399,10 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     Log.d("getSearchResult", "Successful response: ${response}")
                     mapSearchArray = response.body()!!
+                    mapSearchStoreIdArray.clear()
+                    for(i in response.body()!!){
+                        mapSearchStoreIdArray.add(i.storeId)
+                    }
                     callback(0)
 
                 } else {
