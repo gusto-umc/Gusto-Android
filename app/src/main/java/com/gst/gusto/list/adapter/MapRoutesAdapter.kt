@@ -58,11 +58,11 @@ class MapRoutesAdapter(
                 notifyItemRangeChanged(position,getItemCount())
             }
         } else {
+            parentActivity.getViewModel().selectedDetailStoreId = itemList[position].storeId.toInt()
             if(option!=1) {
                 holder.itemView.setOnClickListener{
                     parentActivity.getCon().navigate(R.id.action_routeStoresFragment_to_storeDetailFragment)
                     parentActivity.getViewModel().groupFragment = 1
-
                 }
                 holder.tv_rest_name.setOnClickListener{
                     parentActivity.getCon().navigate(R.id.action_routeStoresFragment_to_storeDetailFragment)
