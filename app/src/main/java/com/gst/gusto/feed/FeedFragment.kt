@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -90,11 +91,16 @@ class FeedFragment : Fragment() {
         gustoViewModel.feed() { result, response ->
             if (result == 1) {
                 feedList.clear()
-                response?.forEach {
-                    feedList.add(ResponseFeedReview(it.reviewId, it.images))
+                if(response != null) {
+                    response.forEach {
+                        feedList.add(ResponseFeedReview(it.reviewId, it.images))
+                    }
+                    adapter.feedList = feedList
+                    adapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(requireContext(),"네트워크 연결이 불안정합니다.", Toast.LENGTH_SHORT).show()
                 }
-                adapter.feedList = feedList
-                adapter.notifyDataSetChanged()
+
             }
             Log.d("feedResponse", feedList.toString())
         }
