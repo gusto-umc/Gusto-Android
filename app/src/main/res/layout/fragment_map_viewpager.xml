@@ -96,7 +96,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_height="173dp"
+                android:layout_height="180dp"
                 android:paddingHorizontal="10dp" />
         </LinearLayout>
     </LinearLayout>

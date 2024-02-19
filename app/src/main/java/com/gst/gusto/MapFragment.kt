@@ -226,8 +226,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
         }
 
-        // 카테고리 조회 및 칩 추가
-        getMapCategoryAndAddChips("성수1가1동")
 
         /**
          * 방문 o 클릭 리스너 -> 보완 예정
@@ -440,7 +438,11 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     }
     override fun onResume() {
         super.onResume()
-       mapView = MapView(requireContext())
+
+
+        // 카테고리 조회 및 칩 추가
+        getMapCategoryAndAddChips("성수1가1동")
+        mapView = MapView(requireContext())
 
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
@@ -576,27 +578,31 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         }
     }
     fun reGetMapMarkers2(nextText: String) {
-        Log.d("viewmodel", "new Text : ${nextText}")
-        if(nextText =="전체") {
+        if(true) {
+            Log.d("viewmodel", "new Text : ${nextText}, cate : ${currentChip}")
             reGetMapMarkers()
         } else {
+            Log.d("viewmodel", "new Text : ${nextText}, cate : ${currentChip}")
             markerList.clear()
             gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, currentChip){
                     result ->
                 when(result){
                     0 -> {
                         if(nextText == "가본 곳 만") {
+                            Log.d("viewmodel", "visit : ${gustoViewModel.mapVisitedList}")
                             for( (index,data) in gustoViewModel.mapVisitedList!!.withIndex()) {
                                 gustoViewModel.getStoreDetailQuick(data.storeId.toLong()) {result, data ->
                                     when(result) {
                                         1 -> {
                                             if (data != null) {
                                                 markerList.add(MarkerItem(data.storeId.toLong(), index+1,0, data.latitude,data.longitude, data.storeName!!, "", true))
+                                                if (markerList.size == gustoViewModel.mapVisitedList!!.size) {
+                                                    Log.d("viewmodel", "dsadassdaads")
+                                                    binding.vpSlider.adapter?.notifyDataSetChanged()
+                                                    setMarker(mapView,markerList)
+                                                }
                                             }
-                                            if (markerList.size == gustoViewModel.mapVisitedList!!.size) {
-                                                binding.vpSlider.adapter?.notifyDataSetChanged()
-                                                setMarker(mapView,markerList)
-                                            }
+
                                         }
                                         else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                                     }
@@ -604,6 +610,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
                             }
                         } else { //"가본 곳 제외"
+                            Log.d("viewmodel", "no visit : ${gustoViewModel.mapUnvisitedList}")
                             for( (index,data) in gustoViewModel.mapUnvisitedList!!.withIndex()) {
                                 gustoViewModel.getStoreDetailQuick(data.storeId.toLong()) {result, data ->
                                     when(result) {
@@ -612,6 +619,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                                                 markerList.add(MarkerItem(data.storeId.toLong(), index+1,0,  data.latitude,data.longitude, data.storeName!!, "", true))
                                             }
                                             if (markerList.size == gustoViewModel.mapUnvisitedList!!.size) {
+                                                Log.d("viewmodel", "dsadassdaads")
                                                 binding.vpSlider.adapter?.notifyDataSetChanged()
                                                 setMarker(mapView,markerList)
                                             }
