@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
 
 
-        Log.d("viewmodel","dsasda : ${ getExtensionVersion(Build.VERSION_CODES.R)}")
+        //Log.d("viewmodel","dsasda : ${ getExtensionVersion(Build.VERSION_CODES.R)}")
         navController.addOnDestinationChangedListener { _, destination, _ ->
             var currentDestinationId = destination.id
             if (previousDestinationId == currentDestinationId) {

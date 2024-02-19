@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -32,16 +33,33 @@
             android:weightSum="7"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/iv_item_store_img"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="11.73dp"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_list_store_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                android:layout_marginStart="10dp"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/background_radius_5"
-                android:clipToOutline="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/sample_store_img" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                >
+                <ImageView
+                    android:id="@+id/iv_item_store_img"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:clipToOutline="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/sample_store_img"
+                    android:adjustViewBounds="true"
+                    tools:ignore="DuplicateIds" />
+
+
+            </androidx.cardview.widget.CardView>
+
+
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_card_data"
