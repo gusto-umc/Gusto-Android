@@ -157,10 +157,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             handleChipClick(chip)
             Log.d("chip", "$chipId")
         }
-
         chipGroup.addView(chip, chipIndex)
     }
-
 
     // 클릭된 칩의 처리를 담당하는 함수
     private fun handleChipClick(chip: Chip) {
