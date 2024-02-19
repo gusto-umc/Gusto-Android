@@ -266,15 +266,16 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     }
                 }
             }
+
+
+            refindDong()
+
             //LoginViewModel.signUp()
 
-            Log.d("dong", "${dong}")
-            dong.text = gustoViewModel.dong // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
-            areaPick.text = gustoViewModel.dong // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
+            /*
 
             noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적 없는 맛집 수
             visNum.text = gustoViewModel.mapVisitedCnt.toString() //방문해본 적 있는 맛집 수
-
 
             // 저장된 맛집의 수를 locRestSaveNum 텍스트뷰에 연결
             gustoViewModel.getSavedStores("성수1가1동", null) { result ->
@@ -282,6 +283,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     0 -> {
                         // 성공적으로 저장된 맛집 정보를 가져온 경우
                         val savedStoresCount = gustoViewModel.savedStoreIdList.size
+                        Log.d("save_rest","${savedStoresCount}")
                         locRestSaveNum.text = savedStoresCount.toString()
                     }
                     else -> {
@@ -291,6 +293,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     }
                 }
             }
+             */
 
             //사진 불러와서 리사이클러뷰와 연결해 담기//
             val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -315,18 +318,20 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
             // 방문 X - 각 가게에 대한 정보
             gustoViewModel.mapUnvisitedList?.let { unvisitedStores ->
+                Log.d("log_img","방문 안 한 가게 이미지")
                 for (store in unvisitedStores) {
                     val reviewImg = store.reviewImg
-                    Log.d("img","${reviewImg}")
+                    Log.d("log_img","방문 X 가게 이미지 ${reviewImg}")
                     reviewImg?.let { itemList_unvisit.add(it) } // null이 아닌 경우에만 itemList_unvisit에 추가
                 }
             }
 
             // 방문 O - 각 가게에 대한 정보
             gustoViewModel.mapVisitedList?.let { visitedStores ->
+                Log.d("log_img","방문 가게 이미지")
                 for (store in visitedStores) {
                     val reviewImg = store.reviewImg
-                    Log.d("img","${reviewImg}")
+                    Log.d("log_img","방문 O 가게 이미지 ${reviewImg}")
                     reviewImg?.let { itemList_visit.add(it) } // null이 아닌 경우에만 itemList에 추가
                 }
             }
@@ -500,6 +505,48 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     }
 
+    //현재 동을 불러오기//
+    //현재 동에 대한 작업 불러오기//
+    fun refindDong(){
+
+        //동
+        var dong = binding.fragmentArea.dong
+        var areaPick = binding.fragmentArea.areaPick
+
+        //방문 맛집
+        var noVisNum = binding.fragmentArea.noVisNum
+        var visNum = binding.fragmentArea.visNum
+
+        var locRestSaveNum = binding.fragmentArea.locRestSaveNum
+
+        //출력//
+        Log.d("dong", "${dong}")
+        dong.text = gustoViewModel.dong // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
+        areaPick.text = gustoViewModel.dong // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
+
+        noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적 없는 맛집 수
+        visNum.text = gustoViewModel.mapVisitedCnt.toString() //방문해본 적 있는 맛집 수
+
+
+        // 저장된 맛집의 수를 locRestSaveNum 텍스트뷰에 연결
+        gustoViewModel.getSavedStores("${dong}", null) { result ->
+            when (result) {
+                0 -> {
+                    // 성공적으로 저장된 맛집 정보를 가져온 경우
+                    val savedStoresCount = gustoViewModel.savedStoreIdList.size
+                    Log.d("save_rest","${savedStoresCount}")
+                    locRestSaveNum.text = savedStoresCount.toString()
+                }
+                else -> {
+                    // 저장된 맛집 정보를 가져오지 못한 경우
+                    locRestSaveNum.text = "0"
+                    Toast.makeText(context, "저장된 맛집 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+    }
+
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
         if (p1 != null) {
             gustoViewModel.getRegionInfo(p1.mapPointGeoCoord.longitude, p1.mapPointGeoCoord.latitude)  {result, address ->
@@ -507,7 +554,11 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     1 -> {
                         Log.d("viewmodel",gustoViewModel.dong)
                         binding.fragmentArea.userLoc.text = address
-                        //binding.fragmentArea.dong.text = address //깡지 수정(추가)
+                        //깡지 수정(추가)
+
+                        //현재 위치(동)를 불러오는 함수//
+                        refindDong()
+
                         gustoViewModel.getCurrentMapStores {result, datas ->
                             when(result) {
                                 1 -> {
