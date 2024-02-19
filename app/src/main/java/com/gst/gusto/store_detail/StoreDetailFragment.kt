@@ -37,12 +37,6 @@ class StoreDetailFragment : Fragment() {
         StoreDetailReview(reviewId = 0, visitedAt = "2024-01-03", nickname = "귀여운 바질페스토 12", liked = 1, comment = "goooooood", hashTageName = arrayListOf("맛있음", "분위기"), date= "2024-01-04", photoArray = arrayListOf(R.drawable.sample_store_img, R.drawable.sample_store_2_img)),
         StoreDetailReview(reviewId = 1, visitedAt = "2024-01-02", nickname = "매콤한 통닭", liked = 3, comment = "맛있어요", hashTageName = arrayListOf("맛있음", "넓음"), date = "2024-01-02", photoArray = arrayListOf(R.drawable.sample_store_img, R.drawable.sample_store_2_img))
     )
-    private var samplePhotoDataArray = arrayListOf<Int>(
-        R.drawable.sample_store_img,
-        R.drawable.sample_store_2_img,
-        R.drawable.sample_store_3_img,
-        R.drawable.sample_store_4_img
-    )
     private var sampleData = StoreDetail(0, "Gusto Restaurant", "양식", "메롱시 메로나동 바밤바 24-6 1층", 1, 0, reviews = sampleReviewDataArray, reviewImg = arrayListOf(1, 2, 3))
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,17 +68,7 @@ class StoreDetailFragment : Fragment() {
         val mReviewAdapter = StoreDetailReviewAdapter()
 
         fun setDatas(data : ResponseStoreDetail?){
-            if(data == null){
-                binding.ivStoreDetailBanner.setImageResource(R.drawable.sample_store_3_img)
-                binding.tvStoreDetailCategory.text = sampleData.categoryName
-                binding.tvStoreDetailName.text = sampleData.storeName
-                binding.tvStoreDetailAddress.text = sampleData.address
-                if(sampleData.pin == 1){
-                    binding.ivStoreDetailSave.setImageResource(R.drawable.save_o_img)
-                }
-                Log.d("review checking", gustoViewModel.detailReviewLastId.toString())
-            }
-            else{
+            if(data != null){
                 binding.tvStoreDetailCategory.text = data!!.categoryString
                 binding.tvStoreDetailName.text = data!!.storeName
                 binding.tvStoreDetailAddress.text = data!!.address
@@ -135,7 +119,6 @@ class StoreDetailFragment : Fragment() {
                 binding.rvStoreDetailReview.adapter = mReviewAdapter
                 binding.rvStoreDetailReview.layoutManager = LinearLayoutManager(this.requireActivity())
             }
-
         }
 
         fun loadReviews(reviews : ArrayList<ResponseReviews>){

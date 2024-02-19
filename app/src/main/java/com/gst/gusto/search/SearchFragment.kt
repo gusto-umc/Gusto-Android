@@ -38,21 +38,78 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.edtSearchSearchbox.requestFocus()
-        util.openKeyboard(requireActivity())
+        //변수
+        val mKeepStoreAdpater = SearchStoreAdapter()
+        val mSearshResultAdapter = SearchStoreAdapter()
+
+        mSearshResultAdapter.mContext = context
+        mKeepStoreAdpater.mContext = context
+
+
+        if(!gustoViewModel.keepFlag){
+            // 첫 진임 시
+            binding.edtSearchSearchbox.requestFocus()
+            util.openKeyboard(requireActivity())
+            //저장 rv visibility 설정
+            binding.rvSearchKeep.visibility = View.GONE
+            binding.tvNoResult.visibility = View.GONE
+            binding.fabSearchMap.visibility = View.GONE
+            binding.edtSearchSearchbox.text.clear()
+
+        }
+        else{
+            //목록보기에서 이동 시
+            util.hideKeyboard(this.requireActivity())
+            gustoViewModel.mapSearchArray = gustoViewModel.mapKeepArray
+            gustoViewModel.mapSearchStoreIdArray = gustoViewModel.mapKeepStoreIdArray
+
+
+            //edt에 검색 결과 넣기
+            binding.edtSearchSearchbox.setText(gustoViewModel.searchKeepKeyword)
+
+            //visibility 처리
+            binding.rvSearchKeep.visibility = View.VISIBLE
+            binding.rvSearchResult.visibility = View.GONE
+            binding.tvNoResult.visibility = View.GONE
+            binding.fabSearchMap.visibility = View.VISIBLE
+
+            //저장 rv 연결
+            mKeepStoreAdpater.submitList(gustoViewModel.mapKeepArray)
+            mKeepStoreAdpater.setItemClickListener(object :
+                SearchStoreAdapter.OnItemClickListener {
+                override fun onClick(v: View, dataSet: ResponseSearch) {
+                    //데이터 넣기
+                    gustoViewModel.selectStoreId = dataSet.storeId
+                    gustoViewModel.storeIdList = gustoViewModel.mapKeepStoreIdArray
+                    //페이지 이동
+                    Navigation.findNavController(view)
+                        .navigate(R.id.action_searchFragment_to_fragment_map_viewpager3)
+                }
+
+            })
+            //visibility 설정, 어댑터 연결
+            binding.rvSearchKeep.visibility = View.VISIBLE
+            binding.rvSearchKeep.adapter = mKeepStoreAdpater
+            binding.rvSearchKeep.layoutManager = LinearLayoutManager(this.requireActivity())
+
+            //keep flag 바꾸기
+            gustoViewModel.keepFlag = false
+
+        }
+
+
 
         /**
          * Rv 어댑터 연결, 클릭 리스너 설정, 검색 클릭 리스너
          */
-
         binding.edtSearchSearchbox.setOnClickListener {
             binding.tvNoResult.visibility = View.GONE
+            binding.rvSearchKeep.visibility = View.GONE
             binding.edtSearchSearchbox.text.clear()
         }
 
-        val mSearshResultAdapter = SearchStoreAdapter()
-        mSearshResultAdapter.mContext = context
-        binding.ivSearchSearchbox.setOnClickListener {
+
+        binding.layoutSearchSearchbox.setOnClickListener {
             //공백 확인
             if (binding.edtSearchSearchbox.text.isNullOrBlank()) {
                 binding.rvSearchResult.visibility = View.GONE
@@ -71,6 +128,7 @@ class SearchFragment : Fragment() {
                             else{
                                 binding.rvSearchResult.visibility = View.VISIBLE
                                 binding.tvNoResult.visibility = View.GONE
+                                binding.fabSearchMap.visibility = View.VISIBLE
                             }
                             //success
                             //데이터셋 저장 후 연결(공백일 때 동작 확인)
@@ -94,8 +152,7 @@ class SearchFragment : Fragment() {
                             binding.rvSearchResult.adapter = mSearshResultAdapter
                             binding.rvSearchResult.layoutManager = LinearLayoutManager(this.requireActivity())
                             //키보드 내리기
-                            // fab visibility 설정
-                            binding.fabSearchMap.visibility = View.VISIBLE
+                            util.hideKeyboard(this.requireActivity())
                         }
                         1 -> {
                             //fail
@@ -115,6 +172,7 @@ class SearchFragment : Fragment() {
             //데이터 저장
             gustoViewModel.selectStoreId = gustoViewModel.mapSearchStoreIdArray[0]
             gustoViewModel.storeIdList = gustoViewModel.mapSearchStoreIdArray
+
             //페이지 이동
            Navigation.findNavController(view).navigate(R.id.action_searchFragment_to_fragment_map_viewpager3)
         }

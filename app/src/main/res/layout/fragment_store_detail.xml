@@ -14,7 +14,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@color/white">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_store_detail_banner"
@@ -146,12 +147,12 @@
                     android:textSize="10sp"
                     android:text="더보기"
                     android:gravity="center_horizontal"
-                    android:paddingVertical="20dp"
+                    android:paddingTop="50dp"
                     />
                 <View
                     android:id="@+id/view_bottom"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="50dp"
                     />
 
             </LinearLayout>

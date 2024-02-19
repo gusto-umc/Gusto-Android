@@ -1460,6 +1460,11 @@ class GustoViewModel: ViewModel() {
      */
     var mapSearchArray = ArrayList<ResponseSearch>()
     var mapSearchStoreIdArray = ArrayList<Long>()
+
+    var keepFlag = false
+    var mapKeepArray = ArrayList<ResponseSearch>()
+    var mapKeepStoreIdArray = ArrayList<Long>()
+    var searchKeepKeyword = ""
     //검색 결과 -> 작성 예정
     fun getSearchResult(keyword : String, callback: (Int) -> Unit){
         service.getSearch(xAuthToken, keyword).enqueue(object : Callback<ArrayList<ResponseSearch>>{
@@ -1470,9 +1475,11 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     Log.d("getSearchResult", "Successful response: ${response}")
                     mapSearchArray = response.body()!!
+                    mapKeepArray = response.body()!!
                     mapSearchStoreIdArray.clear()
                     for(i in response.body()!!){
                         mapSearchStoreIdArray.add(i.storeId)
+                        mapKeepStoreIdArray.add(i.storeId)
                     }
                     callback(0)
 
