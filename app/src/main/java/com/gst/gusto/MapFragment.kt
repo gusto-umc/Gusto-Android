@@ -60,7 +60,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     val markerList = ArrayList<MarkerItem>()
 
-    lateinit var  chipGroup: ChipGroup
+    lateinit var chipGroup: ChipGroup
     private var currentChip:Int?=null
 
     // 이전에 활성화된 칩을 저장하는 변수
@@ -80,6 +80,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         // BottomSheet 설정
         val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
         ////    카테고리    ////
 
@@ -93,11 +94,11 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 "전체" -> "가본 곳 만"
                 "가본 곳 만" -> "가본 곳 제외"
                 else -> "전체"
-            }*/
+            }
 
             // 변경된 텍스트 설정
-            totalBtn.text = nextText
-            reGetMapMarkers2(nextText)
+            totalBtn.text = nextText*/
+            reGetMapMarkers2("")
 
         }
 
