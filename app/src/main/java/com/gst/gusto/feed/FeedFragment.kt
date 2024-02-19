@@ -33,7 +33,7 @@ class FeedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentFeedBinding.inflate(inflater, container, false)
-
+        Log.d("CurrentFragment","onCreateView")
         initView()
 
 
@@ -44,8 +44,19 @@ class FeedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getData()
+
+        Log.d("CurrentFragment","onViewCreated")
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("CurrentFragment","onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("CurrentFragment","onPause")
+    }
     fun initView(){
         adapter = FeedReviewAdapter(ArrayList(), context,
             itemClickListener = { reviewId ->
