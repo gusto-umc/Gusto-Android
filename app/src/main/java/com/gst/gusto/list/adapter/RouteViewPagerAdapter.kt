@@ -19,6 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.internal.notifyAll
 
 
 class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerItem>,val activity: MainActivity,val option : Int) : RecyclerView.Adapter<RouteViewPagerAdapter.ReviewDetailViewHolder>() {
@@ -82,7 +83,8 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
 
                             }
                         }
-
+                        item.latitude = data.latitude
+                        item.longitude = data.longitude
                     }
                 }
                 else -> {
