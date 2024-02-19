@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -521,8 +522,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         //출력//
         Log.d("dong", "${dong}")
-        dong.text = gustoViewModel.dong // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
-        areaPick.text = gustoViewModel.dong // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
+        dong.text = gustoViewModel.dong.value// 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
+        areaPick.text = gustoViewModel.dong.value // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
 
         noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적 없는 맛집 수
         visNum.text = gustoViewModel.mapVisitedCnt.toString() //방문해본 적 있는 맛집 수
@@ -552,13 +553,13 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             gustoViewModel.getRegionInfo(p1.mapPointGeoCoord.longitude, p1.mapPointGeoCoord.latitude)  {result, address ->
                 when(result) {
                     1 -> {
-                        Log.d("viewmodel",gustoViewModel.dong)
+                        Log.d("viewmodel", "gustoViewModel.dong.value")
                         binding.fragmentArea.userLoc.text = address
                         //깡지 수정(추가)
 
                         //현재 위치(동)를 불러오는 함수//
                         refindDong()
-
+                        /*
                         gustoViewModel.getCurrentMapStores {result, datas ->
                             when(result) {
                                 1 -> {
@@ -574,12 +575,14 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                                 }
                                 else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                             }
+                            */
                         }
                     }
                 }
             }
         }
     }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == mapUtil.LOCATION_PERMISSION_REQUEST_CODE) {
