@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -62,6 +63,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     //private lateinit var locationSource: FusedLocationSource
 
     lateinit var  chipGroup: ChipGroup
+    private var currentChip:Int?=null
 
     // 이전에 활성화된 칩을 저장하는 변수
     private var previousChipId: Int = -1
@@ -188,6 +190,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             chip.setChipIconResource(R.drawable.streamline_bean)
             // 클릭된 칩의 ID를 초기화하여 비활성화 상태로 설정
             previousChipId = -1
+            currentChip = null
         } else {
             // 클릭된 칩을 활성화
             Log.d("chip", "활성화 ${chip.id}")
@@ -294,7 +297,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     }
                 }
             }
-             */
+
 
             //사진 불러와서 리사이클러뷰와 연결해 담기//
             val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -585,6 +588,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                             markerList.add(MarkerItem(data.storeId, index+1,0, data.latitude!!, data.longitude!!, data.storeName!!, "", true))
                         }
                     }
+                    binding.vpSlider.adapter?.notifyDataSetChanged()
+                    setMarker(mapView,markerList)
                 }
             }
         }
