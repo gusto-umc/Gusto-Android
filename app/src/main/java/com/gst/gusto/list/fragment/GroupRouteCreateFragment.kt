@@ -1,6 +1,7 @@
 package com.gst.gusto.list.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,19 +10,20 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.MainActivity
+import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.RequestCreateRoute
 import com.gst.gusto.api.RouteList
 import com.gst.gusto.databinding.FragmentListGroupMRouteCreateBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
+import com.gst.gusto.search.RouteSearchFragment
 
 class GroupRouteCreateFragment : Fragment() {
 
     lateinit var binding: FragmentListGroupMRouteCreateBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
-    val itemList = ArrayList<MarkerItem>()
-    private var tmp = 1
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,27 +39,28 @@ class GroupRouteCreateFragment : Fragment() {
 
         gustoViewModel.requestRoutesData = null
 
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute,null,0)
+        val boardAdapter = MapRoutesAdapter(gustoViewModel.itemList,binding.lyAddRoute,requireActivity(),0)
         boardAdapter.notifyDataSetChanged()
 
         binding.rvRoutes.adapter = boardAdapter
         binding.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        binding.btnPlus.setOnClickListener {
-            itemList.add(MarkerItem(
-                tmp.toLong(),
-                tmp,0,
-                37.6215001,
-                127.0743010,
-                binding.tvRestName.text.toString(),
-                "",
-                false
-            ))
-            tmp++
-            boardAdapter.notifyItemInserted(itemList.size-1)
-            if(itemList.size==6) {
+        if(gustoViewModel.routeStorTmpData != null) {
+            var data = gustoViewModel.routeStorTmpData
+            if (data != null) {
+                gustoViewModel.itemList.add(MarkerItem(data.storeId.toLong(), 0, 0,1.1, 1.1, data.storeName, "", false))
+            }
+            boardAdapter.notifyItemInserted(gustoViewModel.itemList.size-1)
+            if(gustoViewModel.itemList.size==6) {
                 binding.lyAddRoute.visibility = View.INVISIBLE
             }
+            if(gustoViewModel.tmpName!="") binding.etRouteName.setText(gustoViewModel.tmpName)
+            gustoViewModel.routeStorTmpData = null
+        }
+        binding.btnPlus.setOnClickListener {
+            gustoViewModel.groupFragment = 2
+            if(binding.etRouteName.text.toString()!="") gustoViewModel.tmpName = binding.etRouteName.text.toString()
+            (requireActivity() as MainActivity).getCon().navigate(R.id.action_groupFragment_to_routeSearchFragment)
         }
     }
 
@@ -72,14 +75,16 @@ class GroupRouteCreateFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-
+        Log.d("viewmodel","pase")
     }
     fun getRequestRoutesData() {
         val routeList = ArrayList<RouteList>()
-        for(data in itemList) {
-            routeList.add(RouteList(data.storeId,data.ordinal,null,null,null,null,null))
+        for((index,data) in gustoViewModel.itemList.withIndex()) {
+            routeList.add(RouteList(data.storeId,index+1,null,null,null,null,null))
         }
         gustoViewModel.requestRoutesData = RequestCreateRoute(binding.etRouteName.text.toString(),gustoViewModel.currentGroupId,routeList)
     }
+
+
 
 }

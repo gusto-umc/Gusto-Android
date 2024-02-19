@@ -23,8 +23,8 @@ class LoginViewModel: ViewModel() {
     private lateinit var nickName : String
     private lateinit var age : String
     private lateinit var gender : String
-    private lateinit var accessToken : String
-    private lateinit var refreshToken : String
+    private var accessToken = ""
+    private var refreshToken = ""
     fun setImage(image : String) : Boolean {
         this.image = image
         return true

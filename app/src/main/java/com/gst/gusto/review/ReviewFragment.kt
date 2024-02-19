@@ -20,7 +20,7 @@ class ReviewFragment : Fragment() {
 
     lateinit var binding: FragmentReviewBinding
 
-    val icons = listOf(R.drawable.gallery_review_img, R.drawable.calendar_review_img, R.drawable.calendar_review_img)
+    val icons = listOf(R.drawable.gallery_review_img, R.drawable.calendar_review_img, R.drawable.list_review_img)
 
     private val gustoViewModel : GustoViewModel by activityViewModels()
 

@@ -127,6 +127,7 @@ class OtherFragment : Fragment() {
         viewPager2Adatper.addFragment(OtherReviewFragment())
         viewPager2Adatper.addFragment(MyListFragment())
         viewPager2Adatper.addFragment(MyRouteFragment())
+
         //Adapter 연결
         binding.viewpager.apply {
             adapter = viewPager2Adatper

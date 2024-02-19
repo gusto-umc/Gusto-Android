@@ -78,7 +78,7 @@
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/ic_launcher_background" />
+                        android:src="@drawable/gst_dummypic" />
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
