@@ -1,6 +1,7 @@
 package com.gst.gusto.my
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,24 +31,43 @@ class MyRouteRoutesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.d("viewmodel","help")
+        val nickname = gustoViewModel.profileNickname
+        if(nickname!="") {
+            gustoViewModel.getOtherRoute(nickname) {result ->
+                when(result) {
+                    1 -> {
+                        val rv_board = binding.recyclerView
+                        itemList = gustoViewModel.otherRouteList
+                        val boardAdapter = LisAdapter(itemList, null, 3, gustoViewModel,null)
+                        boardAdapter.notifyDataSetChanged()
+                        rv_board.adapter = boardAdapter
+                        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    } else -> {
+                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                }
+                }
+            }
+        } else {
+            gustoViewModel.getMyRoute {result ->
+                when(result) {
+                    1 -> {
+                        val rv_board = binding.recyclerView
+                        itemList = gustoViewModel.myRouteList
+                        val boardAdapter = LisAdapter(itemList, null, 3, gustoViewModel,null)
+                        boardAdapter.notifyDataSetChanged()
+                        rv_board.adapter = boardAdapter
+                        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    } else -> {
+                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                }
+                }
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        gustoViewModel.getMyRoute {result ->
-            when(result) {
-                1 -> {
-                    val rv_board = binding.recyclerView
-                    itemList = gustoViewModel.myRouteList
-                    val boardAdapter = LisAdapter(itemList, null, 3, gustoViewModel,null)
-                    boardAdapter.notifyDataSetChanged()
-                    rv_board.adapter = boardAdapter
-                    rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                } else -> {
-                Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+        // 번들이 null이 아닌지 확인하고 "nickname" 키로 값을 가져옴
     }
 }

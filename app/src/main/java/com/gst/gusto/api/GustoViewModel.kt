@@ -32,6 +32,7 @@ class GustoViewModel: ViewModel() {
 
     // 자신의 루트 리스트 - (val title : String, val people : Int, val food : Int, val route : Int)
     val myRouteList = ArrayList<GroupItem>()
+    val otherRouteList = ArrayList<GroupItem>()
     // 루트 이름
     var routeName = ""
     // 루트 편집 정보
@@ -63,6 +64,7 @@ class GustoViewModel: ViewModel() {
     var groupFragment = 0 // stores = 0 or routes = 1
 
     // 리뷰 작성 필요 변수
+    var skipCheck = true
     var visitedAt: String? = null
     var imageFiles = ArrayList<File>()
     var menuName: String? = null
@@ -79,7 +81,7 @@ class GustoViewModel: ViewModel() {
     var followListTitleName = "팔로잉 중"
 
     // 가게 정보 보기 아이디 리스트
-    val storeIdList = ArrayList<Long>().apply {
+    var storeIdList = ArrayList<Long>().apply {
         add(1)
         add(2)
         add(3)
@@ -92,6 +94,8 @@ class GustoViewModel: ViewModel() {
     // 현재 동
     var dong = ""
 
+    // 현재 프로필 닉네임
+    var profileNickname = ""
     // 현재 피드 리뷰 아이디
     var currentFeedReviewId = -1L
     // 현재 피드 리뷰 데이터
@@ -180,11 +184,11 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     // 성공적이라면 일단 서버와의 연결에 성공 했다는 것!
                     val responseBody = response.body()
-                    myRouteList.clear()
+                    otherRouteList.clear()
                     if(responseBody!=null) {
                         Log.d("viewmodel", "Successful response: ${response}")
                         for(data in responseBody) {
-                            myRouteList.add(GroupItem(data.routeId, data.routeName, 0, true,data.numStore, 0))
+                            otherRouteList.add(GroupItem(data.routeId, data.routeName, 0, true,data.numStore, 0))
                         }
                     }
                     callback(1)
@@ -253,6 +257,48 @@ class GustoViewModel: ViewModel() {
     fun getGroupRouteDetail(routeId : Long?,callback: (Int) -> Unit){
         val groupId = if (routeId == null) currentGroupId else null
         service.getGroupRouteDetail(xAuthToken,routeId,groupId).enqueue(object : Callback<ResponseRouteDetail> {
+            override fun onResponse(call: Call<ResponseRouteDetail>, response: Response<ResponseRouteDetail>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel", "Successful response: ${response}")
+                    val responseBody = response.body()
+                    if(responseBody !=null) {
+                        markerListLiveData.value?.clear()
+                        for(data in responseBody.routes) {
+                            markerListLiveData.value?.add(
+                                mapUtil.Companion.MarkerItem(
+                                    data.storeId,
+                                    data.ordinal,
+                                    data.routeListId!!,
+                                    0.0,
+                                    0.0,
+                                    data.storeName!!,
+                                    data.address!!,
+                                    false
+                                )
+                            )
+                        }
+                        markerListLiveData.value?.let { list ->
+                            // ordinal 속성을 기준으로 리스트를 정렬
+                            list.sortBy { it.ordinal }
+                        }
+                        routeName = responseBody.routeName
+                        callback(1)
+                    } else callback(2)
+
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2)
+                }
+            }
+            override fun onFailure(call: Call<ResponseRouteDetail>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(2)
+            }
+        })
+    }
+    // 내 루트/그룹 루트 상세 조회 (공통)
+    fun getOtherRouteDetail(routeId : Long,profileNickname: String,callback: (Int) -> Unit){
+        service.getOtherRouteDetail(xAuthToken,routeId,profileNickname).enqueue(object : Callback<ResponseRouteDetail> {
             override fun onResponse(call: Call<ResponseRouteDetail>, response: Response<ResponseRouteDetail>) {
                 if (response.isSuccessful) {
                     Log.d("viewmodel", "Successful response: ${response}")
@@ -434,14 +480,17 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
-                } else {
+                } else if(response.code()==400) {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
                     callback(2)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3)
                 }
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
-                callback(2)
+                callback(3)
             }
         })
     }
@@ -740,7 +789,7 @@ class GustoViewModel: ViewModel() {
     }
     // 리뷰 작성
     fun createReview(callback: (Int) -> Unit){
-        val data = RequestCreateReview(myStoreDetail?.storeId!!.toLong(),visitedAt,menuName,hashTagId,taste,spiciness,mood,toilet,parking,comment)
+        val data = RequestCreateReview(skipCheck,myStoreDetail?.storeId!!.toLong(),visitedAt,menuName,hashTagId,taste,spiciness,mood,toilet,parking,comment)
         val filesToUpload: MutableList<MultipartBody.Part> = mutableListOf()
 
         // 이미지 파일들을 반복하면서 MultipartBody.Part 리스트에 추가
@@ -749,10 +798,7 @@ class GustoViewModel: ViewModel() {
             val filePart = MultipartBody.Part.createFormData("image", imgFile.name, requestFile)
             filesToUpload.add(filePart)
         }
-        Log.e("token",xAuthToken)
-        Log.d("viewmodel",data.toString())
-        Log.d("viewmodel",imageFiles.toString())
-        Log.d("viewmodel",imageFiles.toString())
+
         service.createReview(xAuthToken,filesToUpload,data).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
@@ -777,20 +823,20 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if(responseBody!=null) {
-                        Log.d("viewmodel", "Successful response: ${response}")
+                        Log.d("getFeedReview", "Successful response: ${response}")
                         currentFeedData = responseBody
                         callback(1)
                     } else {
-                        Log.e("viewmodel", "Unsuccessful response: ${response}")
+                        Log.e("getFeedReview success", "Unsuccessful response: ${response}")
                         callback(3)
                     }
                 } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    Log.e("getFeedReview Android", "Unsuccessful response: ${response}")
                     callback(3)
                 }
             }
             override fun onFailure(call: Call<ResponseFeedDetail>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
+                Log.e("getFeedReview server", "Failed to make the request", t)
                 callback(3)
             }
         })
@@ -841,7 +887,7 @@ class GustoViewModel: ViewModel() {
             override fun onResponse(call: Call<List<Member>>, response: Response<List<Member>>) {
                 if (response.isSuccessful) {
                     followList = response.body()!!
-                    Log.d("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel", "Successful response: ${response} ${response.body()}")
                     callback(1)
                 }else if(response.code()==404){
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1026,7 +1072,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
+    //타인 카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
     fun getAllCategory(nickname: String, callback: (Int) -> Unit){
         service.getAllCategory(xAuthToken, nickname = nickname).enqueue(object : Callback<List<ResponseAllCategory>>{
             override fun onResponse(
@@ -1051,14 +1097,50 @@ class GustoViewModel: ViewModel() {
 
         })
     }
+    //타인 카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
+    fun getAllUserCategory(callback: (Int) -> Unit){
+        service.getAllCategory(xAuthToken, nickname = null).enqueue(object : Callback<List<ResponseAllCategory>>{
+            override fun onResponse(
+                call: Call<List<ResponseAllCategory>>,
+                response: Response<List<ResponseAllCategory>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.e("getAllUserCategory", "Successful response: ${response}")
+                    Log.d("getAllUserCategory", response.body()!!.toString())
+                    myAllCategoryList = response.body()!!
+                    callback(0)
+                } else {
+                    Log.e("getAllUserCategory", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<List<ResponseAllCategory>>, t: Throwable) {
+                Log.e("getAllUserCategory", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
 
     /**
      * 가게 api 함수 - mindy
      */
+    var selectedDetailStoreId = 1
     var myMapStoreList : List<ResponseStoreListItem>? = null
     var myAllStoreList : List<ResponseStoreListItem>? = null
 
     var myStoreDetail : ResponseStoreDetail? = null
+    var storeDetailReviews = ArrayList<ResponseReviews>()
+    var detailReviewLastId : Long? = null
+    var detailReviewLastVisitedAt : String? = null
+
+    var userNickname : String = "Gusto"
+
+    var mapVisitedList : List<ResponseSavedStoreData>? = null
+    var mapUnvisitedList : List<ResponseSavedStoreData>? = null
+    var mapVisitedCnt = 0
+    var mapUnvisitedCnt = 0
 
     //가게 카테고리 추가(찜) -> 확인 완, 수정 필요
     fun addPin(categoryId: Long, storeLong: Long, callback: (Int) -> Unit){
@@ -1101,9 +1183,9 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //가게 상세 조회 -> 수정 필요
-    fun getStoreDetail(storeId: Long, reviewId : Int?, callback: (Int) -> Unit){
-        service.getStoreDetail(xAuthToken, storeId, reviewId).enqueue(object : Callback<ResponseStoreDetail>{
+    //가게 상세 조회 -> 완
+    fun getStoreDetail(storeId: Long, callback: (Int) -> Unit){
+        service.getStoreDetail(xAuthToken, storeId, detailReviewLastVisitedAt, detailReviewLastId).enqueue(object : Callback<ResponseStoreDetail>{
             override fun onResponse(
                 call: Call<ResponseStoreDetail>,
                 response: Response<ResponseStoreDetail>
@@ -1112,8 +1194,28 @@ class GustoViewModel: ViewModel() {
                     Log.e("viewmodel", "Successful response: ${response}")
                     Log.d("getStoreDetail", response.body()!!.reviews.toString())
                     myStoreDetail = response.body()
+                    if(detailReviewLastId == null){
+                        for (i in response.body()!!.reviews){
+                            detailReviewLastId = i.reviewId
+                            detailReviewLastVisitedAt = i.visitedAt
+                            storeDetailReviews.add(i)
+                            Log.d("reviewId check first", i.toString())
+                            Log.d("reviewId check first", detailReviewLastId.toString())
+                        }
+                    }
+                    else{
+                        Log.d("reviewId check", "more")
+                        for (i in response.body()!!.reviews){
+                            detailReviewLastId = i.reviewId
+                            detailReviewLastVisitedAt = i.visitedAt
+                            storeDetailReviews.add(i)
+                            Log.d("reviewId check more", i.toString())
+                            Log.d("reviewId check more", detailReviewLastId.toString())
+                        }
+                    }
                     callback(0)
-                } else {
+                }
+                else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
                     callback(1)
                 }
@@ -1126,7 +1228,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //카테고리 별 가게 조회 - 위치기반
+    //카테고리 별 가게 조회 - 위치기반 -> 완
     fun getMapStores(categoryId: Int, townName: String, callback: (Int) -> Unit){
         service.getMapStores(xAuthToken, categoryId = categoryId, townName = townName).enqueue(object :Callback<List<ResponseStoreListItem>>{
             override fun onResponse(
@@ -1151,7 +1253,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //카테고리 별 가게 조회 - 전체
+    //타인 카테고리 별 가게 조회 - 전체 -> 완
     fun getAllStores(categoryId: Int, nickname: String, callback: (Int) -> Unit){
         service.getAllStores(xAuthToken, nickname = nickname, categoryId = categoryId).enqueue(object : Callback<List<ResponseStoreListItem>>{
             override fun onResponse(
@@ -1175,9 +1277,35 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //저장된 맛집 리스트 -> 수정 예정
+    // 내 카테고리 별 전체 가게 조회
+    fun getAllUserStores(categoryId: Int,  callback: (Int) -> Unit){
+        service.getAllStores(xAuthToken, nickname = null, categoryId = categoryId).enqueue(object : Callback<List<ResponseStoreListItem>>{
+            override fun onResponse(
+                call: Call<List<ResponseStoreListItem>>,
+                response: Response<List<ResponseStoreListItem>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.e("viewmodel", "Successful response: ${response}")
+                    myAllStoreList = response.body()!!
+                    callback(0)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<List<ResponseStoreListItem>>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
+    //저장된 맛집 리스트 -> 완
+    var savedStoreIdList = ArrayList<Long>()
+    var unsavedStoreIdList = ArrayList<Long>()
     fun getSavedStores(townName: String, categoryId : Int?, callback: (Int) -> Unit){
-        service.getSavedStores(xAuthToken, townName = "성수1가1동", categoryId = 3).enqueue(object : Callback<List<ResponseSavedStore>>{
+        service.getSavedStores(xAuthToken, townName = "성수1가1동", categoryId = null).enqueue(object : Callback<List<ResponseSavedStore>>{
             override fun onResponse(
                 call: Call<List<ResponseSavedStore>>,
                 response: Response<List<ResponseSavedStore>>
@@ -1185,6 +1313,28 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     Log.e("getSavedStores", "Successful response: ${response}")
                     Log.d("getSavedStores", response.body()!![0].toString())
+                    val data = response.body()!![0]
+                    userNickname = data.nickname
+                    mapVisitedList = data.visitedStores[0].visitedStores
+                    mapVisitedCnt = data.visitedStores[0].numPinStores
+                    mapUnvisitedList = data.unvisitedStores[0].unvisitedStores
+                    mapUnvisitedCnt = data.unvisitedStores[0].numPinStores
+                    if(!mapUnvisitedList.isNullOrEmpty()){
+                        for(i in mapUnvisitedList!!){
+                            unsavedStoreIdList.add(i.storeId.toLong())
+                        }
+                    }
+                    else{
+                        unsavedStoreIdList.clear()
+                    }
+                    if(!mapVisitedList.isNullOrEmpty()){
+                        for(i in mapVisitedList!!){
+                            savedStoreIdList.add(i.storeId.toLong())
+                        }
+                    }
+                    else{
+                        savedStoreIdList.clear()
+                    }
                     callback(0)
                 } else {
                     Log.e("getSavedStores", "Unsuccessful response: ${response}")
@@ -1206,6 +1356,7 @@ class GustoViewModel: ViewModel() {
 
     var myReview : ResponseMyReview? = null
     var myReviewId : Long? = null
+    var reviewEditImg = ArrayList<File>()
     //리뷰 1건 조회 -> 확인 완
     fun getReview(reviewId : Long, callback: (Int) -> Unit){
         service.getReview(xAuthToken, reviewId.toInt()).enqueue(object : Callback<ResponseMyReview>{
@@ -1235,8 +1386,16 @@ class GustoViewModel: ViewModel() {
     //리뷰 수정 -> 확인 완
     fun editReview(reviewId : Long, img : String?, menuName : String?, taste : Int, spiceness : Int, mood : Int, toilet : Int, parking : Int, comment : String?, callback: (Int) -> Unit){
         var requestBody = RequestMyReview(menuName = menuName, taste = taste, spiciness = spiceness, mood = mood, toilet = toilet, parking = parking, comment = comment)
+        val filesToUpload: MutableList<MultipartBody.Part> = mutableListOf()
+
+        // 이미지 파일들을 반복하면서 MultipartBody.Part 리스트에 추가
+        reviewEditImg?.forEach { imgFile ->
+            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), imgFile)
+            val filePart = MultipartBody.Part.createFormData("image", imgFile.name, requestFile)
+            filesToUpload.add(filePart)
+        }
         Log.d("edit checking", requestBody.toString())
-        service.editReview(xAuthToken, reviewId, null, requestBody).enqueue(object : Callback<Void>{
+        service.editReview(xAuthToken, reviewId, filesToUpload, requestBody).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
@@ -1254,7 +1413,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //리뷰 삭제 -> 확인 완
+    //리뷰 삭제
     fun deleteReview(reviewId: Long, callback: (Int) -> Unit){
         service.deleteReview(xAuthToken, reviewId).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -1278,7 +1437,37 @@ class GustoViewModel: ViewModel() {
     /**
      * 검색 api 함수 - mindy
      */
+    var mapSearchArray = ArrayList<ResponseSearch>()
+    var mapSearchStoreIdArray = ArrayList<Long>()
     //검색 결과 -> 작성 예정
+    fun getSearchResult(keyword : String, callback: (Int) -> Unit){
+        service.getSearch(xAuthToken, keyword).enqueue(object : Callback<ArrayList<ResponseSearch>>{
+            override fun onResponse(
+                call: Call<ArrayList<ResponseSearch>>,
+                response: Response<ArrayList<ResponseSearch>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d("getSearchResult", "Successful response: ${response}")
+                    mapSearchArray = response.body()!!
+                    mapSearchStoreIdArray.clear()
+                    for(i in response.body()!!){
+                        mapSearchStoreIdArray.add(i.storeId)
+                    }
+                    callback(0)
+
+                } else {
+                    Log.e("getSearchResult", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<ArrayList<ResponseSearch>>, t: Throwable) {
+                Log.e("getSearchResult", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
 
 
     // 행정 구역
@@ -1486,4 +1675,29 @@ class GustoViewModel: ViewModel() {
     }
 
 
+
+    // 타인 리뷰 모아보기
+    fun otherInstaView(nickName: String, reviewId: Long?, size: Int, callback: (Int, ResponseInstaReview?) -> Unit){
+        service.otherInstaView(xAuthToken, nickName, reviewId, size).enqueue(object : Callback<ResponseInstaReview> {
+            override fun onResponse(call: Call<ResponseInstaReview>, response: Response<ResponseInstaReview>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if(responseBody!=null) {
+                        Log.e("viewmodel", "1 Successful response: ${response}")
+                        callback(1, responseBody)
+                    } else {
+                        Log.e("viewmodel", "2 Successful response: ${response}")
+                        callback(2, null)
+                    }
+                }else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3, null)
+                }
+            }
+            override fun onFailure(call: Call<ResponseInstaReview>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3, null)
+            }
+        })
+    }
 }

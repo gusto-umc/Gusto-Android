@@ -35,6 +35,11 @@ class ReviewFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        initViewPager()
+    }
+
     private fun initViewPager() {
         //ViewPager2 Adapter 셋팅
         var VPAdapter = ReviewAdapter(requireActivity())

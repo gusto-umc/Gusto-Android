@@ -172,17 +172,18 @@ data class RequestPin(
 data class ResponseStoreDetail(
     @SerializedName("storeId") val storeId : Int,
     @SerializedName("storeName") val storeName : String,
-    @SerializedName("categoryName") val categoryName : String,
+    @SerializedName("categoryString") val categoryString : String,
     @SerializedName("address") val address : String,
     @SerializedName("opening") val opening : Int,
     @SerializedName("pin") var pin : Boolean,
-    @SerializedName("reviewImg4") val reviewImg4: List<String>,
-    @SerializedName("reviews") val reviews : List<ResponseReviews>
+    @SerializedName("pinId") var pinId : Int,
+    @SerializedName("reviewImg4") val reviewImg4: ArrayList<String>,
+    @SerializedName("reviews") val reviews : MutableList<ResponseReviews>
 )
 
 //가게 상세 리뷰 -> 수정 필요
 data class ResponseReviews(
-    @SerializedName("reviewId") val reviewId : Int,
+    @SerializedName("reviewId") val reviewId : Long,
     @SerializedName("visitedAt") val visitedAt : String,
     @SerializedName("profileImage") val profileImage : String,
     @SerializedName("nickname") val nickname : String,
@@ -201,7 +202,7 @@ data class ResponseStoreListItem(
     @SerializedName("storeName") val storeName  :String,
     @SerializedName("address") val address : String,
     @SerializedName("reviewCnt") var reviewCnt : Int,
-    @SerializedName("reviewImg") val reviewImg : String
+    @SerializedName("reviewImg") val reviewImg : String?
 )
 
 // 저장된 가게 response
@@ -224,10 +225,10 @@ data class ResponseVisitedStoreData(
 
 data class ResponseSavedStoreData(
     @SerializedName("storeId") val storeId : Int,
-    @SerializedName("categoryName") val categoryName : String,
+    @SerializedName("categoryName") val categoryName : String?,
     @SerializedName("storeName") val storeName : String,
     @SerializedName("address") val address : String,
-    @SerializedName("reviewImg") val reviewImg : String
+    @SerializedName("reviewImg") val reviewImg : String?
 )
 //리뷰 상세
 data class ResponseMyReview(
@@ -236,7 +237,7 @@ data class ResponseMyReview(
     @SerializedName("visitedAt") var visitedAt : String?,
     @SerializedName("images") val img : List<String>?,
     @SerializedName("menuName") val menuName : String?,
-    @SerializedName("hashTags") val hashTags : String?,
+//    @SerializedName("hashTags") val hashTags : String?,
     @SerializedName("taste") val taste : Int,
     @SerializedName("spiciness") val spiciness : Int?,
     @SerializedName("mood") val mood : Int?,
@@ -263,6 +264,7 @@ data class RequestMyReview(
 
 // 리뷰 작성
 data class RequestCreateReview(
+    @SerializedName("skipCheck") val skipCheck : Boolean,
     @SerializedName("storeId") val storeId : Long,
     @SerializedName("visitedAt") val visitedAt : String?,
     @SerializedName("menuName") val menuName : String?,
@@ -275,16 +277,26 @@ data class RequestCreateReview(
     @SerializedName("comment") val comment : String?
 )
 
-// insta (gallery) review 조회- reviews
+// insta (gallery) review 조회- reviews & MyReviewFragment와 OtherReviewFragment
 data class ResponseInstaReviews(
     @SerializedName("reviewId") val reviewId: Long,
     @SerializedName("images") val images: String,
 )
 
-// insta (gallery) review 조회
+// insta (gallery) review 조회 & MyReviewFragment와 OtherReviewFragment
 data class ResponseInstaReview(
     @SerializedName("reviews") val reviews: List<ResponseInstaReviews>,
     @SerializedName("hasNext") val hasNext: Boolean
+)
+
+
+//검색결과
+data class ResponseSearch(
+    @SerializedName("storeId") val storeId : Long,
+    @SerializedName("storeName") val storeName : String,
+    @SerializedName("categoryName") val categoryName : String?,
+    @SerializedName("reviewImg") val reviewImg : String?,
+    @SerializedName("address") val address : String
 )
 
 // 가게 정보 조회(짧은 화면)

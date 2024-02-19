@@ -29,16 +29,12 @@ class MyFragment : Fragment() {
     lateinit var binding: FragmentMyBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
 
-    private val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#F27781"))
-    private val colorStateOffList = ColorStateList.valueOf(Color.parseColor("#ECECEC"))
     private var followed = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMyBinding.inflate(inflater, container, false)
-        initViewPager()
-
 
         gustoViewModel.getUserProfile("my") { result, data ->
             when(result) {
@@ -46,7 +42,9 @@ class MyFragment : Fragment() {
                     if(data!=null) {
                         Log.d("viewmodel",data.toString())
                         setImage(binding.ivProfileImage,data.profileImg,requireContext())
+                        gustoViewModel.profileNickname = ""
                         binding.tvNickname.text = data.nickname
+                        binding.tvReviewNum.text = data.review.toString()
                         binding.tvReviewNum.text = "${data.review}"
                         binding.tvFollowingNum.text = "${data.following}"
                         binding.tvFollowerNum.text = "${data.follower}"
@@ -99,8 +97,14 @@ class MyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        initViewPager()
     }
+
+    override fun onResume() {
+        super.onResume()
+        initViewPager()
+    }
+
     private fun initViewPager() {
 
         //ViewPager2 Adapter 셋팅

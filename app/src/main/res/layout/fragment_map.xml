@@ -50,7 +50,7 @@
             android:id="@+id/list_view_btn"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="18dp"
             android:src="@drawable/fab_list_img"
             android:background="@drawable/background_radius_10"
             android:elevation="4dp"
@@ -58,12 +58,12 @@
             android:padding="10dp"
             android:layout_gravity="right"
             android:contentDescription="목록보기"
-            android:layout_marginRight="30dp"/>
+            android:layout_marginRight="20dp"/>
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_slider"
             android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="191dp"
+            android:layout_height="173dp"
             android:paddingHorizontal="10dp" />
     </LinearLayout>
 

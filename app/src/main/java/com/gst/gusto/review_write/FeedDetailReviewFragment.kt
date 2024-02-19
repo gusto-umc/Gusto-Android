@@ -55,9 +55,7 @@ class FeedDetailReviewFragment : Fragment() {
             if(gustoViewModel.currentFeedNickname!="")
                 findNavController().navigate(R.id.action_feedDetailReview_to_otherFragment)
         }
-        binding.restInfo.setOnClickListener {
-            findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
-        }
+
         chipGroup = binding.chipGroup
 
         return binding.root
@@ -69,6 +67,10 @@ class FeedDetailReviewFragment : Fragment() {
         // 데이터 세팅
         val feedDetail = gustoViewModel.currentFeedData
         binding.tvRestName.text = feedDetail.storeName
+        binding.restInfo.setOnClickListener {
+            gustoViewModel.selectedDetailStoreId = gustoViewModel.currentFeedData.storeId.toInt()
+            findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
+        }
         binding.tvRestLoc.text = feedDetail.address
         binding.tvNickname.text = feedDetail.nickName
         gustoViewModel.currentFeedNickname = feedDetail.nickName

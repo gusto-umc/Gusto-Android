@@ -40,7 +40,7 @@ class GroupRouteEditFragment : Fragment() {
 
         val itemList = gustoViewModel.markerListLiveData.value as ArrayList
 
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute,requireActivity())
+        val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute,requireActivity(),0)
         boardAdapter.notifyDataSetChanged()
 
         binding.rvRoutes.adapter = boardAdapter

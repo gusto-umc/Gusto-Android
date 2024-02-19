@@ -19,7 +19,6 @@ import com.gst.gusto.R
 import com.gst.gusto.Util.util
 import com.gst.gusto.Util.util.Companion.convertContentToFile
 import com.gst.gusto.Util.util.Companion.dpToPixels
-import com.gst.gusto.Util.util.Companion.isPhotoPickerAvailable
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd3Binding
@@ -126,15 +125,11 @@ class ReviewAdd3Fragment : Fragment() {
         binding.ivImage.setOnClickListener {
             binding.btnSkip.visibility = View.GONE
             binding.btnNext.visibility = View.VISIBLE
-            if(isPhotoPickerAvailable()) {
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
         for(i in 0..3) {
             imageCards[i].setOnClickListener {
-                if(isPhotoPickerAvailable()) {
-                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                }
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
         }
     }

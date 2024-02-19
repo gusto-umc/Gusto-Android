@@ -1,4 +1,4 @@
-package com.gst.gusto.review.fragment
+package com.gst.clock.Fragment
 
 import android.graphics.Color
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -14,13 +15,13 @@ import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseInstaReviews
-import com.gst.gusto.databinding.FragmentGalleryReviewBinding
+import com.gst.gusto.databinding.FragmentMyReviewBinding
 import com.gst.gusto.review.adapter.GalleryReviewAdapter
 import com.gst.gusto.review.adapter.GridItemDecoration
 
-class GalleryReviewFragment : Fragment() {
+class OtherReviewFragment : Fragment() {
 
-    lateinit var binding: FragmentGalleryReviewBinding
+    lateinit var binding: FragmentMyReviewBinding
     lateinit var adapter: GalleryReviewAdapter
 
     private val gustoViewModel : GustoViewModel by activityViewModels()
@@ -29,13 +30,13 @@ class GalleryReviewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        binding = FragmentGalleryReviewBinding.inflate(inflater, container, false)
+        binding = FragmentMyReviewBinding.inflate(inflater, container, false)
 
         initView()
         getData()
 
         return binding.root
+
     }
 
     fun initView(){
@@ -43,10 +44,9 @@ class GalleryReviewFragment : Fragment() {
         adapter = GalleryReviewAdapter(ArrayList(), context,
             itemClickListener = { reviewId ->
                 val bundle = Bundle()
-                Log.d("review id check", reviewId.toString())
                 bundle.putLong("reviewId", reviewId)     //리뷰 아이디 넘겨 주면 됨
                 bundle.putString("page","review")
-                findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail,bundle)
+                findNavController().navigate(R.id.action_otherFragment_to_reviewDetail,bundle)
             })
 
         binding.apply {
@@ -62,7 +62,7 @@ class GalleryReviewFragment : Fragment() {
 
 
     fun getData() {
-        gustoViewModel.instaView(null, 30) { result, response ->
+        gustoViewModel.otherInstaView(gustoViewModel.currentFeedNickname, null, 30) { result, response ->
             if (result == 1) {
                 val galleryList = ArrayList<ResponseInstaReviews>()
                 response?.reviews?.forEach { review ->
@@ -71,7 +71,7 @@ class GalleryReviewFragment : Fragment() {
                 adapter.galleryList = galleryList
                 adapter.notifyDataSetChanged()
             }
-            Log.d("listResponse", response.toString())
+            Log.d("otherResponse", response.toString())
         }
     }
 

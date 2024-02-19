@@ -70,7 +70,7 @@ class RouteStoresFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         itemList = gustoViewModel.markerListLiveData.value!!
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyNull,requireActivity())
+        val boardAdapter = MapRoutesAdapter(itemList,binding.lyNull,requireActivity(),0)
         boardAdapter.notifyDataSetChanged()
 
         binding.tvRouteName.text = gustoViewModel.routeName

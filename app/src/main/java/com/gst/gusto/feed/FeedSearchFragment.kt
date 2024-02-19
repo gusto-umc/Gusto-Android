@@ -1,12 +1,15 @@
 package com.gst.gusto.feed
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import android.view.TouchDelegate
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentFeedSearchBinding
@@ -21,7 +24,8 @@ class FeedSearchFragment() : Fragment() {
 
     lateinit var binding: FragmentFeedSearchBinding
 
-    var clickList: ArrayList<Boolean> = arrayListOf(true, true, true, true, true, true, true, true)
+    var hashClickList: ArrayList<Boolean> = arrayListOf(true, true, true, true, true, true, true, true, true, true, true)
+    var hashSearchList: ArrayList<Long>? = ArrayList()
 
     private val gustoViewModel : GustoViewModel by activityViewModels()
 
@@ -32,7 +36,6 @@ class FeedSearchFragment() : Fragment() {
         binding = FragmentFeedSearchBinding.inflate(inflater, container, false)
 
         cancel()
-        hashClick()
         searchKeyWord()
 
         return binding.root
@@ -42,13 +45,12 @@ class FeedSearchFragment() : Fragment() {
     fun hashTagClick(hashTag: TextView, index: Int) {
         hashTag.apply {
             setOnClickListener {
-                if (clickList[index]) {
+                if (hashClickList[index]) {
                     background = ContextCompat.getDrawable(context, R.drawable.background_radius_feed_search_on)
-                    clickList[index] = false
                 } else {
                     background = ContextCompat.getDrawable(context, R.drawable.background_radius_feed_search_off)
-                    clickList[index] = true
                 }
+                hashClickList[index] = !hashClickList[index]
             }
         }
     }
@@ -82,34 +84,84 @@ class FeedSearchFragment() : Fragment() {
         binding.apply{
             // 해시태그 버튼들 클릭
             hashTagClick(warm, 0)
-            hashTagClick(clean, 1)
-            hashTagClick(insta, 2)
-            hashTagClick(comportable, 3)
-            hashTagClick(cute, 4)
-            hashTagClick(wide, 5)
-            hashTagClick(mood, 6)
-            hashTagClick(cost, 7)
+            hashTagClick(restroom, 1)
+            hashTagClick(comportable, 2)
+            hashTagClick(cute, 3)
+            hashTagClick(clean, 4)
+            hashTagClick(insta, 5)
+            hashTagClick(hip, 6)
+            hashTagClick(okay, 7)
+            hashTagClick(wide, 8)
+            hashTagClick(mood, 9)
+            hashTagClick(cost, 10)
         }
     }
 
     fun searchKeyWord(){
-        var testHashList = listOf(1L, 2L, 3L)
+
+        hashClick()
+
         with(binding) {
-            feedSearch.setOnTouchListener(View.OnTouchListener { v, event ->
+
+            feedSearch.setOnEditorActionListener{ textView, action, event ->
+                var handled = false
+
+                if (action == EditorInfo.IME_ACTION_SEARCH) {
+                    hashSearchList?.clear()
+                    for(hashClick in 1.. hashClickList.size ){
+                        Log.d("Search", "${hashClick}은 ${hashClickList[hashClick - 1]}")
+                        if(!hashClickList[hashClick - 1]){
+                            hashSearchList?.add(hashClick.toLong())
+                        }
+                    }
+
+                    val tags = hashSearchList?.toList() ?: emptyList()
+                    getData(feedSearch.text.toString(), tags)
+                    moveFeed()
+                    handled = true
+                }
+
+                handled
+            }
+
+            val delegateArea = Rect()
+            feedSearch.post {
+                feedSearch.getHitRect(delegateArea)
+                delegateArea.right += 200  // 오른쪽 패딩을 늘립니다.
+
+                val touchDelegate = TouchDelegate(delegateArea, feedSearch)
+                if (View::class.java.isInstance(feedSearch.parent)) {
+                    (feedSearch.parent as View).touchDelegate = touchDelegate
+                }
+            }
+
+            feedSearch.setOnTouchListener { v, event ->
                 if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= (feedSearch.right - feedSearch.compoundDrawables[2].bounds.width())) {
-                        getData(feedSearch.text.toString(), testHashList)
+                    val touchableArea = feedSearch.right - feedSearch.compoundDrawables[2].bounds.width() - 50  // 50 픽셀만큼 더 넓게 설정
+                    if (event.rawX >= touchableArea) {
+                        // 검색을 실행하기 전에 해시태그 리스트를 초기화하고, 선택되지 않은 해시태그들만 다시 추가합니다.
+                        hashSearchList?.clear()
+                        for(hashClick in 1.. hashClickList.size ){
+                            Log.d("Search", "${hashClick}은 ${hashClickList[hashClick - 1]}")
+                            if(!hashClickList[hashClick - 1]){
+                                hashSearchList?.add(hashClick.toLong())
+                            }
+                        }
+
+                        val tags = hashSearchList?.toList() ?: emptyList()
+
+                        // 검색을 실행합니다.
+                        getData(feedSearch.text.toString(), tags)
                         moveFeed()
-                        return@OnTouchListener true
+                        return@setOnTouchListener true
                     }
                 }
                 false
-            })
+            }
         }
     }
 
-    fun getData(keyword: String, hashTags: List<Long>) {
-        gustoViewModel.getTokens(requireActivity() as MainActivity)
+    fun getData(keyword: String, hashTags: List<Long>?) {
         gustoViewModel.feedSearch(keyword, hashTags) { result, response ->
             if (result == 1) {
                 if (response != null) {

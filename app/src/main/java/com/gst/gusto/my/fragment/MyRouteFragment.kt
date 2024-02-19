@@ -1,6 +1,7 @@
 package com.gst.gusto.my
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentMyRouteBinding
 
-class MyRouteFragment(val nickname:String?) : Fragment() {
+class MyRouteFragment() : Fragment() {
 
     lateinit var binding: FragmentMyRouteBinding
     override fun onCreateView(
@@ -27,12 +28,8 @@ class MyRouteFragment(val nickname:String?) : Fragment() {
         val navHostFragment = childFragmentManager.findFragmentById(R.id.fl_my_route_container) as NavHostFragment
         val navController = navHostFragment.navController
 
-
-
         navController.popBackStack()
-        val bundle = Bundle()
-        if(nickname!=null)
-            bundle.putString("nickname",nickname)
+
         navController.navigate(R.id.myRouteRoutesFragment)
     }
 }

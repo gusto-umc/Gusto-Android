@@ -13,12 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.CardWxampleBinding
 import com.gst.gusto.databinding.ItemStoreCardBinding
 
 class ListViewStoreAdapter(private var flag : String, private val parentView : View) : ListAdapter<ResponseStoreListItem, ListViewStoreAdapter.ViewHolder>(DiffCallback) {
 
+    var gustoViewModel : GustoViewModel? = null
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<ResponseStoreListItem>(){
             override fun areItemsTheSame(oldItem: ResponseStoreListItem, newItem: ResponseStoreListItem): Boolean {
@@ -64,6 +66,8 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
             holder.tvCountCategory.text = "${holder.data?.reviewCnt}번 방문했어요"
 
             holder.cvStore.setOnClickListener {
+                //뷰모델에 storeId 저장 -> detail 로 이동인 경우
+                gustoViewModel!!.selectedDetailStoreId = holder.data?.storeId!!.toInt()
                 Navigation.findNavController(parentView).navigate(R.id.action_mapListViewFragment_to_storeDetailFragment)
             }
         }

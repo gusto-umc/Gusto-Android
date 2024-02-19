@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background_radius_top_30"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:minHeight="500dp">
 
     <TextView
         android:layout_width="wrap_content"

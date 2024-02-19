@@ -38,11 +38,19 @@ class ReviewAdd1Fragment : Fragment() {
 
         binding.btnNext.setOnClickListener {
             gustoViewModel.progress = 0
+            gustoViewModel.skipCheck = false
             findNavController().navigate(R.id.action_reviewAdd1Fragment_to_reviewAdd2Fragment)
         }
 
         binding.btnSkip.setOnClickListener {
-
+            gustoViewModel.createReview() {result ->
+                when(result) {
+                    1 -> {
+                        activity.hideBottomNavigation(false)
+                        findNavController().popBackStack(R.id.storeDetailFragment,false)
+                    }
+                }
+            }
         }
 
         return binding.root
@@ -51,6 +59,9 @@ class ReviewAdd1Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //storeId : gustoViewModel.selectedDetailStoreId 사용하면 됨
+
         activity.hideBottomNavigation(true)
         binding.lyRest.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
@@ -70,7 +81,7 @@ class ReviewAdd1Fragment : Fragment() {
             }
         })
         setImage(binding.ivRest, gustoViewModel.myStoreDetail?.reviewImg4?.get(0),requireContext())
-        gustoViewModel
+        binding.tvRest.text = gustoViewModel.myStoreDetail?.storeName
     }
     override fun onDestroy() {
         super.onDestroy()
