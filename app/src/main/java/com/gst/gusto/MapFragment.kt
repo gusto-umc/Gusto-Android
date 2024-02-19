@@ -3,21 +3,17 @@ package com.gst.clock.Fragment
 
 import MapRecyclerAdapter
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +22,6 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.MainActivity
@@ -37,7 +32,6 @@ import com.gst.gusto.Util.mapUtil.Companion.setMapInit
 import com.gst.gusto.Util.mapUtil.Companion.setMarker
 import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
-import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.databinding.FragmentMapBinding
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter
 import net.daum.mf.map.api.CameraUpdateFactory
@@ -119,7 +113,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 val categoryList = gustoViewModel.myMapCategoryList
                 if (categoryList != null) {
                     for ((index, category) in categoryList.withIndex()) {
-                        addChip(category.categoryName, category.myCategoryId, index)
+                        addChip(category.categoryName, category.myCategoryId, index,category.categoryIcon)
                         Log.d("chip","칩 불러오기")
                     }
                 } else {
@@ -133,7 +127,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     }
 
     // 칩 추가
-    private fun addChip(text: String, chipId: Int, chipIndex: Int) {
+    private fun addChip(text: String, chipId: Int, chipIndex: Int, categoryIcon: Int) {
         val chip = Chip(requireContext())
 
         chip.id = chipId // 고유한 ID 할당
@@ -148,7 +142,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         chip.typeface = Typeface.createFromAsset(requireActivity().assets, "font/pretendard_medium.otf")
         chip.chipStrokeWidth = util.dpToPixels(1f, resources.displayMetrics)
         chip.chipCornerRadius = util.dpToPixels(41f, resources.displayMetrics)
-        chip.setChipIconResource(R.drawable.streamline_bean)
+        chip.setChipIconResource(gustoViewModel.findIconResource(categoryIcon))
 
         Log.d("chip","칩 생성")
 
