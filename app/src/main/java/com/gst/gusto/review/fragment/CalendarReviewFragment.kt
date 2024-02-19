@@ -56,10 +56,12 @@ class CalendarReviewFragment : Fragment() {
     fun initView(){
         adapter = CalendarReviewAdapter(ArrayList(), context,
                 itemClickListener = { reviewId ->
-                    val bundle = Bundle()
-                    bundle.putLong("reviewId", reviewId)     // 리뷰 아이디 넘겨 주면 됨
-                    bundle.putString("page","review")
-                    findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail, bundle)
+                    if(reviewId != 0L){
+                        val bundle = Bundle()
+                        bundle.putLong("reviewId", reviewId)
+                        bundle.putString("page","review")
+                        findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail, bundle)
+                    }
                 })
 
         binding.apply {

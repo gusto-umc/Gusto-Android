@@ -36,7 +36,7 @@ class CalendarReviewAdapter(var calendarList: List<ResponseCalReviews?>, val con
 
         init {
             imageview.setOnClickListener{
-                itemClickListener.invoke(calendarList[position]?.reviewId ?: 0)
+                itemClickListener.invoke(calendarList[position]?.reviewId ?: 0L)
             }
         }
 
