@@ -13,6 +13,7 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 import java.time.LocalDate
 
 
@@ -262,6 +263,14 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Query("myCategoryId") myCategoryId : Int
     ) : Call<Void>
+
+    @DELETE("myCategories")
+    fun deleteCategory2(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("myCategoryId") myCategoryId : MutableList<Int>
+    ) : Call<Void>
+
+
 
     //5.카테고리 전체 조회 - 피드-> 서버 배포 후 다시 확인하기
     @GET("myCategories")

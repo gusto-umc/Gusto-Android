@@ -2,10 +2,14 @@ package com.gst.gusto.search
 
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_ENTER
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
@@ -110,8 +114,10 @@ class SearchFragment : Fragment() {
             binding.fabSearchMap.visibility = View.GONE
         }
 
-
-        binding.layoutSearchSearchbox.setOnClickListener {
+        /**
+         * 검색 함수
+         */
+        fun searchKeyword(){
             //공백 확인
             if (binding.edtSearchSearchbox.text.isNullOrBlank()) {
                 binding.rvSearchResult.visibility = View.GONE
@@ -121,7 +127,7 @@ class SearchFragment : Fragment() {
                 // 서버 연결 후 검샥 결과 response
                 util.hideKeyboard(this.requireActivity())
                 gustoViewModel.getSearchResult(binding.edtSearchSearchbox.text.toString()){
-                    result ->
+                        result ->
                     when(result){
                         0 -> {
                             if(gustoViewModel.mapSearchArray.isNullOrEmpty()){
@@ -165,6 +171,20 @@ class SearchFragment : Fragment() {
 
 
             }
+        }
+
+        binding.edtSearchSearchbox.setOnKeyListener { v, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
+                // 엔터 눌렀을때 행동
+                searchKeyword()
+            }
+
+            true
+        }
+
+
+        binding.layoutSearchSearchbox.setOnClickListener {
+            searchKeyword()
         }
 
         /**

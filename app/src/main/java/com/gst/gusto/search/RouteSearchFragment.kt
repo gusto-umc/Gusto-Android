@@ -2,6 +2,7 @@ package com.gst.gusto.search
 
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -89,7 +90,8 @@ class RouteSearchFragment : Fragment() {
          * 3. 검색 iv clickListener
          */
         val mRouteResultAdapter = SearchStoreAdapter()
-        binding.ivRouteSearchbox.setOnClickListener {
+
+        fun searchRouteKeyword(){
             binding.rvRouteCategory.visibility = View.GONE
             binding.rvRouteSearchResult.visibility = View.VISIBLE
             //서버 연결 -> rv에 데이터 연결
@@ -143,6 +145,19 @@ class RouteSearchFragment : Fragment() {
 
             }
         }
+        binding.ivRouteSearchbox.setOnClickListener {
+            searchRouteKeyword()
+        }
+
+        binding.edtRouteSearchbox.setOnKeyListener { v, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                // 엔터 눌렀을때 행동
+                searchRouteKeyword()
+            }
+
+            true
+        }
+
     }
 
 }
