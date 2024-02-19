@@ -530,11 +530,13 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         var dong = binding.fragmentArea.dong
         var areaPick = binding.fragmentArea.areaPick
 
+        //저장 맛집
+        var locRestSaveNum = binding.fragmentArea.locRestSaveNum
+
         //방문 맛집
         var noVisNum = binding.fragmentArea.noVisNum
         var visNum = binding.fragmentArea.visNum
 
-        var locRestSaveNum = binding.fragmentArea.locRestSaveNum
 
         //출력//
         Log.d("dong", "${dong}")
@@ -544,7 +546,11 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적 없는 맛집 수
         visNum.text = gustoViewModel.mapVisitedCnt.toString() //방문해본 적 있는 맛집 수
 
+        var save_rest = gustoViewModel.mapVisitedCnt + gustoViewModel.mapUnvisitedCnt
 
+        locRestSaveNum.text = save_rest.toString()
+
+        /*
         // 저장된 맛집의 수를 locRestSaveNum 텍스트뷰에 연결
         gustoViewModel.getSavedStores("${dong}", null) { result ->
             when (result) {
@@ -561,6 +567,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 }
             }
         }
+         */
 
     }
 
