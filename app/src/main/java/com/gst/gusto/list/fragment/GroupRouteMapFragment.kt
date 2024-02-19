@@ -116,10 +116,10 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val editMode = arguments?.getBoolean("edit", false) ?: false
-        if(editMode) {
-            //binding.fabEdit.callOnClick()
+        Log.d("viewmodel",gustoViewModel.editMode.toString())
+        if(gustoViewModel.editMode) {
+            gustoViewModel.editMode = false
+            binding.fabEdit.callOnClick()
         }
 
         val itemList = gustoViewModel.markerListLiveData.value as ArrayList<MarkerItem>

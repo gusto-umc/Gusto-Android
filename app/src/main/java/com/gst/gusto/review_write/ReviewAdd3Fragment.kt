@@ -65,7 +65,7 @@ class ReviewAdd3Fragment : Fragment() {
                     }
                 }
             }
-
+            Log.d("viewmodel images",gustoViewModel.imageFiles.get(0).toString())
 
             findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
         }

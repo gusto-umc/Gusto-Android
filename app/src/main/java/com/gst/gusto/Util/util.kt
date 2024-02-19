@@ -5,6 +5,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
@@ -31,6 +33,7 @@ import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.gst.gusto.R
 import java.io.File
+import java.io.FileOutputStream
 import kotlin.concurrent.thread
 
 class util {
@@ -234,12 +237,18 @@ class util {
         @Throws(Exception::class)
         fun convertContentToFile(ctx: Context, uri: Uri): File {
             val inputStream = ctx.contentResolver.openInputStream(uri)
-            val file = File.createTempFile("temp", null, ctx.cacheDir)
-            file.outputStream().use { outputStream ->
-                inputStream?.copyTo(outputStream)
-            }
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            inputStream?.close()
 
-            return file
+            val outputFile = File.createTempFile("temp", ".png", ctx.cacheDir)
+            val outputStream = FileOutputStream(outputFile)
+
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+
+            outputStream.flush()
+            outputStream.close()
+
+            return outputFile
         }
 
         /**

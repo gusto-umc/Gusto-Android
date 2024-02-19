@@ -43,10 +43,18 @@ class OtherReviewFragment : Fragment() {
 
         adapter = GalleryReviewAdapter(ArrayList(), context,
             itemClickListener = { reviewId ->
-                val bundle = Bundle()
+                /*val bundle = Bundle()
                 bundle.putLong("reviewId", reviewId)     //리뷰 아이디 넘겨 주면 됨
-                bundle.putString("page","review")
-                findNavController().navigate(R.id.action_otherFragment_to_feedDetail,bundle)
+                bundle.putString("page","review")*/
+
+                gustoViewModel.currentFeedReviewId = reviewId
+                gustoViewModel.getFeedReview{ result ->
+                    when(result) {
+                        1 -> {
+                            findNavController().navigate(R.id.action_otherFragment_to_feedDetail)
+                        }
+                    }
+                }
             })
 
         binding.apply {
