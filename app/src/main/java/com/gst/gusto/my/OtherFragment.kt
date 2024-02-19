@@ -115,6 +115,12 @@ class OtherFragment : Fragment() {
         binding.btnProfileEdit.text = "팔로잉"
         binding.btnOption.visibility =View.GONE
     }
+
+    override fun onResume() {
+        super.onResume()
+        initViewPager()
+    }
+
     private fun initViewPager() {
         //ViewPager2 Adapter 셋팅
         var viewPager2Adatper = MyViewpagerAdapter(requireActivity())

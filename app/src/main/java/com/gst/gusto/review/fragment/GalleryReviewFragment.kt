@@ -62,7 +62,6 @@ class GalleryReviewFragment : Fragment() {
 
 
     fun getData() {
-        gustoViewModel.getTokens(requireActivity() as MainActivity)
         gustoViewModel.instaView(null, 30) { result, response ->
             if (result == 1) {
                 val galleryList = ArrayList<ResponseInstaReviews>()

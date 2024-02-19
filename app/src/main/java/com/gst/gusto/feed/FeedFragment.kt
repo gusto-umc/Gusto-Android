@@ -110,30 +110,6 @@ class FeedFragment : Fragment() {
             Log.d("feedResponse2", feedList.toString())
         })
 
-        /*gustoViewModel.getTokens(requireActivity() as MainActivity)
-        if(gustoViewModel.searchFeedData == null){
-            gustoViewModel.feed() { result, response ->
-                if (result == 1) {
-                    response?.forEach {
-                        feedList.add(ResponseFeedReview(it.reviewId, it.images))
-                    }
-                    adapter.feedList = feedList
-                    adapter.notifyDataSetChanged()
-                }
-                Log.d("feedResponse", feedList.toString())
-            }
-        } else {
-            gustoViewModel.searchFeedData.observe(viewLifecycleOwner, Observer { value ->
-                feedList.clear()
-                gustoViewModel.searchFeedData?.value?.reviews?.forEach {
-                    feedList.add(ResponseFeedReview(it.reviewId, it.images))
-                }
-                adapter.feedList = feedList
-                adapter.notifyDataSetChanged()
-                Log.d("feedResponse2", feedList.toString())
-            })
-        }*/
-
     }
 
 }

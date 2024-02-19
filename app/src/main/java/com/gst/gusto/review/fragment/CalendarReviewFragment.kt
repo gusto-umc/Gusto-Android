@@ -7,11 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.ResponseCalReview
 import com.gst.gusto.api.ResponseCalReviews
 import com.gst.gusto.databinding.FragmentCalendarReviewBinding
 import com.gst.gusto.review.adapter.CalendarReviewAdapter
@@ -40,9 +44,13 @@ class CalendarReviewFragment : Fragment() {
         binding = FragmentCalendarReviewBinding.inflate(inflater, container, false)
 
         initView()
-        getData()
+        observeData()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
     fun initView(){
@@ -62,36 +70,48 @@ class CalendarReviewFragment : Fragment() {
         }
     }
 
-    fun getData(){
+    fun getData(): LiveData<ResponseCalReview?> {
+        val liveData = MutableLiveData<ResponseCalReview?>()
+        val dates = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
 
+        gustoViewModel.calView(null, 100, dates) { result, response ->
+            if (result == 1) {
+                response?.let {
+                    liveData.postValue(it)
+                }
+            }
+            Log.d("calResponse", liveData.value.toString())
+        }
+
+        return liveData
+    }
+
+    fun observeData() {
+        getData().observe(viewLifecycleOwner, Observer { response ->
+            setData(response)
+        })
+    }
+
+    fun setData(response: ResponseCalReview?) {
         val daysInMonth = YearMonth.now().lengthOfMonth()
-
         val calList = List<ResponseCalReviews?>(daysInMonth){null}.toMutableList()
 
         for(day in 1..daysInMonth){
-            val dates = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
-
-            gustoViewModel.getTokens(requireActivity() as MainActivity)
-            gustoViewModel.calView(null, 100, dates) { result, response ->
-                if (result == 1) {
-                    response?.reviews?.let{
-                        it.forEach { item ->
-                            val date = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, day)
-                            if(item.visitedDate == date.toString()){
-                                calList[(day - 1)] = ResponseCalReviews(item.reviewId, item.visitedDate, item.images)
-                            }
-                        }
+            val date = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, day)
+            response?.reviews?.let{
+                it.forEach { item ->
+                    Log.d("calData" ,"${item.visitedDate}와 ${date.toString()}")
+                    if(item.visitedDate == date.toString()){
+                        calList[(day - 1)] = ResponseCalReviews(item.reviewId, item.visitedDate, item.images)
                     }
-
                 }
-                Log.d("listResponse", response.toString())
-                adapter.calendarList = calList
-                adapter.notifyDataSetChanged()
-                Log.d("listCal", calList.toString())
             }
         }
 
+        Log.d("calList", calList.toString())
 
+        adapter.calendarList = calList
+        adapter.notifyDataSetChanged()
     }
 
 }
