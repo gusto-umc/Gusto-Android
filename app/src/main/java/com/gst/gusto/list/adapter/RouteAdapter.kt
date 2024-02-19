@@ -28,6 +28,7 @@ class RouteAdapter(val itemList: ArrayList<mapUtil.Companion.MarkerItem>, val ac
         if(position+1>=itemList.count()) holder.iv_line_down.visibility = View.INVISIBLE
         holder.itemView.setOnClickListener{
             activity.getViewModel().groupFragment = 1
+            activity.gustoViewModel.selectedDetailStoreId = itemList[position].storeId.toInt()
             activity.getCon().navigate(R.id.action_groupFragment_to_storeDetailFragment)
         }
 
