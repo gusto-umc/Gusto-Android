@@ -84,7 +84,7 @@ class FeedFragment : Fragment() {
                     if (focus){
                         val fragmentManger = activity?.supportFragmentManager
                         fragmentManger?.beginTransaction()
-                            ?.add(R.id.fl_container, FeedSearchFragment())
+                            ?.add(R.id.fl_container, FeedSearchFragment(),"FeedSearchFragmentTag")
                             ?.addToBackStack(null)
                             ?.commit()
                         clearFocus()
