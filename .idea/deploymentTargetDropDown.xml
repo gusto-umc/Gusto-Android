@@ -9,24 +9,13 @@
               <type value="RUNNING_DEVICE_TARGET" />
               <deviceKey>
                 <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\qjatn\.android\avd\Pixel_XL_API_30.avd" />
+                  <type value="SERIAL_NUMBER" />
+                  <value value="192.168.45.140:5555" />
                 </Key>
               </deviceKey>
             </Target>
           </runningDeviceTargetSelectedWithDropDown>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\qjatn\.android\avd\Pixel_XL_API_30.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-19T01:58:47.589331100Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-02-19T02:25:19.221454300Z" />
         </State>
       </entry>
     </value>

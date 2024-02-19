@@ -28,7 +28,9 @@
             android:paddingLeft="16dp"
             android:paddingRight="10dp"
             android:textColorHint="#A6A6A6"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:imeOptions="actionSearch"
+            android:inputType="text"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
