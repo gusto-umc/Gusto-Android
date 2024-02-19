@@ -6,4 +6,8 @@
     </style>
 
     <style name="Theme.Gusto" parent="Base.Theme.Gusto" />
+
+    <style name="BottomSheetDialogStyle" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:background">@drawable/background_radius_top_30</item>
+    </style>
 </resources>

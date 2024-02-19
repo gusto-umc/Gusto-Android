@@ -39,9 +39,8 @@ class RouteStoresFragment : Fragment() {
             gustoViewModel.getRouteMap() { result ->
                 when (result) {
                     1 -> {
-                        val bundle = Bundle()
-                        bundle.putBoolean("edit",true)
-                        findNavController().navigate(R.id.action_routeStoresFragment_to_groupMRMFragment,bundle)
+                        gustoViewModel.editMode = true
+                        findNavController().navigate(R.id.action_routeStoresFragment_to_groupMRMFragment)
                     }
                     else -> {
                         Toast.makeText(context,"서버와의 연결 불안정", Toast.LENGTH_SHORT ).show()

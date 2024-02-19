@@ -82,7 +82,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         // BottomSheet 설정
         val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
         ////    카테고리    ////
 
@@ -407,6 +407,35 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 } else {
                     viewPager.visibility = View.GONE
                 }
+            }
+        })
+        // 드래그 리스너 설정
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                // 상태 변경 시 호출됩니다.
+                when (newState) {
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        binding.listViewBtn.visibility = View.VISIBLE
+                        // 바텀 시트가 축소된 상태입니다.
+                        // 원하는 동작을 수행하세요.
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        // 바텀 시트가 확장된 상태입니다.
+                        // 원하는 동작을 수행하세요.
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                        binding.listViewBtn.visibility = View.GONE
+                        // 바텀 시트가 드래그 중인 상태입니다.
+                        // 원하는 동작을 수행하세요.
+                    }
+                    // 다른 상태에 대한 처리도 필요하다면 추가하세요.
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // 드래그 중일 때 호출됩니다.
+                // slideOffset은 -1(바텀 시트 완전히 닫힘)부터 1(바텀 시트 완전히 열림)까지의 값입니다.
+                // 원하는 동작을 수행하세요.
             }
         })
 
