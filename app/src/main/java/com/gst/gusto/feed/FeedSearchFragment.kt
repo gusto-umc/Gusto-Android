@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentFeedSearchBinding
@@ -99,6 +100,28 @@ class FeedSearchFragment() : Fragment() {
         hashClick()
 
         with(binding) {
+
+            feedSearch.setOnEditorActionListener{ textView, action, event ->
+                var handled = false
+
+                if (action == EditorInfo.IME_ACTION_SEARCH) {
+                    hashSearchList?.clear()
+                    for(hashClick in 1.. hashClickList.size ){
+                        Log.d("Search", "${hashClick}은 ${hashClickList[hashClick - 1]}")
+                        if(!hashClickList[hashClick - 1]){
+                            hashSearchList?.add(hashClick.toLong())
+                        }
+                    }
+
+                    val tags = hashSearchList?.toList() ?: emptyList()
+                    getData(feedSearch.text.toString(), tags)
+                    moveFeed()
+                    handled = true
+                }
+
+                handled
+            }
+
             feedSearch.setOnTouchListener(View.OnTouchListener { v, event ->
 
                 hashSearchList?.clear()
