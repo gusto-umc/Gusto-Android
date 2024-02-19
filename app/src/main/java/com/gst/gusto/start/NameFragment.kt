@@ -35,13 +35,13 @@ class NameFragment : Fragment() {
                                 1 -> {
                                     LoginViewModel.setNickName(binding.etName.text.toString())
                                     findNavController().navigate(R.id.action_nameFragment_to_ageFragment)
-                                }/*
+                                }
                                 2 -> {
                                     Toast.makeText(requireContext(), "이미 중복된 닉네임이 존재합니다", Toast.LENGTH_SHORT).show()
                                 }
                                 else -> {
                                     Toast.makeText(requireContext(), "오류 발생", Toast.LENGTH_SHORT).show()
-                                }*/
+                                }
                             }
                         }
                     }
