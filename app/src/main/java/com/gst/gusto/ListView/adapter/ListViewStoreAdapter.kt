@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.fragment.app.findFragment
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -81,7 +82,13 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
             holder.tvCountCategory.text = "${holder.data!!.reviewCnt}"
 
             holder.cvStore.setOnClickListener {
-                //루트 페이지로 이동
+
+                val mainActivity = gustoViewModel?.mainActivity
+                if (mainActivity != null) {
+                    //mainActivity?.supportFragmentManager?.beginTransaction()?.remove(parentView.findFragment())?.commit()
+                    gustoViewModel!!.routeStorTmpData = holder.data
+                    mainActivity.getCon().popBackStack()
+                }
             }
         }
 

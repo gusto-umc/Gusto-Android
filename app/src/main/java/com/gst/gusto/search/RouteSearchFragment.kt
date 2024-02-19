@@ -86,8 +86,6 @@ class RouteSearchFragment : Fragment() {
             binding.rvRouteSearchResult.visibility = View.VISIBLE
             //서버 연결 -> rv에 데이터 연결
         }
-
-
-
     }
+
 }

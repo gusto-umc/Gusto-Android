@@ -27,12 +27,21 @@ class GustoViewModel: ViewModel() {
     private val service = retrofit.create(GustoApi::class.java)
     private var xAuthToken = ""
     private var refreshToken = ""
+
+    lateinit var mainActivity : MainActivity
     // 해쉬 태그
     val hashTag = listOf<String>("#따뜻함","#여기서는 화장실 금지","#쾌적","#귀여워","#깨끗함","#인스타","#힙함","#나름 괜찮아","#넓음","#분위기","#가성비")
 
     // 자신의 루트 리스트 - (val title : String, val people : Int, val food : Int, val route : Int)
     val myRouteList = ArrayList<GroupItem>()
     val otherRouteList = ArrayList<GroupItem>()
+    // 루트 가게 정보 임시 데이터
+    var routeStorTmpData : ResponseStoreListItem? = null
+
+    // 그룹 루트 생성 임시 데이터들
+    var tmpName = ""
+    val itemList = ArrayList<mapUtil.Companion.MarkerItem>()
+
     // 루트 이름
     var routeName = ""
     // 루트 편집 정보
@@ -281,6 +290,7 @@ class GustoViewModel: ViewModel() {
                             // ordinal 속성을 기준으로 리스트를 정렬
                             list.sortBy { it.ordinal }
                         }
+                        Log.d("viewmodel","route data : ${markerListLiveData.value}")
                         routeName = responseBody.routeName
                         callback(1)
                     } else callback(2)
@@ -366,7 +376,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response(Remove): ${response}")
                     callback(1)
                 } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    Log.e("viewmodel", "Unsuccessful response(Remove): ${response}")
                     callback(2)
                 }
             }
@@ -385,7 +395,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response(Add): ${response}")
                     callback(1)
                 } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    Log.e("viewmodel", "Unsuccessful response(add): ${response} ${addList}")
                     callback(2)
                 }
             }
