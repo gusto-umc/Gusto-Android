@@ -29,7 +29,7 @@ class CategoryIconAdapter(private val dataList : ArrayList<Int>) : RecyclerView.
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.categoryIcon.setImageResource(dataList[position].toInt())
         holder.categoryIcon.setOnClickListener {
-            itemClickListener.onClick(it, position)
+            itemClickListener.onClick(it, position, dataList[position])
         }
     }
 
@@ -39,7 +39,7 @@ class CategoryIconAdapter(private val dataList : ArrayList<Int>) : RecyclerView.
 
     // (2) 리스너 인터페이스
     interface OnItemClickListener {
-        fun onClick(v: View, position: Int)
+        fun onClick(v: View, position: Int, data : Int)
     }
     // (3) 외부에서 클릭 시 이벤트 설정
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {

@@ -1,6 +1,8 @@
 package com.gst.gusto.ListView.adapter
 
+import android.media.Image
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Im
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -31,15 +33,15 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
     var selectedIconInt : Int = 1
     private val sampleIconArray = arrayListOf<Int>(
         R.drawable.category_icon_1,
-        R.drawable.category_icon_1,
-        R.drawable.category_icon_1,
-        R.drawable.category_icon_1,
-        R.drawable.category_icon_1,
-        R.drawable.category_icon_1,
-        R.drawable.category_icon_1,
-        R.drawable.category_icon_1,
-        R.drawable.category_icon_1,
-        R.drawable.category_icon_1,
+        R.drawable.ic_rice_cate,
+        R.drawable.ic_chat,
+        R.drawable.ic_hot_,
+        R.drawable.ic_likes,
+        R.drawable.ic_money,
+        R.drawable.ic_moods,
+        R.drawable.ic_music,
+        R.drawable.ic_noodle,
+        R.drawable.ic_reserv,
         R.drawable.category_icon_1,
         R.drawable.category_icon_1,
         R.drawable.category_icon_1,
@@ -58,25 +60,6 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
 
         view?.findViewById<ImageView>(R.id.iv_bottomsheet_category_x)?.setOnClickListener {
             dialog?.dismiss()
-        }
-
-        view?.findViewById<TextView>(R.id.tv_category_edit)?.setOnClickListener {
-            view?.findViewById<ImageView>(R.id.iv_bottomsheet_category_x)?.visibility = View.VISIBLE
-            view?.findViewById<TextView>(R.id.tv_category_edit)?.visibility = View.GONE
-            view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)?.isEnabled = true
-            view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)?.isEnabled = true
-            // 아이콘 클릭리스너
-            //icon click listener
-            view?.findViewById<ImageView>(R.id.iv_category_add_icon)?.setOnClickListener {
-                if(view?.findViewById<RecyclerView>(R.id.rv_category_add_icon)!!.isVisible){
-                    view?.findViewById<RecyclerView>(R.id.rv_category_add_icon)!!.visibility = View.GONE
-                }
-                else{
-                    view?.findViewById<RecyclerView>(R.id.rv_category_add_icon)!!.visibility = View.VISIBLE
-                }
-            }
-            view?.findViewById<Switch>(R.id.switch_category_public)?.isEnabled = true
-            //스위치 클릭 리스너
         }
 
         if(isAdd){
@@ -128,6 +111,7 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
 
         }
         else{
+
             // 수정 상황
             view?.findViewById<ImageView>(R.id.iv_bottomsheet_category_x)?.visibility = View.GONE
             view?.findViewById<TextView>(R.id.tv_category_edit)?.visibility = View.VISIBLE
@@ -137,8 +121,27 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
             view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)?.setText(categoryEdiBottomSheetData?.categoryDesc)
             view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)?.isEnabled = false
             // 아이콘 데이터 적용
-            //아이콘 클릭 리스너 없음
+            view?.findViewById<ImageView>(R.id.iv_category_add_icon)?.setImageResource(viewModel!!.findIconResource(categoryEdiBottomSheetData?.categoryIcon!!))
+            selectedIconInt = categoryEdiBottomSheetData!!.categoryIcon!!
 
+            view?.findViewById<TextView>(R.id.tv_category_edit)?.setOnClickListener {
+                view?.findViewById<ImageView>(R.id.iv_bottomsheet_category_x)?.visibility = View.VISIBLE
+                view?.findViewById<TextView>(R.id.tv_category_edit)?.visibility = View.GONE
+                view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)?.isEnabled = true
+                view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)?.isEnabled = true
+                // 아이콘 클릭리스너
+                //icon click listener
+                view?.findViewById<ImageView>(R.id.iv_category_add_icon)?.setOnClickListener {
+                    if(view?.findViewById<RecyclerView>(R.id.rv_category_add_icon)!!.isVisible){
+                        view?.findViewById<RecyclerView>(R.id.rv_category_add_icon)!!.visibility = View.GONE
+                    }
+                    else{
+                        view?.findViewById<RecyclerView>(R.id.rv_category_add_icon)!!.visibility = View.VISIBLE
+                    }
+                }
+                view?.findViewById<Switch>(R.id.switch_category_public)?.isEnabled = true
+                //스위치 클릭 리스너
+            }
             //스위치 데이터 적용
             //스위치 변경 불가
             view?.findViewById<Switch>(R.id.switch_category_public)?.isChecked =
@@ -185,9 +188,11 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
         // 아이콘 Rv 연결
         val dCategoryIconAdapter = CategoryIconAdapter(sampleIconArray)
         dCategoryIconAdapter.setItemClickListener(object : CategoryIconAdapter.OnItemClickListener{
-            override fun onClick(v: View, position: Int) {
+            override fun onClick(v: View, position: Int, data : Int) {
                 //선택 아이콘 변경
+                selectedIconInt = (position+1)
                 //iv src 변경 적용
+                view?.findViewById<ImageView>(R.id.iv_category_add_icon)!!.setImageResource(data)
                 //rv visibility 변경
                 view?.findViewById<RecyclerView>(R.id.rv_category_add_icon)!!.visibility = View.GONE
             }
