@@ -78,15 +78,20 @@ class StoreDetailFragment : Fragment() {
                 }
                 //리뷰사진 리사이클러뷰 연결
                 val mStorePhotos = ArrayList<String>().apply {
-                    add(data.reviewImg4[1])
-                    add(data.reviewImg4[2])
-                    add(data.reviewImg4[3])
+                    for(i in data.reviewImg4){
+                        this.add(i)
+                    }
                 }
                 val mStorePhotoAdapter = StoreDetailPhotoAdapter(mStorePhotos)
                 mStorePhotoAdapter.mContext = context
                 binding.rvStoreDetailPhoto.adapter = mStorePhotoAdapter
                 //배너 사진 연결
-                setImage(binding.ivStoreDetailBanner,data.reviewImg4[0], requireContext())
+                if(!data.reviewImg4.isNullOrEmpty()) {
+                    setImage(binding.ivStoreDetailBanner,data.reviewImg4[0], requireContext())
+                }
+                else{
+                    binding.ivStoreDetailBanner.setImageResource(R.drawable.gst_dummypic)
+                }
                 //리뷰 리사이클러뷰 연결
                 mReviewAdapter.mContext = context
                 mReviewAdapter.setItemClickListener(object : StoreDetailReviewAdapter.OnItemClickListener{

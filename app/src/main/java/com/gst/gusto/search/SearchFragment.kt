@@ -103,9 +103,9 @@ class SearchFragment : Fragment() {
          * Rv 어댑터 연결, 클릭 리스너 설정, 검색 클릭 리스너
          */
         binding.edtSearchSearchbox.setOnClickListener {
+            binding.edtSearchSearchbox.text.clear()
             binding.tvNoResult.visibility = View.GONE
             binding.rvSearchKeep.visibility = View.GONE
-            binding.edtSearchSearchbox.text.clear()
         }
 
 
@@ -175,6 +175,13 @@ class SearchFragment : Fragment() {
 
             //페이지 이동
            Navigation.findNavController(view).navigate(R.id.action_searchFragment_to_fragment_map_viewpager3)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(!gustoViewModel.keepFlag){
+            binding.edtSearchSearchbox.text.clear()
         }
     }
 }

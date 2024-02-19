@@ -333,7 +333,9 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
                     result ->
                 when(result){
-                    0 -> {}
+                    0 -> {
+                        //리사이클러뷰 데이터 연결
+                    }
                     1 -> {
                         Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                     }

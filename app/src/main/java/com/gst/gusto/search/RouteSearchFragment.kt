@@ -111,6 +111,7 @@ class RouteSearchFragment : Fragment() {
                                 override fun onClick(v: View, dataSet: ResponseSearch) {
                                     //페이지 이동 -> 루트 추가, 수정 화면으로 이동
                                     findNavController().popBackStack()
+
                                 }
 
                             })
