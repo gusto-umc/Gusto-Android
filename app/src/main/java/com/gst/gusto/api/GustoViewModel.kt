@@ -47,6 +47,7 @@ class GustoViewModel: ViewModel() {
     // 루트 편집 정보
     var removeRoute = ArrayList<Long>()
     var addRoute = ArrayList<Long>()
+    var editMode = false
 
     // 루트 생성 데이터
     var requestRoutesData : RequestCreateRoute? = null

@@ -56,7 +56,7 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val behavior = BottomSheetBehavior.from(requireView().parent as View)
-        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        //behavior.state = BottomSheetBehavior.STATE_EXPANDED
         if(layout == R.layout.bottomsheetdialog_routes) {
             val itemList = gustoViewModel.markerListLiveData.value as ArrayList
 
@@ -69,11 +69,9 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
 
             binding1.rvRoutes.adapter = boardAdapter
             binding1.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            var tmp = 4L
             binding1.btnPlus.setOnClickListener {
                 activity.getCon().navigate(R.id.action_groupMRoutMapFragment_to_routeSearchFragment)
                 dismiss()
-                
 
             }
             binding1.btnSave.setOnClickListener {
@@ -111,6 +109,7 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
             }
         }
         else if(layout == R.layout.bottomsheetdialog_create) {
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
             binding3.btnExit.setOnClickListener {
                 dialog?.dismiss()
             }

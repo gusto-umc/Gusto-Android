@@ -28,16 +28,15 @@ class GroupRouteStoresFragment : Fragment() {
     ): View? {
         binding = FragmentListGroupMRouteStoresBinding.inflate(inflater, container, false)
 
-        val bundle = Bundle()
         binding.fabEdit.setOnClickListener {
             gustoViewModel.getRouteMap() { result ->
                 when (result) {
                     1 -> {
+                        gustoViewModel.editMode = true
                         fun callActivityFunction(): NavController {
                             return (activity as? MainActivity)?.getCon() ?: throw IllegalStateException("NavController is null")
                         }
-                        bundle.putBoolean("edit",true)
-                        callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutMapFragment,bundle)
+                        callActivityFunction().navigate(R.id.action_groupFragment_to_groupMRoutMapFragment)
                     }
                     else -> {
                         Toast.makeText(context,"서버와의 연결 불안정", Toast.LENGTH_SHORT ).show()

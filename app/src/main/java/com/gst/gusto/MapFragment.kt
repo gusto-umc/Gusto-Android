@@ -3,8 +3,10 @@ package com.gst.clock.Fragment
 
 import MapRecyclerAdapter
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +26,7 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.MainActivity
@@ -57,12 +60,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     val markerList = ArrayList<MarkerItem>()
 
-    private val LOCATION_PERMISSION_REQUEST_CODE = 5000
-
-    //private lateinit var naverMap: NaverMap
-    //private lateinit var locationSource: FusedLocationSource
-
-    lateinit var  chipGroup: ChipGroup
+    lateinit var chipGroup: ChipGroup
     private var currentChip:Int?=null
 
     // 이전에 활성화된 칩을 저장하는 변수
@@ -82,7 +80,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         // BottomSheet 설정
         val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
         ////    카테고리    ////
 
@@ -92,14 +90,15 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             // 현재 버튼의 텍스트를 가져옴
             val currentText = totalBtn.text.toString()
             // 다음 순서로 변경
-            val nextText = when (currentText) {
+            /*val nextText = when (currentText) {
                 "전체" -> "가본 곳 만"
                 "가본 곳 만" -> "가본 곳 제외"
                 else -> "전체"
             }
+
             // 변경된 텍스트 설정
-            totalBtn.text = nextText
-            reGetMapMarkers2(nextText)
+            totalBtn.text = nextText*/
+            reGetMapMarkers2("")
 
         }
 
@@ -272,104 +271,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 }
             }
 
-
-            refindDong()
-
-            //LoginViewModel.signUp()
-
-
-            noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적 없는 맛집 수
-            visNum.text = gustoViewModel.mapVisitedCnt.toString() //방문해본 적 있는 맛집 수
-
-            // 저장된 맛집의 수를 locRestSaveNum 텍스트뷰에 연결
-            gustoViewModel.getSavedStores("성수1가1동", null) { result ->
-                when (result) {
-                    0 -> {
-                        // 성공적으로 저장된 맛집 정보를 가져온 경우
-                        val savedStoresCount = gustoViewModel.savedStoreIdList.size
-                        Log.d("save_rest","${savedStoresCount}")
-                        locRestSaveNum.text = savedStoresCount.toString()
-                    }
-                    else -> {
-                        // 저장된 맛집 정보를 가져오지 못한 경우
-                        locRestSaveNum.text = "0"
-                        Toast.makeText(context, "저장된 맛집 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-
-
-            //사진 불러와서 리사이클러뷰와 연결해 담기//
-            val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            val layoutManager2 = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            val layoutManager3 = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
-            val recyclerView: RecyclerView = recyclerViewNoVisitedRest
-            val recyclerView2: RecyclerView = recyclerViewVisitedRest
-            val recyclerView3: RecyclerView = recyclerViewAgeNoVisitedRest
-
-            // 아이템 담기
-            val itemList_unvisit = ArrayList<String>()
-            val itemList_visit = ArrayList<String>()
-            val itemList_unvisit_age = ArrayList<String>()
-
-            val itemList = ArrayList<String>()
-
-
-            val unvisitedStores = gustoViewModel.mapUnvisitedList
-            val visitedStores = gustoViewModel.mapVisitedList
-            //val unvisitedStores_age = gustoViewModel.mapVisitedList
-
-            // 방문 X - 각 가게에 대한 정보
-            gustoViewModel.mapUnvisitedList?.let { unvisitedStores ->
-                Log.d("log_img","방문 안 한 가게 이미지")
-                for (store in unvisitedStores) {
-                    val reviewImg = store.reviewImg
-                    Log.d("log_img","방문 X 가게 이미지 ${reviewImg}")
-                    reviewImg?.let { itemList_unvisit.add(it) } // null이 아닌 경우에만 itemList_unvisit에 추가
-                }
-            }
-
-            // 방문 O - 각 가게에 대한 정보
-            gustoViewModel.mapVisitedList?.let { visitedStores ->
-                Log.d("log_img","방문 가게 이미지")
-                for (store in visitedStores) {
-                    val reviewImg = store.reviewImg
-                    Log.d("img","${reviewImg}")
-                    reviewImg?.let { itemList_visit.add(it) } // null이 아닌 경우에만 itemList에 추가
-                }
-            }
-
-            // 이미지 리소스 URL
-            val imageResource = "https://www.urbanbrush.net/web/wp-content/uploads/edd/2023/02/urban-20230228092421948485.jpg"
-            itemList.add(imageResource)
-            itemList.add(imageResource)
-            itemList.add(imageResource)
-            itemList.add(imageResource)
-            itemList.add(imageResource)
-            itemList.add(imageResource)
-            itemList.add(imageResource)
-            itemList.add(imageResource)
-
-
-            val adapter = MapRecyclerAdapter(itemList_unvisit)
-            val adapter2 = MapRecyclerAdapter(itemList_visit)
-            val adapter3 = MapRecyclerAdapter(itemList)
-            //val adapter3 = MapRecyclerAdapter(itemList_unvisit_age)
-
-            recyclerView.adapter = adapter
-            recyclerView2.adapter = adapter2
-            recyclerView3.adapter = adapter3
-
-            // 레이아웃 매니저 설정
-            recyclerView.layoutManager = layoutManager
-            recyclerView2.layoutManager = layoutManager2
-            recyclerView3.layoutManager = layoutManager3
-
-            // 스크롤바 숨기기
-            recyclerView.isVerticalScrollBarEnabled = false
-            recyclerView2.isVerticalScrollBarEnabled = false
-            recyclerView3.isVerticalScrollBarEnabled = false
         }
 
       
@@ -407,6 +308,35 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 } else {
                     viewPager.visibility = View.GONE
                 }
+            }
+        })
+        // 드래그 리스너 설정
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                // 상태 변경 시 호출됩니다.
+                when (newState) {
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        binding.listViewBtn.visibility = View.VISIBLE
+                        // 바텀 시트가 축소된 상태입니다.
+                        // 원하는 동작을 수행하세요.
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        // 바텀 시트가 확장된 상태입니다.
+                        // 원하는 동작을 수행하세요.
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                        binding.listViewBtn.visibility = View.GONE
+                        // 바텀 시트가 드래그 중인 상태입니다.
+                        // 원하는 동작을 수행하세요.
+                    }
+                    // 다른 상태에 대한 처리도 필요하다면 추가하세요.
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // 드래그 중일 때 호출됩니다.
+                // slideOffset은 -1(바텀 시트 완전히 닫힘)부터 1(바텀 시트 완전히 열림)까지의 값입니다.
+                // 원하는 동작을 수행하세요.
             }
         })
 
@@ -456,6 +386,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     0 -> {
                         Log.d("viewmodel : vi",gustoViewModel.mapVisitedList.toString())
                         Log.d("viewmodel : novi",gustoViewModel.mapUnvisitedList.toString())
+                        //동
+                        refindDong()
                     }
                     1 -> {
                         Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
@@ -530,21 +462,27 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         var dong = binding.fragmentArea.dong
         var areaPick = binding.fragmentArea.areaPick
 
+        //저장 맛집
+        var locRestSaveNum = binding.fragmentArea.locRestSaveNum
+
         //방문 맛집
         var noVisNum = binding.fragmentArea.noVisNum
         var visNum = binding.fragmentArea.visNum
 
-        var locRestSaveNum = binding.fragmentArea.locRestSaveNum
 
         //출력//
         Log.d("dong", "${dong}")
         dong.text = gustoViewModel.dong.value// 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
-        areaPick.text = gustoViewModel.dong.value // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
+        areaPick.text = gustoViewModel.dong.value // 사용자의 현재 동 정보를 가져와서 없 텍스트뷰에 설정
 
-        noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적 없는 맛집 수
+        noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적는 맛집 수
         visNum.text = gustoViewModel.mapVisitedCnt.toString() //방문해본 적 있는 맛집 수
 
+        var save_rest = gustoViewModel.mapVisitedCnt + gustoViewModel.mapUnvisitedCnt //저장한 맛집 수
 
+        locRestSaveNum.text = save_rest.toString()
+
+        /*
         // 저장된 맛집의 수를 locRestSaveNum 텍스트뷰에 연결
         gustoViewModel.getSavedStores("${dong}", null) { result ->
             when (result) {
@@ -561,6 +499,82 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 }
             }
         }
+         */
+
+
+
+        //사진 불러와서 리사이클러뷰와 연결해 담기//
+        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        val layoutManager2 = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        val layoutManager3 = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        val recyclerView: RecyclerView = binding.fragmentArea.recyclerViewNoVisitedRest
+        val recyclerView2: RecyclerView = binding.fragmentArea.recyclerViewVisitedRest
+        val recyclerView3: RecyclerView = binding.fragmentArea.recyclerViewAgeNoVisitedRest
+
+        // 아이템 담기
+        val itemList_unvisit = ArrayList<String>()
+        val itemList_visit = ArrayList<String>()
+        val itemList_unvisit_age = ArrayList<String>() //나이대 별로 pick
+
+        val itemList = ArrayList<String>()
+
+
+        val unvisitedStores = gustoViewModel.mapUnvisitedList
+        val visitedStores = gustoViewModel.mapVisitedList
+        //val unvisitedStores_age = gustoViewModel.mapVisitedList
+
+        // 방문 X - 각 가게에 대한 정보
+        gustoViewModel.mapUnvisitedList?.let { unvisitedStores ->
+            Log.d("log_img","방문 안 한 가게 이미지")
+            for (store in unvisitedStores) {
+                val reviewImg = store.reviewImg
+                Log.d("log_img","방문 X 가게 이미지 ${reviewImg}")
+                reviewImg?.let { itemList_unvisit.add(it) } // null이 아닌 경우에만 itemList_unvisit에 추가
+            }
+        }
+
+        // 방문 O - 각 가게에 대한 정보
+        gustoViewModel.mapVisitedList?.let { visitedStores ->
+            Log.d("log_img","방문 가게 이미지")
+            for (store in visitedStores) {
+                val reviewImg = store.reviewImg
+                Log.d("img","${reviewImg}")
+                reviewImg?.let { itemList_visit.add(it) } // null이 아닌 경우에만 itemList에 추가
+            }
+        }
+
+        // 이미지 리소스 URL
+        val imageResource = "https://www.urbanbrush.net/web/wp-content/uploads/edd/2023/02/urban-20230228092421948485.jpg"
+        itemList.add(imageResource)
+        itemList.add(imageResource)
+        itemList.add(imageResource)
+        itemList.add(imageResource)
+        itemList.add(imageResource)
+        itemList.add(imageResource)
+        itemList.add(imageResource)
+        itemList.add(imageResource)
+
+
+        val adapter = MapRecyclerAdapter(itemList_unvisit)
+        val adapter2 = MapRecyclerAdapter(itemList_visit)
+        val adapter3 = MapRecyclerAdapter(itemList)
+        //val adapter3 = MapRecyclerAdapter(itemList_unvisit_age)
+
+        recyclerView.adapter = adapter
+        recyclerView2.adapter = adapter2
+        recyclerView3.adapter = adapter3
+
+        // 레이아웃 매니저 설정
+        recyclerView.layoutManager = layoutManager
+        recyclerView2.layoutManager = layoutManager2
+        recyclerView3.layoutManager = layoutManager3
+
+        // 스크롤바 숨기기
+        recyclerView.isVerticalScrollBarEnabled = false
+        recyclerView2.isVerticalScrollBarEnabled = false
+        recyclerView3.isVerticalScrollBarEnabled = false
+
 
     }
 
@@ -571,7 +585,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     1 -> {
                         Log.d("viewmodel", "gustoViewModel.dong.value")
                         binding.fragmentArea.userLoc.text = address
-                        refindDong()
+                        //refindDong()
                         reGetMapMarkers2(binding.fragmentMapMainScreen.totalBtn.text.toString())
                     }
                 }

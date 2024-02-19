@@ -46,7 +46,6 @@ class FeedFragment : Fragment() {
     }
 
     fun initView(){
-
         adapter = FeedReviewAdapter(ArrayList(), context,
             itemClickListener = { reviewId ->
                 gustoViewModel.currentFeedReviewId = reviewId
