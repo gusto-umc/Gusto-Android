@@ -252,12 +252,12 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 */
     override fun onResume() {
         super.onResume()
-        mapView = MapView(requireContext())
+       /* mapView = MapView(requireContext())
 
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
 
-        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)
+        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)*/
     }
     private fun showMainScreenFragment() {
         // fragment_map_main_screen.xml을 보이게 하는 작업

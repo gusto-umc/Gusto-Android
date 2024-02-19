@@ -31,6 +31,7 @@ class GroupStoresFragment : Fragment() {
                     1 -> {
                         checkGroupStores()
                     }
+                    2-> Toast.makeText(requireContext(), "이미 해당 그룹에 존재하는 식당입니다.", Toast.LENGTH_SHORT).show()
                     else -> {
                         Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                     }
