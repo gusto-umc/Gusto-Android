@@ -190,7 +190,7 @@ class LisAdapter(
             }
         }
         holder.btn_remove.setOnClickListener {
-            util.setPopupTwo(holder.itemView.context,"구스또레스토랑을\n그룹 맛집에서 삭제하시겠습니까?","",1) { yesOrNo ->
+            util.setPopupTwo(holder.itemView.context,"${itemList[position].groupName}을\n내 루트에서 삭제하시겠습니까?","",1) { yesOrNo ->
                 when (yesOrNo) {
                     0 -> {
                         if(option==1) {
