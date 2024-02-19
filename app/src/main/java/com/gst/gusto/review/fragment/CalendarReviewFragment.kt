@@ -27,6 +27,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.YearMonth
+import java.util.Calendar
 import kotlin.coroutines.resume
 
 
@@ -34,6 +35,9 @@ class CalendarReviewFragment : Fragment() {
 
     lateinit var binding: FragmentCalendarReviewBinding
     lateinit var adapter: CalendarReviewAdapter
+
+    val calendar = Calendar.getInstance()
+    var month = LocalDate.now().monthValue
 
     private val gustoViewModel : GustoViewModel by activityViewModels()
 
@@ -51,6 +55,8 @@ class CalendarReviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
+        observeData()
     }
 
     fun initView(){
@@ -69,12 +75,27 @@ class CalendarReviewFragment : Fragment() {
             recyclerView.layoutManager = GridLayoutManager(activity, 7)
 
             monthTextView.text = "${LocalDate.now().monthValue}월"
+
+            calBtnLeft.setOnClickListener {
+                calendar.add(Calendar.MONTH, -1)
+                monthTextView.text = (calendar.get(Calendar.MONTH) + 1).toString() + "월"
+                month = calendar.get(Calendar.MONTH) + 1
+
+                observeData()
+            }
+            calBtnRight.setOnClickListener {
+                calendar.add(Calendar.MONTH, 1)
+                monthTextView.text = (calendar.get(Calendar.MONTH) + 1).toString() + "월"
+                month = calendar.get(Calendar.MONTH) + 1
+
+                observeData()
+            }
         }
     }
 
-    fun getData(): LiveData<ResponseCalReview?> {
+    fun getData(month: Int): LiveData<ResponseCalReview?> {
         val liveData = MutableLiveData<ResponseCalReview?>()
-        val dates = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, 1)
+        val dates = LocalDate.of(LocalDate.now().year, month, 1)
 
         gustoViewModel.calView(null, 100, dates) { result, response ->
             if (result == 1) {
@@ -89,17 +110,17 @@ class CalendarReviewFragment : Fragment() {
     }
 
     fun observeData() {
-        getData().observe(viewLifecycleOwner, Observer { response ->
-            setData(response)
+        getData(month).observe(viewLifecycleOwner, Observer { response ->
+            setData(response, month)
         })
     }
 
-    fun setData(response: ResponseCalReview?) {
+    fun setData(response: ResponseCalReview?, month: Int) {
         val daysInMonth = YearMonth.now().lengthOfMonth()
         val calList = List<ResponseCalReviews?>(daysInMonth){null}.toMutableList()
 
         for(day in 1..daysInMonth){
-            val date = LocalDate.of(LocalDate.now().year, LocalDate.now().monthValue, day)
+            val date = LocalDate.of(LocalDate.now().year, month, day)
             response?.reviews?.let{
                 it.forEach { item ->
                     Log.d("calData" ,"${item.visitedDate}와 ${date.toString()}")
