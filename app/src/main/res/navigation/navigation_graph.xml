@@ -362,8 +362,8 @@
         android:label="FragmentOther"
         tools:layout="@layout/fragment_my">
         <action
-            android:id="@+id/action_otherFragment_to_reviewDetail"
-            app:destination="@+id/fragment_review_detail" />
+            android:id="@+id/action_otherFragment_to_feedDetail"
+            app:destination="@+id/fragment_feed_detail_review" />
         <action
             android:id="@+id/action_fragment_other_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />

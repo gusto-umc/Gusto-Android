@@ -46,7 +46,7 @@ class OtherReviewFragment : Fragment() {
                 val bundle = Bundle()
                 bundle.putLong("reviewId", reviewId)     //리뷰 아이디 넘겨 주면 됨
                 bundle.putString("page","review")
-                findNavController().navigate(R.id.action_otherFragment_to_reviewDetail,bundle)
+                findNavController().navigate(R.id.action_otherFragment_to_feedDetail,bundle)
             })
 
         binding.apply {
