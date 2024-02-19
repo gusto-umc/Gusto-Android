@@ -58,11 +58,15 @@ class ReviewAdd3Fragment : Fragment() {
             findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
         }
         binding.btnNext.setOnClickListener {
-            for(data in imageList) {
-                if(data !=null) {
-                    gustoViewModel.imageFiles.add(data)
+            if(gustoViewModel.imageFiles.isEmpty()) {
+                for(data in imageList) {
+                    if(data !=null) {
+                        gustoViewModel.imageFiles.add(data)
+                    }
                 }
             }
+
+
             findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
         }
 
@@ -148,6 +152,7 @@ class ReviewAdd3Fragment : Fragment() {
         }
         val pickMedia1 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
+                gustoViewModel.imageFiles.clear()
                 imageList[selectImage] = convertContentToFile(requireContext(),uri)
                 setImage(imageViews[selectImage],uri.toString(),requireContext())
             } else {
@@ -162,7 +167,6 @@ class ReviewAdd3Fragment : Fragment() {
         }
         for(i in 0..3) {
             imageCards[i].setOnClickListener {
-                gustoViewModel.imageFiles.clear()
                 selectImage = i
                 pickMedia1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
