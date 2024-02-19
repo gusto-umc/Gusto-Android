@@ -376,3 +376,12 @@ data class ResponseFeedSearchReviews(
     @SerializedName("reviews") val reviews: ArrayList<ResponseFeedReview>
 )
 
+
+
+// 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+data class LocalCategoryResponse (
+    @SerializedName("storeId") val storeId: Int,
+    @SerializedName("storeName") val storeName: String,
+    @SerializedName("longtitude") val longitude: Double,
+    @SerializedName("latitude") val latitude: Double
+)
