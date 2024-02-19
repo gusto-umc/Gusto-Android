@@ -101,26 +101,12 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         // 칩 그룹 초기화
         chipGroup = binding.fragmentMapMainScreen.chipGroup
 
-        // 각 칩에 대한 클릭 리스너 설정
-        /*
-        view.findViewById<Chip>(R.id.cafe_btn).setOnClickListener {
-            handleChipClick(it as Chip)
-        }
-        view.findViewById<Chip>(R.id.Italian_btn).setOnClickListener {
-            handleChipClick(it as Chip)
-        }
-        view.findViewById<Chip>(R.id.Japanese_btn).setOnClickListener {
-            handleChipClick(it as Chip)
-        }
-        view.findViewById<Chip>(R.id.Izakaya_btn).setOnClickListener {
-            handleChipClick(it as Chip)
-        }
-         */
 
         return view
     }
 
-    // 카테고리 조회 및 칩 추가
+
+// 카테고리 조회 및 칩 추가
     fun getMapCategoryAndAddChips(townName: String) {
         gustoViewModel.getMapCategory(townName) { result ->
             if (result == 0) {
@@ -128,7 +114,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 val categoryList = gustoViewModel.myMapCategoryList
                 if (categoryList != null) {
                     for ((index, category) in categoryList.withIndex()) {
-                        addChip(category.categoryName, index)
+                        addChip(category.categoryName, category.myCategoryId, index)
+                        Log.d("chip","칩 불러오기")
                     }
                 } else {
                     Log.e("getMapCategoryAndAddChips", "Category list is null")
@@ -141,7 +128,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     }
 
     // 칩 추가
-    private fun addChip(text: String, chipId: Int) {
+    private fun addChip(text: String, chipId: Int, chipIndex: Int) {
         val chip = Chip(requireContext())
 
         chip.id = chipId // 고유한 ID 할당
@@ -158,42 +145,48 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         chip.chipCornerRadius = util.dpToPixels(41f, resources.displayMetrics)
         chip.setChipIconResource(R.drawable.streamline_bean)
 
-        chipGroup.addView(chip)
+        Log.d("chip","칩 생성")
+
+        chip.setOnClickListener {
+            handleChipClick(chip)
+            Log.d("chip", "$chipId")
+        }
+
+        chipGroup.addView(chip, chipIndex)
     }
+
 
     // 클릭된 칩의 처리를 담당하는 함수
     private fun handleChipClick(chip: Chip) {
+        Log.d("chip", "칩 클릭 이벤트 발생")
+
         // 클릭된 칩의 ID
         val clickedChipId = chip.id
 
         // 클릭된 칩이 이미 활성화된 상태인지 확인
         val isClickedChipActive = previousChipId == clickedChipId
 
-        // 이전에 활성화된 칩이 있으면 해당 칩의 색상을 변경
-        if (previousChipId != -1) {
+        // 다른 칩이 활성화된 상태인 경우 이전 칩을 비활성화
+        if (!isClickedChipActive && previousChipId != -1) {
+            Log.d("chip","이전 칩 비활성화 ${previousChipId}")
             val previousChip = chipGroup.findViewById<Chip>(previousChipId)
-            // 클릭된 칩이 이미 활성화된 상태가 아니거나, 전체 칩이 비활성화된 상태인 경우에만 이전 칩을 비활성화합니다.
-            if (!isClickedChipActive || isAllChipsDisabled()) {
-                // 이전에 활성화된 칩을 비활성화 상태로 변경
-                previousChip.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_C))
-                previousChip.setChipBackgroundColorResource(R.color.chip_select_color)
-                previousChip.setChipIconResource(R.drawable.streamline_bean)
-                // 이전 칩의 ID를 초기화하여 비활성화 상태로 설정
-                previousChipId = -1
-            }
+            previousChip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chip_disabled))
+            previousChip.setChipBackgroundColorResource(R.color.white)
+            previousChip.setChipIconResource(R.drawable.streamline_bean)
         }
 
-        // 클릭된 칩이 이미 활성화된 상태인 경우에만 비활성화
+        // 클릭된 칩이 이미 활성화된 상태라면 비활성화
         if (isClickedChipActive) {
             // 클릭된 칩의 색상 변경 (비활성화 상태로 변경)
-            chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_C))
+            Log.d("chip", "클릭된 칩 비활성화 ${chip.id}")
+            chip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chip_select_text_color))
             chip.setChipBackgroundColorResource(R.color.chip_select_color)
             chip.setChipIconResource(R.drawable.streamline_bean)
             // 클릭된 칩의 ID를 초기화하여 비활성화 상태로 설정
             previousChipId = -1
         } else {
-            // 클릭된 칩이 이미 활성화된 상태가 아니라면 해당 칩을 활성화
-            // 클릭된 칩의 색상 변경
+            // 클릭된 칩을 활성화
+            Log.d("chip", "활성화 ${chip.id}")
             chip.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
             chip.setChipBackgroundColorResource(R.color.main_C)
             chip.setChipIconResource(R.drawable.streamline_coffee_bean_white)
@@ -201,6 +194,9 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             previousChipId = clickedChipId
         }
     }
+
+
+
 
     // 전체 칩이 비활성화되었는지 여부를 확인하는 함수
     private fun isAllChipsDisabled(): Boolean {
@@ -215,12 +211,22 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     }
 
 
+
+
+
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //목록 보기 클릭 리스너 - 민디
         binding.listViewBtn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
         }
+
+        //카테고리 보이기 //
+
+        // 카테고리 조회 및 칩 추가
+        getMapCategoryAndAddChips("성수1가1동")
 
         /**
          * 방문 o 클릭 리스너 -> 보완 예정
@@ -251,6 +257,9 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         /**
          * 카테고리 전체 조회 - mindy
          */
+
+
+
 
         binding.fragmentArea.apply {
             val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
