@@ -164,7 +164,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
          * 카테고리 전체 조회 - mindy
          */
         // 데이터 넣어둔 변수 : gustoViewModel.myMapCategoryList
-        gustoViewModel.getMapCategory("성수1가1동"){
+        gustoViewModel.getMapCategory(gustoViewModel.dong.value!!){
             result ->
             when(result){
                 0 -> {
