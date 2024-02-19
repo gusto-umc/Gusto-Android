@@ -170,9 +170,6 @@ class MapListViewFragment : Fragment() {
             }
         })
 
-        /**
-         * 전체 선택 리스너 - 카테고리 개당(store)
-         */
 
         /**
          * 추가fab 클릭 리스너
@@ -204,8 +201,21 @@ class MapListViewFragment : Fragment() {
             Log.d("selected", gustoViewModel.selectedCategory.toString())
             if(!gustoViewModel.selectedCategory.isNullOrEmpty()){
                 //카테고리 삭제 진행
-                gustoViewModel.deleteCategory(gustoViewModel.selectedCategory[0]){
-                    result ->
+//                gustoViewModel.deleteCategory(gustoViewModel.selectedCategory[0]){
+//                    result ->
+//                    when(result){
+//                        0 -> {
+//                            //success
+//                            getMapCategories()
+//                        }
+//                        1 -> {
+//                            //fail
+//                            Toast.makeText(context, "삭제 실패", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//                }
+                gustoViewModel.deleteCateogories(gustoViewModel.selectedCategory){
+                        result ->
                     when(result){
                         0 -> {
                             //success

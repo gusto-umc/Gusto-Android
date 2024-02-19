@@ -1128,6 +1128,27 @@ class GustoViewModel: ViewModel() {
 
         })
     }
+
+    fun deleteCateogories(data : MutableList<Int>, callback: (Int) -> Unit){
+        val requestData = data
+        service.deleteCategory2(xAuthToken, requestData).enqueue(object : Callback<Void>{
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.e("deleteCateogories", "Successful response: ${response}")
+                    callback(0)
+                } else {
+                    Log.e("deleteCateogories", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("deleteCateogories", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
     //타인 카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
     fun getAllCategory(nickname: String, callback: (Int) -> Unit){
         service.getAllCategory(xAuthToken, nickname = nickname).enqueue(object : Callback<List<ResponseMapCategory>>{
