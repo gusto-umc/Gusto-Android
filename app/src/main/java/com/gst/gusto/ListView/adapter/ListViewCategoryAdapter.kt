@@ -49,7 +49,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
 
         fun bind(simple: ResponseMapCategory){
             data = simple
-            binding.ivItemCategoryShow.setImageResource(R.drawable.category_icon_1)
+            binding.ivItemCategoryShow.setImageResource(viewModel!!.findIconResource(data!!.categoryIcon))
             binding.tvItemCategoryShowTitle.text = simple.categoryName
             binding.tvCategoryShowCount.text = "${simple.pinCnt}개"
         }
@@ -178,6 +178,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
         // route인 경우 롱클릭 비활성화
         if(flag != "route"){
             holder.updownLayout.setOnLongClickListener {
+                Log.d("categoryIcon adapter", holder.data!!.categoryIcon!!.toString())
                 val categoryBottomSheetDialog = CategoryBottomSheetDialog(){
                     when(it){
                         0 -> {
@@ -190,7 +191,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                     }
                 }
                 categoryBottomSheetDialog.isAdd = false
-                categoryBottomSheetDialog.categoryEdiBottomSheetData = CategoryDetail(id = holder.data!!.myCategoryId, categoryName = holder.data!!.categoryName, categoryDesc = "냠냠", categoryIcon = 1, isPublic = true )
+                categoryBottomSheetDialog.categoryEdiBottomSheetData = CategoryDetail(id = holder.data!!.myCategoryId, categoryName = holder.data!!.categoryName, categoryDesc = "siasia", categoryIcon = holder.data!!.categoryIcon, isPublic = true )
                 categoryBottomSheetDialog.viewModel = viewModel
                 categoryBottomSheetDialog.show(mFragmentManager, categoryBottomSheetDialog.tag)
                 true

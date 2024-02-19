@@ -47,7 +47,7 @@ class ListViewEditCategoryAdapter (private var flag : String, private val parent
 
         fun bind(simple: ResponseMapCategory){
             data = simple
-            binding.ivItemCategoryEdit.setImageResource(R.drawable.category_icon_1)
+            binding.ivItemCategoryEdit.setImageResource(viewModel!!.findIconResource(simple.categoryIcon))
             binding.tvItemCategoryEditTitle.text = simple.categoryName
             binding.tvItemCategoryEditCount.text = "${simple.pinCnt}개"
         }

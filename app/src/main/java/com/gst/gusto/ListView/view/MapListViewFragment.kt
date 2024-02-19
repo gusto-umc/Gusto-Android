@@ -119,6 +119,7 @@ class MapListViewFragment : Fragment() {
         /**
          * 정렬 순서 클릭 리스너
          */
+        binding.layoutListviewOrder.visibility = View.GONE
         binding.layoutListviewOrder.setOnClickListener {
             // 0 : 최신순, 1 : 오래된 순, 2 : ㄱ 부터, 3: ㅎ 부터, 4 : 방문횟수 높은 순, 5 : 방문회수 낮은 순
             changeOrderFlag()
@@ -234,7 +235,7 @@ class MapListViewFragment : Fragment() {
 
     }
     fun goShow(){
-        binding.layoutListviewOrder.visibility = View.VISIBLE
+        //binding.layoutListviewOrder.visibility = View.VISIBLE
         binding.layoutListviewSelect.visibility = View.GONE
         binding.cbMapListviewAll.isChecked = false
         binding.rvMapListviewCategoryShow.visibility = View.VISIBLE

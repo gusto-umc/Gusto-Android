@@ -43,6 +43,7 @@ class CategoryChooseBottomSheetDialog(var flag : String?, val itemClick : (Int, 
                     categoryArray = viewModel!!.myAllCategoryList
                     //카테고리 댑터 선언 + 연결
                     val dCategoryChooseAdapter = CategoryChooseAdapter()
+                    dCategoryChooseAdapter.viewModel = viewModel
                     dCategoryChooseAdapter.setItemClickListener(object : CategoryChooseAdapter.OnItemClickListener{
                         override fun onClick(v: View, dataSet: ResponseMapCategory) {
                             //서버 연결 (찜)

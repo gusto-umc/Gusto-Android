@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.Model.CategorySimple
 import com.gst.gusto.ListView.Model.StoreSearch
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseAllCategory
 import com.gst.gusto.api.ResponseMapCategory
 import com.gst.gusto.databinding.ItemMapCategoryChooseBinding
@@ -16,6 +17,7 @@ import com.gst.gusto.databinding.ItemMapCategoryChooseBinding
 class CategoryChooseAdapter() : ListAdapter<ResponseMapCategory, CategoryChooseAdapter.ViewHolder>(
     DiffCallback) {
 
+    var viewModel : GustoViewModel? = null
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<ResponseMapCategory>(){
             override fun areItemsTheSame(oldItem: ResponseMapCategory, newItem: ResponseMapCategory): Boolean {
@@ -37,7 +39,7 @@ class CategoryChooseAdapter() : ListAdapter<ResponseMapCategory, CategoryChooseA
         fun bind(category : ResponseMapCategory){
             data = category
 
-            //binding.ivItemCategoryChooseIcon.setImageResource(category.categoryIcon)
+            binding.ivItemCategoryChooseIcon.setImageResource(viewModel!!.findIconResource(category.categoryIcon))
             binding.tvItemCategoryChooseTitle.text = category.categoryName
             binding.tvItemCategoryChooseCount.text = "${category.pinCnt}개"
         }
