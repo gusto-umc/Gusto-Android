@@ -3,8 +3,10 @@ package com.gst.clock.Fragment
 
 import MapRecyclerAdapter
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +26,7 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.MainActivity
@@ -57,11 +60,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     val markerList = ArrayList<MarkerItem>()
 
-    private val LOCATION_PERMISSION_REQUEST_CODE = 5000
-
-    //private lateinit var naverMap: NaverMap
-    //private lateinit var locationSource: FusedLocationSource
-
     lateinit var  chipGroup: ChipGroup
     private var currentChip:Int?=null
 
@@ -82,7 +80,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         // BottomSheet 설정
         val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+
+        //val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
         ////    카테고리    ////
 
