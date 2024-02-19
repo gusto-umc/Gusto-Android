@@ -21,26 +21,32 @@
         app:layout_anchor="@+id/kakao_map"
         app:layout_anchorGravity="center" />
 
+
+
     <LinearLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:behavior_peekHeight="60dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <include layout="@layout/fragment_area"
-                android:id="@+id/fragment_area"/>
+
+            <include
+                layout="@layout/fragment_area"
+                android:id="@+id/fragment_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </ScrollView>
     </LinearLayout>
 
 
-
-
-    <LinearLayout
+<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
