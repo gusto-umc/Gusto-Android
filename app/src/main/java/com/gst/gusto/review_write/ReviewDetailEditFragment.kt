@@ -19,7 +19,6 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
-import com.gst.gusto.Util.util.Companion.isPhotoPickerAvailable
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewDetailEditBinding
@@ -130,9 +129,7 @@ class ReviewDetailEditFragment : Fragment() {
         }
 
         binding.btnSelectImages.setOnClickListener {
-            if(isPhotoPickerAvailable()) {
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
         //저장

@@ -140,8 +140,6 @@ class RouteSearchFragment : Fragment() {
 
             }
         }
-
-
-
     }
+
 }

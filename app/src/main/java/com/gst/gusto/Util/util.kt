@@ -103,21 +103,6 @@ class util {
 
 
         /**
-         * 작업자 : 버루
-         * 이 메서드는 사진 선택창 불러오기 위한 휴대폰 버전 체크
-         * @return true or false
-         */
-        fun isPhotoPickerAvailable(): Boolean {
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                true
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                SdkExtensions.getExtensionVersion(Build.VERSION_CODES.R) >= 2
-            } else {
-                false
-            }
-        }
-
-        /**
          * 작업자 : 버루(But 인터넷에 있는 코드)
          * 이 메서드는 LinearLayout을 View.GONE 상태에서 View.VISIBLE 상태로 바뀔 때 애니메이션을 추가 해 준다
          * @param isExpanded 펼칠 떄 true, 닫을 때 false

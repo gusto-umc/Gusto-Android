@@ -428,6 +428,16 @@ interface GustoApi {
         @Query("hashTags") hashTags: List<Long>?
     ):Call<ResponseFeedSearchReviews>
 
+
+    // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+    @GET("stores/map?townName={townName}&myCategoryId={myCategoryId}&visit={visitedStatus}")
+    fun LocalCategory(
+        @Query("storeId") storeId: Int,
+        @Query("storeName") storeName: String,
+        @Query("longtitude") longitude: Double,
+        @Query("latitude") latitude: Double
+    ): Call<LocalCategoryResponse>
+
     @GET("reviews") // 타인 리뷰 모아보기
     fun otherInstaView(
         @Header("X-AUTH-TOKEN") token: String,

@@ -264,6 +264,7 @@ data class RequestMyReview(
 
 // 리뷰 작성
 data class RequestCreateReview(
+    @SerializedName("skipCheck") val skipCheck : Boolean,
     @SerializedName("storeId") val storeId : Long,
     @SerializedName("visitedAt") val visitedAt : String?,
     @SerializedName("menuName") val menuName : String?,
@@ -273,7 +274,7 @@ data class RequestCreateReview(
     @SerializedName("mood") val mood : Int?,
     @SerializedName("toilet") val toilet : Int?,
     @SerializedName("parking") val parking : Int?,
-@SerializedName("comment") val comment : String?
+    @SerializedName("comment") val comment : String?
 )
 
 // insta (gallery) review 조회- reviews & MyReviewFragment와 OtherReviewFragment
@@ -379,3 +380,12 @@ data class ResponseFeedSearchReviews(
     @SerializedName("reviews") val reviews: ArrayList<ResponseFeedReview>
 )
 
+
+
+// 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+data class LocalCategoryResponse (
+    @SerializedName("storeId") val storeId: Int,
+    @SerializedName("storeName") val storeName: String,
+    @SerializedName("longtitude") val longitude: Double,
+    @SerializedName("latitude") val latitude: Double
+)

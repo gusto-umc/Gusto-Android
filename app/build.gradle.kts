@@ -89,4 +89,6 @@ dependencies {
     // kakao
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(files("libs/libDaumMapAndroid.jar"))
+
+    // photo picker
 }

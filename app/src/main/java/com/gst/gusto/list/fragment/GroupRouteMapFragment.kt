@@ -59,11 +59,27 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                 when (selectedItem) {
                     1 -> {
                         change = true
+                        if(gustoViewModel.removeRoute.size>0) {
+                            for(routeListId in gustoViewModel.removeRoute) {
+                                gustoViewModel.deleteRouteStore(routeListId) { result ->
+                                    when (result) {
+                                        1 -> {
+
+                                        }
+                                        else -> {
+                                            Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         if(gustoViewModel.addRoute.size>0) {
                             val tmpList =ArrayList<RouteList>()
-                            var ordinal = returnList.size+1
+                            var ordinal = gustoViewModel.markerListLiveData.value!!.size - gustoViewModel.addRoute.size +1
+                            Log.d("viewmodel","size : ${ordinal}")
                             for(storeId in gustoViewModel.addRoute) {
-                                tmpList.add(RouteList(storeId,ordinal++,null,null,null,null,null))
+                                tmpList.add(RouteList(storeId,
+                                    ordinal++,null,null,null,null,null))
                             }
                             gustoViewModel.addRouteStore(tmpList) { result ->
                                 when (result) {
@@ -85,32 +101,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                                 }
                             }
                         }
-                        if(gustoViewModel.removeRoute.size>0) {
-                            var num = 0
-                            for(routeListId in gustoViewModel.removeRoute) {
-                                gustoViewModel.deleteRouteStore(routeListId) { result ->
-                                    when (result) {
-                                        1 -> {
-                                            num++
-                                            if(num == gustoViewModel.removeRoute.size) {
-                                                gustoViewModel.getGroupRouteDetail(gustoViewModel.currentRouteId) { result ->
-                                                    when (result) {
-                                                        1 -> {
-                                                        }
-                                                        else -> {
-                                                            Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else -> {
-                                            Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
-                                        }
-                                    }
-                                }
-                            }
-                        }
+
 
                     }
                 }
@@ -128,7 +119,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
 
         val editMode = arguments?.getBoolean("edit", false) ?: false
         if(editMode) {
-            binding.fabEdit.callOnClick()
+            //binding.fabEdit.callOnClick()
         }
 
         val itemList = gustoViewModel.markerListLiveData.value as ArrayList<MarkerItem>
@@ -175,6 +166,37 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
 
         mapUtil.setMapInit(mapView, binding.kakaoRouteMap, requireContext(), requireActivity(),"route",this)
 
+
+
+        if(gustoViewModel.routeStorTmpData != null) {
+            var data = gustoViewModel.routeStorTmpData
+
+            if (data != null) {
+                gustoViewModel.addRoute.add(data.storeId.toLong())
+                gustoViewModel.getStoreDetailQuick(data.storeId.toLong()) {result, data2 ->
+                    when(result) {
+                        1 -> {
+                            if(data2!=null) {
+                                gustoViewModel.markerListLiveData.value!!.add(mapUtil.Companion.MarkerItem(
+                                    data.storeId.toLong(),
+                                    0,
+                                    0,
+                                    data2.latitude,
+                                    data2.longitude,
+                                    data.storeName,
+                                    data.address,
+                                    false
+                                ))
+                                mapUtil.setRoute(mapView, gustoViewModel.markerListLiveData.value!!)
+                            }
+                            binding.fabEdit.callOnClick()
+                            gustoViewModel.routeStorTmpData = null
+                        }
+                        else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
         gustoViewModel.markerListLiveData.observe(viewLifecycleOwner, Observer { markers ->
             Log.d("itemList222",markers.toString())
             mapUtil.setRoute(mapView, markers)
