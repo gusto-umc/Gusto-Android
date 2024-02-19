@@ -58,10 +58,11 @@ class MapListViewFragment : Fragment() {
 
 
         fun getMapCategories(){
-            gustoViewModel.getMapCategory("성수1가1동"){
+            gustoViewModel.getMapCategory(gustoViewModel.dong.value!!){
                     result ->
                 when(result){
                     0 -> {
+                        binding.tvTestAll.text = "${gustoViewModel.dong.value}의 저장 맛집"
                         /**
                          * 카테고리Show 연결
                          * 아이템 클릭 리스너
@@ -223,32 +224,6 @@ class MapListViewFragment : Fragment() {
             goShow()
         }
 
-        /**
-         * 전체 카테고리, 가게 테스트
-         */
-//        binding.tvTestAll.setOnClickListener {
-//            gustoViewModel.getAllCategory("gusto"){
-//                result ->
-//                when(result){
-//                    0 ->{}
-//                    1 -> {}
-//                }
-//            }
-//            gustoViewModel.getAllStores(6, nickname = "gusto"){
-//                result ->
-//                when(result){
-//                    0 -> {
-//                        //성공
-//                        Log.d("all stores", "success")
-//                        Log.d("all stores", gustoViewModel.myAllStoreList.toString())
-//                    }
-//                    1 -> {
-//                        //실패
-//                        Log.e("all stores", "fail")
-//                    }
-//                }
-//            }
-//        }
 
         /**
          * 편집 시 리스트 새로 불러오기

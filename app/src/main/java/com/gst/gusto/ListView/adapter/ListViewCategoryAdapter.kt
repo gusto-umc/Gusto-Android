@@ -2,12 +2,14 @@ package com.gst.gusto.ListView.adapter
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -65,6 +67,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
 
         var openFlag = false
         val cateId = holder.bind(getItem(position))
+        Log.d("my check", holder.data!!.categoryName)
 
         //펼치기 클릭리스너
         holder.updownLayout.setOnClickListener {
@@ -81,23 +84,84 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                     /**
                      * storeRv 연결
                      */
-                    viewModel!!.getMapStores(holder.data!!.myCategoryId, townName = "성수1가1동"){
-                        result ->
-                        when(result){
-                            0 -> {
-                                //성공
-                                val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
-                                mStoreAdapter.submitList(viewModel!!.myMapStoreList!!)
-                                mStoreAdapter.gustoViewModel = viewModel
-                                holder.storeRv.adapter = mStoreAdapter
-                                holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
-                            }
-                            1 -> {
-                                //실패
-                                Log.d("store checking", "fail")
+                    if(flag == "route"){
+                        viewModel!!.getAllUserStores(holder.data!!.myCategoryId){
+                            result ->
+                            when(result){
+                                0 -> {
+                                    //success
+                                    val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
+                                    mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
+                                    mStoreAdapter.gustoViewModel = viewModel
+                                    holder.storeRv.adapter = mStoreAdapter
+                                    holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
+                                }
+                                1 -> {
+                                    //실패
+                                    Log.d("store checking", "fail")
+                                }
                             }
                         }
                     }
+                    else if (flag == "my"){
+
+                        viewModel!!.getAllUserStores(holder.data!!.myCategoryId){
+                                result ->
+                            when(result){
+                                0 -> {
+                                    //success
+                                    val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
+                                    mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
+                                    mStoreAdapter.gustoViewModel = viewModel
+                                    holder.storeRv.adapter = mStoreAdapter
+                                    holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
+                                }
+                                1 -> {
+                                    //실패
+                                    Log.d("store checking", "fail")
+                                }
+                            }
+                        }
+                    }
+                    else if (flag == "feed"){
+                        viewModel!!.getAllStores(categoryId = holder.data!!.myCategoryId, nickname = viewModel!!.currentFeedNickname){
+                                result ->
+                            when(result){
+                                0 -> {
+                                    //success
+                                    val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
+                                    mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
+                                    mStoreAdapter.gustoViewModel = viewModel
+                                    holder.storeRv.adapter = mStoreAdapter
+                                    holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
+                                }
+                                1 -> {
+                                    //실패
+                                    Log.d("store checking", "fail")
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        viewModel!!.getMapStores(holder.data!!.myCategoryId, townName = viewModel!!.dong.value!!){
+                                result ->
+                            when(result){
+                                0 -> {
+                                    //성공
+                                    val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
+                                    mStoreAdapter.submitList(viewModel!!.myMapStoreList!!)
+                                    mStoreAdapter.gustoViewModel = viewModel
+                                    holder.storeRv.adapter = mStoreAdapter
+                                    holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
+                                }
+                                1 -> {
+                                    //실패
+                                    Log.d("store checking", "fail")
+                                }
+                            }
+                        }
+                    }
+
 
                 }
             }
