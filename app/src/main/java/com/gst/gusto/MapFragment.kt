@@ -11,11 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,7 +55,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     private val gustoViewModel : GustoViewModel by activityViewModels()
 
     val markerList = ArrayList<MarkerItem>()
-    var currentChip:Int?=null
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 5000
 
@@ -79,10 +78,9 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         binding = FragmentMapBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        gustoViewModel.changeDong("")
         // BottomSheet 설정
         val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
         ////    카테고리    ////
 
@@ -156,7 +154,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         chip.setOnClickListener {
             handleChipClick(chip)
             Log.d("chip", "$chipId")
-            binding.vpSlider.visibility = View.GONE
         }
 
         chipGroup.addView(chip, chipIndex)
@@ -169,8 +166,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         // 클릭된 칩의 ID
         val clickedChipId = chip.id
-        currentChip = clickedChipId
-        reGetMapMarkers()
 
         // 클릭된 칩이 이미 활성화된 상태인지 확인
         val isClickedChipActive = previousChipId == clickedChipId
@@ -193,7 +188,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             chip.setChipIconResource(R.drawable.streamline_bean)
             // 클릭된 칩의 ID를 초기화하여 비활성화 상태로 설정
             previousChipId = -1
-            currentChip = null
         } else {
             // 클릭된 칩을 활성화
             Log.d("chip", "활성화 ${chip.id}")
@@ -274,15 +268,15 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     }
                 }
             }
+
+
+            refindDong()
+
             //LoginViewModel.signUp()
 
-            Log.d("dong", "${dong}")
-            dong.text = gustoViewModel.dong.value // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
-            areaPick.text = gustoViewModel.dong.value // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
 
             noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적 없는 맛집 수
             visNum.text = gustoViewModel.mapVisitedCnt.toString() //방문해본 적 있는 맛집 수
-
 
             // 저장된 맛집의 수를 locRestSaveNum 텍스트뷰에 연결
             gustoViewModel.getSavedStores("성수1가1동", null) { result ->
@@ -290,6 +284,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     0 -> {
                         // 성공적으로 저장된 맛집 정보를 가져온 경우
                         val savedStoresCount = gustoViewModel.savedStoreIdList.size
+                        Log.d("save_rest","${savedStoresCount}")
                         locRestSaveNum.text = savedStoresCount.toString()
                     }
                     else -> {
@@ -299,6 +294,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     }
                 }
             }
+             */
 
             //사진 불러와서 리사이클러뷰와 연결해 담기//
             val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -323,15 +319,17 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
             // 방문 X - 각 가게에 대한 정보
             gustoViewModel.mapUnvisitedList?.let { unvisitedStores ->
+                Log.d("log_img","방문 안 한 가게 이미지")
                 for (store in unvisitedStores) {
                     val reviewImg = store.reviewImg
-                    Log.d("img","${reviewImg}")
+                    Log.d("log_img","방문 X 가게 이미지 ${reviewImg}")
                     reviewImg?.let { itemList_unvisit.add(it) } // null이 아닌 경우에만 itemList_unvisit에 추가
                 }
             }
 
             // 방문 O - 각 가게에 대한 정보
             gustoViewModel.mapVisitedList?.let { visitedStores ->
+                Log.d("log_img","방문 가게 이미지")
                 for (store in visitedStores) {
                     val reviewImg = store.reviewImg
                     Log.d("img","${reviewImg}")
@@ -371,6 +369,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             recyclerView3.isVerticalScrollBarEnabled = false
         }
 
+      
         val viewPager = binding.vpSlider
 
         // 이미지 슬라이드
@@ -405,33 +404,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 } else {
                     viewPager.visibility = View.GONE
                 }
-            }
-        })
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when (newState) {
-                    BottomSheetBehavior.STATE_COLLAPSED -> {
-                        // 바텀 시트가 접혀있는 상태
-                        binding.listViewBtn.visibility = View.VISIBLE
-                    }
-                    BottomSheetBehavior.STATE_DRAGGING -> {
-                        // 사용자가 바텀 시트를 드래그 중
-                        binding.listViewBtn.visibility = View.GONE
-                    }
-                    BottomSheetBehavior.STATE_EXPANDED -> {
-                        // 바텀 시트가 펼쳐진 상태
-                    }
-                    BottomSheetBehavior.STATE_HIDDEN -> {
-                        // 바텀 시트가 숨겨진 상태
-                    }
-                    BottomSheetBehavior.STATE_SETTLING -> {
-                        // 바텀 시트가 설정되는 중
-                    }
-                }
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                // 바텀 시트가 슬라이드되는 동안
             }
         })
 
@@ -547,12 +519,56 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     }
 
+    //현재 동을 불러오기//
+    //현재 동에 대한 작업 불러오기//
+    fun refindDong(){
+
+        //동
+        var dong = binding.fragmentArea.dong
+        var areaPick = binding.fragmentArea.areaPick
+
+        //방문 맛집
+        var noVisNum = binding.fragmentArea.noVisNum
+        var visNum = binding.fragmentArea.visNum
+
+        var locRestSaveNum = binding.fragmentArea.locRestSaveNum
+
+        //출력//
+        Log.d("dong", "${dong}")
+        dong.text = gustoViewModel.dong.value// 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
+        areaPick.text = gustoViewModel.dong.value // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
+
+        noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적 없는 맛집 수
+        visNum.text = gustoViewModel.mapVisitedCnt.toString() //방문해본 적 있는 맛집 수
+
+
+        // 저장된 맛집의 수를 locRestSaveNum 텍스트뷰에 연결
+        gustoViewModel.getSavedStores("${dong}", null) { result ->
+            when (result) {
+                0 -> {
+                    // 성공적으로 저장된 맛집 정보를 가져온 경우
+                    val savedStoresCount = gustoViewModel.savedStoreIdList.size
+                    Log.d("save_rest","${savedStoresCount}")
+                    locRestSaveNum.text = savedStoresCount.toString()
+                }
+                else -> {
+                    // 저장된 맛집 정보를 가져오지 못한 경우
+                    locRestSaveNum.text = "0"
+                    Toast.makeText(context, "저장된 맛집 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+    }
+
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
         if (p1 != null) {
             gustoViewModel.getRegionInfo(p1.mapPointGeoCoord.longitude, p1.mapPointGeoCoord.latitude)  {result, address ->
                 when(result) {
                     1 -> {
+                        Log.d("viewmodel", "gustoViewModel.dong.value")
                         binding.fragmentArea.userLoc.text = address
+                        refindDong()
                         reGetMapMarkers2(binding.fragmentMapMainScreen.totalBtn.text.toString())
                     }
                 }
@@ -569,11 +585,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                             markerList.add(MarkerItem(data.storeId, index+1,0, data.latitude!!, data.longitude!!, data.storeName!!, "", true))
                         }
                     }
-                    Log.d("viewmodel","${markerList}")
-                    setMarker(mapView,markerList)
-                    binding.vpSlider.adapter?.notifyDataSetChanged()
                 }
-                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -653,6 +665,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             }
         }
     }
+
 }
 
 
