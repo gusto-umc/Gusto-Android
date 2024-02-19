@@ -13,4 +13,6 @@
     <color name="gray_6">#ECECEC</color>
     <color name="gray_7">#CBCBCB</color>
     <color name="main_C">#F27781</color>
+    <color name="chip_disabled">#515151</color>
+
 </resources>
