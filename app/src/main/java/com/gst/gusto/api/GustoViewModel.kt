@@ -1332,29 +1332,24 @@ class GustoViewModel: ViewModel() {
                 response: Response<List<ResponseSavedStore>>
             ) {
                 if (response.isSuccessful) {
-                    Log.e("getSavedStores", "Successful response: ${response}")
-                    Log.d("getSavedStores", response.body()!![0].toString())
                     val data = response.body()!![0]
                     userNickname = data.nickname
                     mapVisitedList = data.visitedStores[0].visitedStores
                     mapVisitedCnt = data.visitedStores[0].numPinStores
                     mapUnvisitedList = data.unvisitedStores[0].unvisitedStores
                     mapUnvisitedCnt = data.unvisitedStores[0].numPinStores
+                    unsavedStoreIdList.clear()
+                    savedStoreIdList.clear()
                     if(!mapUnvisitedList.isNullOrEmpty()){
                         for(i in mapUnvisitedList!!){
                             unsavedStoreIdList.add(i.storeId.toLong())
                         }
                     }
-                    else{
-                        unsavedStoreIdList.clear()
-                    }
+
                     if(!mapVisitedList.isNullOrEmpty()){
                         for(i in mapVisitedList!!){
                             savedStoreIdList.add(i.storeId.toLong())
                         }
-                    }
-                    else{
-                        savedStoreIdList.clear()
                     }
                     callback(0)
                 } else {
