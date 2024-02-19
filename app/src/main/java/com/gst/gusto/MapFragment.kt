@@ -92,11 +92,12 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             // 현재 버튼의 텍스트를 가져옴
             val currentText = totalBtn.text.toString()
             // 다음 순서로 변경
-            val nextText = when (currentText) {
+            /*val nextText = when (currentText) {
                 "전체" -> "가본 곳 만"
                 "가본 곳 만" -> "가본 곳 제외"
                 else -> "전체"
-            }
+            }*/
+
             // 변경된 텍스트 설정
             totalBtn.text = nextText
             reGetMapMarkers2(nextText)
