@@ -1332,29 +1332,24 @@ class GustoViewModel: ViewModel() {
                 response: Response<List<ResponseSavedStore>>
             ) {
                 if (response.isSuccessful) {
-                    Log.e("getSavedStores", "Successful response: ${response}")
-                    Log.d("getSavedStores", response.body()!![0].toString())
                     val data = response.body()!![0]
                     userNickname = data.nickname
                     mapVisitedList = data.visitedStores[0].visitedStores
                     mapVisitedCnt = data.visitedStores[0].numPinStores
                     mapUnvisitedList = data.unvisitedStores[0].unvisitedStores
                     mapUnvisitedCnt = data.unvisitedStores[0].numPinStores
+                    unsavedStoreIdList.clear()
+                    savedStoreIdList.clear()
                     if(!mapUnvisitedList.isNullOrEmpty()){
                         for(i in mapUnvisitedList!!){
                             unsavedStoreIdList.add(i.storeId.toLong())
                         }
                     }
-                    else{
-                        unsavedStoreIdList.clear()
-                    }
+
                     if(!mapVisitedList.isNullOrEmpty()){
                         for(i in mapVisitedList!!){
                             savedStoreIdList.add(i.storeId.toLong())
                         }
-                    }
-                    else{
-                        savedStoreIdList.clear()
                     }
                     callback(0)
                 } else {
@@ -1460,6 +1455,11 @@ class GustoViewModel: ViewModel() {
      */
     var mapSearchArray = ArrayList<ResponseSearch>()
     var mapSearchStoreIdArray = ArrayList<Long>()
+
+    var keepFlag = false
+    var mapKeepArray = ArrayList<ResponseSearch>()
+    var mapKeepStoreIdArray = ArrayList<Long>()
+    var searchKeepKeyword = ""
     //검색 결과 -> 작성 예정
     fun getSearchResult(keyword : String, callback: (Int) -> Unit){
         service.getSearch(xAuthToken, keyword).enqueue(object : Callback<ArrayList<ResponseSearch>>{
@@ -1470,9 +1470,11 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     Log.d("getSearchResult", "Successful response: ${response}")
                     mapSearchArray = response.body()!!
+                    mapKeepArray = response.body()!!
                     mapSearchStoreIdArray.clear()
                     for(i in response.body()!!){
                         mapSearchStoreIdArray.add(i.storeId)
+                        mapKeepStoreIdArray.add(i.storeId)
                     }
                     callback(0)
 

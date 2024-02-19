@@ -113,6 +113,7 @@ class RouteSearchFragment : Fragment() {
                                     //페이지 이동 -> 루트 추가, 수정 화면으로 이동
                                     gustoViewModel!!.routeStorTmpData = ResponseStoreListItem(dataSet.storeId.toInt(),dataSet.storeName,dataSet.address,0,"")
                                     findNavController().popBackStack()
+
                                 }
 
                             })

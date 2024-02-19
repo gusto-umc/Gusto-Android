@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -39,7 +40,8 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
         // 클릭 리스너 설정
         binding.listViewBtn.setOnClickListener {
             // 버튼이 클릭되었을 때 실행될 동작
-            Toast.makeText(requireContext(), "목록보기 버튼이 클릭되었습니다.", Toast.LENGTH_SHORT).show()
+            gustoViewModel.keepFlag = true
+            findNavController().popBackStack()
         }
 
         return binding.root
