@@ -30,11 +30,12 @@ class NameFragment : Fragment() {
             LoginViewModel.checkNickname(binding.etName.text.toString()) { resultCode ->
                 when (resultCode) {
                     1 -> {
+                        LoginViewModel.setNickName(binding.etName.text.toString())
+                        findNavController().navigate(R.id.action_nameFragment_to_ageFragment)/*
                         LoginViewModel.confirmNickname(binding.etName.text.toString()) { resultCode ->
                             when (resultCode) {
                                 1 -> {
-                                    LoginViewModel.setNickName(binding.etName.text.toString())
-                                    findNavController().navigate(R.id.action_nameFragment_to_ageFragment)
+
                                 }
                                 2 -> {
                                     Toast.makeText(requireContext(), "이미 중복된 닉네임이 존재합니다", Toast.LENGTH_SHORT).show()
@@ -43,7 +44,7 @@ class NameFragment : Fragment() {
                                     Toast.makeText(requireContext(), "오류 발생", Toast.LENGTH_SHORT).show()
                                 }
                             }
-                        }
+                        }*/
                     }
                     2 -> {
                         Toast.makeText(requireContext(), "이미 중복된 닉네임이 존재합니다", Toast.LENGTH_SHORT).show()
