@@ -9,8 +9,8 @@ plugins {
 
 android {
     namespace = "com.gst.gusto"
-    compileSdk = 33
-    compileSdkExtension = 4
+    compileSdk = 34
+    compileSdkExtension = 10
 
     val localProperties = Properties()
     localProperties.load(project.rootProject.file("local.properties").inputStream())
@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId = "com.gst.gusto"
         minSdk = 30
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
