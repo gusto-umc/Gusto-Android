@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
+import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.RestItem
@@ -1005,6 +1006,38 @@ class GustoViewModel: ViewModel() {
      * 카테고리 api 함수 - mindy
      */
 
+    fun findIconResource(iconId : Int) : Int{
+        var iconResource : Int = when(iconId){
+            1 -> { R.drawable.category_icon_1}
+            2 -> {R.drawable.ic_rice_cate}
+            3 -> {R.drawable.ic_chat}
+            4 -> {R.drawable.ic_hot_}
+            5 -> {R.drawable.ic_likes}
+            6 -> {R.drawable.ic_money}
+            7 -> {R.drawable.ic_moods}
+            8 -> {R.drawable.ic_music}
+            9 -> {R.drawable.ic_noodle}
+            else -> {R.drawable.ic_reserv}
+        }
+        return iconResource
+    }
+    fun findIconId(iconResource : Int) : Int {
+        var iconId = when(iconResource){
+            R.drawable.category_icon_1 -> 1
+            R.drawable.ic_rice_cate -> 2
+            R.drawable.ic_chat -> 3
+            R.drawable.ic_hot_ -> 4
+            R.drawable.ic_likes -> 5
+            R.drawable.ic_money -> 6
+            R.drawable.ic_moods -> 7
+            R.drawable.ic_music -> 8
+            R.drawable.ic_noodle -> 9
+            R.drawable.ic_reserv -> 10
+            else -> 10
+        }
+        return iconId
+    }
+
     // 카테고리 추가 -> 확인 완료
     fun addCategory(categoryName : String,categoryIcon : Int, public : String, desc : String,  callback: (Int) -> Unit){
         var categoryRequestData = RequestAddCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = public, myCategoryScript = desc )
@@ -1164,6 +1197,8 @@ class GustoViewModel: ViewModel() {
     var mapUnvisitedList : List<ResponseSavedStoreData>? = null
     var mapVisitedCnt = 0
     var mapUnvisitedCnt = 0
+
+
 
     //가게 카테고리 추가(찜) -> 확인 완, 수정 필요
     fun addPin(categoryId: Long, storeLong: Long, callback: (Int, ResponseAddPin?) -> Unit){
