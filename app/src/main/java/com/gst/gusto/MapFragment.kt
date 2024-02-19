@@ -151,26 +151,31 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         return view
     }
 
-    // 마이 리스트에서 불러와서 칩그룹 만들기 //
-    fun getAllCategoryAndAddChips(nickname: String) {
-        gustoViewModel.getAllCategory(nickname) { result ->
+    // 카테고리 조회 및 칩 추가
+    fun getMapCategoryAndAddChips(townName: String) {
+        gustoViewModel.getMapCategory(townName) { result ->
             if (result == 0) {
                 // 카테고리 목록을 성공적으로 가져왔을 때
-                for (category in gustoViewModel.myAllCategoryList!!) {
-                    addChip(category.categoryName)
-                    Log.d("call category", "Failed to get category list")
+                val categoryList = gustoViewModel.myMapCategoryList
+                if (categoryList != null) {
+                    for ((index, category) in categoryList.withIndex()) {
+                        addChip(category.categoryName, index)
+                    }
+                } else {
+                    Log.e("getMapCategoryAndAddChips", "Category list is null")
                 }
             } else {
                 // 카테고리 목록을 가져오지 못했을 때
-                Log.d("call category", "Failed to get category list")
+                Log.e("getMapCategoryAndAddChips", "Failed to get category list")
             }
         }
     }
 
-    // 카테고리 만들기
-    private fun addChip(text: String) {
+    // 칩 추가
+    private fun addChip(text: String, chipId: Int) {
         val chip = Chip(requireContext())
 
+        chip.id = chipId // 고유한 ID 할당
         chip.isClickable = true
         chip.isCheckable = true
 
@@ -182,10 +187,10 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         chip.typeface = Typeface.createFromAsset(requireActivity().assets, "font/pretendard_medium.otf")
         chip.chipStrokeWidth = util.dpToPixels(1f, resources.displayMetrics)
         chip.chipCornerRadius = util.dpToPixels(41f, resources.displayMetrics)
+        chip.setChipIconResource(R.drawable.streamline_bean)
 
         chipGroup.addView(chip)
     }
-
 
     // 클릭된 칩의 처리를 담당하는 함수
     private fun handleChipClick(chip: Chip) {
