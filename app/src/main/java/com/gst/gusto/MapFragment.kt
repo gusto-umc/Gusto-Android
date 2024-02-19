@@ -184,8 +184,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         if (isClickedChipActive) {
             // 클릭된 칩의 색상 변경 (비활성화 상태로 변경)
             Log.d("chip", "클릭된 칩 비활성화 ${chip.id}")
-            chip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chip_select_text_color))
-            chip.setChipBackgroundColorResource(R.color.chip_select_color)
+            chip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chip_disabled))
+            chip.setChipBackgroundColorResource(R.color.white)
             chip.setChipIconResource(R.drawable.streamline_bean)
             // 클릭된 칩의 ID를 초기화하여 비활성화 상태로 설정
             previousChipId = -1
