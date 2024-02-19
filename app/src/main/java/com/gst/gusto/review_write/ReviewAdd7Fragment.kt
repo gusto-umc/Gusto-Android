@@ -43,6 +43,7 @@ class ReviewAdd7Fragment : Fragment() {
             findNavController().popBackStack()
         }
         binding.btnEnd.setOnClickListener {
+            binding.btnEnd.isClickable = false
             gustoViewModel.comment = binding.etContent.text.toString()
             gustoViewModel.createReview() {result ->
                 when(result) {
@@ -50,6 +51,7 @@ class ReviewAdd7Fragment : Fragment() {
                         activity.hideBottomNavigation(false)
                         findNavController().popBackStack(R.id.storeDetailFragment,false)
                     }
+                    else -> binding.btnEnd.isClickable = true
                 }
             }
 
