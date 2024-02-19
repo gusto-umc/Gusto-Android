@@ -232,15 +232,13 @@ class util {
         @SuppressLint("Range")
         @Throws(Exception::class)
         fun convertContentToFile(ctx: Context, uri: Uri): File {
-            var cursor: Cursor? = null
-            return try {
-                cursor = ctx.contentResolver.query(uri, null, null, null, null)
-                cursor!!.moveToNext()
-                val filePath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
-                File(filePath)
-            } finally {
-                cursor?.close()
+            val inputStream = ctx.contentResolver.openInputStream(uri)
+            val file = File.createTempFile("temp", null, ctx.cacheDir)
+            file.outputStream().use { outputStream ->
+                inputStream?.copyTo(outputStream)
             }
+
+            return file
         }
 
     }

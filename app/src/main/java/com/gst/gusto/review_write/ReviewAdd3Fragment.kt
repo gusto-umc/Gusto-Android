@@ -1,5 +1,7 @@
 package com.gst.clock.Fragment
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +14,8 @@ import android.view.ViewTreeObserver
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -33,6 +37,11 @@ class ReviewAdd3Fragment : Fragment() {
     private val handler = Handler()
     private val progressPoint = 200
     private val gustoViewModel : GustoViewModel by activityViewModels()
+
+    companion object {
+        private const val REQUEST_CODE_STORAGE_PERMISSION = 1001
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,9 +84,11 @@ class ReviewAdd3Fragment : Fragment() {
 
         var imagesOn = false
 
+        var selectImage = 0
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(4)) { uri ->
             // Callback is invoked after th user selects a media item or closes the photo picker.
             if (uri != null) {
+                gustoViewModel.imageFiles.clear()
                 if(!imagesOn) {
                     imagesOn= true
                     binding.lyImgaes.visibility = View.VISIBLE
@@ -111,6 +122,7 @@ class ReviewAdd3Fragment : Fragment() {
                 }
 
                 for (j in 0 .. uri.size-1) {
+                    Log.e("viewmodel",uri[j].toString())
                     gustoViewModel.imageFiles?.add(convertContentToFile(requireContext(),uri[j]))
                     setImage(imageViews[j],uri[j].toString(),requireContext())
                 }
@@ -129,6 +141,7 @@ class ReviewAdd3Fragment : Fragment() {
         }
         for(i in 0..3) {
             imageCards[i].setOnClickListener {
+                selectImage = i
                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
         }
