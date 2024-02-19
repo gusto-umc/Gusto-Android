@@ -22,7 +22,7 @@ interface GustoApi {
     fun getCurrentMapStores(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("townName") townName : String,
-        @Query("myCategoryId") myCategoryId : String?
+        @Query("myCategoryId") myCategoryId : Int?
     ):Call<List<RouteList>>
 
     //ROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTE

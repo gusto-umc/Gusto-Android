@@ -70,21 +70,21 @@
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_search_map"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="78.5dp"
-            app:tint="@null"
-            app:srcCompat="@drawable/fab_map_img"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="20dp"
+            app:fabCustomSize="60dp"
+            app:maxImageSize="40dp"
+            android:src="@drawable/fab_map_2_img"
+            android:backgroundTint="@color/white"
+            app:borderWidth="0dp"
+            android:elevation="4dp"
+            app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:scaleType="fitXY"
-            app:maxImageSize="50dp"
-            app:fabCustomSize="@dimen/cardview_default_radius"
-            android:visibility="invisible"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -71,9 +71,9 @@
                 android:layout_height="60dp"
                 android:layout_gravity="bottom|right"
                 android:layout_marginRight="30dp"
-                android:background="@drawable/background_radius_10"
+                android:background="@drawable/background_radius_15"
                 android:elevation="4dp"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/fab_list_img" />
 
