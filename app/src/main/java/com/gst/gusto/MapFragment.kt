@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,6 +34,7 @@ import com.gst.gusto.Util.mapUtil.Companion.setMapInit
 import com.gst.gusto.Util.mapUtil.Companion.setMarker
 import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.databinding.FragmentMapBinding
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter
 import net.daum.mf.map.api.CameraUpdateFactory
@@ -202,7 +204,17 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         }
     }
 
-
+    // 전체 칩이 비활성화되었는지 여부를 확인하는 함수
+    private fun isAllChipsDisabled(): Boolean {
+        // 모든 칩을 확인하여 비활성화된 칩이 있는지 검사
+        for (i in 0 until chipGroup.childCount) {
+            val chip = chipGroup.getChildAt(i) as Chip
+            if (chip.isEnabled) {
+                return false
+            }
+        }
+        return true
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -211,7 +223,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
         }
 
-
+        // 카테고리 조회 및 칩 추가
+        getMapCategoryAndAddChips("성수1가1동")
 
         /**
          * 방문 o 클릭 리스너 -> 보완 예정
@@ -245,8 +258,48 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
 
 
-
         binding.fragmentArea.apply {
+
+        // 사용자에 대한 정보 가져오기
+            gustoViewModel.getUserProfile("my") { result, data ->
+                when (result) {
+                    1 -> {
+                        if (data != null) {
+                            // 사용자 정보가 성공적으로 가져온 경우
+                            userName1.text = data.nickname
+                            userName2.text = data.nickname
+                            userName3.text = data.nickname
+                        }
+                    }
+                }
+            }
+            //LoginViewModel.signUp()
+
+            Log.d("dong", "${dong}")
+            dong.text = gustoViewModel.dong // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
+            areaPick.text = gustoViewModel.dong // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
+
+            noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적 없는 맛집 수
+            visNum.text = gustoViewModel.mapVisitedCnt.toString() //방문해본 적 있는 맛집 수
+
+
+            // 저장된 맛집의 수를 locRestSaveNum 텍스트뷰에 연결
+            gustoViewModel.getSavedStores("성수1가1동", null) { result ->
+                when (result) {
+                    0 -> {
+                        // 성공적으로 저장된 맛집 정보를 가져온 경우
+                        val savedStoresCount = gustoViewModel.savedStoreIdList.size
+                        locRestSaveNum.text = savedStoresCount.toString()
+                    }
+                    else -> {
+                        // 저장된 맛집 정보를 가져오지 못한 경우
+                        locRestSaveNum.text = "0"
+                        Toast.makeText(context, "저장된 맛집 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+            //사진 불러와서 리사이클러뷰와 연결해 담기//
             val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             val layoutManager2 = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             val layoutManager3 = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -256,7 +309,34 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             val recyclerView3: RecyclerView = recyclerViewAgeNoVisitedRest
 
             // 아이템 담기
+            val itemList_unvisit = ArrayList<String>()
+            val itemList_visit = ArrayList<String>()
+            val itemList_unvisit_age = ArrayList<String>()
+
             val itemList = ArrayList<String>()
+
+
+            val unvisitedStores = gustoViewModel.mapUnvisitedList
+            val visitedStores = gustoViewModel.mapVisitedList
+            //val unvisitedStores_age = gustoViewModel.mapVisitedList
+
+            // 방문 X - 각 가게에 대한 정보
+            gustoViewModel.mapUnvisitedList?.let { unvisitedStores ->
+                for (store in unvisitedStores) {
+                    val reviewImg = store.reviewImg
+                    Log.d("img","${reviewImg}")
+                    reviewImg?.let { itemList_unvisit.add(it) } // null이 아닌 경우에만 itemList_unvisit에 추가
+                }
+            }
+
+            // 방문 O - 각 가게에 대한 정보
+            gustoViewModel.mapVisitedList?.let { visitedStores ->
+                for (store in visitedStores) {
+                    val reviewImg = store.reviewImg
+                    Log.d("img","${reviewImg}")
+                    reviewImg?.let { itemList_visit.add(it) } // null이 아닌 경우에만 itemList에 추가
+                }
+            }
 
             // 이미지 리소스 URL
             val imageResource = "https://www.urbanbrush.net/web/wp-content/uploads/edd/2023/02/urban-20230228092421948485.jpg"
@@ -269,9 +349,11 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             itemList.add(imageResource)
             itemList.add(imageResource)
 
-            val adapter = MapRecyclerAdapter(itemList)
-            val adapter2 = MapRecyclerAdapter(itemList)
+
+            val adapter = MapRecyclerAdapter(itemList_unvisit)
+            val adapter2 = MapRecyclerAdapter(itemList_visit)
             val adapter3 = MapRecyclerAdapter(itemList)
+            //val adapter3 = MapRecyclerAdapter(itemList_unvisit_age)
 
             recyclerView.adapter = adapter
             recyclerView2.adapter = adapter2
@@ -355,11 +437,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     }
     override fun onResume() {
         super.onResume()
-        //카테고리 보이기 //
-
-        // 카테고리 조회 및 칩 추가
-        getMapCategoryAndAddChips("성수1가1동")
-        mapView = MapView(requireContext())
+       mapView = MapView(requireContext())
 
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
@@ -467,6 +545,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 when(result) {
                     1 -> {
                         binding.fragmentArea.userLoc.text = address
+                        //binding.fragmentArea.dong.text = address //깡지 수정(추가)
                         reGetMapMarkers()
                     }
                 }

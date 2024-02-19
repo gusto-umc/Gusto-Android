@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/main_C"
                 android:textStyle="bold"
-                android:text="성수동" />
+                android:text=" 성수동" />
         </LinearLayout>
 
         <LinearLayout
