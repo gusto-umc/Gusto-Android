@@ -106,6 +106,8 @@ class SearchFragment : Fragment() {
             binding.edtSearchSearchbox.text.clear()
             binding.tvNoResult.visibility = View.GONE
             binding.rvSearchKeep.visibility = View.GONE
+            binding.rvSearchResult.visibility = View.GONE
+            binding.fabSearchMap.visibility = View.GONE
         }
 
 
@@ -113,6 +115,7 @@ class SearchFragment : Fragment() {
             //공백 확인
             if (binding.edtSearchSearchbox.text.isNullOrBlank()) {
                 binding.rvSearchResult.visibility = View.GONE
+                binding.rvSearchKeep.visibility = View.GONE
                 binding.fabSearchMap.visibility = View.GONE
             } else {
                 // 서버 연결 후 검샥 결과 response
@@ -127,6 +130,7 @@ class SearchFragment : Fragment() {
                             }
                             else{
                                 binding.rvSearchResult.visibility = View.VISIBLE
+                                binding.rvSearchKeep.visibility = View.GONE
                                 binding.tvNoResult.visibility = View.GONE
                                 binding.fabSearchMap.visibility = View.VISIBLE
                             }
@@ -136,11 +140,9 @@ class SearchFragment : Fragment() {
                             mSearshResultAdapter.setItemClickListener(object :
                                 SearchStoreAdapter.OnItemClickListener {
                                 override fun onClick(v: View, dataSet: ResponseSearch) {
-                                    //fab visibility 설정
-                                    binding.fabSearchMap.visibility = View.GONE
                                     //데이터 넣기
                                     gustoViewModel.selectStoreId = dataSet.storeId
-                                    gustoViewModel.storeIdList = gustoViewModel.mapSearchStoreIdArray
+                                    gustoViewModel.storeIdList = gustoViewModel.mapKeepStoreIdArray
                                     //페이지 이동
                                     Navigation.findNavController(view)
                                         .navigate(R.id.action_searchFragment_to_fragment_map_viewpager3)
@@ -170,8 +172,8 @@ class SearchFragment : Fragment() {
          */
         binding.fabSearchMap.setOnClickListener{
             //데이터 저장
-            gustoViewModel.selectStoreId = gustoViewModel.mapSearchStoreIdArray[0]
-            gustoViewModel.storeIdList = gustoViewModel.mapSearchStoreIdArray
+            gustoViewModel.selectStoreId = gustoViewModel.mapKeepStoreIdArray[0]
+            gustoViewModel.storeIdList = gustoViewModel.mapKeepStoreIdArray
 
             //페이지 이동
            Navigation.findNavController(view).navigate(R.id.action_searchFragment_to_fragment_map_viewpager3)

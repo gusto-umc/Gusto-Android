@@ -1,6 +1,7 @@
 package com.gst.clock.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -80,8 +81,9 @@ class ReviewAdd1Fragment : Fragment() {
                 return true
             }
         })
-        if(gustoViewModel.myStoreDetail?.reviewImg4 != null && gustoViewModel.myStoreDetail?.reviewImg4!!.size!=0)
-            setImage(binding.ivRest, gustoViewModel.myStoreDetail?.reviewImg4?.get(0),requireContext())
+        if(!gustoViewModel.myStoreDetail!!.reviewImg4.isNullOrEmpty()) {
+            setImage(binding.ivRest,gustoViewModel.myStoreDetail!!.reviewImg4[0], requireContext())
+        }
         binding.tvRest.text = gustoViewModel.myStoreDetail?.storeName
     }
     override fun onDestroy() {

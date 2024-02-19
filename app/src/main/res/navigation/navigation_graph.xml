@@ -297,7 +297,8 @@
             app:destination="@id/fragment_my"/>
         <action
             android:id="@+id/action_reviewDetail_to_reviewDetailEdit"
-            app:destination="@id/fragment_review_detail_edit"/>
+            app:destination="@id/fragment_review_detail_edit"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_reviewDetail_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment"/>
