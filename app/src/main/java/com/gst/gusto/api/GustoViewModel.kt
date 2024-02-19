@@ -1099,7 +1099,7 @@ class GustoViewModel: ViewModel() {
     }
     //타인 카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
     fun getAllUserCategory(callback: (Int) -> Unit){
-        service.getAllCategory(xAuthToken, nickname = null).enqueue(object : Callback<List<ResponseMapCategory>>{
+        service.getAllUserCategory(xAuthToken).enqueue(object : Callback<List<ResponseMapCategory>>{
             override fun onResponse(
                 call: Call<List<ResponseMapCategory>>,
                 response: Response<List<ResponseMapCategory>>
@@ -1279,7 +1279,7 @@ class GustoViewModel: ViewModel() {
     }
     // 내 카테고리 별 전체 가게 조회
     fun getAllUserStores(categoryId: Int,  callback: (Int) -> Unit){
-        service.getAllStores(xAuthToken, nickname = null, categoryId = categoryId).enqueue(object : Callback<List<ResponseStoreListItem>>{
+        service.getAllUserStores(xAuthToken, categoryId = categoryId).enqueue(object : Callback<List<ResponseStoreListItem>>{
             override fun onResponse(
                 call: Call<List<ResponseStoreListItem>>,
                 response: Response<List<ResponseStoreListItem>>
@@ -1289,7 +1289,7 @@ class GustoViewModel: ViewModel() {
                     myAllStoreList = response.body()!!
                     callback(0)
                 } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    Log.e("getAllUserStores", "Unsuccessful response: ${response}")
                     callback(1)
                 }
             }

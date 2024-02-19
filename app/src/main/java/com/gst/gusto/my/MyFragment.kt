@@ -100,6 +100,7 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewPager()
+        gustoViewModel.currentFeedNickname = gustoViewModel.userNickname
     }
     private fun initViewPager() {
 
