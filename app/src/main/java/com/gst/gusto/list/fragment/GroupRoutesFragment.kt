@@ -33,7 +33,8 @@ class GroupRoutesFragment(val num: Int) : Fragment() {
         navHostFragment = childFragmentManager.findFragmentById(R.id.fl_routes_container) as NavHostFragment
 
         if(num==0) navHostFragment.navController.navigate(R.id.fragment_group_m_route_routes)
-        else navHostFragment.navController.navigate(R.id.fragment_group_m_route_stores)
+        else if(num==1) navHostFragment.navController.navigate(R.id.fragment_group_m_route_stores)
+        else navHostFragment.navController.navigate(R.id.fragment_group_m_route_create)
     }
     public fun getCon() : NavController{
         return navHostFragment.navController

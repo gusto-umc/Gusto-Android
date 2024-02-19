@@ -26,7 +26,5 @@ class MapMainScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-
-
     }
 }

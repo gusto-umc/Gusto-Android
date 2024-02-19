@@ -60,7 +60,6 @@ class ListRouteFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         val frag = requireParentFragment().parentFragment as ListFragment
-        Log.e("frag",frag.toString())
         frag.callBtnGroup()
     }
     fun checkRoutes() {

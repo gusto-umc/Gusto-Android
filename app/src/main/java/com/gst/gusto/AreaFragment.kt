@@ -53,16 +53,16 @@ class AreaFragment : Fragment() {
         //val imageResource = R.drawable.visit // 이미지 리소스 ID 가져오기
         val imageResource = "https://www.urbanbrush.net/web/wp-content/uploads/edd/2023/02/urban-20230228092421948485.jpg"
         itemList.add(imageResource)
-        //itemList.add(imageResource)
-        //itemList.add(imageResource)
+        itemList.add(imageResource)
+        itemList.add(imageResource)
 
         val adapter = MapRecyclerAdapter(itemList)
         val adapter2 = MapRecyclerAdapter(itemList)
         val adapter3 = MapRecyclerAdapter(itemList)
 
         recyclerView.adapter = adapter
-        //recyclerView2.adapter = adapter2
-        //recyclerView3.adapter = adapter3
+        recyclerView2.adapter = adapter2
+        recyclerView3.adapter = adapter3
         Log.d("log_test","보자")
 
     }

@@ -29,10 +29,13 @@
         app:behavior_peekHeight="60dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-        <!-- fragment_area.xml 내용 추가 -->
-        <include layout="@layout/fragment_area"
-            android:id="@+id/fragment_area"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <include layout="@layout/fragment_area"
+                android:id="@+id/fragment_area"/>
+        </ScrollView>
     </LinearLayout>
 
 
@@ -49,10 +52,10 @@
             android:layout_height="60dp"
             android:layout_marginBottom="18dp"
             android:src="@drawable/fab_list_img"
-            android:background="@drawable/background_radius_10"
+            android:background="@drawable/background_radius_15"
             android:elevation="4dp"
             android:scaleType="centerCrop"
-            android:padding="10dp"
+            android:padding="12dp"
             android:layout_gravity="right"
             android:contentDescription="목록보기"
             android:layout_marginRight="20dp"/>
@@ -63,7 +66,6 @@
             android:layout_height="173dp"
             android:paddingHorizontal="10dp" />
     </LinearLayout>
-
 
 
 

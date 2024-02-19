@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "Exception -> $e")
         }
         gustoViewModel.getTokens(this)
+        gustoViewModel.mainActivity = this
     }
 
     fun getCon(): NavController {

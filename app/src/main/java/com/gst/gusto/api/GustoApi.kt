@@ -22,7 +22,7 @@ interface GustoApi {
     fun getCurrentMapStores(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("townName") townName : String,
-        @Query("myCategoryId") myCategoryId : String?
+        @Query("myCategoryId") myCategoryId : Int?
     ):Call<List<RouteList>>
 
     //ROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTE
@@ -263,12 +263,18 @@ interface GustoApi {
         @Query("myCategoryId") myCategoryId : Int
     ) : Call<Void>
 
-    //5.카테고리 전체 조회 - 피드, 마이 -> 서버 배포 후 다시 확인하기
+    //5.카테고리 전체 조회 - 피드-> 서버 배포 후 다시 확인하기
     @GET("myCategories")
     fun getAllCategory(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("nickname") nickname : String?
-    ) : Call<List<ResponseAllCategory>>
+    ) : Call<List<ResponseMapCategory>>
+
+    //6.카테고리 전체 조회 - 마이->
+    @GET("myCategories")
+    fun getAllUserCategory(
+        @Header("X-AUTH-TOKEN") token : String
+    ) : Call<List<ResponseMapCategory>>
 
     /**
      * 가게
@@ -280,7 +286,7 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("myCategoryId") myCategoryId : Long,
         @Body body: RequestPin
-    ) : Call<Void>
+    ) : Call<ResponseAddPin>
 
     //2. 가게 카테고리 삭제(찜 취소) -> 확인 완
     @DELETE("myCategories/pins")
@@ -314,7 +320,14 @@ interface GustoApi {
         @Query("myCategoryId") categoryId : Int
     ): Call<List<ResponseStoreListItem>>
 
-    //6. 저장된 맛집 리스트 -> cateogry 적용 X
+    //5. 카테고리 별 가게 조회 - 전체 -> 확인 완
+    @GET("myCategories/pins")
+    fun getAllUserStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("myCategoryId") categoryId : Int
+    ): Call<List<ResponseStoreListItem>>
+
+    //7. 저장된 맛집 리스트 -> cateogry 적용 X
     @GET("stores/pins")
     fun getSavedStores(
         @Header("X-AUTH-TOKEN") token: String,
@@ -414,6 +427,16 @@ interface GustoApi {
         @Query("keyword") keyword: String,
         @Query("hashTags") hashTags: List<Long>?
     ):Call<ResponseFeedSearchReviews>
+
+
+    // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+    @GET("stores/map?townName={townName}&myCategoryId={myCategoryId}&visit={visitedStatus}")
+    fun LocalCategory(
+        @Query("storeId") storeId: Int,
+        @Query("storeName") storeName: String,
+        @Query("longtitude") longitude: Double,
+        @Query("latitude") latitude: Double
+    ): Call<LocalCategoryResponse>
 
     @GET("reviews") // 타인 리뷰 모아보기
     fun otherInstaView(
