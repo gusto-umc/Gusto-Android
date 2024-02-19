@@ -68,6 +68,13 @@ class ReviewAdd3Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val permission = Manifest.permission.READ_EXTERNAL_STORAGE
+        if (checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(permission), REQUEST_CODE_STORAGE_PERMISSION)
+        } else {
+            // 권한이 이미 승인되었을 때 수행할 작업
+        }
+
         val imageViews = listOf(
             binding.ivImgae1,
             binding.ivImgae2,

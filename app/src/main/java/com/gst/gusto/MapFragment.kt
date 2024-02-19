@@ -367,12 +367,12 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         // 카테고리 조회 및 칩 추가
         getMapCategoryAndAddChips("성수1가1동")
-        mapView = MapView(requireContext())
+       /* mapView = MapView(requireContext())
 
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
 
-        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)
+        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)*/
     }
 
 
