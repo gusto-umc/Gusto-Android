@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId = "com.gst.gusto"
-        minSdk = 27
+        minSdk = 30
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
