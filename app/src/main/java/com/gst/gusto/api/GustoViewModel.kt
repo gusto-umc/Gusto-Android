@@ -1474,8 +1474,8 @@ class GustoViewModel: ViewModel() {
                     mapSearchStoreIdArray.clear()
                     for(i in response.body()!!){
                         mapSearchStoreIdArray.add(i.storeId)
-                        mapKeepStoreIdArray.add(i.storeId)
                     }
+                    mapKeepStoreIdArray = mapSearchStoreIdArray
                     callback(0)
 
                 } else {

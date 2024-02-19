@@ -29,7 +29,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         android:background="@color/sub_m"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         />
 
                     <ImageView
