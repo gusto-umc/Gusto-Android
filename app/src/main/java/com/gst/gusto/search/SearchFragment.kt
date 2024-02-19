@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.search.adapter.SearchStoreAdapter
 import com.gst.gusto.R
+import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseSearch
 import com.gst.gusto.databinding.FragmentSearchBinding
@@ -22,13 +23,6 @@ class SearchFragment : Fragment() {
     private lateinit var binding : FragmentSearchBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
 
-    private val sampleResultArray = arrayListOf<StoreSearch>(
-        StoreSearch(1, "구스또 1호점", "양식", R.drawable.sample_store_4_img),
-        StoreSearch(2, "구스또 2호점", "양식", R.drawable.sample_store_2_img),
-        StoreSearch(3, "구스또 3호점", "양식", R.drawable.sample_store_3_img),
-        StoreSearch(4, "구스또 4호점", "양식", R.drawable.sample_store_img),
-        StoreSearch(5, "구스또 5호점", "양식", R.drawable.sample_store_4_img)
-        )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -44,14 +38,18 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /**
-         * map, group 구분 -> category visibility 설정 -> argument 처리
-         */
-
+        binding.edtSearchSearchbox.requestFocus()
+        util.openKeyboard(requireActivity())
 
         /**
          * Rv 어댑터 연결, 클릭 리스너 설정, 검색 클릭 리스너
          */
+
+        binding.edtSearchSearchbox.setOnClickListener {
+            binding.tvNoResult.visibility = View.GONE
+            binding.edtSearchSearchbox.text.clear()
+        }
+
         val mSearshResultAdapter = SearchStoreAdapter()
         mSearshResultAdapter.mContext = context
         binding.ivSearchSearchbox.setOnClickListener {
@@ -61,10 +59,19 @@ class SearchFragment : Fragment() {
                 binding.fabSearchMap.visibility = View.GONE
             } else {
                 // 서버 연결 후 검샥 결과 response
+                util.hideKeyboard(this.requireActivity())
                 gustoViewModel.getSearchResult(binding.edtSearchSearchbox.text.toString()){
                     result ->
                     when(result){
                         0 -> {
+                            if(gustoViewModel.mapSearchArray.isNullOrEmpty()){
+                                binding.rvSearchResult.visibility = View.GONE
+                                binding.tvNoResult.visibility = View.VISIBLE
+                            }
+                            else{
+                                binding.rvSearchResult.visibility = View.VISIBLE
+                                binding.tvNoResult.visibility = View.GONE
+                            }
                             //success
                             //데이터셋 저장 후 연결(공백일 때 동작 확인)
                             mSearshResultAdapter.submitList(gustoViewModel.mapSearchArray)
@@ -99,7 +106,6 @@ class SearchFragment : Fragment() {
 
 
             }
-            binding.edtSearchSearchbox.text.clear()
         }
 
         /**
