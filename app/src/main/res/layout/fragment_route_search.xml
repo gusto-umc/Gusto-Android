@@ -20,7 +20,7 @@
             >
 
             <EditText
-                android:id="@+id/edt_search_searchbox"
+                android:id="@+id/edt_route_searchbox"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:hint="맛집 검색"
@@ -32,11 +32,11 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/iv_search_searchbox"
+                app:layout_constraintEnd_toStartOf="@id/iv_route_searchbox"
                 />
 
             <ImageView
-                android:id="@+id/iv_search_searchbox"
+                android:id="@+id/iv_route_searchbox"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -72,6 +72,17 @@
                     android:id="@+id/rv_route_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    />
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tv_route_no_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="검색 결과가 없습니다."
+                    android:textColor="@color/gray_1"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="100dp"
                     />
 
             </LinearLayout>

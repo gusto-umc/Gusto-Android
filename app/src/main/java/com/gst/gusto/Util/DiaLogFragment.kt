@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -59,6 +60,10 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
         if(layout == R.layout.bottomsheetdialog_routes) {
             val itemList = gustoViewModel.markerListLiveData.value as ArrayList
 
+            if(itemList.size==6) {
+                binding1.lyAddRoute.visibility = View.INVISIBLE
+            }
+
             val boardAdapter = MapRoutesAdapter(itemList,binding1.lyAddRoute,activity,0)
             boardAdapter.notifyDataSetChanged()
 
@@ -66,24 +71,10 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
             binding1.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             var tmp = 4L
             binding1.btnPlus.setOnClickListener {
-                itemList.add(
-                    mapUtil.Companion.MarkerItem(
-                        tmp,
-                        0,
-                        0,
-                        37.6219001,
-                        127.0743010,
-                        binding1.tvRestName.text.toString(),
-                        "",
-                        false
-                    )
-                )
-                gustoViewModel.addRoute.add(tmp++)  // storeId
-                gustoViewModel.markerListLiveData.value = itemList
-                boardAdapter.notifyItemInserted(itemList.size-1)
-                if(itemList.size==6) {
-                    binding1.lyAddRoute.visibility = View.INVISIBLE
-                }
+                activity.getCon().navigate(R.id.action_groupMRoutMapFragment_to_routeSearchFragment)
+                dismiss()
+                
+
             }
             binding1.btnSave.setOnClickListener {
                 itemClick(1)

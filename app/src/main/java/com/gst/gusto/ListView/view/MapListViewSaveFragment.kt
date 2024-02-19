@@ -79,7 +79,7 @@ class MapListViewSaveFragment : Fragment() {
         }
 
         //현재 위치(동) 받아오기
-        binding.tvMapSaveDong.text = gustoViewModel.dong
+        binding.tvMapSaveDong.text = gustoViewModel.dong.value
 
     }
 

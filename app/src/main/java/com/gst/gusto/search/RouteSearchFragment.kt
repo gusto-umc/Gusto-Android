@@ -1,6 +1,7 @@
 package com.gst.gusto.search
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +10,17 @@ import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.CategorySimple
 import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.ListView.adapter.ListViewCategoryAdapter
 import com.gst.gusto.R
+import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseSearch
+import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.FragmentRouteSearchBinding
 import com.gst.gusto.search.adapter.SearchStoreAdapter
 
@@ -23,22 +28,6 @@ class RouteSearchFragment : Fragment() {
 
     private lateinit var binding : FragmentRouteSearchBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
-
-    private var sampleRouteCategoryData = arrayListOf<CategorySimple>(
-        CategorySimple(0, "카페", 0, 2),
-        CategorySimple(1, "한식", 0, 0),
-        CategorySimple(2, "일식", 0, 2),
-        CategorySimple(3, "양식", 0, 2)
-
-    )
-
-    private val sampleResultArray = arrayListOf<StoreSearch>(
-        StoreSearch(1, "구스또 1호점", "양식", R.drawable.sample_store_4_img),
-        StoreSearch(2, "구스또 2호점", "양식", R.drawable.sample_store_2_img),
-        StoreSearch(3, "구스또 3호점", "양식", R.drawable.sample_store_3_img),
-        StoreSearch(4, "구스또 4호점", "양식", R.drawable.sample_store_img),
-        StoreSearch(5, "구스또 5호점", "양식", R.drawable.sample_store_4_img)
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,39 +44,105 @@ class RouteSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.edtRouteSearchbox.requestFocus()
+        util.openKeyboard(requireActivity())
+
         /**
          * category server 연결
          */
 
-        /**
-         * 1. category Rv 연결, store Rv 연결
-         */
+        binding.edtRouteSearchbox.text.clear()
         val mCategoryAdapter = ListViewCategoryAdapter("route", requireFragmentManager(), view)
-        mCategoryAdapter.submitList(gustoViewModel.myMapCategoryList)
-        mCategoryAdapter.viewModel = gustoViewModel
-        binding.rvRouteCategory.adapter = mCategoryAdapter
-        binding.rvRouteCategory.layoutManager = LinearLayoutManager(this.requireActivity())
+
+        gustoViewModel.getAllUserCategory {
+            result ->
+            when(result){
+                0 -> {
+                    mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
+                    mCategoryAdapter.viewModel = gustoViewModel
+                    binding.rvRouteCategory.adapter = mCategoryAdapter
+                    binding.rvRouteCategory.layoutManager = LinearLayoutManager(this.requireActivity())
+                    binding.rvRouteCategory.visibility = View.VISIBLE
+                }
+                1 -> {
+                    Toast.makeText(context, "fail", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
 
         /**
          * 2. edt 빈칸 일 때 event 처리
          */
-        binding.edtSearchSearchbox.doAfterTextChanged {
-            if(binding.edtSearchSearchbox.text.isNullOrBlank()){
+        binding.edtRouteSearchbox.doAfterTextChanged {
+            binding.tvRouteNoResult.visibility = View.GONE
+            if(binding.edtRouteSearchbox.text.isNullOrBlank()){
                 binding.rvRouteSearchResult.visibility = View.GONE
                 binding.rvRouteCategory.visibility = View.VISIBLE
+            }
+            else{
+                binding.rvRouteCategory.visibility = View.GONE
             }
         }
 
         /**
          * 3. 검색 iv clickListener
          */
-        binding.ivSearchSearchbox.setOnClickListener {
+        val mRouteResultAdapter = SearchStoreAdapter()
+        binding.ivRouteSearchbox.setOnClickListener {
             binding.rvRouteCategory.visibility = View.GONE
             binding.rvRouteSearchResult.visibility = View.VISIBLE
             //서버 연결 -> rv에 데이터 연결
+            //공백 확인
+            if (binding.edtRouteSearchbox.text.isNullOrBlank()) {
+                binding.rvRouteSearchResult.visibility = View.GONE
+            } else {
+                // 서버 연결 후 검샥 결과 response
+                util.hideKeyboard(this.requireActivity())
+                gustoViewModel.getSearchResult(binding.edtRouteSearchbox.text.toString()){
+                        result ->
+                    when(result){
+                        0 -> {
+                            //success
+                            //데이터셋 저장 후 연결(공백일 때 동작 확인)
+                            mRouteResultAdapter.submitList(gustoViewModel.mapSearchArray)
+                            mRouteResultAdapter.mContext = context
+                            mRouteResultAdapter.setItemClickListener(object :
+                                SearchStoreAdapter.OnItemClickListener {
+                                override fun onClick(v: View, dataSet: ResponseSearch) {
+                                    //페이지 이동 -> 루트 추가, 수정 화면으로 이동
+                                    gustoViewModel!!.routeStorTmpData = ResponseStoreListItem(dataSet.storeId.toInt(),dataSet.storeName,dataSet.address,0,"")
+                                    findNavController().popBackStack()
+
+                                }
+
+                            })
+                            //visibility 설정, 어댑터 연결
+                            binding.rvRouteSearchResult.visibility = View.VISIBLE
+                            binding.rvRouteSearchResult.adapter = mRouteResultAdapter
+                            binding.rvRouteSearchResult.layoutManager = LinearLayoutManager(this.requireActivity())
+                            //키보드 내리기
+                            if(gustoViewModel.mapSearchArray.isNullOrEmpty()){
+                                binding.rvRouteCategory.visibility = View.GONE
+                                binding.rvRouteSearchResult.visibility = View.GONE
+                                binding.tvRouteNoResult.visibility = View.VISIBLE
+                            }
+                            else{
+                                binding.rvRouteCategory.visibility = View.GONE
+                                binding.rvRouteSearchResult.visibility = View.VISIBLE
+                                binding.tvRouteNoResult.visibility = View.GONE
+                            }
+                        }
+                        1 -> {
+                            //fail
+                            Log.d("search result", "fail")
+                        }
+                    }
+                }
+
+
+            }
         }
-
-
-
     }
+
 }

@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -38,7 +40,8 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
         // 클릭 리스너 설정
         binding.listViewBtn.setOnClickListener {
             // 버튼이 클릭되었을 때 실행될 동작
-            Toast.makeText(requireContext(), "목록보기 버튼이 클릭되었습니다.", Toast.LENGTH_SHORT).show()
+            gustoViewModel.keepFlag = true
+            findNavController().popBackStack()
         }
 
         return binding.root
@@ -46,6 +49,18 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        /**
+         * 검색창 클릭 리스너
+         */
+        binding.searchShort.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_viewpager_to_searchFragment)
+        }
+        binding.tvMapSearchShort.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_viewpager_to_searchFragment)
+        }
+        binding.ivMapSearchboxShort.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_viewpager_to_searchFragment)
+        }
 
         Log.d("viewmodel","hi")
         val viewPager = binding.vpSlider
@@ -125,6 +140,7 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
 
         }
     }
+
     override fun onPause() {
         super.onPause()
         binding.kakaoMapSearch.removeAllViews()

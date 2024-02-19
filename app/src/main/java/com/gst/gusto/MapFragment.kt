@@ -331,7 +331,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 Log.d("log_img","방문 가게 이미지")
                 for (store in visitedStores) {
                     val reviewImg = store.reviewImg
-                    Log.d("log_img","방문 O 가게 이미지 ${reviewImg}")
+                    Log.d("img","${reviewImg}")
                     reviewImg?.let { itemList_visit.add(it) } // null이 아닌 경우에만 itemList에 추가
                 }
             }

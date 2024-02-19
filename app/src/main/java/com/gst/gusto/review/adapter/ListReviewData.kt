@@ -4,9 +4,7 @@ data class ListReviewData(
     var date: String = "",
     var name: String = "",
     var visit: String = "",
-    var imageview1: String = "",
-    var imageview2: String = "",
-    var imageview3: String = "",
+    var images : ArrayList<String> = ArrayList(),
     var reviewId: Long,
     var viewType: Int = ListReviewType.LISTREVIEW,
 
