@@ -25,7 +25,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.MainActivity
-import com.gst.gusto.MapMainScreenFragment
 import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
@@ -98,6 +97,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             }
             // 변경된 텍스트 설정
             totalBtn.text = nextText
+            reGetMapMarkers2(nextText)
+
         }
 
 
@@ -166,8 +167,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         // 클릭된 칩의 ID
         val clickedChipId = chip.id
-        currentChip = clickedChipId
-        reGetMapMarkers()
+
+
 
         // 클릭된 칩이 이미 활성화된 상태인지 확인
         val isClickedChipActive = previousChipId == clickedChipId
@@ -199,7 +200,9 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             chip.setChipIconResource(R.drawable.streamline_coffee_bean_white)
             // 클릭된 칩의 ID를 이전 칩의 ID로 저장
             previousChipId = clickedChipId
+            currentChip = clickedChipId
         }
+        reGetMapMarkers2(binding.fragmentMapMainScreen.totalBtn.text.toString())
     }
 
 
@@ -397,7 +400,10 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
                     result ->
                 when(result){
-                    0 -> {}
+                    0 -> {
+                        Log.d("viewmodel : vi",gustoViewModel.mapVisitedList.toString())
+                        Log.d("viewmodel : novi",gustoViewModel.mapUnvisitedList.toString())
+                    }
                     1 -> {
                         Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                     }
@@ -469,7 +475,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 when(result) {
                     1 -> {
                         binding.fragmentArea.userLoc.text = address
-                        reGetMapMarkers()
+                        reGetMapMarkers2(binding.fragmentMapMainScreen.totalBtn.text.toString())
                     }
                 }
             }
@@ -492,6 +498,64 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+    fun reGetMapMarkers2(nextText: String) {
+        Log.d("viewmodel", "new Text : ${nextText}")
+        if(nextText =="전체") {
+            reGetMapMarkers()
+        } else {
+            markerList.clear()
+            gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, currentChip){
+                    result ->
+                when(result){
+                    0 -> {
+                        if(nextText == "가본 곳 만") {
+                            for( (index,data) in gustoViewModel.mapVisitedList!!.withIndex()) {
+                                gustoViewModel.getStoreDetailQuick(data.storeId.toLong()) {result, data ->
+                                    when(result) {
+                                        1 -> {
+                                            if (data != null) {
+                                                markerList.add(MarkerItem(data.storeId.toLong(), index+1,0, data.latitude,data.longitude, data.storeName!!, "", true))
+                                            }
+                                            if (markerList.size == gustoViewModel.mapVisitedList!!.size) {
+                                                binding.vpSlider.adapter?.notifyDataSetChanged()
+                                                setMarker(mapView,markerList)
+                                            }
+                                        }
+                                        else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+
+                            }
+                        } else { //"가본 곳 제외"
+                            for( (index,data) in gustoViewModel.mapUnvisitedList!!.withIndex()) {
+                                gustoViewModel.getStoreDetailQuick(data.storeId.toLong()) {result, data ->
+                                    when(result) {
+                                        1 -> {
+                                            if (data != null) {
+                                                markerList.add(MarkerItem(data.storeId.toLong(), index+1,0,  data.latitude,data.longitude, data.storeName!!, "", true))
+                                            }
+                                            if (markerList.size == gustoViewModel.mapUnvisitedList!!.size) {
+                                                binding.vpSlider.adapter?.notifyDataSetChanged()
+                                                setMarker(mapView,markerList)
+                                            }
+                                        }
+                                        else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                    1 -> {
+                        Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+        }
+
+
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
