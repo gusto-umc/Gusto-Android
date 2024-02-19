@@ -153,6 +153,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         chip.setOnClickListener {
             handleChipClick(chip)
             Log.d("chip", "$chipId")
+            binding.vpSlider.visibility = View.GONE
         }
 
         chipGroup.addView(chip, chipIndex)
