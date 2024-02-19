@@ -133,14 +133,30 @@
                     android:textSize="15sp"
                     android:textColor="@color/main_C"
                     android:text="사용자" />
-
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:fontFamily="@font/pretendard_semibold"
                     android:textSize="15sp"
-                    android:text="님이 계신 성수동에" />
+                    android:text="님이 계신 " />
+
+                <TextView
+                    android:id="@+id/dong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/pretendard_semibold"
+                    android:textSize="15sp"
+                    android:text="성수동" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/pretendard_semibold"
+                    android:textSize="15sp"
+                    android:text="에" />
+
             </LinearLayout>
 
             <LinearLayout
