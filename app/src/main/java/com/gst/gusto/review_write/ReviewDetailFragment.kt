@@ -154,7 +154,7 @@ class ReviewDetailFragment : Fragment() {
                     Log.d("img check", gustoViewModel.myReview!!.img.toString())
                 } else{
                     settingImages(imageList)
-                    Log.d("img check", "null입니다")
+                    Log.d("img check", "null입니다.")
                 }
             }
 
