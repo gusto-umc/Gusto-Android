@@ -1,12 +1,17 @@
 package com.gst.gusto.review.adapter
 
+import android.content.Context
+import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.databinding.ItemReviewListBinding
 
 class ListReviewViewHolder(
     private val binding: ItemReviewListBinding,
-    private val itemClickListener: (ListReviewData) -> Unit
+    private val itemClickListener: (ListReviewData) -> Unit,
+    var testcount: Int = 0
 ) : RecyclerView.ViewHolder(binding.root) {
 
     val datetextview = binding.dateTextView
@@ -21,11 +26,40 @@ class ListReviewViewHolder(
         datetextview.text = listReviewList.date
         nametextview.text = listReviewList.name
         visittextview.text = "${listReviewList.visit}번 방문"
-        setImage(imageview1, listReviewList.imageview1, itemView.context)
-        setImage(imageview2, listReviewList.imageview2, itemView.context)
-        setImage(imageview3, listReviewList.imageview3, itemView.context)
+
+        setImageView(listReviewList.images,itemView.context)
+
         linearLayout.setOnClickListener {
             itemClickListener.invoke(listReviewList)
+        }
+    }
+
+    fun setImageView(images: ArrayList<String>, context: Context){
+
+        when(images.size){
+            0-> {
+                imageview1.visibility = View.VISIBLE
+                setImage(imageview1, null, context)
+            }
+            1 -> {
+                imageview1.visibility = View.VISIBLE
+                setImage(imageview1, images[0], context)
+
+            }
+            2 -> {
+                imageview1.visibility = View.VISIBLE
+                imageview2.visibility = View.VISIBLE
+                setImage(imageview1, images[0], context)
+                setImage(imageview2, images[1], context)
+            }
+            else -> {
+                imageview1.visibility = View.VISIBLE
+                imageview2.visibility = View.VISIBLE
+                imageview3.visibility = View.VISIBLE
+                setImage(imageview1, images[0], context)
+                setImage(imageview2, images[1], context)
+                setImage(imageview2, images[2], context)
+            }
         }
     }
 }

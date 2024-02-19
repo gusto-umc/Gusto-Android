@@ -291,8 +291,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             recyclerView3.isVerticalScrollBarEnabled = false
         }
 
-
-
         val viewPager = binding.vpSlider
 
         // 이미지 슬라이드
