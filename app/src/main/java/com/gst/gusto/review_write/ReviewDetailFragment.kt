@@ -10,6 +10,7 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.clearFragmentResult
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,9 +40,66 @@ class ReviewDetailFragment : Fragment() {
     ): View? {
         binding = FragmentReviewDetailBinding.inflate(inflater, container, false)
 
+
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        //1. argument 저장
+        var reviewId = arguments?.getLong("reviewId")
+        Log.d("review detail check", reviewId.toString())
+        gustoViewModel.myReviewId = reviewId
+
+        //2. 서버 연결
+        gustoViewModel.getReview(gustoViewModel.myReviewId!!){
+            result ->
+            when(result){
+                0 -> {
+                    //success
+                    //데이터 적용 - 날짜
+                    val reviewDate = LocalDate.parse(gustoViewModel.myReview!!.visitedAt)
+                    binding.tvDay.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
+                    //데이터 적용 - 가게명
+                    binding.tvReviewStoreName.text = gustoViewModel.myReview!!.storeName
+                    binding.lyTitle.setOnClickListener {
+                        gustoViewModel.selectedDetailStoreId = gustoViewModel.myReview!!.storeId.toInt()
+                        findNavController().navigate(R.id.action_reviewDetail_to_storeDetailFragment)
+                    }
+                    //데이터 적용 - 하트수
+                    binding.tvHeartNum.text = gustoViewModel.myReview!!.likeCnt.toString()
+                    //데이터 적용 - 메뉴
+                    binding.tvMenu.text = if(gustoViewModel.myReview!!.menuName.isNullOrBlank()){
+                        ""
+                    } else{
+                        gustoViewModel.myReview!!.menuName
+                    }
+                    //taste 처리
+                    binding.ratingbarTaste.rating = gustoViewModel.myReview!!.taste.toFloat()
+                    //spiciness 처리
+                    binding.ratingbarSpiceness.rating = gustoViewModel.myReview!!.spiciness!!.toFloat()
+                    //mood 처리
+                    binding.ratingbarMood.rating = gustoViewModel.myReview!!.mood!!.toFloat()
+                    //toilet 처리
+                    binding.ratingbarToilet.rating = gustoViewModel.myReview!!.toilet!!.toFloat()
+                    //parking 처리-> 더미데이터가 null이라서 임의 처리, 추후 보완 예정
+                    binding.ratingbarParking.rating = gustoViewModel.myReview!!.parking!!.toFloat()
+                    //comment 처리
+                    binding.tvMemo.text = if(gustoViewModel.myReview!!.comment == null){
+                        ""
+                    } else{
+                        gustoViewModel.myReview!!.comment
+                    }
+                    gustoViewModel.changeReviewFlag(true)
+
+                }
+                1 -> {
+                    //fail
+                    Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                }
+            }
+        }
+
 
 
         return binding.root
@@ -89,69 +147,24 @@ class ReviewDetailFragment : Fragment() {
         /**
          * 서버 데이터 연결
          */
-        var reviewId = arguments?.getLong("reviewId")
-        Log.d("review detail check", reviewId.toString())
-        gustoViewModel.myReviewId = reviewId
-
-        gustoViewModel.myReviewId?.let {
-
-            gustoViewModel.getReview(it){
-                result ->
-                when(result){
-                    0 -> {
-                        if(gustoViewModel.myReview != null){
-                            Log.d("checking", gustoViewModel.myReview.toString())
-                            val reviewDate = LocalDate.parse(gustoViewModel.myReview!!.visitedAt)
-                            binding.tvDay.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
-                            binding.tvReviewStoreName.text = gustoViewModel.myReview!!.storeName
-                            binding.lyTitle.setOnClickListener {
-                                gustoViewModel.selectedDetailStoreId = gustoViewModel.myReview!!.storeId.toInt()
-                                findNavController().navigate(R.id.action_reviewDetail_to_storeDetailFragment)
-                            }
-                            binding.tvHeartNum.text = gustoViewModel.myReview!!.likeCnt.toString()
-                            //이미지 처리
-                            if(!gustoViewModel.myReview!!.img.isNullOrEmpty()){
-                                settingImages(gustoViewModel.myReview!!.img!!)
-
-                            } else{
-                                settingImages(imageList)
-                            }
-                            //메뉴
-                            binding.tvMenu.text = if(gustoViewModel.myReview!!.menuName.isNullOrBlank()){
-                                ""
-                            } else{
-                                gustoViewModel.myReview!!.menuName
-                            }
-                            //taste 처리
-                            binding.ratingbarTaste.rating = gustoViewModel.myReview!!.taste.toFloat()
-                            //spiciness 처리
-                            binding.ratingbarSpiceness.rating = gustoViewModel.myReview!!.spiciness!!.toFloat()
-                            //mood 처리
-                            binding.ratingbarMood.rating = gustoViewModel.myReview!!.mood!!.toFloat()
-                            //toilet 처리
-                            binding.ratingbarToilet.rating = gustoViewModel.myReview!!.toilet!!.toFloat()
-                            //parking 처리-> 더미데이터가 null이라서 임의 처리, 추후 보완 예정
-                            binding.ratingbarParking.rating = gustoViewModel.myReview!!.parking!!.toFloat()
-                            //comment 처리
-                            binding.tvMemo.text = if(gustoViewModel.myReview!!.comment == null){
-                                ""
-                            } else{
-                                gustoViewModel.myReview!!.comment
-                            }
-
-                        }else{
-                            Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    1 -> {
-                        Toast.makeText(context, "리뷰 상세 GET 실패", Toast.LENGTH_SHORT).show()
-                    }
+        gustoViewModel.successFlg.observe(viewLifecycleOwner, Observer{
+            if(it){
+                if(!gustoViewModel.myReview!!.img.isNullOrEmpty()){
+                    settingImages(gustoViewModel.myReview!!.img!!)
+                    Log.d("img check", gustoViewModel.myReview!!.img.toString())
+                } else{
+                    settingImages(imageList)
+                    Log.d("img check", "null입니다")
                 }
             }
-        }
+
+        })
 
 
+
+        /**
+         * 메뉴바 클릭 리스너
+         */
         binding.btnPopup.setOnClickListener {
             if(binding.lyEditRemove.isGone){
                 binding.lyEditRemove.visibility = View.VISIBLE
@@ -163,6 +176,7 @@ class ReviewDetailFragment : Fragment() {
 
         binding.btnEdit.setOnClickListener {
             findNavController().navigate(R.id.action_reviewDetail_to_reviewDetailEdit)
+
         }
         binding.btnRemove.setOnClickListener {
             gustoViewModel.deleteReview(reviewId = gustoViewModel.myReviewId!!){

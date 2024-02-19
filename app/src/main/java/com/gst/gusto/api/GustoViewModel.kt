@@ -846,6 +846,7 @@ class GustoViewModel: ViewModel() {
                     if(responseBody!=null) {
                         Log.d("getFeedReview", "Successful response: ${response}")
                         currentFeedData = responseBody
+                        Log.d("currentFeedData", currentFeedData.toString())
                         callback(1)
                     } else {
                         Log.e("getFeedReview success", "Unsuccessful response: ${response}")
@@ -1373,6 +1374,13 @@ class GustoViewModel: ViewModel() {
     var myReview : ResponseMyReview? = null
     var myReviewId : Long? = null
     var reviewEditImg = ArrayList<File>()
+    private var _successFlag = MutableLiveData<Boolean>(false)
+    val successFlg : LiveData<Boolean>
+        get() = _successFlag
+
+    fun changeReviewFlag(sign : Boolean){
+        _successFlag.value = sign
+    }
     //리뷰 1건 조회 -> 확인 완
     fun getReview(reviewId : Long, callback: (Int) -> Unit){
         service.getReview(xAuthToken, reviewId.toInt()).enqueue(object : Callback<ResponseMyReview>{
