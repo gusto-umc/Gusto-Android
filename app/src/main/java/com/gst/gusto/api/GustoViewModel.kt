@@ -473,14 +473,17 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
-                } else {
+                } else if(response.code()==400) {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
                     callback(2)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3)
                 }
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
-                callback(2)
+                callback(3)
             }
         })
     }
