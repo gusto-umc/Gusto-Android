@@ -32,11 +32,11 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <include layout="@layout/fragment_area"
                 android:id="@+id/fragment_area"/>
         </ScrollView>
     </LinearLayout>
+
 
 
 
@@ -63,7 +63,7 @@
             android:id="@+id/vp_slider"
             android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="173dp"
+            android:layout_height="180dp"
             android:paddingHorizontal="10dp" />
     </LinearLayout>
 

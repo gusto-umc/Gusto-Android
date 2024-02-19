@@ -10,7 +10,6 @@ plugins {
 android {
     namespace = "com.gst.gusto"
     compileSdk = 34
-    compileSdkExtension = 10
 
     val localProperties = Properties()
     localProperties.load(project.rootProject.file("local.properties").inputStream())
@@ -91,7 +90,7 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(files("libs/libDaumMapAndroid.jar"))
 // Java language implementation
-    implementation("androidx.activity:activity:1.4.0")
+    implementation("androidx.activity:activity:1.6.0")
     // Kotlin
-    implementation("androidx.activity:activity-ktx:1.4.0")
+    implementation("androidx.activity:activity-ktx:1.6.0")
 }
