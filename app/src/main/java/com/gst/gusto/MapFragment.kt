@@ -152,6 +152,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         Log.d("chip","칩 생성")
 
+        //칩그룹에 대한 클릭리스너
         chip.setOnClickListener {
             handleChipClick(chip)
             Log.d("chip", "$chipId")
