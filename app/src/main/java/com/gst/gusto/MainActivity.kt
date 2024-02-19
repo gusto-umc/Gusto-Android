@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.ext.SdkExtensions.getExtensionVersion
 import android.util.Base64
 import android.util.Log
 import androidx.activity.viewModels
@@ -39,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.findNavController()
         binding.bottomNavigationView.setupWithNavController(navController)
 
+
+        Log.d("viewmodel","dsasda : ${ getExtensionVersion(Build.VERSION_CODES.R)}")
         navController.addOnDestinationChangedListener { _, destination, _ ->
             var currentDestinationId = destination.id
             if (previousDestinationId == currentDestinationId) {

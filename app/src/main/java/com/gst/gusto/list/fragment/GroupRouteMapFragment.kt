@@ -60,11 +60,11 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                     1 -> {
                         change = true
                         if(gustoViewModel.removeRoute.size>0) {
-                            for(routeListId in gustoViewModel.removeRoute) {
+                            val routeList = gustoViewModel.removeRoute
+                            iterateWithDelay(routeList) { routeListId ->
                                 gustoViewModel.deleteRouteStore(routeListId) { result ->
                                     when (result) {
                                         1 -> {
-
                                         }
                                         else -> {
                                             Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
@@ -287,6 +287,18 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                 data.address,
                 data.bookMark
             ))
+        }
+    }
+
+    val coroutineScope = CoroutineScope(Dispatchers.Main)
+
+    // 포문을 돌 때 0.1초의 딜레이를 주는 함수
+    fun iterateWithDelay(routeList: ArrayList<Long>, action: (Long) -> Unit) {
+        coroutineScope.launch {
+            for (routeListId in routeList) {
+                action(routeListId)
+                delay(100) // 0.1초의 딜레이를 줍니다.
+            }
         }
     }
 }

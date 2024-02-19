@@ -54,6 +54,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     private val gustoViewModel : GustoViewModel by activityViewModels()
 
     val markerList = ArrayList<MarkerItem>()
+    var currentChip:Int?=null
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 5000
 
@@ -77,9 +78,10 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         binding = FragmentMapBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        gustoViewModel.changeDong("")
         // BottomSheet 설정
         val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
         ////    카테고리    ////
 
@@ -151,6 +153,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         chip.setOnClickListener {
             handleChipClick(chip)
             Log.d("chip", "$chipId")
+            binding.vpSlider.visibility = View.GONE
         }
 
         chipGroup.addView(chip, chipIndex)
@@ -163,6 +166,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         // 클릭된 칩의 ID
         val clickedChipId = chip.id
+        currentChip = clickedChipId
+        reGetMapMarkers()
 
         // 클릭된 칩이 이미 활성화된 상태인지 확인
         val isClickedChipActive = previousChipId == clickedChipId
@@ -185,6 +190,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             chip.setChipIconResource(R.drawable.streamline_bean)
             // 클릭된 칩의 ID를 초기화하여 비활성화 상태로 설정
             previousChipId = -1
+            currentChip = null
         } else {
             // 클릭된 칩을 활성화
             Log.d("chip", "활성화 ${chip.id}")
@@ -198,25 +204,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
 
 
-
-    // 전체 칩이 비활성화되었는지 여부를 확인하는 함수
-    private fun isAllChipsDisabled(): Boolean {
-        // 모든 칩을 확인하여 비활성화된 칩이 있는지 검사
-        for (i in 0 until chipGroup.childCount) {
-            val chip = chipGroup.getChildAt(i) as Chip
-            if (chip.isEnabled) {
-                return false
-            }
-        }
-        return true
-    }
-
-
-
-
-
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //목록 보기 클릭 리스너 - 민디
@@ -224,10 +211,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
         }
 
-        //카테고리 보이기 //
 
-        // 카테고리 조회 및 칩 추가
-        getMapCategoryAndAddChips("성수1가1동")
 
         /**
          * 방문 o 클릭 리스너 -> 보완 예정
@@ -304,45 +288,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             recyclerView3.isVerticalScrollBarEnabled = false
         }
 
-        // 데이터 넣어둔 변수 : gustoViewModel.myMapCategoryList
-        gustoViewModel.getMapCategory(gustoViewModel.dong.value!!){
-            result ->
-            when(result){
-                0 -> {
-                    //success
-                }
-                1 -> {
-                    //fail
-                    Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-        /**
-         * 저장된 맛집 조회 - mindy
-         * 현재 카테고리 선택이 구현 보류로 categoryId에 null 넣고 추후 보완 예정
-         * live data observe
-         */
-        //리스트 별로 저장
-        // 방문X 리스트 저장 변수 : gustoViewModel.mapUnvisitedList
-        // 방문X 개수 : gustoViewModel.mapUnvisitedCnt
-        // 방문 O 리스트 저장 변수 : gustoViewModel.mapVisitedList
-        // 방문o 개수 : gustoViewModel.mapVisitedCnt
-        //닉네임 변수 : gustoViewModel.userNickname
-
-        gustoViewModel.dong.observe(viewLifecycleOwner, Observer {
-            gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
-                    result ->
-                when(result){
-                    0 -> {
-                        //리사이클러뷰 데이터 연결
-                    }
-                    1 -> {
-                        Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        })
-
         val viewPager = binding.vpSlider
 
         // 이미지 슬라이드
@@ -379,16 +324,84 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 }
             }
         })
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        // 바텀 시트가 접혀있는 상태
+                        binding.listViewBtn.visibility = View.VISIBLE
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                        // 사용자가 바텀 시트를 드래그 중
+                        binding.listViewBtn.visibility = View.GONE
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        // 바텀 시트가 펼쳐진 상태
+                    }
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        // 바텀 시트가 숨겨진 상태
+                    }
+                    BottomSheetBehavior.STATE_SETTLING -> {
+                        // 바텀 시트가 설정되는 중
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // 바텀 시트가 슬라이드되는 동안
+            }
+        })
 
     }
     override fun onResume() {
         super.onResume()
-       mapView = MapView(requireContext())
+        //카테고리 보이기 //
+
+        // 카테고리 조회 및 칩 추가
+        getMapCategoryAndAddChips("성수1가1동")
+        mapView = MapView(requireContext())
 
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
 
         setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)
+
+        // 데이터 넣어둔 변수 : gustoViewModel.myMapCategoryList
+        gustoViewModel.getMapCategory(gustoViewModel.dong.value!!){
+                result ->
+            when(result){
+                0 -> {
+                    //success
+                }
+                1 -> {
+                    //fail
+                    Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        /**
+         * 저장된 맛집 조회 - mindy
+         * 현재 카테고리 선택이 구현 보류로 categoryId에 null 넣고 추후 보완 예정
+         * live data observe
+         */
+        //리스트 별로 저장
+        // 방문X 리스트 저장 변수 : gustoViewModel.mapUnvisitedList
+        // 방문X 개수 : gustoViewModel.mapUnvisitedCnt
+        // 방문 O 리스트 저장 변수 : gustoViewModel.mapVisitedList
+        // 방문o 개수 : gustoViewModel.mapVisitedCnt
+        //닉네임 변수 : gustoViewModel.userNickname
+
+        gustoViewModel.dong.observe(viewLifecycleOwner, Observer {
+            gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
+                    result ->
+                when(result){
+                    0 -> {}
+                    1 -> {
+                        Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
     }
 
 
@@ -454,24 +467,27 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 when(result) {
                     1 -> {
                         binding.fragmentArea.userLoc.text = address
-                        gustoViewModel.getCurrentMapStores {result, datas ->
-                            when(result) {
-                                1 -> {
-                                    markerList.clear()
-                                    if(datas!=null) {
-                                        for((index,data) in datas.withIndex()) {
-                                            markerList.add(MarkerItem(data.storeId, index+1,0, data.latitude!!, data.longitude!!, data.storeName!!, "", false))
-                                        }
-                                    }
-                                    Log.d("viewmodel","${markerList}")
-                                    setMarker(mapView,markerList)
-                                    binding.vpSlider.adapter?.notifyDataSetChanged()
-                                }
-                                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                            }
-                        }
+                        reGetMapMarkers()
                     }
                 }
+            }
+        }
+    }
+    fun reGetMapMarkers() {
+        gustoViewModel.getCurrentMapStores(currentChip) {result, datas ->
+            when(result) {
+                1 -> {
+                    markerList.clear()
+                    if(datas!=null) {
+                        for((index,data) in datas.withIndex()) {
+                            markerList.add(MarkerItem(data.storeId, index+1,0, data.latitude!!, data.longitude!!, data.storeName!!, "", true))
+                        }
+                    }
+                    Log.d("viewmodel","${markerList}")
+                    setMarker(mapView,markerList)
+                    binding.vpSlider.adapter?.notifyDataSetChanged()
+                }
+                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -487,7 +503,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             }
         }
     }
-
 }
 
 
