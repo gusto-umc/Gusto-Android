@@ -1,10 +1,12 @@
 package com.gst.gusto.feed
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import android.view.TouchDelegate
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -122,27 +124,40 @@ class FeedSearchFragment() : Fragment() {
                 handled
             }
 
-            feedSearch.setOnTouchListener(View.OnTouchListener { v, event ->
+            val delegateArea = Rect()
+            feedSearch.post {
+                feedSearch.getHitRect(delegateArea)
+                delegateArea.right += 200  // 오른쪽 패딩을 늘립니다.
 
-                hashSearchList?.clear()
-                for(hashClick in 1.. hashClickList.size ){
-                    Log.d("Search", "${hashClick}은 ${hashClickList[hashClick - 1]}")
-                    if(!hashClickList[hashClick - 1]){
-                        hashSearchList?.add(hashClick.toLong())
-                    }
+                val touchDelegate = TouchDelegate(delegateArea, feedSearch)
+                if (View::class.java.isInstance(feedSearch.parent)) {
+                    (feedSearch.parent as View).touchDelegate = touchDelegate
                 }
+            }
 
-                val tags = hashSearchList?.toList() ?: emptyList()
-
+            feedSearch.setOnTouchListener { v, event ->
                 if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX >= (feedSearch.right - feedSearch.compoundDrawables[2].bounds.width())) {
+                    val touchableArea = feedSearch.right - feedSearch.compoundDrawables[2].bounds.width() - 50  // 50 픽셀만큼 더 넓게 설정
+                    if (event.rawX >= touchableArea) {
+                        // 검색을 실행하기 전에 해시태그 리스트를 초기화하고, 선택되지 않은 해시태그들만 다시 추가합니다.
+                        hashSearchList?.clear()
+                        for(hashClick in 1.. hashClickList.size ){
+                            Log.d("Search", "${hashClick}은 ${hashClickList[hashClick - 1]}")
+                            if(!hashClickList[hashClick - 1]){
+                                hashSearchList?.add(hashClick.toLong())
+                            }
+                        }
+
+                        val tags = hashSearchList?.toList() ?: emptyList()
+
+                        // 검색을 실행합니다.
                         getData(feedSearch.text.toString(), tags)
                         moveFeed()
-                        return@OnTouchListener true
+                        return@setOnTouchListener true
                     }
                 }
                 false
-            })
+            }
         }
     }
 
