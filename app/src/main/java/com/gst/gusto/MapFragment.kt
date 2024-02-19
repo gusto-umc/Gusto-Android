@@ -227,7 +227,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         }
 
         // 카테고리 조회 및 칩 추가
-        //getMapCategoryAndAddChips("성수1가1동")
+        getMapCategoryAndAddChips("성수1가1동")
 
         /**
          * 방문 o 클릭 리스너 -> 보완 예정
@@ -279,8 +279,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             //LoginViewModel.signUp()
 
             Log.d("dong", "${dong}")
-            dong.text = gustoViewModel.dong // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
-            areaPick.text = gustoViewModel.dong // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
+            dong.text = gustoViewModel.dong.value // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
+            areaPick.text = gustoViewModel.dong.value // 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
 
             noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적 없는 맛집 수
             visNum.text = gustoViewModel.mapVisitedCnt.toString() //방문해본 적 있는 맛집 수
