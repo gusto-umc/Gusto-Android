@@ -10,13 +10,14 @@ plugins {
 android {
     namespace = "com.gst.gusto"
     compileSdk = 34
+    compileSdkExtension = 10
 
     val localProperties = Properties()
     localProperties.load(project.rootProject.file("local.properties").inputStream())
 
     defaultConfig {
         applicationId = "com.gst.gusto"
-        minSdk = 27
+        minSdk = 30
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -89,6 +90,8 @@ dependencies {
     // kakao
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(files("libs/libDaumMapAndroid.jar"))
-
-    // photo picker
+// Java language implementation
+    implementation("androidx.activity:activity:1.6.0")
+    // Kotlin
+    implementation("androidx.activity:activity-ktx:1.6.0")
 }
