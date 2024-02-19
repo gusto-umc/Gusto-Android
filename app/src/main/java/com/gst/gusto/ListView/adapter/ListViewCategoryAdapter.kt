@@ -191,7 +191,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                     }
                 }
                 categoryBottomSheetDialog.isAdd = false
-                categoryBottomSheetDialog.categoryEdiBottomSheetData = CategoryDetail(id = holder.data!!.myCategoryId, categoryName = holder.data!!.categoryName, categoryDesc = "siasia", categoryIcon = holder.data!!.categoryIcon, isPublic = true )
+                categoryBottomSheetDialog.categoryEdiBottomSheetData = CategoryDetail(id = holder.data!!.myCategoryId, categoryName = holder.data!!.categoryName, categoryDesc = holder.data!!.myCategoryScript, categoryIcon = holder.data!!.categoryIcon, isPublic = true )
                 categoryBottomSheetDialog.viewModel = viewModel
                 categoryBottomSheetDialog.show(mFragmentManager, categoryBottomSheetDialog.tag)
                 true

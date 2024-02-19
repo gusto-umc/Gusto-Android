@@ -151,6 +151,7 @@ data class ResponseMapCategory(
     @SerializedName("myCategoryName") var categoryName : String,
     @SerializedName("myCategoryIcon") var categoryIcon : Int,
     @SerializedName("publishCategory") var publishCategory : String,
+    @SerializedName("myCategoryScript") var myCategoryScript : String?,
     @SerializedName("pinCnt") var pinCnt : Int
 )
 
