@@ -1646,10 +1646,6 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
-    //현재 지역의 카테고리 별 찜한 가게 목록(필터링)
-    fun LocalCategory(callback: (Int) -> Unit){
-
-    }
 
     //내 카테고리 전체 조회 + 카테고리 담기
     fun getMyMapCategory(townName: String, callback: (Int) -> Unit) {
