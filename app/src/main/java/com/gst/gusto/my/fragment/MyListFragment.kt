@@ -33,25 +33,46 @@ class MyListFragment : Fragment() {
         /**
          * 서버 연결 - 데이터 로드
          */
-        val mCategoryAdapter = ListViewCategoryAdapter("my", requireFragmentManager(), view)
+        if(gustoViewModel.currentFeedNickname == gustoViewModel.userNickname){
+            //my
+            val mCategoryAdapter = ListViewCategoryAdapter("my", requireFragmentManager(), view)
 
-        gustoViewModel.getAllUserCategory {
-            result ->
-            when(result){
-                0 -> {
-                    mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
-                    mCategoryAdapter.viewModel = gustoViewModel
-                    binding.rvMyCategory.adapter = mCategoryAdapter
-                    binding.rvMyCategory.layoutManager = LinearLayoutManager(this.requireActivity())
-                    binding.rvMyCategory.visibility = View.VISIBLE
-                }
-                1 -> {
-                    Toast.makeText(context, "fail", Toast.LENGTH_SHORT).show()
+            gustoViewModel.getAllUserCategory {
+                    result ->
+                when(result){
+                    0 -> {
+                        mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
+                        mCategoryAdapter.viewModel = gustoViewModel
+                        binding.rvMyCategory.adapter = mCategoryAdapter
+                        binding.rvMyCategory.layoutManager = LinearLayoutManager(this.requireActivity())
+                        binding.rvMyCategory.visibility = View.VISIBLE
+                    }
+                    1 -> {
+                        Toast.makeText(context, "fail", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
+        else {
+            //other(feed)
+            val mCategoryAdapter = ListViewCategoryAdapter("feed", requireFragmentManager(), view)
 
-        // 아이템 클릭 시 내 리뷰 화면으로 이동하기
+            gustoViewModel.getAllCategory(gustoViewModel.currentFeedNickname) {
+                    result ->
+                when(result){
+                    0 -> {
+                        mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
+                        mCategoryAdapter.viewModel = gustoViewModel
+                        binding.rvMyCategory.adapter = mCategoryAdapter
+                        binding.rvMyCategory.layoutManager = LinearLayoutManager(this.requireActivity())
+                        binding.rvMyCategory.visibility = View.VISIBLE
+                    }
+                    1 -> {
+                        Toast.makeText(context, "fail", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 
 }

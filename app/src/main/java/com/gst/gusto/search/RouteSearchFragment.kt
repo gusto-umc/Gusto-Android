@@ -67,10 +67,6 @@ class RouteSearchFragment : Fragment() {
             }
         }
 
-        /**
-         * 1. category Rv 연결, store Rv 연결
-         */
-
 
         /**
          * 2. edt 빈칸 일 때 event 처리

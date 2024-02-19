@@ -87,11 +87,17 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
                 Navigation.findNavController(parentView).popBackStack()
             }
         }
-        else if(flag == "my"){
+        else if(flag == "my" || flag == "feed"){
             holder.cvStore.setOnClickListener {
                 //store detail로 이동
                 gustoViewModel!!.selectedDetailStoreId = holder.data!!.storeId
-                Navigation.findNavController(parentView).navigate(R.id.action_myFragment_to_storeDetailFragment)
+                if(flag == "my"){
+                    Navigation.findNavController(parentView).navigate(R.id.action_myFragment_to_storeDetailFragment)
+                }
+                else{
+                    Navigation.findNavController(parentView).navigate(R.id.action_fragment_other_to_storeDetailFragment)
+
+                }
             }
         }
 

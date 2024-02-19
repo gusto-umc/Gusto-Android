@@ -123,6 +123,25 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                             }
                         }
                     }
+                    else if (flag == "feed"){
+                        viewModel!!.getAllStores(categoryId = holder.data!!.myCategoryId, nickname = viewModel!!.currentFeedNickname){
+                                result ->
+                            when(result){
+                                0 -> {
+                                    //success
+                                    val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
+                                    mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
+                                    mStoreAdapter.gustoViewModel = viewModel
+                                    holder.storeRv.adapter = mStoreAdapter
+                                    holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
+                                }
+                                1 -> {
+                                    //실패
+                                    Log.d("store checking", "fail")
+                                }
+                            }
+                        }
+                    }
                     else{
                         viewModel!!.getMapStores(holder.data!!.myCategoryId, townName = viewModel!!.dong.value!!){
                                 result ->
