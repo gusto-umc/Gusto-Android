@@ -344,6 +344,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             gustoViewModel.getRegionInfo(p1.mapPointGeoCoord.longitude, p1.mapPointGeoCoord.latitude)  {result, address ->
                 when(result) {
                     1 -> {
+                        binding.fragmentArea.userLoc.text = address
                         gustoViewModel.getCurrentMapStores {result, datas ->
                             when(result) {
                                 1 -> {

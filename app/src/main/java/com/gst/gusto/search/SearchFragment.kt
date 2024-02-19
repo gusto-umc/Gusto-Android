@@ -47,6 +47,7 @@ class SearchFragment : Fragment() {
 
         binding.edtSearchSearchbox.setOnClickListener {
             binding.tvNoResult.visibility = View.GONE
+            binding.edtSearchSearchbox.text.clear()
         }
 
         val mSearshResultAdapter = SearchStoreAdapter()
@@ -105,7 +106,6 @@ class SearchFragment : Fragment() {
 
 
             }
-            binding.edtSearchSearchbox.text.clear()
         }
 
         /**

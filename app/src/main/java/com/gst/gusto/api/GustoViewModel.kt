@@ -91,8 +91,8 @@ class GustoViewModel: ViewModel() {
     var selectStoreId =  2L
 
     // 현재 동
-    private var _dong = MutableLiveData<String?>()
-    val dong : LiveData<String?>
+    private var _dong = MutableLiveData<String>("")
+    val dong : LiveData<String>
         get() = _dong
 
     fun changeDong(new : String){
@@ -1097,7 +1097,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    //타인 카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
+    //카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
     fun getAllUserCategory(callback: (Int) -> Unit){
         service.getAllUserCategory(xAuthToken).enqueue(object : Callback<List<ResponseMapCategory>>{
             override fun onResponse(

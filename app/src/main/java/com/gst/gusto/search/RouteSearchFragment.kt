@@ -49,6 +49,8 @@ class RouteSearchFragment : Fragment() {
         /**
          * category server 연결
          */
+
+        binding.edtRouteSearchbox.text.clear()
         val mCategoryAdapter = ListViewCategoryAdapter("route", requireFragmentManager(), view)
 
         gustoViewModel.getAllUserCategory {
@@ -137,7 +139,6 @@ class RouteSearchFragment : Fragment() {
 
 
             }
-            binding.edtRouteSearchbox.text.clear()
         }
 
 
