@@ -18,7 +18,7 @@ import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseMapCategory
 import com.gst.gusto.databinding.ItemListviewCategoryEditBinding
 
-class ListViewEditCategoryAdapter (private var flag : String, private val parentView : View, private val cbAll : CheckBox) : ListAdapter<ResponseMapCategory, ListViewEditCategoryAdapter.ViewHolder>(
+class ListViewEditCategoryAdapter () : ListAdapter<ResponseMapCategory, ListViewEditCategoryAdapter.ViewHolder>(
     DiffCallback) {
 
 
@@ -70,26 +70,22 @@ class ListViewEditCategoryAdapter (private var flag : String, private val parent
 
         //카테고리s 전체 선택 시
         if(selectedAllCategoryFlag == true){
+            viewModel!!.changeCategoryList(true, holder.data!!.myCategoryId)
             holder.cb.isChecked = true
         }
-        else{
+        else if(selectedAllCategoryFlag == false){
             holder.cb.isChecked = false
         }
+        else{
 
-        //cb처리
-        holder.cb.setOnCheckedChangeListener { buttonView, isChecked ->
+        }
+
+        holder.cb.setOnCheckedChangeListener{ view, isChecked ->
             if(isChecked){
-                //전체 선택 여부 확인
-                Log.d("categoryId", holder.data!!.toString())
-                viewModel!!.selectedCategory.add(holder.data!!.myCategoryId)
-                if(viewModel!!.selectedCategory.size == viewModel!!.myMapCategoryList!!.size){
-                    viewModel!!.changeCategoryFlag(true)
-                }
+                viewModel!!.addItem(holder.data!!.myCategoryId)
             }
             else{
-                viewModel!!.selectedCategory.remove(holder.data!!.myCategoryId)
-                viewModel!!.cateRemoveFlag = true
-                cbAll.isChecked = false
+                viewModel!!.removeItem(holder.data!!.myCategoryId)
             }
         }
 

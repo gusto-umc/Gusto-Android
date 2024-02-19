@@ -988,10 +988,45 @@ class GustoViewModel: ViewModel() {
     private val _cateEditFlag = MutableLiveData<Boolean?>(false)
     val cateEditFlag: LiveData<Boolean?>
         get() = _cateEditFlag
-    fun changeEditFlag(flag : Boolean){
-        _cateEditFlag.value = !flag
+    fun changeEditFlag(flag : Boolean?){
+        _cateEditFlag.value = flag
     }
-    var selectedCategory = mutableListOf<Int>()
+
+    private val _selectedCategory = MutableLiveData<MutableList<Int>>()
+
+    val categorySlist = mutableListOf<Int>(0)
+    val selectedCategoryList : LiveData<MutableList<Int>> = _selectedCategory
+
+    init {
+        _selectedCategory.value = categorySlist
+    }
+
+    fun addItem(item: Int) {
+        categorySlist.add(item)
+        _selectedCategory.value = categorySlist
+    }
+
+    fun removeItem(item: Int) {
+        categorySlist.remove(item)
+        _selectedCategory.value = categorySlist
+    }
+
+
+
+    fun changeCategoryList(flag : Boolean, data : Int?){
+        if(flag){
+            _selectedCategory.value!!.add(data!!)
+        }
+        else{
+            if(data == null){
+                _selectedCategory.value!!.clear()
+            }
+            else{
+                _selectedCategory.value!!.remove(data)
+            }
+
+        }
+    }
 
     private val _categoryAllFlag = MutableLiveData<Boolean>(false)
     val categoryAllFlag : LiveData<Boolean>
