@@ -122,6 +122,13 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     />
 
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_6"
+                    android:layout_marginTop="20dp"
+                    />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -130,7 +137,7 @@
                     android:fontFamily="@font/pretendard_bold"
                     android:textColor="#767676"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="32dp"/>
+                    android:layout_marginTop="12dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_store_detail_review"
