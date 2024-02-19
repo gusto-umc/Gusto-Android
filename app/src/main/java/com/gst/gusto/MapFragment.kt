@@ -54,6 +54,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     private val gustoViewModel : GustoViewModel by activityViewModels()
 
     val markerList = ArrayList<MarkerItem>()
+    var currentChip:Int?=null
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 5000
 
@@ -163,6 +164,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         // 클릭된 칩의 ID
         val clickedChipId = chip.id
+        currentChip = clickedChipId
+        reGetMapMarkers()
 
         // 클릭된 칩이 이미 활성화된 상태인지 확인
         val isClickedChipActive = previousChipId == clickedChipId
@@ -185,6 +188,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             chip.setChipIconResource(R.drawable.streamline_bean)
             // 클릭된 칩의 ID를 초기화하여 비활성화 상태로 설정
             previousChipId = -1
+            currentChip = null
         } else {
             // 클릭된 칩을 활성화
             Log.d("chip", "활성화 ${chip.id}")
@@ -198,25 +202,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
 
 
-
-    // 전체 칩이 비활성화되었는지 여부를 확인하는 함수
-    private fun isAllChipsDisabled(): Boolean {
-        // 모든 칩을 확인하여 비활성화된 칩이 있는지 검사
-        for (i in 0 until chipGroup.childCount) {
-            val chip = chipGroup.getChildAt(i) as Chip
-            if (chip.isEnabled) {
-                return false
-            }
-        }
-        return true
-    }
-
-
-
-
-
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //목록 보기 클릭 리스너 - 민디
@@ -224,10 +209,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
         }
 
-        //카테고리 보이기 //
 
-        // 카테고리 조회 및 칩 추가
-        getMapCategoryAndAddChips("성수1가1동")
 
         /**
          * 방문 o 클릭 리스너 -> 보완 예정
@@ -381,12 +363,16 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     }
     override fun onResume() {
         super.onResume()
-       /* mapView = MapView(requireContext())
+        //카테고리 보이기 //
+
+        // 카테고리 조회 및 칩 추가
+        getMapCategoryAndAddChips("성수1가1동")
+        mapView = MapView(requireContext())
 
         mapView.setPOIItemEventListener(this)
         mapView.setMapViewEventListener(this)
 
-        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)*/
+        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)
     }
 
 
@@ -452,24 +438,27 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 when(result) {
                     1 -> {
                         binding.fragmentArea.userLoc.text = address
-                        gustoViewModel.getCurrentMapStores {result, datas ->
-                            when(result) {
-                                1 -> {
-                                    markerList.clear()
-                                    if(datas!=null) {
-                                        for((index,data) in datas.withIndex()) {
-                                            markerList.add(MarkerItem(data.storeId, index+1,0, data.latitude!!, data.longitude!!, data.storeName!!, "", false))
-                                        }
-                                    }
-                                    Log.d("viewmodel","${markerList}")
-                                    setMarker(mapView,markerList)
-                                    binding.vpSlider.adapter?.notifyDataSetChanged()
-                                }
-                                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                            }
-                        }
+                        reGetMapMarkers()
                     }
                 }
+            }
+        }
+    }
+    fun reGetMapMarkers() {
+        gustoViewModel.getCurrentMapStores(currentChip) {result, datas ->
+            when(result) {
+                1 -> {
+                    markerList.clear()
+                    if(datas!=null) {
+                        for((index,data) in datas.withIndex()) {
+                            markerList.add(MarkerItem(data.storeId, index+1,0, data.latitude!!, data.longitude!!, data.storeName!!, "", true))
+                        }
+                    }
+                    Log.d("viewmodel","${markerList}")
+                    setMarker(mapView,markerList)
+                    binding.vpSlider.adapter?.notifyDataSetChanged()
+                }
+                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
             }
         }
     }

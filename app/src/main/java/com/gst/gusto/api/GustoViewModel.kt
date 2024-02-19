@@ -142,7 +142,7 @@ class GustoViewModel: ViewModel() {
     }
 
     // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
-    fun getCurrentMapStores(callback: (Int,List<RouteList>?) -> Unit){
+    fun getCurrentMapStores(cateId : Int?,callback: (Int,List<RouteList>?) -> Unit){
         Log.e("token",xAuthToken)
         Log.d("viewmodel","view : ${_dong.value}")
         service.getCurrentMapStores(xAuthToken,_dong.value!!,null).enqueue(object : Callback<List<RouteList>> {
