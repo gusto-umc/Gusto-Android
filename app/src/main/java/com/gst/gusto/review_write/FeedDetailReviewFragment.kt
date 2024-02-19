@@ -178,17 +178,6 @@ class FeedDetailReviewFragment : Fragment() {
         chip.typeface = Typeface.createFromAsset(requireActivity().assets, "font/pretendard_bold.otf")
         chip.chipCornerRadius = dpToPixels(41f,resources.displayMetrics)
 
-        // 높이를 20dp로 설정
-        val heightInPixels = dpToPixels(45f, resources.displayMetrics)
-
-        // LayoutParams에 높이 설정
-        val layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            heightInPixels.toInt()
-        )
-
-        // chip에 LayoutParams 할당
-        chip.layoutParams = layoutParams
 
         chipGroup.addView(chip)
     }
