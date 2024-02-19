@@ -37,6 +37,7 @@ class ReviewAdd3Fragment : Fragment() {
     private val handler = Handler()
     private val progressPoint = 200
     private val gustoViewModel : GustoViewModel by activityViewModels()
+    private val imageList: MutableList<File?> = MutableList(4) { null }
 
     companion object {
         private const val REQUEST_CODE_STORAGE_PERMISSION = 1001
@@ -57,6 +58,11 @@ class ReviewAdd3Fragment : Fragment() {
             findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
         }
         binding.btnNext.setOnClickListener {
+            for(data in imageList) {
+                if(data !=null) {
+                    gustoViewModel.imageFiles.add(data)
+                }
+            }
             findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
         }
 
@@ -127,7 +133,7 @@ class ReviewAdd3Fragment : Fragment() {
                     binding.tvUpload2.text = "이제 리뷰를 작성하러 가볼까요?"
                     binding.btnNext.text = "리뷰 작성하러 가기"
                 }
-
+                imageList[0] = convertContentToFile(requireContext(),uri[0])
                 for (j in 0 .. uri.size-1) {
                     Log.e("viewmodel",uri[j].toString())
                     gustoViewModel.imageFiles?.add(convertContentToFile(requireContext(),uri[j]))
@@ -140,6 +146,14 @@ class ReviewAdd3Fragment : Fragment() {
                 Log.d("PhotoPicker", "No media selected")
             }
         }
+        val pickMedia1 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                imageList[selectImage] = convertContentToFile(requireContext(),uri)
+                setImage(imageViews[selectImage],uri.toString(),requireContext())
+            } else {
+                Log.d("PhotoPicker", "No media selected")
+            }
+        }
 
         binding.ivImage.setOnClickListener {
             binding.btnSkip.visibility = View.GONE
@@ -148,8 +162,9 @@ class ReviewAdd3Fragment : Fragment() {
         }
         for(i in 0..3) {
             imageCards[i].setOnClickListener {
+                gustoViewModel.imageFiles.clear()
                 selectImage = i
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                pickMedia1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
         }
     }
