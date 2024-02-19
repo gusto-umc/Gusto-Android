@@ -114,6 +114,9 @@ class GustoViewModel: ViewModel() {
     var category : Int?= null
 
 
+    // 리뷰 모아보기 현재 페이지
+    var currentReviewPage = 0
+
 
     // 토큰 얻는 함수
     fun getTokens(activity: MainActivity) {
