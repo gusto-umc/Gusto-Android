@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gst.gusto.MainActivity
+import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.RequestCreateRoute
@@ -19,7 +21,6 @@ class RouteCreateFragment : Fragment() {
 
     lateinit var binding: FragmentListRouteCreateBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
-    private var tmp = 1
     private val itemList = ArrayList<MarkerItem>()
 
     override fun onCreateView(
@@ -35,8 +36,8 @@ class RouteCreateFragment : Fragment() {
         }
         binding.btnSave.setOnClickListener {
             val routeList = ArrayList<RouteList>()
-            for(data in itemList) {
-                routeList.add(RouteList(data.storeId,data.ordinal,null,null,null,null,null))
+            for((index,data) in itemList.withIndex()) {
+                routeList.add(RouteList(data.storeId,index+1,null,null,null,null,null))
             }
             gustoViewModel.requestRoutesData = RequestCreateRoute(binding.etRouteName.text.toString(),null,routeList)
             gustoViewModel.createRoute {result ->
@@ -63,13 +64,22 @@ class RouteCreateFragment : Fragment() {
         binding.rvRoutes.adapter = boardAdapter
         binding.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        binding.btnPlus.setOnClickListener {
-            itemList.add(MarkerItem(tmp.toLong(), tmp, 0,1.1, 1.1, binding.tvRestName.text.toString(), "", false))
-            tmp++
+        if(gustoViewModel.routeStorTmpData != null) {
+            var data = gustoViewModel.routeStorTmpData
+            if (data != null) {
+                itemList.add(MarkerItem(data.storeId.toLong(), 0, 0,1.1, 1.1, data.storeName, "", false))
+            }
             boardAdapter.notifyItemInserted(itemList.size-1)
             if(itemList.size==6) {
                 binding.lyAddRoute.visibility = View.INVISIBLE
             }
+
+            gustoViewModel.routeStorTmpData = null
+        }
+
+        binding.btnPlus.setOnClickListener {
+            findNavController().navigate(R.id.action_routeCreateFragment_to_routeSearchFragment)
+
         }
 
     }
@@ -77,6 +87,11 @@ class RouteCreateFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         gustoViewModel.listFragment="route"
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
 
