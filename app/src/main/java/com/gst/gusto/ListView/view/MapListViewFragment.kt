@@ -144,6 +144,7 @@ class MapListViewFragment : Fragment() {
             if(binding.cbMapListviewAll.isChecked){
                 binding.cbMapListviewAll.isChecked = false
                 gustoViewModel.changeCategoryList(false, null)
+                gustoViewModel.clearItem()
                 if(cateEditAdapter != null){
                     cateEditAdapter!!.selectedAllCategoryFlag = false
                     categoryRvEdit.adapter = cateEditAdapter
@@ -152,6 +153,31 @@ class MapListViewFragment : Fragment() {
 
             }
             else{
+                gustoViewModel.clearItem()
+                binding.cbMapListviewAll.isChecked = true
+                //flag true로 어댖터 연결
+                if(cateEditAdapter != null){
+                    cateEditAdapter!!.selectedAllCategoryFlag = true
+                    categoryRvEdit.adapter = cateEditAdapter
+                    categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())
+                }
+            }
+        }
+
+        binding.cbMapListviewAll.setOnClickListener {
+            if(binding.cbMapListviewAll.isChecked){
+                binding.cbMapListviewAll.isChecked = false
+                gustoViewModel.changeCategoryList(false, null)
+                gustoViewModel.clearItem()
+                if(cateEditAdapter != null){
+                    cateEditAdapter!!.selectedAllCategoryFlag = false
+                    categoryRvEdit.adapter = cateEditAdapter
+                    categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())
+                }
+
+            }
+            else{
+                gustoViewModel.clearItem()
                 binding.cbMapListviewAll.isChecked = true
                 //flag true로 어댖터 연결
                 if(cateEditAdapter != null){

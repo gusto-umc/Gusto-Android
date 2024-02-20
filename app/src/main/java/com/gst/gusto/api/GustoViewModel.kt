@@ -1011,6 +1011,11 @@ class GustoViewModel: ViewModel() {
         _selectedCategory.value = categorySlist
     }
 
+    fun clearItem(){
+        categorySlist.clear()
+        _selectedCategory.value = categorySlist
+    }
+
 
 
     fun changeCategoryList(flag : Boolean, data : Int?){
