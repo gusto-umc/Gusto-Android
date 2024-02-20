@@ -102,6 +102,12 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
             }
         }
         else if(flag == "my" || flag == "feed"){
+            if(flag == "my"){
+                holder.tvCountCategory.text = "${holder.data!!.reviewCnt}번 방문했어요"
+            }
+            else{
+                holder.tvCountCategory.text = ""
+            }
             holder.cvStore.setOnClickListener {
                 //store detail로 이동
                 gustoViewModel!!.selectedDetailStoreId = holder.data!!.storeId
