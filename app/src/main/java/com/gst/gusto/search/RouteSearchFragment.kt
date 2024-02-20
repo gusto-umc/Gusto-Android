@@ -61,6 +61,7 @@ class RouteSearchFragment : Fragment() {
                 0 -> {
                     mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
                     mCategoryAdapter.viewModel = gustoViewModel
+                    mCategoryAdapter.mContext = context
                     binding.rvRouteCategory.adapter = mCategoryAdapter
                     binding.rvRouteCategory.layoutManager = LinearLayoutManager(this.requireActivity())
                     binding.rvRouteCategory.visibility = View.VISIBLE

@@ -142,7 +142,6 @@ class StoreDetailFragment : Fragment() {
             when(result){
                 0 -> {
                     //success
-                    Toast.makeText(context, "detail 성공", Toast.LENGTH_SHORT).show()
                     setDatas(gustoViewModel.myStoreDetail)
                     Log.d("reviewsId", gustoViewModel.detailReviewLastId.toString())
 

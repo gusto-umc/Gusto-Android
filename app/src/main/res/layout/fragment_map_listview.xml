@@ -126,9 +126,6 @@
                         android:layout_height="match_parent"
                         android:layout_marginStart="24dp"
                         android:layout_marginTop="13dp"
-                        android:padding="20dp"
-                        android:background="@drawable/background_radius_5_stroke_1"
-                        android:backgroundTint="@color/main_C"
                         android:visibility="gone">
 
                         <CheckBox

@@ -1,5 +1,6 @@
 package com.gst.gusto.ListView.adapter
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.R
+import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.CardWxampleBinding
@@ -23,6 +25,7 @@ import com.gst.gusto.databinding.ItemStoreCardBinding
 class ListViewStoreAdapter(private var flag : String, private val parentView : View) : ListAdapter<ResponseStoreListItem, ListViewStoreAdapter.ViewHolder>(DiffCallback) {
 
     var gustoViewModel : GustoViewModel? = null
+    var mContext : Context? = null
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<ResponseStoreListItem>(){
             override fun areItemsTheSame(oldItem: ResponseStoreListItem, newItem: ResponseStoreListItem): Boolean {
@@ -42,7 +45,12 @@ class ListViewStoreAdapter(private var flag : String, private val parentView : V
         var data : ResponseStoreListItem? = null
         fun bind(store: ResponseStoreListItem){
             data = store
-            binding.ivItemStoreImg.setImageResource(R.drawable.sample_store_img)
+            if(!store.reviewImg.isNullOrEmpty()){
+                util.setImage(binding.ivItemStoreImg, store.reviewImg, mContext!!)
+            }
+            else{
+                binding.ivItemStoreImg.setImageResource(R.drawable.gst_dummypic)
+            }
             binding.tvItemStoreTitle.text = store.storeName
             binding.tvItemStoreLocation.text = store.address
         }

@@ -1,5 +1,6 @@
 package com.gst.gusto.ListView.adapter
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -27,6 +28,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
 
     private val mFragmentManager = fragmentManager
     var viewModel : GustoViewModel? = null
+    var mContext : Context? = null
 
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<ResponseMapCategory>(){
@@ -91,6 +93,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                                 0 -> {
                                     //success
                                     val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
+                                    mStoreAdapter.mContext = mContext
                                     mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
                                     mStoreAdapter.gustoViewModel = viewModel
                                     holder.storeRv.adapter = mStoreAdapter
@@ -113,6 +116,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                                     val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
                                     mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
                                     mStoreAdapter.gustoViewModel = viewModel
+                                    mStoreAdapter.mContext = mContext
                                     holder.storeRv.adapter = mStoreAdapter
                                     holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
                                 }
@@ -132,7 +136,9 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                                     val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
                                     mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
                                     mStoreAdapter.gustoViewModel = viewModel
+                                    mStoreAdapter.mContext = mContext
                                     holder.storeRv.adapter = mStoreAdapter
+
                                     holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
                                 }
                                 1 -> {
@@ -151,6 +157,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                                     val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
                                     mStoreAdapter.submitList(viewModel!!.myMapStoreList!!)
                                     mStoreAdapter.gustoViewModel = viewModel
+                                    mStoreAdapter.mContext = mContext
                                     holder.storeRv.adapter = mStoreAdapter
                                     holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
                                 }

@@ -43,6 +43,7 @@ class MyListFragment : Fragment() {
                     0 -> {
                         mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
                         mCategoryAdapter.viewModel = gustoViewModel
+                        mCategoryAdapter.mContext = context
                         binding.rvMyCategory.adapter = mCategoryAdapter
                         binding.rvMyCategory.layoutManager = LinearLayoutManager(this.requireActivity())
                         binding.rvMyCategory.visibility = View.VISIBLE
@@ -63,6 +64,7 @@ class MyListFragment : Fragment() {
                     0 -> {
                         mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
                         mCategoryAdapter.viewModel = gustoViewModel
+                        mCategoryAdapter.mContext = context
                         binding.rvMyCategory.adapter = mCategoryAdapter
                         binding.rvMyCategory.layoutManager = LinearLayoutManager(this.requireActivity())
                         binding.rvMyCategory.visibility = View.VISIBLE

@@ -74,6 +74,7 @@ class MapListViewFragment : Fragment() {
                         cateShowAdapter = ListViewCategoryAdapter("show", requireFragmentManager(), view)
                         cateShowAdapter!!.submitList(gustoViewModel.myMapCategoryList)
                         cateShowAdapter!!.viewModel = gustoViewModel
+                        cateShowAdapter!!.mContext = context
                         categoryRvShow.adapter = cateShowAdapter
                         categoryRvShow.layoutManager = LinearLayoutManager(this.requireActivity())
 
