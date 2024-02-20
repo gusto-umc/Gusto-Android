@@ -32,22 +32,22 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
 
     var selectedIconInt : Int = 1
     private val sampleIconArray = arrayListOf<Int>(
-        R.drawable.category_icon_1,
-        R.drawable.ic_rice_cate,
         R.drawable.ic_chat,
-        R.drawable.ic_hot_,
-        R.drawable.ic_likes,
-        R.drawable.ic_money,
-        R.drawable.ic_moods,
-        R.drawable.ic_music,
-        R.drawable.ic_noodle,
+        R.drawable.ic_wine,
+        R.drawable.ic_taco,
+        R.drawable.ic_shrimp,
+        R.drawable.ic_rice_cate,
         R.drawable.ic_reserv,
-        R.drawable.category_icon_1,
-        R.drawable.category_icon_1,
-        R.drawable.category_icon_1,
-        R.drawable.category_icon_1,
-        R.drawable.category_icon_1,
-        R.drawable.category_icon_1
+        R.drawable.ic_noodle,
+        R.drawable.ic_music,
+        R.drawable.ic_moods,
+        R.drawable.ic_money,
+        R.drawable.ic_likes,
+        R.drawable.ic_friends,
+        R.drawable.ic_fresh,
+        R.drawable.ic_dish,
+        R.drawable.ic_cake,
+        R.drawable.ic_bread
     )
     override fun onCreateView(
         inflater: LayoutInflater,

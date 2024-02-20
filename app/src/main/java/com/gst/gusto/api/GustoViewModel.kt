@@ -988,10 +988,50 @@ class GustoViewModel: ViewModel() {
     private val _cateEditFlag = MutableLiveData<Boolean?>(false)
     val cateEditFlag: LiveData<Boolean?>
         get() = _cateEditFlag
-    fun changeEditFlag(flag : Boolean){
-        _cateEditFlag.value = !flag
+    fun changeEditFlag(flag : Boolean?){
+        _cateEditFlag.value = flag
     }
-    var selectedCategory = mutableListOf<Int>()
+
+    private val _selectedCategory = MutableLiveData<MutableList<Int>>()
+
+    val categorySlist = mutableListOf<Int>(0)
+    val selectedCategoryList : LiveData<MutableList<Int>> = _selectedCategory
+
+    init {
+        _selectedCategory.value = categorySlist
+    }
+
+    fun addItem(item: Int) {
+        categorySlist.add(item)
+        _selectedCategory.value = categorySlist
+    }
+
+    fun removeItem(item: Int) {
+        categorySlist.remove(item)
+        _selectedCategory.value = categorySlist
+    }
+
+    fun clearItem(){
+        categorySlist.clear()
+        _selectedCategory.value = categorySlist
+    }
+
+
+
+    fun changeCategoryList(flag : Boolean, data : Int?){
+        if(flag){
+            _selectedCategory.value!!.add(data!!)
+        }
+        else{
+            if(data == null){
+                _selectedCategory.value!!.clear()
+            }
+            else{
+                _selectedCategory.value!!.remove(data)
+            }
+
+        }
+    }
 
     private val _categoryAllFlag = MutableLiveData<Boolean>(false)
     val categoryAllFlag : LiveData<Boolean>
@@ -1008,34 +1048,24 @@ class GustoViewModel: ViewModel() {
 
     fun findIconResource(iconId : Int) : Int{
         var iconResource : Int = when(iconId){
-            1 -> { R.drawable.category_icon_1}
-            2 -> {R.drawable.ic_rice_cate}
-            3 -> {R.drawable.ic_chat}
-            4 -> {R.drawable.ic_hot_}
-            5 -> {R.drawable.ic_likes}
-            6 -> {R.drawable.ic_money}
-            7 -> {R.drawable.ic_moods}
-            8 -> {R.drawable.ic_music}
-            9 -> {R.drawable.ic_noodle}
-            else -> {R.drawable.ic_reserv}
+            1 -> R.drawable.ic_chat
+            2 ->R.drawable.ic_wine
+            3 ->R.drawable.ic_taco
+            4 ->R.drawable.ic_shrimp
+            5 ->R.drawable.ic_rice_cate
+            6 ->R.drawable.ic_reserv
+            7 ->R.drawable.ic_noodle
+            8 ->R.drawable.ic_music
+            9 ->R.drawable.ic_moods
+            10 ->R.drawable.ic_money
+            11 ->R.drawable.ic_likes
+            12 ->R.drawable.ic_friends
+            13 ->R.drawable.ic_fresh
+            14 ->R.drawable.ic_dish
+            15 ->R.drawable.ic_cake
+            else -> R.drawable.ic_bread
         }
         return iconResource
-    }
-    fun findIconId(iconResource : Int) : Int {
-        var iconId = when(iconResource){
-            R.drawable.category_icon_1 -> 1
-            R.drawable.ic_rice_cate -> 2
-            R.drawable.ic_chat -> 3
-            R.drawable.ic_hot_ -> 4
-            R.drawable.ic_likes -> 5
-            R.drawable.ic_money -> 6
-            R.drawable.ic_moods -> 7
-            R.drawable.ic_music -> 8
-            R.drawable.ic_noodle -> 9
-            R.drawable.ic_reserv -> 10
-            else -> 10
-        }
-        return iconId
     }
 
     // 카테고리 추가 -> 확인 완료
