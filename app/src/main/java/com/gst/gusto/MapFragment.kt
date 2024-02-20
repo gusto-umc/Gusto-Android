@@ -142,6 +142,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         chip.typeface = Typeface.createFromAsset(requireActivity().assets, "font/pretendard_medium.otf")
         chip.chipStrokeWidth = util.dpToPixels(1f, resources.displayMetrics)
         chip.chipCornerRadius = util.dpToPixels(41f, resources.displayMetrics)
+        chip.setChipIconTintResource(R.color.main_C)
         chip.setChipIconResource(gustoViewModel.findIconResource(categoryIcon))
 
         Log.d("chip","칩 생성")
@@ -170,7 +171,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             val previousChip = chipGroup.findViewById<Chip>(previousChipId)
             previousChip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chip_disabled))
             previousChip.setChipBackgroundColorResource(R.color.white)
-            previousChip.setChipIconResource(R.drawable.streamline_bean)
+            previousChip.setChipIconTintResource(R.color.main_C)
         }
 
         // 클릭된 칩이 이미 활성화된 상태라면 비활성화
@@ -179,7 +180,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             Log.d("chip", "클릭된 칩 비활성화 ${chip.id}")
             chip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chip_disabled))
             chip.setChipBackgroundColorResource(R.color.white)
-            chip.setChipIconResource(R.drawable.streamline_bean)
+            chip.setChipIconTintResource(R.color.main_C)
             // 클릭된 칩의 ID를 초기화하여 비활성화 상태로 설정
             previousChipId = -1
             currentChip = null
@@ -188,7 +189,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             Log.d("chip", "활성화 ${chip.id}")
             chip.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
             chip.setChipBackgroundColorResource(R.color.main_C)
-            chip.setChipIconResource(R.drawable.streamline_coffee_bean_white)
+            chip.setChipIconTintResource(R.color.white)
             // 클릭된 칩의 ID를 이전 칩의 ID로 저장
             previousChipId = clickedChipId
             currentChip = clickedChipId
