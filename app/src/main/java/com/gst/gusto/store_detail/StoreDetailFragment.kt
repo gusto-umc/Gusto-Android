@@ -33,12 +33,6 @@ class StoreDetailFragment : Fragment() {
 
     private lateinit var binding : FragmentStoreDetailBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
-    private var sampleReviewDataArray = arrayListOf<StoreDetailReview>(
-        StoreDetailReview(reviewId = 0, visitedAt = "2024-01-03", nickname = "귀여운 바질페스토 12", liked = 1, comment = "goooooood", hashTageName = arrayListOf("맛있음", "분위기"), date= "2024-01-04", photoArray = arrayListOf(R.drawable.sample_store_img, R.drawable.sample_store_2_img)),
-        StoreDetailReview(reviewId = 1, visitedAt = "2024-01-02", nickname = "매콤한 통닭", liked = 3, comment = "맛있어요", hashTageName = arrayListOf("맛있음", "넓음"), date = "2024-01-02", photoArray = arrayListOf(R.drawable.sample_store_img, R.drawable.sample_store_2_img))
-    )
-    private var sampleData = StoreDetail(0, "Gusto Restaurant", "양식", "메롱시 메로나동 바밤바 24-6 1층", 1, 0, reviews = sampleReviewDataArray, reviewImg = arrayListOf(1, 2, 3))
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -223,6 +217,9 @@ class StoreDetailFragment : Fragment() {
                         Log.d("reviews more load", gustoViewModel.myStoreDetail!!.reviews.toString())
                         Log.d("reviews more load", gustoViewModel.detailReviewLastId.toString())
                         loadReviews(gustoViewModel.storeDetailReviews)
+                        if(gustoViewModel.myStoreDetail!!.reviews.isEmpty()){
+                            binding.tvReviewLoad.visibility = View.INVISIBLE
+                        }
                     }
                     1 -> {
                         //fail
