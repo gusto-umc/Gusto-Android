@@ -3,6 +3,7 @@ package com.gst.gusto.list.adapter
 import android.app.Activity
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,21 +59,25 @@ class MapRoutesAdapter(
                 notifyItemRangeChanged(position,getItemCount())
             }
         } else {
-            parentActivity.gustoViewModel.selectedDetailStoreId = itemList[position].storeId.toInt()
+
             if(option!=1) {
                 holder.itemView.setOnClickListener{
+                    parentActivity.gustoViewModel.selectedDetailStoreId = itemList[position].storeId.toInt()
                     parentActivity.getCon().navigate(R.id.action_routeStoresFragment_to_storeDetailFragment)
                     parentActivity.getViewModel().groupFragment = 1
                 }
                 holder.tv_rest_name.setOnClickListener{
+                    parentActivity.gustoViewModel.selectedDetailStoreId = itemList[position].storeId.toInt()
                     parentActivity.getCon().navigate(R.id.action_routeStoresFragment_to_storeDetailFragment)
                     parentActivity.getViewModel().groupFragment = 1
                 }
             } else {
                 holder.itemView.setOnClickListener{
+                    parentActivity.gustoViewModel.selectedDetailStoreId = itemList[position].storeId.toInt()
                     parentActivity.getCon().navigate(R.id.action_myFragment_to_storeDetailFragment)
                 }
                 holder.tv_rest_name.setOnClickListener{
+                    parentActivity.gustoViewModel.selectedDetailStoreId = itemList[position].storeId.toInt()
                     parentActivity.getCon().navigate(R.id.action_myFragment_to_storeDetailFragment)
                 }
 

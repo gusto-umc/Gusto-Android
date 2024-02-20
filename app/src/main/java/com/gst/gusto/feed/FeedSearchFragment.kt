@@ -58,6 +58,8 @@ class FeedSearchFragment() : Fragment() {
     // FeedFragment로 이동
     fun moveFeed(){
         activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
+
+
     }
 
     fun cancel(){

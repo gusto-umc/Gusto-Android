@@ -14,6 +14,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -21,6 +23,7 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.ActivityMainBinding
+import com.gst.gusto.feed.FeedFragment
 import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
@@ -40,10 +43,14 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.findNavController()
         binding.bottomNavigationView.setupWithNavController(navController)
 
-
         //Log.d("viewmodel","dsasda : ${ getExtensionVersion(Build.VERSION_CODES.R)}")
         navController.addOnDestinationChangedListener { _, destination, _ ->
             var currentDestinationId = destination.id
+            val fragmentManager = this.supportFragmentManager
+            val fragment = fragmentManager?.findFragmentByTag("FeedSearchFragmentTag")
+            if (fragment != null) {
+                fragmentManager.beginTransaction().remove(fragment).commit()
+            }
             if (previousDestinationId == currentDestinationId) {
                 // 현재 목적지와 이전 목적지가 같은 경우
                 // 선택한 탭이 이미 화면에 표시 중이므로 초기 화면으로 이동
@@ -53,10 +60,26 @@ class MainActivity : AppCompatActivity() {
                     currentDestinationId = -1
                     navController.popBackStack()
                 }
+                if(currentDestinationId == R.id.fragment_feed) {
+                    val currentFragment = navHostFragment.childFragmentManager.primaryNavigationFragment
+                    Log.d("CurrentFragment", "Current fragment: $currentFragment")
+                    if (currentFragment is FeedFragment) {
+                        Log.d("viewmodel flag", "${currentFragment}")
+
+                        // 현재 프래그먼트가 여러분이 원하는 프래그먼트 타입인 경우에만 해당 함수를 실행합니다.
+                        // 여러분이 만든 프래그먼트의 타입에 따라서 YourFragmentType을 적절히 변경해주세요.
+                        (currentFragment as FeedFragment).initView()
+                        (currentFragment as FeedFragment).getData()
+                    }
+
+                }
             }
             // 이전 목적지 업데이트
             previousDestinationId = currentDestinationId
         }
+
+
+
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item->
             item.onNavDestinationSelected(navController)
             true

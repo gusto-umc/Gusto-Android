@@ -40,10 +40,10 @@ class ReviewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        initViewPager()
         if(gustoViewModel.currentReviewPage != 0){
             binding.reviewVP.currentItem = gustoViewModel.currentReviewPage
         }
+        initViewPager()
 
     }
 
@@ -63,6 +63,7 @@ class ReviewFragment : Fragment() {
                     super.onPageSelected(position)
                     gustoViewModel.currentReviewPage = binding.reviewVP.currentItem
                 }
+
             })
         }
 
@@ -71,6 +72,14 @@ class ReviewFragment : Fragment() {
             tab.setIcon(icons[position])
         }.attach()
 
+        // 각 탭에 OnClickListener 설정
+        for (i in 0 until binding.reviewTab.tabCount) {
+            val tab = binding.reviewTab.getTabAt(i)
+            tab?.view?.setOnClickListener {
+                binding.reviewVP.currentItem = i
+                gustoViewModel.currentReviewPage = i
+            }
+        }
 
     }
 
