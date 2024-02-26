@@ -36,7 +36,7 @@ class mapUtil {
             var bookMark: Boolean
         )
 
-        private val MAPPERMISSIONS = arrayOf(
+        val MAPPERMISSIONS = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
@@ -140,7 +140,7 @@ class mapUtil {
             mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,300))
 
         }
-        private fun hasPermission(context : Context): Boolean {
+        fun hasPermission(context : Context): Boolean {
             for (permission in MAPPERMISSIONS) {
                 if (ContextCompat.checkSelfPermission(
                         context,
