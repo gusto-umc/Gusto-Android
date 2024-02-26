@@ -21,7 +21,7 @@ import com.gst.gusto.Util.mapUtil
 class MapRoutesAdapter(
     val itemList: ArrayList<mapUtil.Companion.MarkerItem>, val lyAddRoute: ConstraintLayout,
     val activity: Activity?, val option : Int):RecyclerView.Adapter<MapRoutesAdapter.ListViewHolder>(){
-// option 0(루트 화면), 1(마이 화면)
+// option 0(루트 화면), 1(마이 화면), 2(다른 유저 프로필 화면)
     val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#A6A6A6"))
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_map_route_view, parent, false)
@@ -59,8 +59,7 @@ class MapRoutesAdapter(
                 notifyItemRangeChanged(position,getItemCount())
             }
         } else {
-
-            if(option!=1) {
+            if(option==0) {
                 holder.itemView.setOnClickListener{
                     parentActivity.gustoViewModel.selectedDetailStoreId = itemList[position].storeId.toInt()
                     parentActivity.getCon().navigate(R.id.action_routeStoresFragment_to_storeDetailFragment)
@@ -69,6 +68,17 @@ class MapRoutesAdapter(
                 holder.tv_rest_name.setOnClickListener{
                     parentActivity.gustoViewModel.selectedDetailStoreId = itemList[position].storeId.toInt()
                     parentActivity.getCon().navigate(R.id.action_routeStoresFragment_to_storeDetailFragment)
+                    parentActivity.getViewModel().groupFragment = 1
+                }
+            } else if(option==2) {
+                holder.itemView.setOnClickListener{
+                    parentActivity.gustoViewModel.selectedDetailStoreId = itemList[position].storeId.toInt()
+                    parentActivity.getCon().navigate(R.id.action_fragment_other_to_storeDetailFragment)
+                    parentActivity.getViewModel().groupFragment = 1
+                }
+                holder.tv_rest_name.setOnClickListener{
+                    parentActivity.gustoViewModel.selectedDetailStoreId = itemList[position].storeId.toInt()
+                    parentActivity.getCon().navigate(R.id.action_fragment_other_to_storeDetailFragment)
                     parentActivity.getViewModel().groupFragment = 1
                 }
             } else {
