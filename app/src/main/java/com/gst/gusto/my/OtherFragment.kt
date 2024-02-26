@@ -51,7 +51,6 @@ class OtherFragment : Fragment() {
                         binding.tvReviewNum.text = "${data.review}"
                         binding.tvFollowingNum.text = "${data.following}"
                         binding.tvFollowerNum.text = "${data.follower}"
-                        //setImage(binding.ivProfileImage)
                         followed = data.followed
                         if(data.followed) {
                             binding.btnProfileEdit.backgroundTintList = colorStateOffList

@@ -34,12 +34,21 @@ class MyRouteStoresFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         itemList = gustoViewModel.markerListLiveData.value!!
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyGone,requireActivity(),1)
-        boardAdapter.notifyDataSetChanged()
+        val nickname = gustoViewModel.profileNickname
+        if(nickname!="") {
+            val boardAdapter = MapRoutesAdapter(itemList,binding.lyGone,requireActivity(),2)
+            boardAdapter.notifyDataSetChanged()
 
-        binding.recyclerView.adapter = boardAdapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            binding.recyclerView.adapter = boardAdapter
+            binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        } else {
+            val boardAdapter = MapRoutesAdapter(itemList,binding.lyGone,requireActivity(),1)
+            boardAdapter.notifyDataSetChanged()
+
+            binding.recyclerView.adapter = boardAdapter
+            binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        }
+
     }
 }
