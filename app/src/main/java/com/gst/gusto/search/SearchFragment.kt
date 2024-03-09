@@ -1,5 +1,6 @@
 package com.gst.gusto.search
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -10,9 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.search.adapter.SearchStoreAdapter
@@ -26,6 +30,21 @@ class SearchFragment : Fragment() {
 
     private lateinit var binding : FragmentSearchBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val callback = object : OnBackPressedCallback(
+            true // default to enabled
+        ) {
+            override fun handleOnBackPressed() {
+
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this, // LifecycleOwner
+            callback
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +71,7 @@ class SearchFragment : Fragment() {
 
         if(!gustoViewModel.keepFlag){
             // 첫 진임 시
-            binding.edtSearchSearchbox.requestFocus()
+            //binding.edtSearchSearchbox.requestFocus()
             util.openKeyboard(requireActivity())
             //저장 rv visibility 설정
             binding.rvSearchKeep.visibility = View.GONE
@@ -178,6 +197,10 @@ class SearchFragment : Fragment() {
                 // 엔터 눌렀을때 행동
                 searchKeyword()
             }
+            else if(keyCode === KeyEvent.KEYCODE_BACK){
+                Log.d("KEYCODE_BACK", "KEYCODE_BACK")
+                //Navigation.findNavController(view).
+        }
 
             true
         }
@@ -206,4 +229,6 @@ class SearchFragment : Fragment() {
             binding.edtSearchSearchbox.text.clear()
         }
     }
+
+
 }

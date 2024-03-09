@@ -127,10 +127,17 @@
                 android:id="@+id/fab_map_rec_map"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginBottom="80dp"
-                android:layout_marginEnd="20.18dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="22dp"
+                android:layout_marginBottom="40dp"
+                app:fabCustomSize="60dp"
+                app:maxImageSize="40dp"
+                android:src="@drawable/fab_map_2_img"
+                android:backgroundTint="@color/white"
+                app:borderWidth="0dp"
+                android:elevation="4dp"
+                app:fabSize="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

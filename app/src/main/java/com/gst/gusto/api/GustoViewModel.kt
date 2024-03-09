@@ -1244,10 +1244,14 @@ class GustoViewModel: ViewModel() {
 
     var userNickname : String = "Gusto"
 
+    //저장된 맛집
     var mapVisitedList : List<ResponseSavedStoreData>? = null
     var mapUnvisitedList : List<ResponseSavedStoreData>? = null
     var mapVisitedCnt = 0
     var mapUnvisitedCnt = 0
+
+    //추천 맛집
+    var mapRecList : List<ResponseSavedStoreData>? = null
 
 
 

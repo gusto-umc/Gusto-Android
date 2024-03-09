@@ -482,4 +482,12 @@
             android:id="@+id/action_myListFragment_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/mapListviewRecFragment"
+        android:name="com.gst.gusto.ListView.view.MapListviewRecFragment"
+        android:label="MapListviewRecFragment" >
+        <action
+            android:id="@+id/action_mapListviewRecFragment_to_fragment_map_viewpager"
+            app:destination="@id/fragment_map_viewpager" />
+    </fragment>
 </navigation>
