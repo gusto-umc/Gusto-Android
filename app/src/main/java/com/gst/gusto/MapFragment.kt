@@ -338,6 +338,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     override fun onResume() {
         super.onResume()
 
+
         if (!mapUtil.hasPermission(requireContext())) {
             requestPermissions(
                 mapUtil.MAPPERMISSIONS,
@@ -353,6 +354,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)
             }
         }
+
 
         // 카테고리 조회 및 칩 추가
         getMapCategoryAndAddChips("성수1가1동")

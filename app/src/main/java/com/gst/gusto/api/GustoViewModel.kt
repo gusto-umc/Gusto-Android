@@ -56,6 +56,7 @@ class GustoViewModel: ViewModel() {
     val myGroupList = ArrayList<GroupItem>()
     // 현재 그룹 아이디
     var currentGroupId = 0L
+    var currentGroupName =""
     // 현재 루트 아이디
     var currentRouteId = 0L
     // 현재 그룹장 유뮤
