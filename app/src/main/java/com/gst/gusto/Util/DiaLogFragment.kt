@@ -35,6 +35,7 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
     lateinit var binding3: BottomsheetdialogCreateBinding
     lateinit var binding4: BottomsheetdialogInviteBinding
     private val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#F27781"))
+    private val colorStateOffList = ColorStateList.valueOf(Color.parseColor("#ECECEC"))
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         if(layout == R.layout.bottomsheetdialog_routes) {
             binding1 = BottomsheetdialogRoutesBinding.inflate(inflater, container, false)
@@ -91,23 +92,31 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                             itemClick(1)
                             dialog?.dismiss()
                         }
-                    }
-                }
-                binding2.etCode.addTextChangedListener(object : TextWatcher {
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                        // 이벤트 발생 전에 수행할 작업
-                    }
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                        // 텍스트가 변경될 때 수행할 작업
-                        if(binding2.etCode.text.length==12) {
-                            binding2.btnEnter.backgroundTintList
+                        else -> {
+                            binding2.bgCode.visibility = View.VISIBLE
+                            binding2.tvCode.visibility = View.VISIBLE
                         }
                     }
-                    override fun afterTextChanged(s: Editable?) {
-                        // 이벤트 발생 후에 수행할 작업
-                    }
-                })
+                }
             }
+            binding2.etCode.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                    // 이벤트 발생 전에 수행할 작업
+                }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    // 텍스트가 변경될 때 수행할 작업
+                    if(binding2.etCode.text.length==12) {
+                        binding2.btnEnter.backgroundTintList = colorStateOnList
+                        binding2.btnEnter.setTextColor(Color.parseColor("#FFFFFF"))
+                    } else {
+                        binding2.btnEnter.backgroundTintList = colorStateOffList
+                        binding2.btnEnter.setTextColor(Color.parseColor("#717171"))
+                    }
+                }
+                override fun afterTextChanged(s: Editable?) {
+                    // 이벤트 발생 후에 수행할 작업
+                }
+            })
         }
         else if(layout == R.layout.bottomsheetdialog_create) {
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -122,6 +131,14 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     // 텍스트가 변경될 때 수행할 작업
                     binding3.tvGroupNameSize.text = "(${binding3.etGroupName.text.length}/10)"
+                    if(binding3.etComent.text.length>0 && binding3.etGroupName.text.length>0) {
+                        binding3.btnEnter.setTextColor(Color.parseColor("#FFFFFF"))
+                        binding3.btnEnter.backgroundTintList = colorStateOnList
+                    }
+                    else {
+                        binding3.btnEnter.setTextColor(Color.parseColor("#717171"))
+                        binding3.btnEnter.backgroundTintList = colorStateOffList
+                    }
                 }
 
                 override fun afterTextChanged(s: Editable?) {
@@ -136,6 +153,14 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     // 텍스트가 변경될 때 수행할 작업
                     binding3.tvComentSize.text = "(${binding3.etComent.text.length}/30)"
+                    if(binding3.etComent.text.length>0 && binding3.etGroupName.text.length>0) {
+                        binding3.btnEnter.setTextColor(Color.parseColor("#FFFFFF"))
+                        binding3.btnEnter.backgroundTintList = colorStateOnList
+                    }
+                    else {
+                        binding3.btnEnter.setTextColor(Color.parseColor("#717171"))
+                        binding3.btnEnter.backgroundTintList = colorStateOffList
+                    }
                 }
 
                 override fun afterTextChanged(s: Editable?) {
@@ -143,11 +168,16 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                 }
             })
             binding3.btnEnter.setOnClickListener {
-                gustoViewModel.createGroup(binding3.etGroupName.text.toString(),binding3.etComent.text.toString()) {result ->
-                    when(result) {
-                        1 -> {
-                            itemClick(1)
-                            dialog?.dismiss()
+                if(binding3.etComent.text.length>0 && binding3.etGroupName.text.length>0) {
+                    gustoViewModel.createGroup(
+                        binding3.etGroupName.text.toString(),
+                        binding3.etComent.text.toString()
+                    ) { result ->
+                        when (result) {
+                            1 -> {
+                                itemClick(1)
+                                dialog?.dismiss()
+                            }
                         }
                     }
                 }
