@@ -37,7 +37,8 @@ class CalendarReviewFragment : Fragment() {
     lateinit var adapter: CalendarReviewAdapter
 
     val calendar = Calendar.getInstance()
-    var month = LocalDate.now().monthValue
+    var year = calendar.get(Calendar.YEAR)
+    var month = calendar.get(Calendar.MONTH) +  1
 
     private val gustoViewModel : GustoViewModel by activityViewModels()
 
@@ -46,10 +47,6 @@ class CalendarReviewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCalendarReviewBinding.inflate(inflater, container, false)
-
-        initView()
-        observeData()
-
         return binding.root
     }
 
@@ -61,14 +58,14 @@ class CalendarReviewFragment : Fragment() {
 
     fun initView(){
         adapter = CalendarReviewAdapter(ArrayList(), context,
-                itemClickListener = { reviewId ->
-                    if(reviewId != 0L){
-                        val bundle = Bundle()
-                        bundle.putLong("reviewId", reviewId)
-                        bundle.putString("page","review")
-                        findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail, bundle)
-                    }
-                })
+            itemClickListener = { reviewId ->
+                if(reviewId != 0L){
+                    val bundle = Bundle()
+                    bundle.putLong("reviewId", reviewId)
+                    bundle.putString("page","review")
+                    findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail, bundle)
+                }
+            })
 
         binding.apply {
             recyclerView.adapter = adapter
@@ -78,24 +75,29 @@ class CalendarReviewFragment : Fragment() {
 
             calBtnLeft.setOnClickListener {
                 calendar.add(Calendar.MONTH, -1)
-                monthTextView.text = (calendar.get(Calendar.MONTH) + 1).toString() + "월"
-                month = calendar.get(Calendar.MONTH) + 1
-
+                updateCalendar()
                 observeData()
             }
+
             calBtnRight.setOnClickListener {
                 calendar.add(Calendar.MONTH, 1)
-                monthTextView.text = (calendar.get(Calendar.MONTH) + 1).toString() + "월"
-                month = calendar.get(Calendar.MONTH) + 1
-
+                updateCalendar()
                 observeData()
             }
+
         }
     }
 
-    fun getData(month: Int): LiveData<ResponseCalReview?> {
+    fun updateCalendar() {
+        binding.monthTextView.text = "${calendar.get(Calendar.MONTH) + 1}월" // +1을 해주어야 올바른 월을 표시합니다.
+        year = calendar.get(Calendar.YEAR)
+        month = calendar.get(Calendar.MONTH) + 1 // +1을 해주어야 합니다.
+    }
+
+
+    fun getData(year: Int, month: Int): LiveData<ResponseCalReview?> {
         val liveData = MutableLiveData<ResponseCalReview?>()
-        val dates = LocalDate.of(LocalDate.now().year, month, 1)
+        val dates = LocalDate.of(year, month, 1)
 
         gustoViewModel.calView(null, 100, dates) { result, response ->
             if (result == 1) {
@@ -110,23 +112,20 @@ class CalendarReviewFragment : Fragment() {
     }
 
     fun observeData() {
-        getData(month).observe(viewLifecycleOwner, Observer { response ->
-            setData(response, month)
+        getData(year, month).observe(viewLifecycleOwner, Observer { response ->
+            setData(response, year, month)
         })
     }
 
-    fun setData(response: ResponseCalReview?, month: Int) {
-        val daysInMonth = YearMonth.now().lengthOfMonth()
+    fun setData(response: ResponseCalReview?, year:Int, month: Int) {
+        val daysInMonth = YearMonth.of(year, month).lengthOfMonth()
         val calList = List<ResponseCalReviews?>(daysInMonth){null}.toMutableList()
 
         for(day in 1..daysInMonth){
-            val date = LocalDate.of(LocalDate.now().year, month, day)
-            response?.reviews?.let{
-                it.forEach { item ->
-                    Log.d("calData" ,"${item.visitedDate}와 ${date.toString()}")
-                    if(item.visitedDate == date.toString()){
-                        calList[(day - 1)] = ResponseCalReviews(item.reviewId, item.visitedDate, item.images)
-                    }
+            response?.reviews?.forEach { item ->
+                val visitedDate = LocalDate.parse(item.visitedDate)
+                if (visitedDate.monthValue == month && visitedDate.year == year) {
+                    calList[visitedDate.dayOfMonth - 1] = ResponseCalReviews(item.reviewId, item.visitedDate, item.images)
                 }
             }
         }
