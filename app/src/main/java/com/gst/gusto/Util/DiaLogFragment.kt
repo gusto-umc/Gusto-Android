@@ -3,6 +3,7 @@ package com.gst.gusto.Util
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -172,13 +173,14 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                 dialog?.dismiss()
             }
             binding4.btnCopy.setOnClickListener {
-                val clipboardManager = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-
-                val clipData = ClipData.newPlainText("viewmodel_data", tmpCode.toString())
-
-
-                clipboardManager.setPrimaryClip(clipData)
                 itemClick(1)
+                dialog?.dismiss()
+                val sharingIntent = Intent(Intent.ACTION_SEND)
+                sharingIntent.type = "text/html"
+                val text = gustoViewModel.currentGroupName+tmpCode
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, text)
+                //sharingIntent.`package` = "com.kakao.talk"
+                startActivity(sharingIntent)
             }
 
         }
