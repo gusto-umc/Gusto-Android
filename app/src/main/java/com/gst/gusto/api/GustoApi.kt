@@ -455,4 +455,10 @@ interface GustoApi {
         @Query("size") size: Int
     ):Call<ResponseInstaReview>
 
+    //나의 콘텐츠 공개 여부 조회
+    @GET("users/my-info/publishing")
+    fun myPublishGet(
+        @Header("X-AUTH-TOKEN") token: String
+    ): Call<ResponseMyPublishGet>
+
 }
