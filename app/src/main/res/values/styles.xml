@@ -20,4 +20,9 @@
         <item name="android:progressDrawable">@drawable/custom_ratingbar</item>
     </style>
 
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">@dimen/toolbarTextSize</item>
+        <item name="fontFamily">@font/pretendard_bold</item>
+    </style>
+
 </resources>
