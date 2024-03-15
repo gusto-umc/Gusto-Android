@@ -11,6 +11,7 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +22,11 @@ import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.databinding.StartFragmentLoginBinding
+import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.NidOAuthLogin
+import com.navercorp.nid.oauth.OAuthLoginCallback
+import com.navercorp.nid.profile.NidProfileCallback
+import com.navercorp.nid.profile.data.NidProfileResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -44,19 +50,15 @@ class LoginFragment : Fragment() {
     ): View? {
         binding = StartFragmentLoginBinding.inflate(inflater, container, false)
 
-        binding.wv.apply {
-            webViewClient = WebViewClient()
-            clearCache(true)
-            settings.javaScriptEnabled = true
-            settings.domStorageEnabled = true
-            settings.javaScriptCanOpenWindowsAutomatically = true
-            settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
-        }
+        val naverClientId = getString(R.string.social_login_info_naver_client_id)
+        val naverClientSecret = getString(R.string.social_login_info_naver_client_secret)
+        val naverClientName = getString(R.string.social_login_info_naver_client_name)
+        NaverIdLoginSDK.initialize(requireContext(), naverClientId, naverClientSecret , naverClientName)
 
         binding.btnNaver.setOnClickListener {
-            binding.wv.visibility = View.VISIBLE
             Log.d("안녕", BuildConfig.API_BASE)
-            binding.wv.loadUrl(BuildConfig.API_BASE+"oauth/authorize/naver")
+            startNaverLogin()
+
         }
         binding.btnNoLogin.setOnClickListener {
             val intent = Intent(requireContext(), MainActivity::class.java)
@@ -69,98 +71,63 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.wv.setWebViewClient(object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
 
-                var url = request?.url.toString()
-                Log.d("url",url)
-                if (url.startsWith("https://gustoapp.shop/auth/result")) {
-                    getResponseLogin(url) { result ->
-                        when (result) {
-                            1 -> {
-                                // 1은 회원가입 해야하는 상태
-                                findNavController().navigate(R.id.action_loginFragment_to_nameFragment)
-                            }
-                            0 -> {
-                                // 0은 회원가입 한 상태라 로그인
-                                val intent = Intent(requireContext(), MainActivity::class.java)
-                                startActivity(intent)
-                                requireActivity().finish()
-                            }
-                        }
-                    }
-                    return true
-                } else {
-                    binding.wv.loadUrl(url)
-                    return false
-                }
-            }
-            override fun onPageFinished(view: WebView, url: String) {
-
-            }
-        })
     }
-    private fun getResponseLogin(url : String, callback: (Int) -> Unit) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val headers = fetchHeadersFromUrl(url)
-            var loginOrSign = 1 //0은 회원가입 한 상태라 로그인, 1은 회원가입 해야하는 상태
-            withContext(Dispatchers.Main) {
-                for ((key, value) in headers) {
-                    if(key!=null) {
-                        if(key == "temp-token") {
-                            LoginViewModel.setTempToken(value.get(0))
-                        } else if(key =="X-Auth-Token") {
-                            loginOrSign = 0
-                            LoginViewModel.setAccessToken(value.get(0))
-                        } else if(key =="refresh-Token") {
-                            loginOrSign = 0
-                            LoginViewModel.setRefreshToken(value.get(0))
-                        }
-                    }
-                }
-                callback(loginOrSign)
+    /**
+     * 로그인
+     * authenticate() 메서드를 이용한 로그인 */
+    private fun startNaverLogin(){
+        var naverToken :String? = ""
+
+        val profileCallback = object : NidProfileCallback<NidProfileResponse> {
+            override fun onSuccess(response: NidProfileResponse) {
+                val userId = response.profile?.id
+                Log.d("hellogogogo",response.toString())
+                Toast.makeText(requireContext(), "네이버 아이디 로그인 성공!", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+                //findNavController().navigate(R.id.action_loginFragment_to_nameFragment)
+            }
+            override fun onFailure(httpStatus: Int, message: String) {
+                val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                Toast.makeText(requireContext(), "errorCode: ${errorCode}\n" +"errorDescription: ${errorDescription}", Toast.LENGTH_SHORT).show()
+            }
+            override fun onError(errorCode: Int, message: String) {
+                onFailure(errorCode, message)
             }
         }
-    }
-    private fun fetchHeadersFromUrl(urlString: String): Map<String, List<String>> {
-        val url = URL(urlString)
-        val connection = url.openConnection() as HttpURLConnection
-        try {
-            // 요청 보내기 (헤더 정보를 얻기 위해 빈 응답을 받아옴)
-            connection.requestMethod = "GET"
-            connection.connect()
 
-            val responseCode = connection.responseCode
-            // 응답 본문 가져오기
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                val inputStream = connection.inputStream
-                val reader = BufferedReader(InputStreamReader(inputStream))
-                val response = StringBuilder()
-                var line: String?
-                while (reader.readLine().also { line = it } != null) {
-                    response.append(line)
-                }
-                val gson = Gson()
-                try {
-                    val jsonObject = gson.fromJson(response.toString(), Map::class.java) as? Map<String, Any>
-                    if (jsonObject != null) {
-                        val profileImgUrl = jsonObject["profileImg"] as? String
-                        if (profileImgUrl != null) {
-                            LoginViewModel.setImage(profileImgUrl)
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    // 예외 처리
-                }
-                reader.close()
-            } else {
-                println("Failed to fetch response, response code: $responseCode")
+        /** OAuthLoginCallback을 authenticate() 메서드 호출 시 파라미터로 전달하거나 NidOAuthLoginButton 객체에 등록하면 인증이 종료되는 것을 확인할 수 있습니다. */
+        val oauthLoginCallback = object : OAuthLoginCallback {
+            override fun onSuccess() {
+                // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
+                naverToken = NaverIdLoginSDK.getAccessToken()
+                LoginViewModel.setAccessToken(naverToken.toString())
+                LoginViewModel.setRefreshToken(NaverIdLoginSDK.getRefreshToken().toString())
+
+                var naverRefreshToken = NaverIdLoginSDK.getRefreshToken()
+                var naverExpiresAt = NaverIdLoginSDK.getExpiresAt().toString()
+                var naverTokenType = NaverIdLoginSDK.getTokenType()
+                var naverState = NaverIdLoginSDK.getState().toString()
+
+                Log.d("helpgogogo",
+                    naverExpiresAt+", "+naverTokenType+", "+naverState)
+                //로그인 유저 정보 가져오기
+                NidOAuthLogin().callProfileApi(profileCallback)
             }
-            // 헤더 정보 가져오기
-            return connection.headerFields
-        } finally {
-            connection.disconnect()
+            override fun onFailure(httpStatus: Int, message: String) {
+                val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                //Toast.makeText(this@MainActivity, "errorCode: ${errorCode}\n" +"errorDescription: ${errorDescription}", Toast.LENGTH_SHORT).show()
+            }
+            override fun onError(errorCode: Int, message: String) {
+                onFailure(errorCode, message)
+            }
         }
+
+        NaverIdLoginSDK.authenticate(requireContext(), oauthLoginCallback)
     }
 }
