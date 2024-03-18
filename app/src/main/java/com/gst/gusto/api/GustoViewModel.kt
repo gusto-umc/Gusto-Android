@@ -128,8 +128,8 @@ class GustoViewModel: ViewModel() {
         value = null
     }
     // 나의 콘텐츠 공개 여부 조회
-    private val _myPublishData: MutableLiveData<ResponseMyPublishGet> = MutableLiveData<ResponseMyPublishGet>()
-    val myPublishData: LiveData<ResponseMyPublishGet>
+    private val _myPublishData: MutableLiveData<ResponseMyPublishGet?> = MutableLiveData<ResponseMyPublishGet?>()
+    val myPublishData: LiveData<ResponseMyPublishGet?>
         get() = _myPublishData
 
     //방문 여부
@@ -1830,7 +1830,8 @@ class GustoViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
-                    if(responseBody!=null) {
+                    _myPublishData.value = responseBody
+                    if(responseBody!= null) {
                         Log.e("viewmodel", "1 Successful response: ${response}")
                         callback(1, responseBody)
                     } else {
