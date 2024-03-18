@@ -42,7 +42,7 @@ class ListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentListMainBinding.inflate(inflater, container, false)
-
+        //gustoViewModel.refreshToken()
         val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#FEB520"))
         val colorStateOffList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
         binding.btnGroup.setOnClickListener {

@@ -18,6 +18,13 @@ import java.time.LocalDate
 
 
 interface GustoApi {
+    // TOKEN
+    @POST("auth/reissue-token") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+    fun refreshToken(
+        @Header("X-AUTH-TOKEN") access : String,
+        @Header("refresh-Token") refresh : String
+    ):Call<ResponseBody>
+
     //MAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAP
     @GET("stores/map") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
     fun getCurrentMapStores(
