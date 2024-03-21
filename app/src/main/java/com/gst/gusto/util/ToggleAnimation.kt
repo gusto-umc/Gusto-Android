@@ -1,4 +1,4 @@
-package com.gst.gusto.Util
+package com.gst.gusto.util
 
 
 import android.view.View

@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.mapUtil
+import com.gst.gusto.util.mapUtil
 
 
 class RouteAdapter(val itemList: ArrayList<mapUtil.Companion.MarkerItem>, val activity: MainActivity):

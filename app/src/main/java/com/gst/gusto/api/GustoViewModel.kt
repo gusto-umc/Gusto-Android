@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.mapUtil
+import com.gst.gusto.util.mapUtil
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.RestItem
 import com.gst.gusto.util.GustoApplication
@@ -2068,4 +2068,27 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
+
+    // 나의 콘텐츠 공개 여부 변경
+    fun myPublishSet(publishReview: Boolean, publishPin: Boolean, callback: (Int) -> Unit){
+        service.myPublishSet(xAuthToken, RequestMyPublish(publishReview, publishPin, true)).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel", "Successful response: ${response}")
+                    callback(1)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2)
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(2)
+            }
+        })
+    }
+
 }

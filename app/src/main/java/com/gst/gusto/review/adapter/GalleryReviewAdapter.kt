@@ -2,14 +2,12 @@ package com.gst.gusto.review.adapter
 
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.gst.gusto.Util.util.Companion.setImage
-import com.gst.gusto.api.ResponseInstaReview
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.ResponseInstaReviews
 import com.gst.gusto.databinding.ItemReviewGalleryBinding
 

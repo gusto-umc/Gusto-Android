@@ -8,16 +8,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.search.adapter.SearchStoreAdapter
 import com.gst.gusto.R
-import com.gst.gusto.Util.util
+import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseSearch
 import com.gst.gusto.databinding.FragmentSearchBinding

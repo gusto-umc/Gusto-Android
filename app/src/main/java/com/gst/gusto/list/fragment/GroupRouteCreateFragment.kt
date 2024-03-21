@@ -11,13 +11,12 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.RequestCreateRoute
 import com.gst.gusto.api.RouteList
 import com.gst.gusto.databinding.FragmentListGroupMRouteCreateBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
-import com.gst.gusto.search.RouteSearchFragment
 
 class GroupRouteCreateFragment : Fragment() {
 

@@ -26,11 +26,11 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.mapUtil
-import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
-import com.gst.gusto.Util.mapUtil.Companion.setMapInit
-import com.gst.gusto.Util.mapUtil.Companion.setMarker
-import com.gst.gusto.Util.util
+import com.gst.gusto.util.mapUtil
+import com.gst.gusto.util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.util.mapUtil.Companion.setMapInit
+import com.gst.gusto.util.mapUtil.Companion.setMarker
+import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMapBinding
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter

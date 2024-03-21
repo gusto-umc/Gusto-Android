@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMyRouteStoresBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
