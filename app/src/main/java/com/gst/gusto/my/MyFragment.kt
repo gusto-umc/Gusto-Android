@@ -100,11 +100,6 @@ class MyFragment : Fragment() {
         initViewPager()
     }
 
-    override fun onResume() {
-        super.onResume()
-        initViewPager()
-    }
-
     override fun onPause() {
         super.onPause()
     }

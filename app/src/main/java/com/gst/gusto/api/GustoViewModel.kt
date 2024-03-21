@@ -1,8 +1,6 @@
 package com.gst.gusto.api
 
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,11 +10,10 @@ import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.RestItem
-import com.gst.gusto.util.getSharedPref
+import com.gst.gusto.util.GustoApplication
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -153,9 +150,9 @@ class GustoViewModel: ViewModel() {
     val tokenToastData: LiveData<Unit>
         get() = _tokenToastData
 
-    fun getTokens(context: Context) {
-        xAuthToken = context.getSharedPref().first
-        refreshToken = context.getSharedPref().second
+    fun getTokens() {
+        xAuthToken = GustoApplication.prefs.getSharedPrefs().first
+        refreshToken = GustoApplication.prefs.getSharedPrefs().second
     }
 
     fun refreshToken(){
@@ -166,6 +163,7 @@ class GustoViewModel: ViewModel() {
                     if (response.isSuccessful) {
                         xAuthToken = response.headers().get("X-Auth-Token")?:""
                         refreshToken = response.headers().get("refresh-Token")?:""
+                        GustoApplication.prefs.setSharedPrefs(xAuthToken, refreshToken)
                         Log.d("thisistoken2",xAuthToken)
                     } else if(response.code()==403) {
                         _tokenToastData.value = Unit

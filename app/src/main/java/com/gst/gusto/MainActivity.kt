@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.d(TAG, "Exception -> $e")
         }
-        gustoViewModel.getTokens(this)
+        gustoViewModel.getTokens()
         gustoViewModel.mainActivity = this
 
         gustoViewModel.tokenToastData.observe(this, Observer {
