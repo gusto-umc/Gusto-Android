@@ -13,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.R
 import com.gst.gusto.databinding.ActivityStartBinding
+import com.gst.gusto.util.GustoApplication
 
 class StartActivity : AppCompatActivity() {
     lateinit var binding: ActivityStartBinding
@@ -34,13 +35,11 @@ class StartActivity : AppCompatActivity() {
     override fun finish() {
         val viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
-        val sharedPref = getSharedPreferences("token_pref", Context.MODE_PRIVATE)
-        val editor = sharedPref.edit()
-        editor.putString("accessToken", viewModel.getAccessToken())
-        editor.putString("refreshToken", viewModel.getRefreshToken())
+        GustoApplication.prefs.setSharedPrefs(viewModel.getAccessToken(), viewModel.getRefreshToken())
+
 
         Log.d("tokens", "${viewModel.getRefreshToken()}, ${viewModel.getAccessToken()}")
-        editor.apply()
+
         stopTimer()
 
         super.finish()

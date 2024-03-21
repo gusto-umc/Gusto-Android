@@ -1,7 +1,6 @@
 package com.gst.gusto.api
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,10 +10,10 @@ import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.RestItem
+import com.gst.gusto.util.GustoApplication
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -129,6 +128,10 @@ class GustoViewModel: ViewModel() {
     val searchFeedData:MutableLiveData<ResponseFeedSearchReviews?> = MutableLiveData<ResponseFeedSearchReviews?>().apply{
         value = null
     }
+    // 나의 콘텐츠 공개 여부 조회
+    private val _myPublishData: MutableLiveData<ResponseMyPublishGet?> = MutableLiveData<ResponseMyPublishGet?>()
+    val myPublishData: LiveData<ResponseMyPublishGet?>
+        get() = _myPublishData
 
     //방문 여부
     var whetherVisit : Int?= null
@@ -141,11 +144,15 @@ class GustoViewModel: ViewModel() {
 
 
     // 토큰 얻는 함수
-    lateinit var activity : MainActivity
-    fun getTokens(activity: MainActivity) {
-        xAuthToken = activity.getSharedPref().first
-        refreshToken = activity.getSharedPref().second
-        this.activity = activity
+    // lateinit var activity : MainActivity
+
+    private val _tokenToastData: MutableLiveData<Unit> = MutableLiveData()
+    val tokenToastData: LiveData<Unit>
+        get() = _tokenToastData
+
+    fun getTokens() {
+        xAuthToken = GustoApplication.prefs.getSharedPrefs().first
+        refreshToken = GustoApplication.prefs.getSharedPrefs().second
     }
 
     fun refreshToken(){
@@ -156,9 +163,10 @@ class GustoViewModel: ViewModel() {
                     if (response.isSuccessful) {
                         xAuthToken = response.headers().get("X-Auth-Token")?:""
                         refreshToken = response.headers().get("refresh-Token")?:""
+                        GustoApplication.prefs.setSharedPrefs(xAuthToken, refreshToken)
                         Log.d("thisistoken2",xAuthToken)
                     } else if(response.code()==403) {
-                        Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                        _tokenToastData.value = Unit
                         refreshToken()
                     }  else {
                         Log.e("LoginViewModel", "Unsuccessful response: ${response}")
@@ -188,7 +196,7 @@ class GustoViewModel: ViewModel() {
                         callback(3,null)
                     }
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -219,7 +227,7 @@ class GustoViewModel: ViewModel() {
                     }
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -249,7 +257,7 @@ class GustoViewModel: ViewModel() {
                     }
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -271,7 +279,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}, ${requestRoutesData}")
@@ -305,7 +313,7 @@ class GustoViewModel: ViewModel() {
 
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -352,7 +360,7 @@ class GustoViewModel: ViewModel() {
                     } else callback(2)
 
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -397,7 +405,7 @@ class GustoViewModel: ViewModel() {
                     } else callback(2)
 
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -419,7 +427,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -441,7 +449,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response(Remove): ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response(Remove): ${response}")
@@ -463,7 +471,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response(Add): ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response(add): ${response} ${addList}")
@@ -492,7 +500,7 @@ class GustoViewModel: ViewModel() {
                     }
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -521,7 +529,7 @@ class GustoViewModel: ViewModel() {
                     }
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -549,7 +557,7 @@ class GustoViewModel: ViewModel() {
                         callback(1,tmpRouteList)
                     } else callback(2,null)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -571,7 +579,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else if(response.code()==400) {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -596,7 +604,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}, data : ${response.body()!!}")
                     callback(1, response.body()!!)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -619,7 +627,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -642,7 +650,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -664,7 +672,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -685,7 +693,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -707,7 +715,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}, id:${newOwner}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -729,7 +737,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -751,7 +759,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -780,7 +788,7 @@ class GustoViewModel: ViewModel() {
                         Log.e("viewmodel", "Unsuccessful response: ${response}")
                     }
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -808,7 +816,7 @@ class GustoViewModel: ViewModel() {
                         callback(2,null)
                     }
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -830,7 +838,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -853,7 +861,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -876,7 +884,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else if(response.code()==400) {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -909,7 +917,7 @@ class GustoViewModel: ViewModel() {
                         callback(2,null)
                     }
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 }else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -940,7 +948,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 }else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -970,7 +978,7 @@ class GustoViewModel: ViewModel() {
                         callback(3)
                     }
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("getFeedReview Android", "Unsuccessful response: ${response}")
@@ -984,6 +992,7 @@ class GustoViewModel: ViewModel() {
         })
     }
 
+
     // 팔로우하기
     fun follow(nickname: String,callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
@@ -993,7 +1002,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1015,7 +1024,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1038,7 +1047,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response} ${response.body()}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 }else if(response.code()==404){
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1064,7 +1073,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else if(response.code()==404){
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1096,7 +1105,7 @@ class GustoViewModel: ViewModel() {
                     }
 
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1211,7 +1220,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 }else{
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1237,7 +1246,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel edit", "Successful response: ${response}")
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 }else{
                     Log.e("viewmodel edit", "Unsuccessful response: ${response}")
@@ -1265,7 +1274,7 @@ class GustoViewModel: ViewModel() {
                     myMapCategoryList = response.body()!!
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1288,7 +1297,7 @@ class GustoViewModel: ViewModel() {
                     Log.e("viewmodel", "Successful response: ${response}")
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1312,7 +1321,7 @@ class GustoViewModel: ViewModel() {
                     Log.e("deleteCateogories", "Successful response: ${response}")
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("deleteCateogories", "Unsuccessful response: ${response}")
@@ -1340,7 +1349,7 @@ class GustoViewModel: ViewModel() {
                     myAllCategoryList = response.body()!!
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1368,7 +1377,7 @@ class GustoViewModel: ViewModel() {
                     myAllCategoryList = response.body()!!
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("getAllUserCategory", "Unsuccessful response: ${response}")
@@ -1414,7 +1423,7 @@ class GustoViewModel: ViewModel() {
                     Log.e("viewmodel", "Successful response: ${response}")
                     callback(0, response.body()!!)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1437,7 +1446,7 @@ class GustoViewModel: ViewModel() {
                     Log.e("viewmodel", "Successful response: ${response}")
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1484,7 +1493,7 @@ class GustoViewModel: ViewModel() {
                     }
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 }
                 else {
@@ -1513,7 +1522,7 @@ class GustoViewModel: ViewModel() {
                     myMapStoreList = response.body()!!
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1540,7 +1549,7 @@ class GustoViewModel: ViewModel() {
                     myAllStoreList = response.body()!!
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1567,7 +1576,7 @@ class GustoViewModel: ViewModel() {
                     myAllStoreList = response.body()!!
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("getAllUserStores", "Unsuccessful response: ${response}")
@@ -1613,7 +1622,7 @@ class GustoViewModel: ViewModel() {
                     }
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("getSavedStores", "Unsuccessful response: ${response}")
@@ -1656,7 +1665,7 @@ class GustoViewModel: ViewModel() {
                     myReview = response.body()!!
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1690,7 +1699,7 @@ class GustoViewModel: ViewModel() {
                     Log.e("viewmodel", "Successful response: ${response}")
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1713,7 +1722,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("viewmodel", "Successful response: ${response}")
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1758,7 +1767,7 @@ class GustoViewModel: ViewModel() {
                     callback(0)
 
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("getSearchResult", "Unsuccessful response: ${response}")
@@ -1809,7 +1818,7 @@ class GustoViewModel: ViewModel() {
                         }
 
                     } else if(response.code()==403) {
-                        Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                        _tokenToastData.value = Unit
                         refreshToken()
                     } else {
                         Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1839,7 +1848,7 @@ class GustoViewModel: ViewModel() {
                         callback(2, null)
                     }
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 }else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1868,7 +1877,7 @@ class GustoViewModel: ViewModel() {
                         callback(2, null)
                     }
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 }else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1897,7 +1906,7 @@ class GustoViewModel: ViewModel() {
                         callback(2, null)
                     }
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 }else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1925,7 +1934,7 @@ class GustoViewModel: ViewModel() {
                         callback(2, null)
                     }
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 }else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1953,7 +1962,7 @@ class GustoViewModel: ViewModel() {
                         callback(2, null)
                     }
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 }else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1980,7 +1989,7 @@ class GustoViewModel: ViewModel() {
                     myMapCategoryList = response.body()!! // 서버에서 받아온 카테고리 목록을 저장
                     callback(0)
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -2012,7 +2021,7 @@ class GustoViewModel: ViewModel() {
                         callback(2, null)
                     }
                 } else if(response.code()==403) {
-                    Toast.makeText(activity, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+                    _tokenToastData.value = Unit
                     refreshToken()
                 }else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -2020,6 +2029,40 @@ class GustoViewModel: ViewModel() {
                 }
             }
             override fun onFailure(call: Call<ResponseInstaReview>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3, null)
+            }
+        })
+    }
+
+    // 나의 콘텐츠 공개 여부 조회
+    fun myPublishGet(callback: (Int, ResponseMyPublishGet?) -> Unit){
+        service.myPublishGet(xAuthToken).enqueue(object : Callback<ResponseMyPublishGet> {
+            override fun onResponse(
+                call: Call<ResponseMyPublishGet>,
+                response: Response<ResponseMyPublishGet>
+            ) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    _myPublishData.value = responseBody
+                    if(responseBody!= null) {
+                        Log.e("viewmodel", "1 Successful response: ${response}")
+                        callback(1, responseBody)
+                    } else {
+                        Log.e("viewmodel", "2 Successful response: ${response}")
+                        callback(2, null)
+                    }
+
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                }
+                else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3, null)
+                }
+            }
+            override fun onFailure(call: Call<ResponseMyPublishGet>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
                 callback(3, null)
             }

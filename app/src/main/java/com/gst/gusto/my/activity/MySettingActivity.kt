@@ -3,17 +3,28 @@ package com.gst.gusto.my.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.gst.gusto.R
+import android.util.Log
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.ActivityMySettingBinding
-import com.gst.gusto.start.StartActivity
 
 class MySettingActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMySettingBinding
+    private val gustoViewModel : GustoViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMySettingBinding.inflate(layoutInflater)
 
+        buttonSetting()
+        gustoViewModel.getTokens()
+        getPublishData()
+        setContentView(binding.root)
+    }
+
+    fun buttonSetting() {
         binding.apply {
             btnBack.setOnClickListener{
                 finish()
@@ -23,6 +34,20 @@ class MySettingActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-        setContentView(binding.root)
     }
+
+    fun getPublishData() {
+        gustoViewModel.myPublishGet { result, response ->
+            if(result == 1) {
+                if(response != null) {
+                    Log.d("publish", response.toString())
+                    gustoViewModel.myPublishData.observe(this, Observer { value ->
+                        binding.reviewSwitch.isChecked = value?.publishReview ?: false
+                        binding.pinSwitch.isChecked = value?.publishPin ?: false
+                    })
+                }
+            }
+        }
+    }
+
 }
