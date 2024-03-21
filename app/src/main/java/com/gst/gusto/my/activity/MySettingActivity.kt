@@ -19,6 +19,7 @@ class MySettingActivity : AppCompatActivity() {
         binding = ActivityMySettingBinding.inflate(layoutInflater)
 
         buttonSetting()
+        gustoViewModel.getTokens(this)
         getPublishData()
         setContentView(binding.root)
     }
