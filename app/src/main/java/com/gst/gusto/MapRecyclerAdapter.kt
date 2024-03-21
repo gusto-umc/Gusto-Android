@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.util.Companion.setImage
 
 class MapRecyclerAdapter(val list: ArrayList<String>) : RecyclerView.Adapter<MapRecyclerAdapter.ViewHolder>() {
 

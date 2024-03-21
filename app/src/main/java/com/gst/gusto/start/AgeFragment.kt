@@ -9,11 +9,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.R
-import com.gst.gusto.Util.util
-import com.gst.gusto.Util.util.Companion.toggleLayout
+import com.gst.gusto.util.util
+import com.gst.gusto.util.util.Companion.toggleLayout
 import com.gst.gusto.databinding.StartFragmentAgeBinding
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class AgeFragment : Fragment() {
 

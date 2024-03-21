@@ -1,8 +1,6 @@
 package com.gst.gusto.list.fragment
 
 import android.app.AlertDialog
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Point
@@ -16,26 +14,20 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
-import com.gst.clock.Fragment.ListGroupFragment
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.DiaLogFragment
-import com.gst.gusto.Util.mapUtil
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.DiaLogFragment
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupMBinding
 import com.gst.gusto.list.adapter.GroupViewpagerAdapter
-import com.gst.gusto.list.adapter.LisAdapter
 import java.lang.Math.abs
 
 class GroupFragment : Fragment() {

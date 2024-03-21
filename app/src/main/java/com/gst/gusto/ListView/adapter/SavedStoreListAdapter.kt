@@ -4,15 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.gst.gusto.R
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.ResponseSavedStoreData
-import com.gst.gusto.api.ResponseStoreListItem
-import com.gst.gusto.databinding.CardWxampleBinding
 import com.gst.gusto.databinding.ItemListviewStoreCardBinding
 
 class SavedStoreListAdapter(private var flag : String, private val parentView : View) : ListAdapter<ResponseSavedStoreData, SavedStoreListAdapter.ViewHolder>(DiffCallback) {

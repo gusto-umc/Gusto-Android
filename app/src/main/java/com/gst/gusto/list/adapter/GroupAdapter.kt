@@ -9,11 +9,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.Navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
-import com.gst.gusto.Util.util.Companion.setImage
-import com.gst.gusto.Util.util.Companion.setPopupTwo
+import com.gst.gusto.util.util.Companion.setImage
+import com.gst.gusto.util.util.Companion.setPopupTwo
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.list.fragment.GroupStoresFragment
 

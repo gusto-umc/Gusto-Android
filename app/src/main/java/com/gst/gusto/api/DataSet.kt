@@ -397,3 +397,10 @@ data class ResponseMyPublishGet(
     @SerializedName("publishPin") val publishPin: Boolean,
     @SerializedName("publishRoute") val publishRoute: Boolean,
 )
+
+// 나의 콘텐츠 공개 여부 변경
+data class RequestMyPublish(
+    @SerializedName("publishReview") val publishReview: Boolean,
+    @SerializedName("publishPin") val publishPin: Boolean,
+    @SerializedName("publishRoute") val publishRoute: Boolean,
+)

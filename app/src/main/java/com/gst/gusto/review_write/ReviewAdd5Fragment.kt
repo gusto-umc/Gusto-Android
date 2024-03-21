@@ -1,45 +1,23 @@
 package com.gst.clock.Fragment
 
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.ext.SdkExtensions.getExtensionVersion
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
-import android.util.TypedValue
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
-import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.R
-import com.gst.gusto.Util.util
-import com.gst.gusto.Util.util.Companion.createUpdateProgressRunnable
-import com.gst.gusto.Util.util.Companion.dpToPixels
+import com.gst.gusto.util.util
+import com.gst.gusto.util.util.Companion.dpToPixels
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd5Binding
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 class ReviewAdd5Fragment : Fragment() {
 

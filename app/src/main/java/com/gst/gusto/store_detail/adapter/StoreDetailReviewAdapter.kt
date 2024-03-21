@@ -10,9 +10,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.gst.gusto.ListView.Model.StoreDetailReview
 import com.gst.gusto.R
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.ResponseReviews
 import com.gst.gusto.databinding.ItemStoreDetailReviewBinding
 import java.time.LocalDate

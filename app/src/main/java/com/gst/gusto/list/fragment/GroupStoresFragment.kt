@@ -10,11 +10,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupMStoresBinding
 import com.gst.gusto.list.adapter.GroupAdapter
-import com.gst.gusto.list.adapter.LisAdapter
 import com.gst.gusto.list.adapter.RestItem
 
 class GroupStoresFragment : Fragment() {

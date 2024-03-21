@@ -9,24 +9,18 @@ import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.clearFragmentResult
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.util
-import com.gst.gusto.Util.util.Companion.dpToPixels
+import com.gst.gusto.util.util.Companion.dpToPixels
 import com.gst.gusto.api.GustoViewModel
-import com.gst.gusto.api.ResponseMyReview
 import com.gst.gusto.databinding.FragmentReviewDetailBinding
 import com.gst.gusto.review_write.adapter.ImageViewPagerAdapter
-import com.gst.gusto.review_write.adapter.ReviewHowAdapter
 import java.time.LocalDate
 
 class ReviewDetailFragment : Fragment() {

@@ -4,8 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.ActivityMySettingBinding
 
@@ -22,6 +25,11 @@ class MySettingActivity : AppCompatActivity() {
         gustoViewModel.getTokens()
         getPublishData()
         setContentView(binding.root)
+    }
+
+    override fun onPause() {
+        setPublishData()
+        super.onPause()
     }
 
     fun buttonSetting() {
@@ -48,6 +56,22 @@ class MySettingActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun setPublishData() {
+        with(binding) {
+            val reviewSwitch = this.reviewSwitch.isChecked
+            val pinSwitch = this.pinSwitch.isChecked
+            gustoViewModel.myPublishSet(reviewSwitch,pinSwitch) {result, ->
+            when(result) {
+                1 -> {
+                    Log.d("publishSet", result.toString())
+                }
+                else -> Toast.makeText(this@MySettingActivity, "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
     }
 
 }
