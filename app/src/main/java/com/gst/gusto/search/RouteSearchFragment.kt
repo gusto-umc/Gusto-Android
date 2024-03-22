@@ -1,5 +1,6 @@
 package com.gst.gusto.search
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
@@ -45,8 +47,8 @@ class RouteSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.edtRouteSearchbox.requestFocus()
-        util.openKeyboard(requireActivity())
+        //binding.edtRouteSearchbox.requestFocus()
+        //util.openKeyboard(requireActivity())
 
         /**
          * category server 연결
@@ -147,16 +149,26 @@ class RouteSearchFragment : Fragment() {
             }
         }
         binding.ivRouteSearchbox.setOnClickListener {
+            var handled = false
+            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.edtRouteSearchbox.windowToken, 0)
+            handled = true
             searchRouteKeyword()
+
+            handled
         }
 
         binding.edtRouteSearchbox.setOnKeyListener { v, keyCode, event ->
+            var handled = false
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 // 엔터 눌렀을때 행동
+                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.edtRouteSearchbox.windowToken, 0)
+                handled = true
                 searchRouteKeyword()
             }
-
-            true
+            handled
+            false
         }
 
     }
