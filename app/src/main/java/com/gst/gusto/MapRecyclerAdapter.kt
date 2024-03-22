@@ -27,6 +27,10 @@ class MapRecyclerAdapter(val list: ArrayList<String>) : RecyclerView.Adapter<Map
         //리스트 수를 return
         Log.d("log_test", "${list.take(10).count()}")
         return minOf(10, list.size)
+
+        //   //리스트의 수를 return
+        //        Log.d("log_test","${list.count()}")
+        //        return list.count()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
