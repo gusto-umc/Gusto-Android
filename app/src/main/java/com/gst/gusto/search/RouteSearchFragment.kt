@@ -13,14 +13,11 @@ import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gst.gusto.ListView.Model.CategorySimple
-import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.ListView.adapter.ListViewCategoryAdapter
 import com.gst.gusto.R
-import com.gst.gusto.Util.util
+import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseSearch
 import com.gst.gusto.api.ResponseStoreListItem

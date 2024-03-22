@@ -27,11 +27,11 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.mapUtil
-import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
-import com.gst.gusto.Util.mapUtil.Companion.setMapInit
-import com.gst.gusto.Util.mapUtil.Companion.setMarker
-import com.gst.gusto.Util.util
+import com.gst.gusto.util.mapUtil
+import com.gst.gusto.util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.util.mapUtil.Companion.setMapInit
+import com.gst.gusto.util.mapUtil.Companion.setMarker
+import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMapBinding
 import com.gst.gusto.databinding.StartFragmentAgeBinding
@@ -370,14 +370,26 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         super.onResume()
 
 
+        if (!mapUtil.hasPermission(requireContext())) {
+            requestPermissions(
+                mapUtil.MAPPERMISSIONS,
+                mapUtil.LOCATION_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            if(!::mapView.isInitialized) {/*
+                mapView = MapView(requireContext())
+
+                mapView.setPOIItemEventListener(this)
+                mapView.setMapViewEventListener(this)
+
+                setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)*/
+            }
+        }
+
+
         // 카테고리 조회 및 칩 추가
         getMapCategoryAndAddChips("성수1가1동")
-        mapView = MapView(requireContext())
 
-        mapView.setPOIItemEventListener(this)
-        mapView.setMapViewEventListener(this)
-
-        setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)
 
         // 데이터 넣어둔 변수 : gustoViewModel.myMapCategoryList
         gustoViewModel.getMapCategory(gustoViewModel.dong.value!!){
@@ -702,6 +714,11 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         if (requestCode == mapUtil.LOCATION_PERMISSION_REQUEST_CODE) {
             // 권한 요청 코드가 일치하는 경우
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mapView = MapView(requireContext())
+
+                mapView.setPOIItemEventListener(this)
+                mapView.setMapViewEventListener(this)
+
                 setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)
             } else {
                 // 사용자가 권한을 거부한 경우 또는 권한이 부여되지 않은 경우

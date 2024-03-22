@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMyRouteStoresBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
@@ -34,12 +34,21 @@ class MyRouteStoresFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         itemList = gustoViewModel.markerListLiveData.value!!
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyGone,requireActivity(),1)
-        boardAdapter.notifyDataSetChanged()
+        val nickname = gustoViewModel.profileNickname
+        if(nickname!="") {
+            val boardAdapter = MapRoutesAdapter(itemList,binding.lyGone,requireActivity(),2)
+            boardAdapter.notifyDataSetChanged()
 
-        binding.recyclerView.adapter = boardAdapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            binding.recyclerView.adapter = boardAdapter
+            binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        } else {
+            val boardAdapter = MapRoutesAdapter(itemList,binding.lyGone,requireActivity(),1)
+            boardAdapter.notifyDataSetChanged()
+
+            binding.recyclerView.adapter = boardAdapter
+            binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        }
+
     }
 }

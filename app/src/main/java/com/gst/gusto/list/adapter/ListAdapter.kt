@@ -20,8 +20,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.clock.Fragment.ListRouteFragment
 import com.gst.gusto.R
-import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
-import com.gst.gusto.Util.util
+import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.list.fragment.GroupRouteRoutesFragment
 import kotlinx.coroutines.CoroutineScope

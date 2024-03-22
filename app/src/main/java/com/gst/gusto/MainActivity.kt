@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.ext.SdkExtensions.getExtensionVersion
 import android.util.Base64
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -42,6 +44,8 @@ class MainActivity : AppCompatActivity() {
         navHostFragment = supportFragmentManager.findFragmentById(R.id.fl_container) as NavHostFragment
         navController = navHostFragment.findNavController()
         binding.bottomNavigationView.setupWithNavController(navController)
+        navController.popBackStack()
+        navController.navigate(R.id.fragment_map)
 
         //Log.d("viewmodel","dsasda : ${ getExtensionVersion(Build.VERSION_CODES.R)}")
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -104,8 +108,12 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.d(TAG, "Exception -> $e")
         }
-        gustoViewModel.getTokens(this)
+        gustoViewModel.getTokens()
         gustoViewModel.mainActivity = this
+
+        gustoViewModel.tokenToastData.observe(this, Observer {
+            Toast.makeText(this, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+        })
     }
 
     fun getCon(): NavController {
@@ -129,13 +137,7 @@ class MainActivity : AppCompatActivity() {
     fun popFragment() {
         supportFragmentManager.popBackStack()
     }
-    fun getSharedPref(): Pair<String, String> {
-        val sharedPref = getSharedPreferences("token_pref", Context.MODE_PRIVATE)
-        // 액세스 토큰과 리프레시 토큰을 가져오는 함수
-        val accessToken = sharedPref.getString("accessToken", "")?: ""
-        val refreshToken = sharedPref.getString("refreshToken", "")?: ""
-        return Pair(accessToken, refreshToken)
-    }
+
 
 
 

@@ -36,8 +36,18 @@ class GroupRoutesFragment(val num: Int) : Fragment() {
         else if(num==1) navHostFragment.navController.navigate(R.id.fragment_group_m_route_stores)
         else navHostFragment.navController.navigate(R.id.fragment_group_m_route_create)
     }
-    public fun getCon() : NavController{
-        return navHostFragment.navController
+    public fun getCon() : NavController?{
+        if (::navHostFragment.isInitialized) {
+            // navHostFragment가 초기화된 경우
+            // 여기서 초기화된 navHostFragment를 사용할 수 있습니다.
+            return navHostFragment.navController
+        } else {
+            // navHostFragment가 초기화되지 않은 경우
+            // 초기화되지 않은 상태에 대한 처리를 수행합니다.
+
+            return null
+        }
+
     }
     public fun getNavHost() : NavHostFragment{
         return navHostFragment

@@ -1,8 +1,6 @@
 package com.gst.gusto.list.fragment
 
 import android.app.AlertDialog
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Point
@@ -16,26 +14,20 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
-import com.gst.clock.Fragment.ListGroupFragment
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.DiaLogFragment
-import com.gst.gusto.Util.mapUtil
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.DiaLogFragment
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupMBinding
 import com.gst.gusto.list.adapter.GroupViewpagerAdapter
-import com.gst.gusto.list.adapter.LisAdapter
 import java.lang.Math.abs
 
 class GroupFragment : Fragment() {
@@ -62,10 +54,14 @@ class GroupFragment : Fragment() {
             val frag = adapter.getCurrentFragment()
             Log.d("frag",frag.toString())
             if(frag is GroupRoutesFragment) {
-                if(frag.getCon().currentDestination !=null && (frag.getCon().currentDestination!!.id == R.id.fragment_group_m_route_stores
-                            || frag.getCon().currentDestination!!.id == R.id.fragment_group_m_route_create)) {
-                    frag.getCon().navigate(R.id.fragment_group_m_route_routes)
+                val tmp = frag.getCon()
+                if(tmp!=null) {
+                    if(tmp.currentDestination !=null && (tmp.currentDestination!!.id == R.id.fragment_group_m_route_stores
+                                || tmp.currentDestination!!.id == R.id.fragment_group_m_route_create)) {
+                        tmp.navigate(R.id.fragment_group_m_route_routes)
+                    } else findNavController().popBackStack()
                 } else findNavController().popBackStack()
+
             } else findNavController().popBackStack()
         }
         binding.btnSave.setOnClickListener {
@@ -77,9 +73,13 @@ class GroupFragment : Fragment() {
                 when(result) {
                     1 -> {
                         gustoViewModel.requestRoutesData = null
+                        val tmp = frag.getCon()
+
                         if(frag is GroupRoutesFragment) {
-                            if(frag.getCon().currentDestination !=null && frag.getCon().currentDestination!!.id == R.id.fragment_group_m_route_create) {
-                                frag.getCon().navigate(R.id.fragment_group_m_route_routes)
+                            if(tmp!=null) {
+                                if(tmp.currentDestination !=null && (tmp.currentDestination!!.id == R.id.fragment_group_m_route_stores)) {
+                                    tmp.navigate(R.id.fragment_group_m_route_routes)
+                                } else findNavController().popBackStack()
                             } else findNavController().popBackStack()
                         } else findNavController().popBackStack()
                         binding.btnSave.visibility =View.GONE
@@ -246,6 +246,7 @@ class GroupFragment : Fragment() {
                 1 -> {
                     if(data!=null) {
                         binding.tvName.text = data.groupName
+                        gustoViewModel.currentGroupName = data.groupName
                         binding.tvComment.text = data.groupScript
                         binding.tvNotice.text = data.notice
                         binding.tvPeople.text = "${data.groupMembers.get(0).nickname} 님 외 ${data.groupMembers.size-1}명"
@@ -269,7 +270,7 @@ class GroupFragment : Fragment() {
                 }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
             }
         }
-
+        mPager.adapter = GroupViewpagerAdapter(requireActivity(),GroupRoutesFragment(gustoViewModel.groupFragment),mPager,2)
     }
 
     override fun onDestroy() {
@@ -282,14 +283,13 @@ class GroupFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        mPager.adapter = null
+        //mPager.adapter = null
     }
     override fun onResume() {
         super.onResume()
-        mPager.adapter = GroupViewpagerAdapter(requireActivity(),GroupRoutesFragment(gustoViewModel.groupFragment),mPager,2)
-        if(gustoViewModel.groupFragment>0)
-            mPager.setCurrentItem(1,false)
         if(gustoViewModel.groupFragment > 0)  {
+            mPager.adapter = GroupViewpagerAdapter(requireActivity(),GroupRoutesFragment(gustoViewModel.groupFragment),mPager,2)
+            mPager.setCurrentItem(1,false)
             binding.lyGroup.setBackgroundColor(Color.TRANSPARENT)
         }
     }

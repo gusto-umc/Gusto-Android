@@ -1,8 +1,6 @@
 package com.gst.gusto.my
 
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,7 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.gst.clock.Fragment.MyReviewFragment
 import com.gst.gusto.R
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMyBinding
 import com.gst.gusto.my.activity.MyProfileEditActivity
@@ -98,12 +96,10 @@ class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewPager()
-        gustoViewModel.currentFeedNickname = gustoViewModel.userNickname
     }
 
-    override fun onResume() {
-        super.onResume()
-        initViewPager()
+    override fun onPause() {
+        super.onPause()
     }
 
     private fun initViewPager() {

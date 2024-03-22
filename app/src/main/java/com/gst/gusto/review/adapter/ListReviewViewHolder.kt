@@ -1,11 +1,9 @@
 package com.gst.gusto.review.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.databinding.ItemReviewListBinding
 
 class ListReviewViewHolder(
