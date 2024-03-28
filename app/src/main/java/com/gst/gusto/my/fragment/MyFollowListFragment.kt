@@ -1,13 +1,19 @@
 package com.gst.clock.Fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.Member
 import com.gst.gusto.databinding.FragmentMyFollowListBinding
@@ -39,11 +45,47 @@ class MyFollowListFragment() : Fragment() {
         followList = gustoViewModel.followList
 
         val rv_board = binding.rvFollowList
-        val howAdapter = FollowListAdapter(followList,this)
+        val howAdapter = FollowListAdapter(followList.toMutableList(),this)
         binding.tvTitle.text = gustoViewModel.followListTitleName
 
         rv_board.adapter = howAdapter
         rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvFollowList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val rvPosition =
+                    (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+
+                // 리사이클러뷰 아이템 총개수 (index 접근 이기 때문에 -1)
+                val totalCount =
+                    recyclerView.adapter?.itemCount?.minus(1)
+                Log.d("viewmodelHELPHELP","${rvPosition}, ${totalCount}")
+
+                // 페이징 처리
+                if(rvPosition == totalCount&&binding.progressBar.visibility==View.VISIBLE) {
+                    gustoViewModel.getFollowerP(followList.last().followId) {result, followListP ->
+                        when(result) {
+                            1 -> {
+                                val handler = Handler(Looper.getMainLooper())
+                                handler.postDelayed({
+                                    if (followListP != null) {
+                                        followList = followListP
+                                        howAdapter.addItems(followListP)
+                                    }
+                                }, 1000)
+
+                            }
+                            2-> {
+                                binding.progressBar.visibility= View.GONE
+                            }
+                            3 -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                }
+            }
+        })
 
     }
 

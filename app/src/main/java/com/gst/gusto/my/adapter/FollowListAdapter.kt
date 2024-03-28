@@ -9,11 +9,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.clock.Fragment.MyFollowListFragment
 import com.gst.gusto.R
-import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.Member
+import com.gst.gusto.util.util.Companion.setImage
 
 
-class FollowListAdapter(val itemList: List<Member>, val fragment : MyFollowListFragment):
+class FollowListAdapter(val itemList: MutableList<Member>, val fragment : MyFollowListFragment):
     RecyclerView.Adapter<FollowListAdapter.FollowListViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowListViewHolder {
@@ -32,9 +32,14 @@ class FollowListAdapter(val itemList: List<Member>, val fragment : MyFollowListF
                 fragment.gustoViewModel.currentFeedNickname = itemList[position].nickname
                 fragment.findNavController().navigate(R.id.action_followList_to_otherFragment)
             }
-
         }
     }
+    fun addItems(newItems: List<Member>) {
+        val startPosition = itemList.size // 기존 아이템 리스트의 마지막 인덱스 + 1
+        itemList.addAll(newItems) // 새로운 아이템들을 기존 리스트에 추가
+        notifyItemRangeInserted(startPosition, newItems.size) // 아이템 추가를 RecyclerView에 알림
+    }
+
 
     override fun getItemCount(): Int {
         return itemList.count()
