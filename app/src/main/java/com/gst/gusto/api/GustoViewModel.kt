@@ -1063,6 +1063,31 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
+    // 팔로워 조회 paging
+    fun getFollowerP(lastId : Int,callback: (Int,followList : List<Member>?) -> Unit){
+        service.getFollowerP(xAuthToken,lastId).enqueue(object : Callback<List<Member>> {
+            override fun onResponse(call: Call<List<Member>>, response: Response<List<Member>>) {
+                if (response.isSuccessful) {
+                    val tmpFollowList = response.body()!!
+                    Log.d("viewmodel", "Successful response: ${response} ${response.body()}")
+                    callback(1,tmpFollowList)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                }else if(response.code()==404){
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2,null)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3,null)
+                }
+            }
+            override fun onFailure(call: Call<List<Member>>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3,null)
+            }
+        })
+    }
     // 팔로잉 조회
     fun getFollowing(callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
