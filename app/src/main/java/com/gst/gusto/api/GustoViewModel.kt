@@ -152,7 +152,6 @@ class GustoViewModel: ViewModel() {
 
     fun getTokens() {
         xAuthToken = GustoApplication.prefs.getSharedPrefs().first
-        xAuthToken = "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MTI5ODEyMDMsInN1YiI6ImFjY2Vzcy10b2tlbiIsInV1aWQiOiJmYWI4ZTY2ZC02NmNjLTRjZTEtODgwNC0wYzg5NzNiYWJmNzgiLCJpYXQiOjE3MTIzNzY0MDN9.taX2ffoMSctSLptzuhfmGwn7ieRDGv2Fj2jBWXFb2q8"
         refreshToken = GustoApplication.prefs.getSharedPrefs().second
     }
 
