@@ -64,7 +64,7 @@ class MyFollowListFragment() : Fragment() {
 
                 // 페이징 처리
                 if(rvPosition == totalCount&&binding.progressBar.visibility==View.VISIBLE) {
-                    if(binding.tvTitle.text == "팔로워") {
+                    if(binding.tvTitle.text.toString() == "팔로워") {
                         gustoViewModel.getFollowerP(followList.last().followId) {result, followListP ->
                             when(result) {
                                 1 -> {
@@ -83,7 +83,7 @@ class MyFollowListFragment() : Fragment() {
                                 3 -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                             }
                         }
-                    } else if(binding.tvTitle.text == "팔로잉 중"){
+                    } else if(binding.tvTitle.text.toString() == "팔로잉 중"){
                         gustoViewModel.getFollowingP(followList.last().followId) {result, followListP ->
                             when(result) {
                                 1 -> {
