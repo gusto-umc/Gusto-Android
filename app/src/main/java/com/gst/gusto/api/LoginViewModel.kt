@@ -3,6 +3,7 @@ package com.gst.gusto.api
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.gst.gusto.BuildConfig
+import com.gst.gusto.Util.util
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
@@ -11,6 +12,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
+import java.net.URI
 
 class LoginViewModel: ViewModel() {
     val retrofit = Retrofit.Builder().baseUrl(BuildConfig.API_BASE)
@@ -19,18 +22,17 @@ class LoginViewModel: ViewModel() {
     val service = retrofit.create(LoginApi::class.java)
 
     private lateinit var image : String
-    private lateinit var tmpToken : String
-    private lateinit var nickName : String
-    private lateinit var age : String
-    private lateinit var gender : String
     private var accessToken = ""
     private var refreshToken = ""
+
+    lateinit var provider : String
+    var providerId : String=""
+    var profileImg : File?=null
+    lateinit var nickName : String
+    lateinit var age : String
+    lateinit var gender : String
     fun setImage(image : String) : Boolean {
         this.image = image
-        return true
-    }
-    fun setTempToken(tmpToken : String) : Boolean {
-        this.tmpToken = tmpToken
         return true
     }
     fun setNickName(nickName : String) : Boolean  {
@@ -60,15 +62,8 @@ class LoginViewModel: ViewModel() {
         return refreshToken
     }
     fun signUp(callback: (Int) -> Unit){
-        val info = """
-            {
-                "nickname": "$nickName",
-                "age": "$age",
-                "gender": "$gender",
-                "profileImg" : "$image"
-            }
-        """.trimIndent().toRequestBody("application/json".toMediaTypeOrNull())
-        service.signUp(tmpToken, null,info)
+        val info = Singup(provider,providerId,nickName,age,gender)
+        service.signUp( null,info)
             .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     if (response.isSuccessful) {

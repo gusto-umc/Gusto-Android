@@ -390,3 +390,12 @@ data class LocalCategoryResponse (
     @SerializedName("longtitude") val longitude: Double,
     @SerializedName("latitude") val latitude: Double
 )
+
+// 회원가입
+data class Singup(
+    @SerializedName("provider") val provider: String,
+    @SerializedName("providerId") val providerId: String,
+    @SerializedName("nickname") val nickname: String,
+    @SerializedName("age") val age: String,
+    @SerializedName("gender") val gender: String
+)

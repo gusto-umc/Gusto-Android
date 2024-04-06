@@ -20,9 +20,8 @@ interface LoginApi {
     @Multipart
     @POST("users/sign-up")
     fun signUp(
-        @Header("Temp-Token") tempToken: String,
         @Part profileImg: MultipartBody.Part?,
-        @Part("info") info: RequestBody
+        @Part("info") info: Singup
     ): Call<ResponseBody>
 
     @GET("users/check-nickname/{nickname}")

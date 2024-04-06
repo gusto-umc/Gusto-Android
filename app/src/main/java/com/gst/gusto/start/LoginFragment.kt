@@ -1,43 +1,28 @@
 package com.gst.gusto.start
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import com.google.gson.Gson
 import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.Util.util
 import com.gst.gusto.databinding.StartFragmentLoginBinding
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
+import java.io.File
+import java.net.URI
 
 class LoginFragment : Fragment() {
 
@@ -81,8 +66,13 @@ class LoginFragment : Fragment() {
 
         val profileCallback = object : NidProfileCallback<NidProfileResponse> {
             override fun onSuccess(response: NidProfileResponse) {
-                val userId = response.profile?.id
                 Log.d("hellogogogo",response.toString())
+                val tmpId = response.profile?.id
+                val tmpPI:String? = response.profile?.profileImage
+
+                LoginViewModel.providerId = tmpId ?: ""
+                LoginViewModel.profileImg =  File(tmpPI)
+                LoginViewModel.provider = "NAVER"
                 Toast.makeText(requireContext(), "네이버 아이디 로그인 성공!", Toast.LENGTH_SHORT).show()
 
                 val intent = Intent(requireContext(), MainActivity::class.java)

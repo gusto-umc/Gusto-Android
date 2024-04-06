@@ -2,8 +2,6 @@ package com.gst.clock.Fragment
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -27,9 +25,6 @@ import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd3Binding
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 class ReviewAdd3Fragment : Fragment() {
 

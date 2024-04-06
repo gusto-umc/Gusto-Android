@@ -1,29 +1,23 @@
 package com.gst.clock.Fragment
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.gst.gusto.R
 import com.gst.gusto.Util.util
-import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewDetailEditBinding
 import com.gst.gusto.review_write.adapter.ImageViewPagerAdapter
-import com.gst.gusto.review_write.adapter.ReviewHowAdapter
 import java.time.LocalDate
 
 class ReviewDetailEditFragment : Fragment() {
