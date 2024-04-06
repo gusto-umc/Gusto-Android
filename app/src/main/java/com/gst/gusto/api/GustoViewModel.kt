@@ -152,6 +152,7 @@ class GustoViewModel: ViewModel() {
 
     fun getTokens() {
         xAuthToken = GustoApplication.prefs.getSharedPrefs().first
+        xAuthToken = "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MTI5ODEyMDMsInN1YiI6ImFjY2Vzcy10b2tlbiIsInV1aWQiOiJmYWI4ZTY2ZC02NmNjLTRjZTEtODgwNC0wYzg5NzNiYWJmNzgiLCJpYXQiOjE3MTIzNzY0MDN9.taX2ffoMSctSLptzuhfmGwn7ieRDGv2Fj2jBWXFb2q8"
         refreshToken = GustoApplication.prefs.getSharedPrefs().second
     }
 
@@ -1111,6 +1112,31 @@ class GustoViewModel: ViewModel() {
             override fun onFailure(call: Call<List<Member>>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
                 callback(3)
+            }
+        })
+    }
+    // 팔로잉 조회 paging
+    fun getFollowingP(lastId : Int,callback: (Int,followList : List<Member>?) -> Unit){
+        service.getFollowingP(xAuthToken,lastId).enqueue(object : Callback<List<Member>> {
+            override fun onResponse(call: Call<List<Member>>, response: Response<List<Member>>) {
+                if (response.isSuccessful) {
+                    val tmpFollowList = response.body()!!
+                    Log.d("viewmodel", "Successful response: ${response} ${response.body()}")
+                    callback(1,tmpFollowList)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                }else if(response.code()==404){
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2,null)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3,null)
+                }
+            }
+            override fun onFailure(call: Call<List<Member>>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3,null)
             }
         })
     }

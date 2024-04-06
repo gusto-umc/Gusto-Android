@@ -398,13 +398,17 @@ interface GustoApi {
     @GET("users/follower") // 팔로워 페이징 조회
     fun getFollowerP(
         @Header("X-AUTH-TOKEN") token : String,
-        @Query("followerId") followerId : Int
+        @Query("followId") followerId : Int
     ):Call<List<Member>>
-    @GET("users/following") // 팔로워 조회
+    @GET("users/following") // 팔로잉 조회
     fun getFollowing(
         @Header("X-AUTH-TOKEN") token : String
     ):Call<List<Member>>
-
+    @GET("users/following") // 팔로워 페이징 조회
+    fun getFollowingP(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("followId") followerId : Int
+    ):Call<List<Member>>
 
     @GET("reviews/calView") // 리뷰 모아보기 - 2 (cal view)
     fun calView(
