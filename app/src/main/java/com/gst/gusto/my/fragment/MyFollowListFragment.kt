@@ -60,29 +60,49 @@ class MyFollowListFragment() : Fragment() {
                 // 리사이클러뷰 아이템 총개수 (index 접근 이기 때문에 -1)
                 val totalCount =
                     recyclerView.adapter?.itemCount?.minus(1)
-                Log.d("viewmodelHELPHELP","${rvPosition}, ${totalCount}")
+                Log.d("viewmodelHELPHELP","${followList.last().followId}, ${followList}")
 
                 // 페이징 처리
                 if(rvPosition == totalCount&&binding.progressBar.visibility==View.VISIBLE) {
-                    gustoViewModel.getFollowerP(followList.last().followId) {result, followListP ->
-                        when(result) {
-                            1 -> {
-                                val handler = Handler(Looper.getMainLooper())
-                                handler.postDelayed({
-                                    if (followListP != null) {
-                                        followList = followListP
-                                        howAdapter.addItems(followListP)
-                                    }
-                                }, 1000)
+                    if(binding.tvTitle.text == "팔로워") {
+                        gustoViewModel.getFollowerP(followList.last().followId) {result, followListP ->
+                            when(result) {
+                                1 -> {
+                                    val handler = Handler(Looper.getMainLooper())
+                                    handler.postDelayed({
+                                        if (followListP != null) {
+                                            followList = followListP
+                                            howAdapter.addItems(followListP)
+                                        }
+                                    }, 1000)
 
+                                }
+                                2-> {
+                                    binding.progressBar.visibility= View.GONE
+                                }
+                                3 -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                             }
-                            2-> {
-                                binding.progressBar.visibility= View.GONE
+                        }
+                    } else if(binding.tvTitle.text == "팔로잉 중"){
+                        gustoViewModel.getFollowingP(followList.last().followId) {result, followListP ->
+                            when(result) {
+                                1 -> {
+                                    val handler = Handler(Looper.getMainLooper())
+                                    handler.postDelayed({
+                                        if (followListP != null) {
+                                            followList = followListP
+                                            howAdapter.addItems(followListP)
+                                        }
+                                    }, 1000)
+
+                                }
+                                2-> {
+                                    binding.progressBar.visibility= View.GONE
+                                }
+                                3 -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                             }
-                            3 -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                         }
                     }
-
                 }
             }
         })
