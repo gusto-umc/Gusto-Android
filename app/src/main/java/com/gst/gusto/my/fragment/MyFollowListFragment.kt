@@ -24,6 +24,7 @@ class MyFollowListFragment() : Fragment() {
     lateinit var binding: FragmentMyFollowListBinding
     private var followList: List<Member> = listOf()
     val gustoViewModel : GustoViewModel by activityViewModels()
+    private var more = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +47,7 @@ class MyFollowListFragment() : Fragment() {
 
         val rv_board = binding.rvFollowList
         val howAdapter = FollowListAdapter(followList.toMutableList(),this)
+        howAdapter.addLoading()
         binding.tvTitle.text = gustoViewModel.followListTitleName
 
         rv_board.adapter = howAdapter
@@ -63,7 +65,7 @@ class MyFollowListFragment() : Fragment() {
                 Log.d("viewmodelHELPHELP","${followList.last().followId}, ${followList}")
 
                 // 페이징 처리
-                if(rvPosition == totalCount&&binding.progressBar.visibility==View.VISIBLE) {
+                if(rvPosition == totalCount&&more) {
                     if(binding.tvTitle.text == "팔로워") {
                         gustoViewModel.getFollowerP(followList.last().followId) {result, followListP ->
                             when(result) {
@@ -78,7 +80,9 @@ class MyFollowListFragment() : Fragment() {
 
                                 }
                                 2-> {
-                                    binding.progressBar.visibility= View.GONE
+                                    more = false
+                                    howAdapter.removeLastItem()
+                                    //binding.progressBar.visibility= View.GONE
                                 }
                                 3 -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                             }
@@ -97,7 +101,9 @@ class MyFollowListFragment() : Fragment() {
 
                                 }
                                 2-> {
-                                    binding.progressBar.visibility= View.GONE
+                                    more = false
+                                    howAdapter.removeLastItem()
+                                    //binding.progressBar.visibility= View.GONE
                                 }
                                 3 -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                             }
