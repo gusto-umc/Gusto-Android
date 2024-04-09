@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_fragment_map_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_fragment_map_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/fragment_map_viewpager"
@@ -490,4 +493,24 @@
             android:id="@+id/action_mapListviewRecFragment_to_fragment_map_viewpager"
             app:destination="@id/fragment_map_viewpager" />
     </fragment>
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.gst.gusto.ListView.view.CategoryFragment"
+        android:label="CategoryFragment" >
+        <action
+            android:id="@+id/action_categoryFragment_to_storeFragment"
+            app:destination="@id/storeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/storeFragment"
+        android:name="com.gst.gusto.ListView.view.StoreFragment"
+        android:label="StoreFragment" >
+        <action
+            android:id="@+id/action_storeFragment_to_storeEditFragment"
+            app:destination="@id/storeEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/storeEditFragment"
+        android:name="com.gst.gusto.ListView.view.StoreEditFragment"
+        android:label="StoreEditFragment" />
 </navigation>

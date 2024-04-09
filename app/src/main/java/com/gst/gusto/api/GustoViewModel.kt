@@ -984,6 +984,23 @@ class GustoViewModel: ViewModel() {
     //내 위치 장소보기 카테고리 array
     var myMapCategoryList : List<ResponseMapCategory>? = null
     var myAllCategoryList : List<ResponseMapCategory>? = null
+    var testList : List<ResponseMapCategory> = listOf(
+        ResponseMapCategory(1, "Category1", 1, "PUBLIC", "desc1", 1),
+        ResponseMapCategory(2, "Category2", 2, "PUBLIC", "desc2", 2),
+        ResponseMapCategory(3, "Category3", 3, "PUBLIC", "desc3", 3),
+        ResponseMapCategory(4, "Category4", 4, "PUBLIC", "desc4", 4),
+        ResponseMapCategory(5, "Category5", 5, "PUBLIC", "desc5", 5),
+        ResponseMapCategory(1, "Category1", 1, "PUBLIC", "desc1", 1),
+        ResponseMapCategory(2, "Category2", 2, "PUBLIC", "desc2", 2),
+        ResponseMapCategory(3, "Category3", 3, "PUBLIC", "desc3", 3),
+        ResponseMapCategory(4, "Category4", 4, "PUBLIC", "desc4", 4),
+        ResponseMapCategory(5, "Category5", 5, "PUBLIC", "desc5", 5),
+        ResponseMapCategory(1, "Category1", 1, "PUBLIC", "desc1", 1),
+        ResponseMapCategory(2, "Category2", 2, "PUBLIC", "desc2", 2),
+        ResponseMapCategory(3, "Category3", 3, "PUBLIC", "desc3", 3),
+        ResponseMapCategory(4, "Category4", 4, "PUBLIC", "desc4", 4),
+        ResponseMapCategory(5, "Category5", 5, "PUBLIC", "desc5", 5)
+    )
 
     private val _cateEditFlag = MutableLiveData<Boolean?>(false)
     val cateEditFlag: LiveData<Boolean?>

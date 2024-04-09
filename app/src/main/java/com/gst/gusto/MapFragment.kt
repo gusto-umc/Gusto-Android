@@ -212,7 +212,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         super.onViewCreated(view, savedInstanceState)
         //목록 보기 클릭 리스너 - 민디
         binding.listViewBtn.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
+            //Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_categoryFragment)
         }
 
 
