@@ -1,11 +1,15 @@
 package com.gst.gusto.ListView.view
 
 import android.os.Bundle
+import android.view.ContextMenu
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -46,7 +50,12 @@ class CategoryFragment : Fragment() {
         /**
          * 1. 서버 연결, rv 연결
          */
-        val mCategoryAdapter = CategoryAdapter(view)
+        val mCategoryAdapter = CategoryAdapter(view, object : CategoryAdapter.OptionsMenuClickListener{
+            override fun onOptionsMenuClicked(position: Int) {
+                Toast.makeText(context , "delete clicked" , Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
         gustoViewModel.getAllUserCategory {
                 result ->

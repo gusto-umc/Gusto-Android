@@ -1085,6 +1085,9 @@ class GustoViewModel: ViewModel() {
         return iconResource
     }
 
+    // storeFragment에서 사용하는 선택된 카테고리 정보
+    var selectedCategoryInfo : ResponseMapCategory? = null
+
     // 카테고리 추가 -> 확인 완료
     fun addCategory(categoryName : String,categoryIcon : Int, public : String, desc : String,  callback: (Int) -> Unit){
         var categoryRequestData = RequestAddCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = public, myCategoryScript = desc )

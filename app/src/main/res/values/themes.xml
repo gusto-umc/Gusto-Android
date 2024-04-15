@@ -3,9 +3,12 @@
     <style name="Base.Theme.Gusto" parent="Theme.Material3.DayNight.NoActionBar">
         <item name ="colorPrimary">#FFFFFF</item>
         <item name ="android:windowLightStatusBar">true</item>
+        <item name="popupMenuBackground">@drawable/background_radius_20</item>
+
     </style>
 
-    <style name="Theme.Gusto" parent="Base.Theme.Gusto" />
+    <style name="Theme.Gusto" parent="Base.Theme.Gusto">
+    </style>
 
     <style name="BottomSheetDialogStyle" parent="Theme.Design.BottomSheetDialog">
         <item name="android:background">@drawable/background_radius_top_30</item>
