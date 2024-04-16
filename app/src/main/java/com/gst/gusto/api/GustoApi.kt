@@ -18,6 +18,13 @@ import java.time.LocalDate
 
 
 interface GustoApi {
+    // TOKEN
+    @POST("auth/reissue-token") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+    fun refreshToken(
+        @Header("X-AUTH-TOKEN") access : String,
+        @Header("refresh-Token") refresh : String
+    ):Call<ResponseBody>
+
     //MAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAP
     @GET("stores/map") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
     fun getCurrentMapStores(
@@ -388,11 +395,20 @@ interface GustoApi {
     fun getFollower(
         @Header("X-AUTH-TOKEN") token : String
     ):Call<List<Member>>
-    @GET("users/following") // 팔로워 조회
+    @GET("users/follower") // 팔로워 페이징 조회
+    fun getFollowerP(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("followId") followerId : Int
+    ):Call<List<Member>>
+    @GET("users/following") // 팔로잉 조회
     fun getFollowing(
         @Header("X-AUTH-TOKEN") token : String
     ):Call<List<Member>>
-
+    @GET("users/following") // 팔로워 페이징 조회
+    fun getFollowingP(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("followId") followerId : Int
+    ):Call<List<Member>>
 
     @GET("reviews/calView") // 리뷰 모아보기 - 2 (cal view)
     fun calView(
@@ -454,5 +470,18 @@ interface GustoApi {
         @Query("reviewId") reviewId: Long?,
         @Query("size") size: Int
     ):Call<ResponseInstaReview>
+
+    //나의 콘텐츠 공개 여부 조회
+    @GET("users/my-info/publishing")
+    fun myPublishGet(
+        @Header("X-AUTH-TOKEN") token: String
+    ): Call<ResponseMyPublishGet>
+
+    //나의 콘텐츠 공개 여부 변경
+    @PATCH("users/my-info/publishing")
+    fun myPublishSet(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Body data: RequestMyPublish
+    ): Call<ResponseBody>
 
 }

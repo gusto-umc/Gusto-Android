@@ -16,10 +16,10 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.DiaLogFragment
-import com.gst.gusto.Util.mapUtil
-import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
-import com.gst.gusto.Util.util
+import com.gst.gusto.util.DiaLogFragment
+import com.gst.gusto.util.mapUtil
+import com.gst.gusto.util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.RouteList
 import com.gst.gusto.databinding.FragmentListGroupMRouteMapBinding

@@ -1,7 +1,6 @@
 package com.gst.gusto.list.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,14 +10,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.R
-import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListRouteStoresBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class RouteStoresFragment : Fragment() {
 

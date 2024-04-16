@@ -1,5 +1,6 @@
 package com.gst.gusto.search
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -9,15 +10,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.search.adapter.SearchStoreAdapter
 import com.gst.gusto.R
-import com.gst.gusto.Util.util
+import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseSearch
 import com.gst.gusto.databinding.FragmentSearchBinding
@@ -52,8 +53,8 @@ class SearchFragment : Fragment() {
 
         if(!gustoViewModel.keepFlag){
             // 첫 진임 시
-            binding.edtSearchSearchbox.requestFocus()
-            util.openKeyboard(requireActivity())
+            //binding.edtSearchSearchbox.requestFocus()
+            //util.openKeyboard(requireActivity())
             //저장 rv visibility 설정
             binding.rvSearchKeep.visibility = View.GONE
             binding.tvNoResult.visibility = View.GONE
@@ -117,6 +118,7 @@ class SearchFragment : Fragment() {
         /**
          * 검색 함수
          */
+
         fun searchKeyword(){
             //공백 확인
             if (binding.edtSearchSearchbox.text.isNullOrBlank()) {
@@ -174,17 +176,27 @@ class SearchFragment : Fragment() {
         }
 
         binding.edtSearchSearchbox.setOnKeyListener { v, keyCode, event ->
+            var handled = false
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
                 // 엔터 눌렀을때 행동
+                val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.edtSearchSearchbox.windowToken, 0)
+                handled = true
                 searchKeyword()
             }
-
-            true
+            handled
+            false
         }
 
 
         binding.layoutSearchSearchbox.setOnClickListener {
+            var handled = false
+            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.edtSearchSearchbox.windowToken, 0)
+            handled = true
             searchKeyword()
+
+            handled
         }
 
         /**

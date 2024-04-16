@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.gst.gusto.ListView.Model.StoreSearch
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.ResponseSearch
-import com.gst.gusto.databinding.ItemListviewStoreCardBinding
 import com.gst.gusto.databinding.ItemStoreSearchBinding
 
 class SearchStoreAdapter() : ListAdapter<ResponseSearch, SearchStoreAdapter.ViewHolder>(DiffCallback){

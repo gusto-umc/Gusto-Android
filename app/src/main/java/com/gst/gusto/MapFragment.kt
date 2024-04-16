@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -26,13 +27,14 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.mapUtil
-import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
-import com.gst.gusto.Util.mapUtil.Companion.setMapInit
-import com.gst.gusto.Util.mapUtil.Companion.setMarker
-import com.gst.gusto.Util.util
+import com.gst.gusto.util.mapUtil
+import com.gst.gusto.util.mapUtil.Companion.MarkerItem
+import com.gst.gusto.util.mapUtil.Companion.setMapInit
+import com.gst.gusto.util.mapUtil.Companion.setMarker
+import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMapBinding
+import com.gst.gusto.databinding.StartFragmentAgeBinding
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter
 import net.daum.mf.map.api.CameraUpdateFactory
 import net.daum.mf.map.api.MapPOIItem
@@ -46,7 +48,6 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
     lateinit var binding: FragmentMapBinding
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-
 
     private val TAG = "SOL_LOG"
     lateinit var mapView : MapView
@@ -211,6 +212,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        gustoViewModel.changeDong("")
         //목록 보기 클릭 리스너 - 민디
         binding.listViewBtn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
@@ -248,8 +250,36 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
          */
 
 
+        // 나이대로 표현하기
+        fun getAgeGroupFromAge(ageText: String): String {
+            val age = ageText.toIntOrNull() ?: return "나이 정보가 올바르지 않습니다"
+
+            return when (age) {
+                in 10..19 -> "10"
+                in 20..29 -> "20"
+                in 30..39 -> "30"
+                in 40..49 -> "40"
+                in 50..59 -> "50"
+                in 60..69 -> "60"
+                in 70..79 -> "70"
+                in 80..89 -> "80"
+                in 90..99 -> "90"
+                else -> "기타 연령" // 특정 범위에 속하지 않는 경우
+            }
+        }
 
         binding.fragmentArea.apply {
+
+
+            //사용자에 대한 정보 //
+
+
+            val user_age = binding.root.findViewById<TextView>(R.id.user_age) //화면에 출력되는 나이값
+            val age = binding.root.findViewById<TextView>(R.id.ageBtn) //아직 없길래 임의 값.. 불러오기
+            //val ageGroup = getAgeGroupFromAge(age) //나이대로 변환
+            //user_age.text = ageGroup
+
+            //성별에 대한 정보 불러오기 //
 
         // 사용자에 대한 정보 가져오기
             gustoViewModel.getUserProfile("my") { result, data ->
@@ -260,6 +290,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                             userName1.text = data.nickname
                             userName2.text = data.nickname
                             userName3.text = data.nickname
+
                         }
                     }
                 }

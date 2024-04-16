@@ -18,10 +18,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.gst.gusto.R
-import com.gst.gusto.Util.util
-import com.gst.gusto.Util.util.Companion.convertContentToFile
-import com.gst.gusto.Util.util.Companion.dpToPixels
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.util
+import com.gst.gusto.util.util.Companion.convertContentToFile
+import com.gst.gusto.util.util.Companion.dpToPixels
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd3Binding
 import java.io.File

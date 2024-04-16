@@ -16,8 +16,7 @@ import com.gst.gusto.databinding.FragmentFeedSearchBinding
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import com.gst.gusto.MainActivity
-import com.gst.gusto.Util.util
+import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel
 
 class FeedSearchFragment() : Fragment() {

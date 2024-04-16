@@ -1,4 +1,4 @@
-package com.gst.gusto.Util
+package com.gst.gusto.util
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -9,11 +9,9 @@ import android.graphics.Color
 import android.location.Location
 import android.util.Log
 import android.widget.RelativeLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.LocationServices
-import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import net.daum.mf.map.api.CameraUpdateFactory
 import net.daum.mf.map.api.MapPOIItem

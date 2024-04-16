@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.BounceInterpolator
 import android.view.animation.ScaleAnimation
-import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -22,11 +21,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.R
-import com.gst.gusto.Util.util.Companion.dpToPixels
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.util.Companion.dpToPixels
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentFeedDetailBinding
-import com.gst.gusto.review_write.adapter.HowItem
 import com.gst.gusto.review_write.adapter.ImageViewPagerAdapter
 import com.gst.gusto.review_write.adapter.ReviewHowAdapter
 import java.lang.Math.abs
