@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
@@ -41,7 +42,7 @@ class LoginFragment : Fragment() {
         NaverIdLoginSDK.initialize(requireContext(), naverClientId, naverClientSecret , naverClientName)
 
         binding.btnNaver.setOnClickListener {
-            Log.d("안녕", BuildConfig.API_BASE)
+            //Log.d("안녕", BuildConfig.API_BASE)
             startNaverLogin()
 
         }
@@ -73,12 +74,23 @@ class LoginFragment : Fragment() {
                 LoginViewModel.providerId = tmpId ?: ""
                 LoginViewModel.profileImg =  File(tmpPI)
                 LoginViewModel.provider = "NAVER"
-                Toast.makeText(requireContext(), "네이버 아이디 로그인 성공!", Toast.LENGTH_SHORT).show()
 
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                startActivity(intent)
-                requireActivity().finish()
-                //findNavController().navigate(R.id.action_loginFragment_to_nameFragment)
+                LoginViewModel.login { resultCode ->
+                    when (resultCode) {
+                        1 -> {
+                            val intent = Intent(requireContext(), MainActivity::class.java)
+                            startActivity(intent)
+                            requireActivity().finish()
+                        }
+                        2 -> {
+                            findNavController().navigate(R.id.action_loginFragment_to_nameFragment)
+                        }
+                        else -> {
+                            Toast.makeText(requireContext(), "서버와의 통신 불안정", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
             }
             override fun onFailure(httpStatus: Int, message: String) {
                 val errorCode = NaverIdLoginSDK.getLastErrorCode().code

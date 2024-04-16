@@ -83,6 +83,51 @@ class LoginViewModel: ViewModel() {
                 }
             })
     }
+    fun login(callback: (Int) -> Unit){
+        service.login( Login(provider,providerId))
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response.isSuccessful) {
+                        accessToken = response.headers().get("X-Auth-Token")?:""
+                        refreshToken = response.headers().get("Refresh-Token")?:""
+                        //Log.d("get tokens","$accessToken, $refreshToken")
+                        callback(1)
+                    }else if(response.code() == 404) {
+                        callback(2)
+                    } else {
+                        Log.e("LoginViewModel", "Unsuccessful response: ${response}")
+                        callback(3)
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e("LoginViewModel", "Failed to make the request", t)
+                    callback(3)
+                }
+            })
+    }
+    fun randomNickname(callback: (Int, String) -> Unit){
+        service.randomNickname()
+            .enqueue(object : Callback<Nickname> {
+                override fun onResponse(call: Call<Nickname>, response: Response<Nickname>) {
+                    if (response.isSuccessful) {
+                        if(response.body()!=null) {
+                            callback(1, response.body()!!.nickname)
+                        } else {
+                            callback(2,"")
+                        }
+                    } else {
+                        Log.e("LoginViewModel", "Unsuccessful response: ${response}")
+                        callback(3,"")
+                    }
+                }
+
+                override fun onFailure(call: Call<Nickname>, t: Throwable) {
+                    Log.e("LoginViewModel", "Failed to make the request", t)
+                    callback(3,"")
+                }
+            })
+    }
     fun checkNickname(nickname : String, callback: (Int) -> Unit){
         Log.d("nickname",nickname)
         service.checkNickname(nickname).enqueue(object : Callback<ResponseBody> {

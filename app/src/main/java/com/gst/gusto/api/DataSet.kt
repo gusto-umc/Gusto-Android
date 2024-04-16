@@ -399,3 +399,10 @@ data class Singup(
     @SerializedName("age") val age: String,
     @SerializedName("gender") val gender: String
 )
+data class Login(
+    @SerializedName("provider") val provider: String,
+    @SerializedName("providerId") val providerId: String
+)
+data class Nickname(
+    @SerializedName("nickname") val nickname: String
+)
