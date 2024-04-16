@@ -3,6 +3,7 @@ package com.gst.gusto.api
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.gst.gusto.BuildConfig
+import com.gst.gusto.Util.util
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
@@ -11,6 +12,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
+import java.net.URI
 
 class LoginViewModel: ViewModel() {
     val retrofit = Retrofit.Builder().baseUrl(BuildConfig.API_BASE)
@@ -19,18 +22,17 @@ class LoginViewModel: ViewModel() {
     val service = retrofit.create(LoginApi::class.java)
 
     private lateinit var image : String
-    private lateinit var tmpToken : String
-    private lateinit var nickName : String
-    private lateinit var age : String
-    private lateinit var gender : String
     private var accessToken = ""
     private var refreshToken = ""
+
+    lateinit var provider : String
+    var providerId : String=""
+    var profileImg : File?=null
+    lateinit var nickName : String
+    lateinit var age : String
+    lateinit var gender : String
     fun setImage(image : String) : Boolean {
         this.image = image
-        return true
-    }
-    fun setTempToken(tmpToken : String) : Boolean {
-        this.tmpToken = tmpToken
         return true
     }
     fun setNickName(nickName : String) : Boolean  {
@@ -60,15 +62,8 @@ class LoginViewModel: ViewModel() {
         return refreshToken
     }
     fun signUp(callback: (Int) -> Unit){
-        val info = """
-            {
-                "nickname": "$nickName",
-                "age": "$age",
-                "gender": "$gender",
-                "profileImg" : "$image"
-            }
-        """.trimIndent().toRequestBody("application/json".toMediaTypeOrNull())
-        service.signUp(tmpToken, null,info)
+        val info = Singup(provider,providerId,nickName,age,gender)
+        service.signUp( null,info)
             .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     if (response.isSuccessful) {
@@ -85,6 +80,51 @@ class LoginViewModel: ViewModel() {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e("LoginViewModel", "Failed to make the request", t)
                     callback(2)
+                }
+            })
+    }
+    fun login(callback: (Int) -> Unit){
+        service.login( Login(provider,providerId))
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response.isSuccessful) {
+                        accessToken = response.headers().get("X-Auth-Token")?:""
+                        refreshToken = response.headers().get("Refresh-Token")?:""
+                        //Log.d("get tokens","$accessToken, $refreshToken")
+                        callback(1)
+                    }else if(response.code() == 404) {
+                        callback(2)
+                    } else {
+                        Log.e("LoginViewModel", "Unsuccessful response: ${response}")
+                        callback(3)
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e("LoginViewModel", "Failed to make the request", t)
+                    callback(3)
+                }
+            })
+    }
+    fun randomNickname(callback: (Int, String) -> Unit){
+        service.randomNickname()
+            .enqueue(object : Callback<Nickname> {
+                override fun onResponse(call: Call<Nickname>, response: Response<Nickname>) {
+                    if (response.isSuccessful) {
+                        if(response.body()!=null) {
+                            callback(1, response.body()!!.nickname)
+                        } else {
+                            callback(2,"")
+                        }
+                    } else {
+                        Log.e("LoginViewModel", "Unsuccessful response: ${response}")
+                        callback(3,"")
+                    }
+                }
+
+                override fun onFailure(call: Call<Nickname>, t: Throwable) {
+                    Log.e("LoginViewModel", "Failed to make the request", t)
+                    callback(3,"")
                 }
             })
     }

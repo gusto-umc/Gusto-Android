@@ -391,6 +391,22 @@ data class LocalCategoryResponse (
     @SerializedName("latitude") val latitude: Double
 )
 
+// 회원가입
+data class Singup(
+    @SerializedName("provider") val provider: String,
+    @SerializedName("providerId") val providerId: String,
+    @SerializedName("nickname") val nickname: String,
+    @SerializedName("age") val age: String,
+    @SerializedName("gender") val gender: String
+)
+data class Login(
+    @SerializedName("provider") val provider: String,
+    @SerializedName("providerId") val providerId: String
+)
+data class Nickname(
+    @SerializedName("nickname") val nickname: String
+)
+
 // 나의 콘텐츠 공개 여부 조회
 data class ResponseMyPublishGet(
     @SerializedName("publishReview") val publishReview: Boolean,
