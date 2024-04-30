@@ -1273,6 +1273,9 @@ class GustoViewModel: ViewModel() {
     //추천 맛집
     var mapRecList : List<ResponseSavedStoreData>? = null
 
+    //가게 삭제
+    var selectedStoreIdList : ArrayList<Int> = arrayListOf()
+
 
 
     //가게 카테고리 추가(찜) -> 확인 완, 수정 필요

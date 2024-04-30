@@ -5,9 +5,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.gst.gusto.ListView.adapter.StoreAdapter
+import com.gst.gusto.ListView.adapter.StoreEditAdapter
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.databinding.FragmentStoreEditBinding
 
 class StoreEditFragment : Fragment() {
+
+    private lateinit var binding : FragmentStoreEditBinding
+    private val gustoViewModel : GustoViewModel by activityViewModels()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,8 +31,42 @@ class StoreEditFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_store_edit, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_store_edit, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        /**
+         * 1. 데이터 적용 -> 서버 연결 필요
+         */
+
+
+        /**
+         * 2. rv 연결
+         */
+        val mStoreAdapter = StoreEditAdapter()
+        //서버 연결
+        mStoreAdapter.mContext = context
+        mStoreAdapter.submitList(gustoViewModel.myAllStoreList!!)
+        mStoreAdapter.gustoViewModel = gustoViewModel
+        binding.rvStoreEdit.adapter = mStoreAdapter
+        binding.rvStoreEdit.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        /**
+         * 3. onclick event
+         */
+        binding.ivStoreEditBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+        binding.fabStoreEditDelete.setOnClickListener{
+            //서버 연결
+        }
+
+        /**
+         * 4. 전체 선택
+         */
     }
 
 }
