@@ -287,7 +287,8 @@ data class ResponseInstaReviews(
 // insta (gallery) review 조회 & MyReviewFragment와 OtherReviewFragment
 data class ResponseInstaReview(
     @SerializedName("reviews") val reviews: List<ResponseInstaReviews>,
-    @SerializedName("hasNext") val hasNext: Boolean
+    @SerializedName("hasNext") val hasNext: Boolean,
+    @SerializedName("cursorId") val cursorId: Long,
 )
 
 
