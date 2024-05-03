@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.util.mapUtil
@@ -24,9 +23,8 @@ import java.io.File
 import java.time.LocalDate
 
 class GustoViewModel: ViewModel() {
-    private val retrofit = Retrofit.Builder().baseUrl(BuildConfig.API_BASE)
-        .addConverterFactory(GsonConverterFactory.create()).build()
-    private val service = retrofit.create(GustoApi::class.java)
+
+    private val service = RetrofitInstance.createService(GustoApi::class.java)
     private var xAuthToken = ""
     private var refreshToken = ""
 
