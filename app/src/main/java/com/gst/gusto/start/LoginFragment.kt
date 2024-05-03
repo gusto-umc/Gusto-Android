@@ -15,7 +15,7 @@ import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.util
+import com.gst.gusto.util.util
 import com.gst.gusto.databinding.StartFragmentLoginBinding
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthLogin

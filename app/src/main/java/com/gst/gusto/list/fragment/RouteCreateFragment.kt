@@ -59,38 +59,33 @@ class RouteCreateFragment : Fragment() {
 
         val boardAdapter = MapRoutesAdapter(itemList,binding.lyAddRoute,requireActivity(),0)
         boardAdapter.notifyDataSetChanged()
+        //gustoViewModel.groupRouteCreateFragment = this
 
         binding.rvRoutes.adapter = boardAdapter
         binding.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-        if(gustoViewModel.routeStorTmpData != null) {
-            var data = gustoViewModel.routeStorTmpData
-            if (data != null) {
-                itemList.add(MarkerItem(data.storeId.toLong(), 0, 0,1.1, 1.1, data.storeName, "", false))
-            }
-            boardAdapter.notifyItemInserted(itemList.size-1)
-            if(itemList.size==6) {
-                binding.lyAddRoute.visibility = View.INVISIBLE
-            }
-
-            gustoViewModel.routeStorTmpData = null
-        }
 
         binding.btnPlus.setOnClickListener {
             findNavController().navigate(R.id.action_routeCreateFragment_to_routeSearchFragment)
 
         }
-
+        addStore()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         gustoViewModel.listFragment="route"
     }
-
-    override fun onResume() {
-        super.onResume()
-
+    fun addStore() {
+        if(gustoViewModel.routeStorTmpData!=null) {
+            var data = gustoViewModel.routeStorTmpData
+            if (data != null) {
+                itemList.add(MarkerItem(data.storeId.toLong(), 0, 0,1.1, 1.1, data.storeName, "", false))
+            }
+            binding.rvRoutes.adapter?.notifyItemInserted(itemList.size-1)
+            if(itemList.size==6) {
+                binding.lyAddRoute.visibility = View.INVISIBLE
+            }
+        }
     }
 
 
