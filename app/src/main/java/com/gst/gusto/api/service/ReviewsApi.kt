@@ -1,6 +1,6 @@
 package com.gst.gusto.api.service
 
-import com.gst.gusto.dto.ResponseInstaReview
+import com.gst.gusto.dto.ResponseInstaReviews
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -12,5 +12,5 @@ interface ReviewsApi {
         @Header("X-AUTH-TOKEN") token: String,
         @Query("reviewId") reviewId: Long?,
         @Query("size") size: Int
-    ): Call<ResponseInstaReview>
+    ): Call<ResponseInstaReviews>
 }
