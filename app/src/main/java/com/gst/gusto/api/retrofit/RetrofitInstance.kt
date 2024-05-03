@@ -1,8 +1,7 @@
-package com.gst.gusto.api
+package com.gst.gusto.api.retrofit
 
 import android.util.Log
 import com.gst.gusto.BuildConfig
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
