@@ -25,6 +25,8 @@ class GroupRouteStoresFragment : Fragment() {
     ): View? {
         binding = FragmentListGroupMRouteStoresBinding.inflate(inflater, container, false)
 
+        gustoViewModel.groupFragment = 2
+
         binding.fabEdit.setOnClickListener {
             gustoViewModel.getRouteMap() { result ->
                 when (result) {
