@@ -19,7 +19,7 @@ class ReviewsDataSource(
         return if (response.isSuccessful) {
             response.body()?.let {
                 ApiResponse.Success(it)
-            } ?: ApiResponse.Error(response.code(),"Response body is null")
+            } ?: ApiResponse.Error(response.code(),"Response body is null + ${response.message()}")
         } else {
             ApiResponse.Error(response.code(), response.message())
         }
