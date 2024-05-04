@@ -10,7 +10,11 @@ import retrofit2.await
 class ReviewsDataSource(
     private val reviewsService: ReviewsApi
 ) {
-    suspend fun getInstaViewReview(token: String, reviewId: Long?, size: Int): ApiResponse<ResponseInstaReviews> {
+    suspend fun getInstaViewReview(
+        token: String,
+        reviewId: Long?,
+        size: Int
+    ): ApiResponse<ResponseInstaReviews> {
         val response = reviewsService.instaView(token, reviewId, size)
         return if (response.isSuccessful) {
             response.body()?.let {

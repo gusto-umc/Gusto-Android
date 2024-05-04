@@ -7,10 +7,14 @@ import com.gst.gusto.model.InstaReviews
 class ReviewsRepositoryImpl(
     private val reviewsDataSource: ReviewsDataSource
 ) : ReviewsRepository {
-    override suspend fun getInstaReview(token: String, reviewId: Long?, size: Int): ApiResponse<out Any> {
+    override suspend fun getInstaReview(
+        token: String,
+        reviewId: Long?,
+        size: Int
+    ): ApiResponse<InstaReviews> {
         return when (val response = reviewsDataSource.getInstaViewReview(token, reviewId, size)) {
             is ApiResponse.Success -> ApiResponse.Success(response.data.toDomainModel())
-            is ApiResponse.Error -> response
+            is ApiResponse.Error -> ApiResponse.Error(response.errorCode, response.errorMessage)
         }
     }
 }
