@@ -109,8 +109,29 @@
                     />
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="6dp"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_location"
+                        android:layout_gravity="center_vertical"
+                        />
+                    <TextView
+                        android:id="@+id/tv_store_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="14개"
+                        android:textSize="10sp"
+                        android:fontFamily="@font/pretendard_extrabold"
+                        android:textColor="@color/main_C"
+                        android:layout_marginLeft="4dp"
+                        android:gravity="center_vertical"
+                        />
                 </LinearLayout>
                 <View
                     android:layout_width="match_parent"

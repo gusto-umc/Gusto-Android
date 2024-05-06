@@ -1253,6 +1253,13 @@ class GustoViewModel: ViewModel() {
     /**
      * 가게 api 함수 - mindy
      */
+    var testStoreData : List<ResponseStoreListItem> = listOf(
+        ResponseStoreListItem(0, "store1", "address1", 0, null),
+        ResponseStoreListItem(1, "store2", "address2", 1, null),
+        ResponseStoreListItem(2, "store3", "address3", 2, null),
+        ResponseStoreListItem(3, "store4", "address4", 3, null),
+        ResponseStoreListItem(4, "store5", "address5", 4, null),
+    )
     var selectedDetailStoreId = 1
     var myMapStoreList : List<ResponseStoreListItem>? = null
     var myAllStoreList : List<ResponseStoreListItem>? = null

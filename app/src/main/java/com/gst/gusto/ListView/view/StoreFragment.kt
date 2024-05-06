@@ -43,8 +43,8 @@ class StoreFragment : Fragment() {
          * 1. 데이터 연결
          * viewmodel의 selectedCategoryInfo 변수에서 가져오기
          */
-        binding.ivStoreBack.setImageResource(gustoViewModel.findIconResource(gustoViewModel.selectedCategoryInfo!!.categoryIcon))
-        binding.tvStoreCategoryName.text = gustoViewModel.selectedCategoryInfo!!.categoryName
+        //binding.ivStoreBack.setImageResource(gustoViewModel.findIconResource(gustoViewModel.selectedCategoryInfo!!.categoryIcon))
+        //binding.tvStoreCategoryName.text = gustoViewModel.selectedCategoryInfo!!.categoryName
         //저장 개수
 
 
@@ -55,7 +55,7 @@ class StoreFragment : Fragment() {
         val mStoreAdapter = StoreAdapter(view)
         //서버 연결
         mStoreAdapter.mContext = context
-        mStoreAdapter.submitList(gustoViewModel.myAllStoreList!!)
+        mStoreAdapter.submitList(gustoViewModel.testStoreData!!)
         mStoreAdapter.gustoViewModel = gustoViewModel
         binding.rvStore.adapter = mStoreAdapter
         binding.rvStore.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

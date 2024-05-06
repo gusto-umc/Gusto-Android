@@ -68,6 +68,10 @@ class CategoryFragment : Fragment() {
                 }
                 1 -> {
                     Toast.makeText(context, "fail", Toast.LENGTH_SHORT).show()
+                    mCategoryAdapter.submitList(gustoViewModel.testList)
+                    mCategoryAdapter.viewModel = gustoViewModel
+                    rvCategory.adapter = mCategoryAdapter
+                    rvCategory.layoutManager = LinearLayoutManager(this.requireActivity())
                 }
             }
         }
