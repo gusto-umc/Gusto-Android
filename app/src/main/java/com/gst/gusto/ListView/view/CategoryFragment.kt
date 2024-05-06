@@ -57,11 +57,11 @@ class CategoryFragment : Fragment() {
 
         })
 
-        gustoViewModel.getAllUserCategory {
+        gustoViewModel.getPMyCategory {
                 result ->
             when(result){
                 0 -> {
-                    mCategoryAdapter.submitList(gustoViewModel.testList)
+                    mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
                     mCategoryAdapter.viewModel = gustoViewModel
                     rvCategory.adapter = mCategoryAdapter
                     rvCategory.layoutManager = LinearLayoutManager(this.requireActivity())

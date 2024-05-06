@@ -270,8 +270,6 @@ interface GustoApi {
         @Query("myCategoryId") myCategoryId : MutableList<Int>
     ) : Call<Void>
 
-
-
     //5.카테고리 전체 조회 - 피드-> 서버 배포 후 다시 확인하기
     @GET("myCategories")
     fun getAllCategory(
@@ -284,6 +282,12 @@ interface GustoApi {
     fun getAllUserCategory(
         @Header("X-AUTH-TOKEN") token : String
     ) : Call<List<ResponseMapCategory>>
+
+    //8. 카테고리 전체 조회(paging)
+    @GET("myCategories")
+    fun pGetMyCategory(
+        @Header("X-AUTH-TOKEN") token : String
+    ) : Call<ResponsePMyCategory>
 
     /**
      * 가게
@@ -343,6 +347,8 @@ interface GustoApi {
         @Query("myCategoryId") categoryId: Int?,
         @Query("townName") townName: String
     ) : Call<List<ResponseSavedStore>>
+
+
 
 
     /**

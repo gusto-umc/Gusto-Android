@@ -155,6 +155,12 @@ data class ResponseMapCategory(
     @SerializedName("pinCnt") var pinCnt : Int
 )
 
+// paging 내 카테고리 전체 조회
+data class ResponsePMyCategory(
+    @SerializedName("hasNext") val hasNext : Boolean,
+    @SerializedName("result") val result : List<ResponseMapCategory>
+)
+
 //카테고리 조회- 마이, 피드
 data class ResponseAllCategory(
     @SerializedName("myCategoryId") val myCategoryId : Int,

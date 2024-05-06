@@ -1250,6 +1250,30 @@ class GustoViewModel: ViewModel() {
         })
     }
 
+    fun getPMyCategory(callback: (Int) -> Unit){
+        service.pGetMyCategory(xAuthToken).enqueue(object : Callback<ResponsePMyCategory>{
+            override fun onResponse(
+                call: Call<ResponsePMyCategory>,
+                response: Response<ResponsePMyCategory>
+            ) {
+                if (response.isSuccessful) {
+                    Log.e("getPMyCategory", "Successful response: ${response}")
+                    myAllCategoryList = response.body()!!.result
+                    callback(0)
+                } else {
+                    Log.e("getPMyCategory", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponsePMyCategory>, t: Throwable) {
+                Log.e("getPMyCategory", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
+
     /**
      * 가게 api 함수 - mindy
      */
