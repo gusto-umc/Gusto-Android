@@ -39,7 +39,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
     private val TAG = "MapViewEventListener"
     lateinit var mapView : MapView
     private var returnList = ArrayList<MarkerItem>()
-
+    private var change = false
     private val gustoViewModel : GustoViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,11 +58,28 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                 // 아이템 클릭 이벤트를 처리하는 코드를 작성합니다.
                 when (selectedItem) {
                     1 -> {
+                        change = true
+                        if(gustoViewModel.removeRoute.size>0) {
+                            val routeList = gustoViewModel.removeRoute
+                            iterateWithDelay(routeList) { routeListId ->
+                                gustoViewModel.deleteRouteStore(routeListId) { result ->
+                                    when (result) {
+                                        1 -> {
+                                        }
+                                        else -> {
+                                            Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         if(gustoViewModel.addRoute.size>0) {
                             val tmpList =ArrayList<RouteList>()
-                            var ordinal = returnList.size+1
+                            var ordinal = gustoViewModel.markerListLiveData.value!!.size - gustoViewModel.addRoute.size +1
+                            Log.d("viewmodel","size : ${ordinal}")
                             for(storeId in gustoViewModel.addRoute) {
-                                tmpList.add(RouteList(storeId,ordinal++,null,null,null,null,null))
+                                tmpList.add(RouteList(storeId,
+                                    ordinal++,null,null,null,null,null))
                             }
                             gustoViewModel.addRouteStore(tmpList) { result ->
                                 when (result) {
@@ -84,32 +101,7 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                                 }
                             }
                         }
-                        if(gustoViewModel.removeRoute.size>0) {
-                            var num = 0
-                            for(routeListId in gustoViewModel.removeRoute) {
-                                gustoViewModel.deleteRouteStore(routeListId) { result ->
-                                    when (result) {
-                                        1 -> {
-                                            num++
-                                            if(num == gustoViewModel.removeRoute.size) {
-                                                gustoViewModel.getGroupRouteDetail(gustoViewModel.currentRouteId) { result ->
-                                                    when (result) {
-                                                        1 -> {
-                                                        }
-                                                        else -> {
-                                                            Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else -> {
-                                            Toast.makeText(context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
-                                        }
-                                    }
-                                }
-                            }
-                        }
+
 
                     }
                 }
@@ -124,9 +116,9 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val editMode = arguments?.getBoolean("edit", false) ?: false
-        if(editMode) {
+        Log.d("viewmodel",gustoViewModel.editMode.toString())
+        if(gustoViewModel.editMode) {
+            gustoViewModel.editMode = false
             binding.fabEdit.callOnClick()
         }
 
@@ -148,8 +140,8 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         val compositePageTransformer = CompositePageTransformer()
         compositePageTransformer.addTransformer(
             MarginPageTransformer(
-            util.dpToPixels(4f, resources.displayMetrics).toInt()
-        )
+                util.dpToPixels(4f, resources.displayMetrics).toInt()
+            )
         )
         compositePageTransformer.addTransformer(object : ViewPager2.PageTransformer {
             override fun transformPage(page: View, position: Float) {
@@ -172,9 +164,39 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         mapView.setMapViewEventListener(this)
 
 
-        mapUtil.setMapInit(mapView, binding.kakaoRouteMap, requireContext(), requireActivity(),"route")
-        //mapUtil.setRoute(mapView, itemList)
+        mapUtil.setMapInit(mapView, binding.kakaoRouteMap, requireContext(), requireActivity(),"route",this)
 
+
+
+        if(gustoViewModel.routeStorTmpData != null) {
+            var data = gustoViewModel.routeStorTmpData
+
+            if (data != null) {
+                gustoViewModel.addRoute.add(data.storeId.toLong())
+                gustoViewModel.getStoreDetailQuick(data.storeId.toLong()) {result, data2 ->
+                    when(result) {
+                        1 -> {
+                            if(data2!=null) {
+                                gustoViewModel.markerListLiveData.value!!.add(mapUtil.Companion.MarkerItem(
+                                    data.storeId.toLong(),
+                                    0,
+                                    0,
+                                    data2.latitude,
+                                    data2.longitude,
+                                    data.storeName,
+                                    data.address,
+                                    false
+                                ))
+                                mapUtil.setRoute(mapView, gustoViewModel.markerListLiveData.value!!)
+                            }
+                            binding.fabEdit.callOnClick()
+                            gustoViewModel.routeStorTmpData = null
+                        }
+                        else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
         gustoViewModel.markerListLiveData.observe(viewLifecycleOwner, Observer { markers ->
             Log.d("itemList222",markers.toString())
             mapUtil.setRoute(mapView, markers)
@@ -189,6 +211,12 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
         gustoViewModel.groupFragment = 1
         gustoViewModel.addRoute.clear()
         gustoViewModel.removeRoute.clear()
+        if(!change) {
+            gustoViewModel.markerListLiveData.value?.clear()
+            for(data in returnList) {
+                gustoViewModel.markerListLiveData.value?.add(data)
+            }
+        }
 
     }
 
@@ -259,6 +287,18 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
                 data.address,
                 data.bookMark
             ))
+        }
+    }
+
+    val coroutineScope = CoroutineScope(Dispatchers.Main)
+
+    // 포문을 돌 때 0.1초의 딜레이를 주는 함수
+    fun iterateWithDelay(routeList: ArrayList<Long>, action: (Long) -> Unit) {
+        coroutineScope.launch {
+            for (routeListId in routeList) {
+                action(routeListId)
+                delay(100) // 0.1초의 딜레이를 줍니다.
+            }
         }
     }
 }

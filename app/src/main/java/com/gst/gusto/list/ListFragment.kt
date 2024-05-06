@@ -1,5 +1,7 @@
 package com.gst.gusto.list
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.res.ColorStateList
@@ -72,6 +74,7 @@ class ListFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setFABClickEvent()
         navHostFragment = childFragmentManager.findFragmentById(R.id.fl_list_container) as NavHostFragment
@@ -80,7 +83,6 @@ class ListFragment : Fragment() {
 
         navHostFragment.navController.popBackStack()
         navHostFragment.navController.navigate(R.id.fragment_list_group)
-
 
     }
 
@@ -128,6 +130,10 @@ class ListFragment : Fragment() {
         }
     }
     private fun toggleFab() {
+
+        binding.fabMain.isClickable = false
+        binding.fabInput.isClickable = false
+        binding.fabCreate.isClickable = false
         // 플로팅 액션 버튼 닫기 - 열려있는 플로팅 버튼 집어넣는 애니메이션
         if (isFabOpen) {
             collapseView()
@@ -164,6 +170,14 @@ class ListFragment : Fragment() {
             layoutParams.height = value
             fabBackground.layoutParams = layoutParams
         }
+        animator.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                binding.fabMain.isClickable = true
+                binding.fabInput.isClickable = true
+                binding.fabCreate.isClickable = true
+            }
+        })
 
         animator.start()
     }
@@ -180,7 +194,14 @@ class ListFragment : Fragment() {
             layoutParams.height = value
             fabBackground.layoutParams = layoutParams
         }
-
+        animator.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                binding.fabMain.isClickable = true
+                binding.fabInput.isClickable = true
+                binding.fabCreate.isClickable = true
+            }
+        })
         animator.start()
     }
 

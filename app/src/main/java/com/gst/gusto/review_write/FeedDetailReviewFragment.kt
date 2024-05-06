@@ -2,6 +2,7 @@ package com.gst.clock.Fragment
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,9 +55,7 @@ class FeedDetailReviewFragment : Fragment() {
             if(gustoViewModel.currentFeedNickname!="")
                 findNavController().navigate(R.id.action_feedDetailReview_to_otherFragment)
         }
-        binding.restInfo.setOnClickListener {
-            findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
-        }
+
         chipGroup = binding.chipGroup
 
         return binding.root
@@ -68,19 +67,27 @@ class FeedDetailReviewFragment : Fragment() {
         // 데이터 세팅
         val feedDetail = gustoViewModel.currentFeedData
         binding.tvRestName.text = feedDetail.storeName
+        binding.restInfo.setOnClickListener {
+            gustoViewModel.selectedDetailStoreId = gustoViewModel.currentFeedData.storeId.toInt()
+            findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
+        }
         binding.tvRestLoc.text = feedDetail.address
         binding.tvNickname.text = feedDetail.nickName
         gustoViewModel.currentFeedNickname = feedDetail.nickName
         setImage(binding.ivProfileImage,feedDetail.profileImage,requireContext())
         binding.tvHeartNum.text = "${feedDetail.likeCnt}"
+        Log.d("viewmodel","heart num : ${feedDetail}")
         val imageList = mutableListOf<String>()
         for(image in feedDetail.images) {
             imageList.add(image)
         }
         binding.tvMenuName.text = feedDetail.menuName
-        for(tagNum in feedDetail.hashTags.split(",").mapNotNull { it.toIntOrNull() }) {
-            addChip(gustoViewModel.hashTag[tagNum-1])
+        if(feedDetail.hashTags!=null) {
+            for(tagNum in feedDetail.hashTags) {
+                addChip(gustoViewModel.hashTag[tagNum.toInt()-1])
+            }
         }
+
         binding.tvMemo.text = feedDetail.comment
 
         val viewPager = binding.vpImgSlider
@@ -171,17 +178,6 @@ class FeedDetailReviewFragment : Fragment() {
         chip.typeface = Typeface.createFromAsset(requireActivity().assets, "font/pretendard_bold.otf")
         chip.chipCornerRadius = dpToPixels(41f,resources.displayMetrics)
 
-        // 높이를 20dp로 설정
-        val heightInPixels = dpToPixels(45f, resources.displayMetrics)
-
-        // LayoutParams에 높이 설정
-        val layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            heightInPixels.toInt()
-        )
-
-        // chip에 LayoutParams 할당
-        chip.layoutParams = layoutParams
 
         chipGroup.addView(chip)
     }

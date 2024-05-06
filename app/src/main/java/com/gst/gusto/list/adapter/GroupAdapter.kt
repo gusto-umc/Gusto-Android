@@ -42,10 +42,11 @@ class GroupAdapter(val itemList: ArrayList<RestItem>,val gustoViewModel: GustoVi
         setImage(holder.iv_recomend_profile_image,itemList[position].userProfileImg,holder.itemView.context)
         setImage(holder.iv_rest,itemList[position].storeProfileImg,holder.itemView.context)
         holder.btn_detail.setOnClickListener {
+            gustoViewModel.selectedDetailStoreId = itemList[position].storeId.toInt()
             findNavController(holder.itemView).navigate(R.id.action_groupFragment_to_storeDetailFragment)
         }
         holder.itemView.setOnLongClickListener {
-            setPopupTwo(holder.itemView.context, "구스또레스토랑을\n그룹 맛집에서 삭제핫시겠습니까?", "", 1) { option ->
+            setPopupTwo(holder.itemView.context, "${itemList[position].storeName}을\n그룹 맛집에서 삭제핫시겠습니까?", "", 1) { option ->
                 when (option) {
                     0 -> {
                         gustoViewModel.deleteGroupStore(itemList[position].groupListId) { result ->

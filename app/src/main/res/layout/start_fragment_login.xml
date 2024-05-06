@@ -14,7 +14,7 @@
 
         <ImageView
             android:id="@+id/iv_mascot"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="40dp"
             android:src="@drawable/tmp_login" />
@@ -39,6 +39,7 @@
                 android:id="@+id/btn_kakao"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:visibility="gone"
                 android:src="@drawable/kakao_img" />
 
             <ImageView
@@ -52,6 +53,7 @@
                 android:id="@+id/btn_google"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:visibility="gone"
                 android:src="@drawable/google_img" />
 
         </LinearLayout>

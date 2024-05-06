@@ -1,5 +1,6 @@
 package com.gst.clock.Fragment
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,7 +19,6 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.gst.gusto.R
 import com.gst.gusto.Util.util
-import com.gst.gusto.Util.util.Companion.isPhotoPickerAvailable
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewDetailEditBinding
@@ -57,7 +57,6 @@ class ReviewDetailEditFragment : Fragment() {
         binding.tvDay.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
         binding.tvReviewStoreNameEdit.text = editReview!!.storeName
 
-        // 사진 적용 -> 예정
 
         //ratingbar 적용
         binding.ratingbarTasteEdit.rating = editReview!!.taste.toFloat()
@@ -75,6 +74,15 @@ class ReviewDetailEditFragment : Fragment() {
         // 이미지 슬라이드
         val viewPager = binding.vpImgSlider
         val imageList = mutableListOf<String>()
+        imageList.clear()
+        gustoViewModel.reviewEditImg.clear()
+        //이미지 처리
+        if(!gustoViewModel.myReview!!.img.isNullOrEmpty()){
+            for(i in gustoViewModel.myReview!!.img!!){
+                imageList.add(i)
+            }
+        }
+
 
         val adapter = ImageViewPagerAdapter(imageList)
         viewPager.adapter = adapter
@@ -99,12 +107,20 @@ class ReviewDetailEditFragment : Fragment() {
         viewPager.setPageTransformer(compositePageTransformer)
 
 
+
         //사진 변경
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(4)) { uri ->
             // Callback is invoked after th user selects a media item or closes the photo picker.
             if (uri != null) {
                 for (j in 0 .. uri.size-1) {
                     adapter.setImageView(j,uri[j].toString(),requireContext())
+                    gustoViewModel.reviewEditImg.clear()
+                    gustoViewModel.reviewEditImg.add(
+                        util.convertContentToFile(
+                            requireContext(),
+                            uri[j]
+                        )
+                    )
                 }
 
             } else {
@@ -113,9 +129,7 @@ class ReviewDetailEditFragment : Fragment() {
         }
 
         binding.btnSelectImages.setOnClickListener {
-            if(isPhotoPickerAvailable()) {
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
         //저장
@@ -137,11 +151,21 @@ class ReviewDetailEditFragment : Fragment() {
             //comment
             val comment = binding.edtMemo.text.toString()
 
-
             gustoViewModel.editReview(gustoViewModel.myReviewId!!, taste = taste, spiceness = spiceness, mood = mood, toilet = toilet, parking = parking, menuName = menu, comment = comment, img = img){
                 result ->
                 when(result){
-                    0 -> {}
+                    0 -> {
+                        gustoViewModel.getReview(gustoViewModel.myReviewId!!){
+                            result ->
+                            when(result){
+                                0 -> {
+                                    Log.d("img check edit", gustoViewModel.myReview!!.img.toString())
+                                    gustoViewModel.changeReviewFlag(true)
+                                }
+                                1 -> {}
+                            }
+                        }
+                    }
                     1 -> {}
                 }
             }

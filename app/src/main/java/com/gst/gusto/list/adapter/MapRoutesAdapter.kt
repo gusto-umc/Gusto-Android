@@ -19,6 +19,7 @@ import com.gst.gusto.Util.mapUtil
 class MapRoutesAdapter(
     val itemList: ArrayList<mapUtil.Companion.MarkerItem>, val lyAddRoute: ConstraintLayout,
     val activity: Activity?,
+    i: Int,
 ):
     RecyclerView.Adapter<MapRoutesAdapter.ListViewHolder>(){
 

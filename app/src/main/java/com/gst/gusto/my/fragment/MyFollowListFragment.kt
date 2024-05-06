@@ -35,7 +35,6 @@ class MyFollowListFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         //임시 데이터
         followList = gustoViewModel.followList
 

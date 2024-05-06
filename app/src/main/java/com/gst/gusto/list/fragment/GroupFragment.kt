@@ -30,6 +30,7 @@ import com.gst.clock.Fragment.ListGroupFragment
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.DiaLogFragment
+import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.Util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupMBinding
@@ -50,8 +51,12 @@ class GroupFragment : Fragment() {
     ): View? {
         binding = FragmentListGroupMBinding.inflate(inflater, container, false)
 
+
         binding.ivBack.setOnClickListener {
             val adapter = mPager.adapter as GroupViewpagerAdapter
+
+            gustoViewModel.itemList.clear()
+            gustoViewModel.tmpName =""
 
             binding.btnSave.visibility =View.GONE
             val frag = adapter.getCurrentFragment()
@@ -66,6 +71,7 @@ class GroupFragment : Fragment() {
         binding.btnSave.setOnClickListener {
             val adapter = mPager.adapter as GroupViewpagerAdapter
             val frag = adapter.getCurrentFragment() as GroupRoutesFragment
+
             (frag.getNavHost().childFragmentManager.primaryNavigationFragment as GroupRouteCreateFragment).getRequestRoutesData()
             gustoViewModel.createRoute {result ->
                 when(result) {
@@ -81,6 +87,8 @@ class GroupFragment : Fragment() {
                 }
             }
 
+            gustoViewModel.itemList.clear()
+            gustoViewModel.tmpName =""
         }
         binding.lyPeople.setOnClickListener {
             gustoViewModel.getGroupMembers {result ->
@@ -266,7 +274,10 @@ class GroupFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d("viewmodel","destroy gorup fragment ")
         gustoViewModel.groupFragment = 0
+        gustoViewModel.itemList.clear()
+        gustoViewModel.tmpName =""
     }
 
     override fun onPause() {
@@ -276,8 +287,9 @@ class GroupFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         mPager.adapter = GroupViewpagerAdapter(requireActivity(),GroupRoutesFragment(gustoViewModel.groupFragment),mPager,2)
-        mPager.setCurrentItem(gustoViewModel.groupFragment,false)
-        if(gustoViewModel.groupFragment == 1)  {
+        if(gustoViewModel.groupFragment>0)
+            mPager.setCurrentItem(1,false)
+        if(gustoViewModel.groupFragment > 0)  {
             binding.lyGroup.setBackgroundColor(Color.TRANSPARENT)
         }
     }

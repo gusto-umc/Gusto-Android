@@ -56,15 +56,17 @@ class MapListViewFragment : Fragment() {
         var cateShowAdapter : ListViewCategoryAdapter? = null
         var cateEditAdapter : ListViewEditCategoryAdapter? = null
 
-        gustoViewModel.getTokens(requireActivity() as MainActivity)
+        gustoViewModel.categorySlist.clear()
+
 
 
         fun getMapCategories(){
-            gustoViewModel.getMapCategory("성수1가1동"){
+            gustoViewModel.getMapCategory(gustoViewModel.dong.value!!){
                     result ->
                 when(result){
                     0 -> {
-                        Toast.makeText(context, "연결 성공", Toast.LENGTH_SHORT).show()
+                        Log.d("dong",gustoViewModel.dong.value!!.toString() )
+                        binding.tvTestAll.text = "${gustoViewModel.dong.value}의 저장 맛집"
                         /**
                          * 카테고리Show 연결
                          * 아이템 클릭 리스너
@@ -72,6 +74,7 @@ class MapListViewFragment : Fragment() {
                         cateShowAdapter = ListViewCategoryAdapter("show", requireFragmentManager(), view)
                         cateShowAdapter!!.submitList(gustoViewModel.myMapCategoryList)
                         cateShowAdapter!!.viewModel = gustoViewModel
+                        cateShowAdapter!!.mContext = context
                         categoryRvShow.adapter = cateShowAdapter
                         categoryRvShow.layoutManager = LinearLayoutManager(this.requireActivity())
 
@@ -81,7 +84,7 @@ class MapListViewFragment : Fragment() {
                          */
                         //cateEditAdapter = ListViewEditCategoryAdapter("edit", view, binding.cbMapListviewAll)
                         //데모데이용
-                        cateEditAdapter = ListViewEditCategoryAdapter("show", view, binding.cbMapListviewAll)
+                        cateEditAdapter = ListViewEditCategoryAdapter()
                         cateEditAdapter!!.submitList(gustoViewModel.myMapCategoryList)
                         cateEditAdapter!!.viewModel = gustoViewModel
                         categoryRvEdit.adapter = cateEditAdapter
@@ -108,6 +111,13 @@ class MapListViewFragment : Fragment() {
          * 편집 뒤로가기 클릭 리스
          */
         binding.ivMapListviewEditBack.setOnClickListener {
+            binding.cbMapListviewAll.isChecked = false
+            gustoViewModel.changeCategoryList(false, null)
+            if(cateEditAdapter != null){
+                cateEditAdapter!!.selectedAllCategoryFlag = false
+                categoryRvEdit.adapter = cateEditAdapter
+                categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())
+            }
             goShow()
         }
 
@@ -121,6 +131,7 @@ class MapListViewFragment : Fragment() {
         /**
          * 정렬 순서 클릭 리스너
          */
+        binding.layoutListviewOrder.visibility = View.GONE
         binding.layoutListviewOrder.setOnClickListener {
             // 0 : 최신순, 1 : 오래된 순, 2 : ㄱ 부터, 3: ㅎ 부터, 4 : 방문횟수 높은 순, 5 : 방문회수 낮은 순
             changeOrderFlag()
@@ -129,47 +140,59 @@ class MapListViewFragment : Fragment() {
         /**
          * 전체선택 클릭 리스너 - 카테고리
          */
-        binding.cbMapListviewAll.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.layoutListviewSelect.setOnClickListener {
+            if(binding.cbMapListviewAll.isChecked){
+                binding.cbMapListviewAll.isChecked = false
+                gustoViewModel.changeCategoryList(false, null)
+                gustoViewModel.clearItem()
+                if(cateEditAdapter != null){
+                    cateEditAdapter!!.selectedAllCategoryFlag = false
+                    categoryRvEdit.adapter = cateEditAdapter
+                    categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())
+                }
 
-            if(!isChecked){
-                if(!gustoViewModel.cateRemoveFlag){
-                    gustoViewModel.selectedCategory.clear()
-                }
-                else{
-                    gustoViewModel.cateRemoveFlag = false
-                }
             }
-            gustoViewModel.changeCategoryFlag(isChecked)
-        }
-        gustoViewModel.categoryAllFlag.observe(viewLifecycleOwner, Observer{
-            if(it == true){
-                for(i in gustoViewModel.myMapCategoryList!!){
-                    gustoViewModel.selectedCategory.add(i.myCategoryId)
-                }
+            else{
+                gustoViewModel.clearItem()
                 binding.cbMapListviewAll.isChecked = true
-                cateEditAdapter!!.selectedAllCategoryFlag = true
-                categoryRvEdit.adapter = cateEditAdapter
-                categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())
-            }
-            else if(it == false){
-                if(gustoViewModel.selectedCategory.isNotEmpty()){
-                    binding.cbMapListviewAll.isChecked = false
-                }
-                else{
-                    //어댑터 체크 처리
-                    if(cateEditAdapter != null){
-                        cateEditAdapter!!.selectedAllCategoryFlag = false
-                        categoryRvEdit.adapter = cateEditAdapter
-                        categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())
-                    }
-                    binding.cbMapListviewAll.isChecked = false
+                //flag true로 어댖터 연결
+                if(cateEditAdapter != null){
+                    cateEditAdapter!!.selectedAllCategoryFlag = true
+                    categoryRvEdit.adapter = cateEditAdapter
+                    categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())
                 }
             }
+        }
+
+        binding.cbMapListviewAll.setOnClickListener {
+            if(binding.cbMapListviewAll.isChecked){
+                binding.cbMapListviewAll.isChecked = false
+                gustoViewModel.changeCategoryList(false, null)
+                gustoViewModel.clearItem()
+                if(cateEditAdapter != null){
+                    cateEditAdapter!!.selectedAllCategoryFlag = false
+                    categoryRvEdit.adapter = cateEditAdapter
+                    categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())
+                }
+
+            }
+            else{
+                gustoViewModel.clearItem()
+                binding.cbMapListviewAll.isChecked = true
+                //flag true로 어댖터 연결
+                if(cateEditAdapter != null){
+                    cateEditAdapter!!.selectedAllCategoryFlag = true
+                    categoryRvEdit.adapter = cateEditAdapter
+                    categoryRvEdit.layoutManager = LinearLayoutManager(this.requireActivity())
+                }
+            }
+        }
+
+        gustoViewModel.selectedCategoryList.observe(viewLifecycleOwner, Observer{
+            Log.d("observe", "observe")
+            binding.cbMapListviewAll.isChecked = it.size == gustoViewModel.myMapCategoryList!!.size
         })
 
-        /**
-         * 전체 선택 리스너 - 카테고리 개당(store)
-         */
 
         /**
          * 추가fab 클릭 리스너
@@ -179,7 +202,6 @@ class MapListViewFragment : Fragment() {
                 when(it){
                     0 -> {
                         //추가 성공
-                        Toast.makeText(context, "추가 성공", Toast.LENGTH_SHORT).show()
                         //카테고리 새로 받아와서 연결시키기
                         getMapCategories()
                     }
@@ -199,15 +221,15 @@ class MapListViewFragment : Fragment() {
          * 삭제fab 클릭 리스너
          */
         binding.fabMapListviewDelete.setOnClickListener {
-            Log.d("selected", gustoViewModel.selectedCategory.toString())
-            if(!gustoViewModel.selectedCategory.isNullOrEmpty()){
+
+            if(!gustoViewModel.selectedCategoryList.value.isNullOrEmpty()){
                 //카테고리 삭제 진행
-                gustoViewModel.deleteCategory(gustoViewModel.selectedCategory[0]){
-                    result ->
+                gustoViewModel.deleteCateogories(gustoViewModel.selectedCategoryList.value!!){
+                        result ->
                     when(result){
                         0 -> {
                             //success
-                            Toast.makeText(context, "삭제 성공", Toast.LENGTH_SHORT).show()
+
                             getMapCategories()
                         }
                         1 -> {
@@ -224,33 +246,6 @@ class MapListViewFragment : Fragment() {
             goShow()
         }
 
-        /**
-         * 전체 카테고리, 가게 테스트
-         */
-        binding.tvTestAll.setOnClickListener {
-            gustoViewModel.getAllCategory("gusto"){
-                result ->
-                when(result){
-                    0 ->{}
-                    1 -> {}
-                }
-            }
-            gustoViewModel.getAllStores(6, nickname = "gusto"){
-                result ->
-                when(result){
-                    0 -> {
-                        //성공
-                        Log.d("all stores", "success")
-                        Log.d("all stores", gustoViewModel.myAllStoreList.toString())
-                    }
-                    1 -> {
-                        //실패
-                        Log.e("all stores", "fail")
-                    }
-                }
-            }
-        }
-
 
         /**
          * 편집 시 리스트 새로 불러오기
@@ -261,7 +256,7 @@ class MapListViewFragment : Fragment() {
 
     }
     fun goShow(){
-        binding.layoutListviewOrder.visibility = View.VISIBLE
+        //binding.layoutListviewOrder.visibility = View.VISIBLE
         binding.layoutListviewSelect.visibility = View.GONE
         binding.cbMapListviewAll.isChecked = false
         binding.rvMapListviewCategoryShow.visibility = View.VISIBLE
@@ -272,6 +267,7 @@ class MapListViewFragment : Fragment() {
         binding.ivMapListviewEditBack.visibility = View.GONE
         binding.ivMapListviewBack.visibility = View.VISIBLE
         binding.layoutMapListview.setBackgroundResource(R.drawable.background_review_add)
+
     }
     fun goEdit(){
         binding.layoutListviewOrder.visibility = View.GONE

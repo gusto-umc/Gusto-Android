@@ -3,6 +3,8 @@ package com.gst.gusto.Util
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -30,6 +32,7 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
     lateinit var binding2: BottomsheetdialogJoinBinding
     lateinit var binding3: BottomsheetdialogCreateBinding
     lateinit var binding4: BottomsheetdialogInviteBinding
+    private val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#F27781"))
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         if(layout == R.layout.bottomsheetdialog_routes) {
             binding1 = BottomsheetdialogRoutesBinding.inflate(inflater, container, false)
@@ -52,35 +55,23 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val behavior = BottomSheetBehavior.from(requireView().parent as View)
-        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        //behavior.state = BottomSheetBehavior.STATE_EXPANDED
         if(layout == R.layout.bottomsheetdialog_routes) {
             val itemList = gustoViewModel.markerListLiveData.value as ArrayList
 
-            val boardAdapter = MapRoutesAdapter(itemList,binding1.lyAddRoute,activity)
+            if(itemList.size==6) {
+                binding1.lyAddRoute.visibility = View.INVISIBLE
+            }
+
+            val boardAdapter = MapRoutesAdapter(itemList,binding1.lyAddRoute,activity,0)
             boardAdapter.notifyDataSetChanged()
 
             binding1.rvRoutes.adapter = boardAdapter
             binding1.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            var tmp = 4L
             binding1.btnPlus.setOnClickListener {
-                itemList.add(
-                    mapUtil.Companion.MarkerItem(
-                        tmp,
-                        0,
-                        0,
-                        37.6219001,
-                        127.0743010,
-                        binding1.tvRestName.text.toString(),
-                        "",
-                        false
-                    )
-                )
-                gustoViewModel.addRoute.add(tmp++)  // storeId
-                gustoViewModel.markerListLiveData.value = itemList
-                boardAdapter.notifyItemInserted(itemList.size-1)
-                if(itemList.size==6) {
-                    binding1.lyAddRoute.visibility = View.INVISIBLE
-                }
+                activity.getCon().navigate(R.id.action_groupMRoutMapFragment_to_routeSearchFragment)
+                dismiss()
+
             }
             binding1.btnSave.setOnClickListener {
                 itemClick(1)
@@ -100,9 +91,24 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                         }
                     }
                 }
+                binding2.etCode.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                        // 이벤트 발생 전에 수행할 작업
+                    }
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                        // 텍스트가 변경될 때 수행할 작업
+                        if(binding2.etCode.text.length==12) {
+                            binding2.btnEnter.backgroundTintList
+                        }
+                    }
+                    override fun afterTextChanged(s: Editable?) {
+                        // 이벤트 발생 후에 수행할 작업
+                    }
+                })
             }
         }
         else if(layout == R.layout.bottomsheetdialog_create) {
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
             binding3.btnExit.setOnClickListener {
                 dialog?.dismiss()
             }

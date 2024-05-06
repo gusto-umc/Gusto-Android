@@ -8,7 +8,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.Util.mapUtil
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupMStoresBinding
 import com.gst.gusto.list.adapter.GroupAdapter
@@ -25,17 +27,29 @@ class GroupStoresFragment : Fragment() {
     ): View? {
         binding = FragmentListGroupMStoresBinding.inflate(inflater, container, false)
 
-        binding.fabMain.setOnClickListener {
-            gustoViewModel.addGroupStore(2) {result ->
-                when(result) {
-                    1 -> {
-                        checkGroupStores()
+        if(gustoViewModel.routeStorTmpData != null) {
+            var data = gustoViewModel.routeStorTmpData
+            if(gustoViewModel.groupFragment==0) {
+                gustoViewModel?.addGroupStore(data!!.storeId.toLong()) { result ->
+                    when(result) {
+                        1 -> {
+                            checkGroupStores()
+                        }
+                        2-> Toast.makeText(requireContext(), "이미 해당 그룹에 존재하는 식당입니다.", Toast.LENGTH_SHORT).show()
+                        else -> {
+                            Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                    else -> {
-                        Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                    }
+
                 }
             }
+
+
+            gustoViewModel.routeStorTmpData = null
+        }
+
+        binding.fabMain.setOnClickListener {
+            (requireActivity() as MainActivity).getCon().navigate(R.id.action_groupFragment_to_routeSearchFragment)
         }
 
         return binding.root

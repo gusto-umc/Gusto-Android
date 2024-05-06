@@ -18,7 +18,7 @@ import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseMapCategory
 import com.gst.gusto.databinding.ItemListviewCategoryEditBinding
 
-class ListViewEditCategoryAdapter (private var flag : String, private val parentView : View, private val cbAll : CheckBox) : ListAdapter<ResponseMapCategory, ListViewEditCategoryAdapter.ViewHolder>(
+class ListViewEditCategoryAdapter () : ListAdapter<ResponseMapCategory, ListViewEditCategoryAdapter.ViewHolder>(
     DiffCallback) {
 
 
@@ -47,7 +47,7 @@ class ListViewEditCategoryAdapter (private var flag : String, private val parent
 
         fun bind(simple: ResponseMapCategory){
             data = simple
-            binding.ivItemCategoryEdit.setImageResource(R.drawable.category_icon_1)
+            binding.ivItemCategoryEdit.setImageResource(viewModel!!.findIconResource(simple.categoryIcon))
             binding.tvItemCategoryEditTitle.text = simple.categoryName
             binding.tvItemCategoryEditCount.text = "${simple.pinCnt}개"
         }
@@ -70,68 +70,74 @@ class ListViewEditCategoryAdapter (private var flag : String, private val parent
 
         //카테고리s 전체 선택 시
         if(selectedAllCategoryFlag == true){
+            viewModel!!.changeCategoryList(true, holder.data!!.myCategoryId)
             holder.cb.isChecked = true
         }
-        else{
+        else if(selectedAllCategoryFlag == false){
             holder.cb.isChecked = false
         }
+        else{
 
-        //cb처리
-        holder.cb.setOnCheckedChangeListener { buttonView, isChecked ->
+        }
+
+        holder.cb.setOnCheckedChangeListener{ view, isChecked ->
             if(isChecked){
-                //전체 선택 여부 확인
-                Log.d("categoryId", holder.data!!.toString())
-                viewModel!!.selectedCategory.add(holder.data!!.myCategoryId)
-                if(viewModel!!.selectedCategory.size == viewModel!!.myMapCategoryList!!.size){
-                    viewModel!!.changeCategoryFlag(true)
-                }
+                viewModel!!.addItem(holder.data!!.myCategoryId)
             }
             else{
-                viewModel!!.selectedCategory.remove(holder.data!!.myCategoryId)
-                viewModel!!.cateRemoveFlag = true
-                cbAll.isChecked = false
+                viewModel!!.removeItem(holder.data!!.myCategoryId)
             }
         }
-
 
         holder.updownLayout.setOnClickListener {
-            if(holder.data?.pinCnt != 0){
-                if(openFlag){
-                    holder.storeRv.visibility = View.GONE
-                    holder.ivUpDown.setImageResource(R.drawable.arrow_down_2_img)
-                    openFlag = false
-                    //뷰모델에 신호 -> 해당 카테고리 외에 숨기기
-                }
-                else{
-                    //뷰모델에 신호 -> 모든 카테고리 활성화
-                    holder.storeRv.visibility = View.VISIBLE
-                    holder.ivUpDown.setImageResource(R.drawable.arrow_up_1_img)
-                    openFlag = true
-                    /**
-                     * storeRv 연결
-                     */
-                    viewModel!!.getMapStores(holder.data!!.myCategoryId, townName = "성수1가1동"){
-                            result ->
-                        when(result){
-                            0 -> {
-                                //성공
-                                val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
-                                mStoreAdapter.submitList(viewModel!!.myMapStoreList!!)
-                                holder.storeRv.adapter = mStoreAdapter
-                                holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
-                            }
-                            1 -> {
-                                //실패
-                                Log.d("store checking", "fail")
-                            }
-                        }
-                    }
-                }
+            if(holder.cb.isChecked){
+                holder.cb.isChecked = false
             }
-            else {
+            else{
+                holder.cb.isChecked = true
+            }
 
-            }
         }
+
+
+//        holder.updownLayout.setOnClickListener {
+//            if(holder.data?.pinCnt != 0){
+//                if(openFlag){
+//                    holder.storeRv.visibility = View.GONE
+//                    holder.ivUpDown.setImageResource(R.drawable.arrow_down_2_img)
+//                    openFlag = false
+//                    //뷰모델에 신호 -> 해당 카테고리 외에 숨기기
+//                }
+//                else{
+//                    //뷰모델에 신호 -> 모든 카테고리 활성화
+//                    holder.storeRv.visibility = View.VISIBLE
+//                    holder.ivUpDown.setImageResource(R.drawable.arrow_up_1_img)
+//                    openFlag = true
+//                    /**
+//                     * storeRv 연결
+//                     */
+//                    viewModel!!.getMapStores(holder.data!!.myCategoryId, townName = "성수1가1동"){
+//                            result ->
+//                        when(result){
+//                            0 -> {
+//                                //성공
+//                                val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
+//                                mStoreAdapter.submitList(viewModel!!.myMapStoreList!!)
+//                                holder.storeRv.adapter = mStoreAdapter
+//                                holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
+//                            }
+//                            1 -> {
+//                                //실패
+//                                Log.d("store checking", "fail")
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            else {
+//
+//            }
+//        }
 
         if(holder.data?.pinCnt!! <= 0) {
             holder.ivUpDown.imageTintList = ColorStateList.valueOf(Color.parseColor("#ECECEC"))

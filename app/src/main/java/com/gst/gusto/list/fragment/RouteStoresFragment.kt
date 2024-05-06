@@ -1,7 +1,6 @@
 package com.gst.gusto.list.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +14,6 @@ import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListRouteStoresBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class RouteStoresFragment : Fragment() {
 
@@ -39,9 +34,8 @@ class RouteStoresFragment : Fragment() {
             gustoViewModel.getRouteMap() { result ->
                 when (result) {
                     1 -> {
-                        val bundle = Bundle()
-                        bundle.putBoolean("edit",true)
-                        findNavController().navigate(R.id.action_routeStoresFragment_to_groupMRMFragment,bundle)
+                        gustoViewModel.editMode = true
+                        findNavController().navigate(R.id.action_routeStoresFragment_to_groupMRMFragment)
                     }
                     else -> {
                         Toast.makeText(context,"서버와의 연결 불안정", Toast.LENGTH_SHORT ).show()
@@ -70,7 +64,7 @@ class RouteStoresFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         itemList = gustoViewModel.markerListLiveData.value!!
-        val boardAdapter = MapRoutesAdapter(itemList,binding.lyNull,requireActivity())
+        val boardAdapter = MapRoutesAdapter(itemList,binding.lyNull,requireActivity(),0)
         boardAdapter.notifyDataSetChanged()
 
         binding.tvRouteName.text = gustoViewModel.routeName

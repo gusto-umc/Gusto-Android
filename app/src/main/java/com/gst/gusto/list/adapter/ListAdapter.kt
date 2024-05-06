@@ -149,28 +149,48 @@ class LisAdapter(
 
             } else if(option == 3){
                 // 마이에서 루트 리스트 들어가기
-                gustoViewModel.getGroupRouteDetail(itemList[position].groupId) { result ->
-                    when (result) {
-                        1 -> {
-                            gustoViewModel.currentRouteId = itemList[position].groupId
-                            CoroutineScope(Dispatchers.Main).launch {
-                                delay(50)
+                val nickname = gustoViewModel.profileNickname
+                Log.d("viewmodel","nickname ${nickname}")
+                if(nickname=="") {
+                    gustoViewModel.getGroupRouteDetail(itemList[position].groupId) { result ->
+                        when (result) {
+                            1 -> {
                                 CoroutineScope(Dispatchers.Main).launch {
                                     delay(50)
-                                    Navigation.findNavController(holder.itemView).navigate(R.id.action_myRouteRoutesFragment_to_myRouteStoresFragment)
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        delay(50)
+                                        Navigation.findNavController(holder.itemView).navigate(R.id.action_myRouteRoutesFragment_to_myRouteStoresFragment)
+                                    }
                                 }
                             }
+                            else -> {
+                                Toast.makeText(holder.itemView.context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                            }
                         }
-                        else -> {
-                            Toast.makeText(holder.itemView.context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                    }
+                } else {
+                    gustoViewModel.getOtherRouteDetail(itemList[position].groupId,nickname) { result ->
+                        when (result) {
+                            1 -> {
+                                Log.d("viewmodel","other view clear")
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    delay(50)
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        delay(50)
+                                        Navigation.findNavController(holder.itemView).navigate(R.id.action_myRouteRoutesFragment_to_myRouteStoresFragment)
+                                    }
+                                }
+                            }
+                            else -> {
+                                Toast.makeText(holder.itemView.context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                            }
                         }
                     }
                 }
-
             }
         }
         holder.btn_remove.setOnClickListener {
-            util.setPopupTwo(holder.itemView.context,"구스또레스토랑을\n그룹 맛집에서 삭제하시겠습니까?","",1) { yesOrNo ->
+            util.setPopupTwo(holder.itemView.context,"${itemList[position].groupName}을\n내 루트에서 삭제하시겠습니까?","",1) { yesOrNo ->
                 when (yesOrNo) {
                     0 -> {
                         if(option==1) {
