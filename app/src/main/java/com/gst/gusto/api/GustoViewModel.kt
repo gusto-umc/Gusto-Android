@@ -982,8 +982,8 @@ class GustoViewModel: ViewModel() {
     //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 
     //내 위치 장소보기 카테고리 array
-    var myMapCategoryList : List<ResponseMapCategory>? = null
-    var myAllCategoryList : List<ResponseMapCategory>? = null
+    var myMapCategoryList : ArrayList<ResponseMapCategory>? = null
+    var myAllCategoryList : ArrayList<ResponseMapCategory> = arrayListOf()
     var testList : List<ResponseMapCategory> = listOf(
         ResponseMapCategory(1, "Category1", 1, "PUBLIC", "desc1", 1),
         ResponseMapCategory(2, "Category2", 2, "PUBLIC", "desc2", 2),
@@ -1135,10 +1135,10 @@ class GustoViewModel: ViewModel() {
     }
     // 카테고리 조회(위치 기반, 내 위치 장소보기) -> 확인 완료
     fun getMapCategory(townName : String, callback: (Int) -> Unit){
-        service.getMapCategory(xAuthToken, townName = townName).enqueue(object :Callback<List<ResponseMapCategory>>{
+        service.getMapCategory(xAuthToken, townName = townName).enqueue(object :Callback<ArrayList<ResponseMapCategory>>{
             override fun onResponse(
-                call: Call<List<ResponseMapCategory>>,
-                response: Response<List<ResponseMapCategory>>
+                call: Call<ArrayList<ResponseMapCategory>>,
+                response: Response<ArrayList<ResponseMapCategory>>
             ) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", response.body()!!.toString())
@@ -1151,7 +1151,7 @@ class GustoViewModel: ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<List<ResponseMapCategory>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<ResponseMapCategory>>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
                 callback(1)
             }
@@ -1209,7 +1209,7 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
                     Log.d("getAllMap", response.body()!!.toString())
-                    myAllCategoryList = response.body()!!
+                    //myAllCategoryList = response.body()!!
                     callback(0)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1226,10 +1226,10 @@ class GustoViewModel: ViewModel() {
     }
     //카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
     fun getAllUserCategory(callback: (Int) -> Unit){
-        service.getAllUserCategory(xAuthToken).enqueue(object : Callback<List<ResponseMapCategory>>{
+        service.getAllUserCategory(xAuthToken).enqueue(object : Callback<ArrayList<ResponseMapCategory>>{
             override fun onResponse(
-                call: Call<List<ResponseMapCategory>>,
-                response: Response<List<ResponseMapCategory>>
+                call: Call<ArrayList<ResponseMapCategory>>,
+                response: Response<ArrayList<ResponseMapCategory>>
             ) {
                 if (response.isSuccessful) {
                     Log.e("getAllUserCategory", "Successful response: ${response}")
@@ -1242,7 +1242,7 @@ class GustoViewModel: ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<List<ResponseMapCategory>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<ResponseMapCategory>>, t: Throwable) {
                 Log.e("getAllUserCategory", "Failed to make the request", t)
                 callback(1)
             }
@@ -1250,29 +1250,44 @@ class GustoViewModel: ViewModel() {
         })
     }
 
-    fun getPMyCategory(callback: (Int) -> Unit){
-        service.pGetMyCategory(xAuthToken).enqueue(object : Callback<ResponsePMyCategory>{
-            override fun onResponse(
-                call: Call<ResponsePMyCategory>,
-                response: Response<ResponsePMyCategory>
-            ) {
-                if (response.isSuccessful) {
-                    Log.e("getPMyCategory", "Successful response: ${response}")
-                    myAllCategoryList = response.body()!!.result
-                    callback(0)
-                } else {
-                    Log.e("getPMyCategory", "Unsuccessful response: ${response}")
-                    callback(1)
+
+    fun getPPMyCategory(categoryId : Int?, callback: (Int, Boolean) -> Unit){
+            service.pGetMyCategory(xAuthToken, categoryId).enqueue(object : Callback<ResponsePMyCategory>{
+                override fun onResponse(
+                    call: Call<ResponsePMyCategory>,
+                    response: Response<ResponsePMyCategory>
+                ) {
+                    if(response.isSuccessful){
+                        val body = response.body()
+                        if(body!=null){
+                            Log.e("getPPMyCategory", "Successful response: ${response}")
+                            myAllCategoryList.addAll(body.result)
+                            Log.e("getPPMyCategory", myAllCategoryList.toString())
+                            callback(1, body.hasNext)
+                        }
+                        else{
+                            callback(2, false)
+                        }
+                    }
+                    else if(response.code() == 403){
+                        //추가 예정
+                        callback(2, false)
+                    }
+                    else if(response.code() == 404){
+                        Log.e("getPPMyCategory", "Unsuccessful response: ${response}")
+                        callback(2, false)
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<ResponsePMyCategory>, t: Throwable) {
-                Log.e("getPMyCategory", "Failed to make the request", t)
-                callback(1)
-            }
+                override fun onFailure(call: Call<ResponsePMyCategory>, t: Throwable) {
+                    Log.e("getPPMyCategory", "Failed to make the request", t)
+                    callback(3, false)
+                }
 
-        })
+            })
+
     }
+
 
     /**
      * 가게 api 함수 - mindy
@@ -1821,30 +1836,30 @@ class GustoViewModel: ViewModel() {
     }
 
     //내 카테고리 전체 조회 + 카테고리 담기
-    fun getMyMapCategory(townName: String, callback: (Int) -> Unit) {
-        service.getMapCategory(xAuthToken, townName = townName).enqueue(object : Callback<List<ResponseMapCategory>> {
-            override fun onResponse(
-                call: Call<List<ResponseMapCategory>>,
-                response: Response<List<ResponseMapCategory>>
-            ) {
-                if (response.isSuccessful) {
-                    Log.e("viewmodel", response.body()!!.toString())
-                    Log.e("viewmodel", "Successful response: ${response}")
-                    myMapCategoryList = response.body()!! // 서버에서 받아온 카테고리 목록을 저장
-                    callback(0)
-                } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(1)
-                }
-            }
-
-            override fun onFailure(call: Call<List<ResponseMapCategory>>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(1)
-            }
-
-        })
-    }
+//    fun getMyMapCategory(townName: String, callback: (Int) -> Unit) {
+//        service.getMapCategory(xAuthToken, townName = townName).enqueue(object : Callback<ArrayList<ResponseMapCategory>> {
+//            override fun onResponse(
+//                call: Call<ArrayList<ResponseMapCategory>>,
+//                response: Response<ArrayList<ResponseMapCategory>>
+//            ) {
+//                if (response.isSuccessful) {
+//                    Log.e("viewmodel", response.body()!!.toString())
+//                    Log.e("viewmodel", "Successful response: ${response}")
+//                    myMapCategoryList = response.body()!! // 서버에서 받아온 카테고리 목록을 저장
+//                    callback(0)
+//                } else {
+//                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+//                    callback(1)
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ArrayList<ResponseMapCategory>>, t: Throwable) {
+//                Log.e("viewmodel", "Failed to make the request", t)
+//                callback(1)
+//            }
+//
+//        })
+//    }
 
 
 

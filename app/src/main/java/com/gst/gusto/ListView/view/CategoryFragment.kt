@@ -1,6 +1,8 @@
 package com.gst.gusto.ListView.view
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.ContextMenu
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +16,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.adapter.CategoryAdapter
 import com.gst.gusto.ListView.adapter.CategoryBottomSheetDialog
 import com.gst.gusto.ListView.adapter.ListViewCategoryAdapter
@@ -50,31 +53,64 @@ class CategoryFragment : Fragment() {
         /**
          * 1. 서버 연결, rv 연결
          */
+
+        gustoViewModel.myAllCategoryList.clear()
+
         val mCategoryAdapter = CategoryAdapter(view, object : CategoryAdapter.OptionsMenuClickListener{
             override fun onOptionsMenuClicked(position: Int) {
                 Toast.makeText(context , "delete clicked" , Toast.LENGTH_SHORT).show()
             }
 
         })
+        mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
+        mCategoryAdapter.viewModel = gustoViewModel
+        rvCategory.adapter = mCategoryAdapter
+        rvCategory.layoutManager = LinearLayoutManager(this.requireActivity())
 
-        gustoViewModel.getPMyCategory {
-                result ->
+        var hasNext = false
+
+        gustoViewModel.getPPMyCategory(null){
+            result, getHasNext ->
             when(result){
-                0 -> {
-                    mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
-                    mCategoryAdapter.viewModel = gustoViewModel
-                    rvCategory.adapter = mCategoryAdapter
-                    rvCategory.layoutManager = LinearLayoutManager(this.requireActivity())
-                }
                 1 -> {
-                    Toast.makeText(context, "fail", Toast.LENGTH_SHORT).show()
-                    mCategoryAdapter.submitList(gustoViewModel.testList)
-                    mCategoryAdapter.viewModel = gustoViewModel
-                    rvCategory.adapter = mCategoryAdapter
-                    rvCategory.layoutManager = LinearLayoutManager(this.requireActivity())
+                    //success
+                    mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
+                    hasNext = getHasNext
+                    mCategoryAdapter.notifyDataSetChanged()
                 }
+                else-> {
+                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                }
+
             }
         }
+
+        rvCategory.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                // 리사이클러뷰 아이템 총개수 (index 접근 이기 때문에 -1)
+                val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+
+                // 페이징 처리
+                if(rvPosition == totalCount && hasNext) {
+                    gustoViewModel.getPPMyCategory(gustoViewModel.myAllCategoryList.last().myCategoryId) {result, getHasNext ->
+                        hasNext = getHasNext
+                        when(result) {
+                            1 -> {
+                                val handler = Handler(Looper.getMainLooper())
+                                handler.postDelayed({
+                                    mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
+                                    mCategoryAdapter.notifyDataSetChanged()
+                                }, 1000)
+
+                            }
+                            else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        })
 
         /**
          * 2. 뒤로가기 클릭 리스너

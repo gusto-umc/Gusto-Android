@@ -158,7 +158,7 @@ data class ResponseMapCategory(
 // paging 내 카테고리 전체 조회
 data class ResponsePMyCategory(
     @SerializedName("hasNext") val hasNext : Boolean,
-    @SerializedName("result") val result : List<ResponseMapCategory>
+    @SerializedName("result") val result : ArrayList<ResponseMapCategory>
 )
 
 //카테고리 조회- 마이, 피드

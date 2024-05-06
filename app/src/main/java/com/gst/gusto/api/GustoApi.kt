@@ -255,7 +255,7 @@ interface GustoApi {
     fun getMapCategory(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("townName") townName : String
-    ) : Call<List<ResponseMapCategory>>
+    ) : Call<ArrayList<ResponseMapCategory>>
 
     //4. 카테고리 삭제하기 -> 단 건 삭제 확인 완
     @DELETE("myCategories")
@@ -281,12 +281,13 @@ interface GustoApi {
     @GET("myCategories")
     fun getAllUserCategory(
         @Header("X-AUTH-TOKEN") token : String
-    ) : Call<List<ResponseMapCategory>>
+    ) : Call<ArrayList<ResponseMapCategory>>
 
     //8. 카테고리 전체 조회(paging)
     @GET("myCategories")
     fun pGetMyCategory(
-        @Header("X-AUTH-TOKEN") token : String
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("myCategoryId") myCategoryId : Int?
     ) : Call<ResponsePMyCategory>
 
     /**
