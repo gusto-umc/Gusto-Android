@@ -3,7 +3,7 @@ package com.gst.gusto.api
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.gst.gusto.BuildConfig
-import com.gst.gusto.Util.util
+import com.gst.gusto.util.util
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody

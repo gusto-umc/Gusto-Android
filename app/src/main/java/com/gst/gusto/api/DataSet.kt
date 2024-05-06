@@ -9,6 +9,10 @@ data class Routes(
     @SerializedName("routeName") val routeName : String,
     @SerializedName("numStore") val numStore : Int
 )
+data class ResponseRoutes(
+    @SerializedName("result") val result : List<Routes>,
+    @SerializedName("hasNext") val hasNext : Boolean
+)
 
 // 루트 생성
 data class RequestCreateRoute(
@@ -40,21 +44,30 @@ data class StoredId(
 
 // 그룹 조회
 data class ResponseGetGroups(
+    @SerializedName("groups") val groups : List<ResponseGetGroup>,
+    @SerializedName("hasNext") val hasNext : Boolean
+)
+data class ResponseGetGroup(
     @SerializedName("groupId") val groupId : Long,
     @SerializedName("groupName") val groupName : String,
-    @SerializedName("numMembers") val numMembers : Int,
     @SerializedName("isOwner") val isOwner : Boolean,
+    @SerializedName("numMembers") val numMembers : Int,
     @SerializedName("numRestaurants") val numRestaurants : Int,
     @SerializedName("numRoutes") val numRoutes : Int
 )
 // 그룹 가게 정보
-data class ResponseStore(
+data class Store(
     @SerializedName("storeName") val storeName : String,
     @SerializedName("storeId") val storeId : Long,
     @SerializedName("storeProfileImg") val storeProfileImg : String,
     @SerializedName("userProfileImg") val userProfileImg : String,
     @SerializedName("address") val address : String,
     @SerializedName("groupListId") val groupListId : Long
+)
+
+data class ResponseStores(
+    @SerializedName("result") val stores :List<Store>,
+    @SerializedName("hasNext") val hasNext: Boolean
 )
 
 // 그룹 조회
@@ -73,6 +86,14 @@ data class Member(
 
     // 팔로워 조회
     @SerializedName("followId") val followId : Int
+)
+data class ResponseGroupMembers(
+    @SerializedName("hasNext") val hasNext: Boolean,
+    @SerializedName("groupMembers") val groupMembers : List<Member>
+)
+data class ResponseFollowMembers(
+    @SerializedName("hasNext") val hasNext: Boolean,
+    @SerializedName("result") val result : List<Member>
 )
 data class NewOwner(
     @SerializedName("newOwner") val newOwner : Int
