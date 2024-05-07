@@ -1,5 +1,6 @@
 package com.gst.gusto.api
 
+import com.gst.gusto.dto.ResponseInstaReview
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call

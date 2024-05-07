@@ -1,10 +1,11 @@
-package com.gst.gusto.review.adapter
+package com.gst.gusto.review.adapter.viewholder
 
 import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.databinding.ItemReviewListBinding
+import com.gst.gusto.review.adapter.ListReviewData
 
 class ListReviewViewHolder(
     private val binding: ItemReviewListBinding,
