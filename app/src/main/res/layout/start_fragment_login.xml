@@ -39,8 +39,8 @@
                 android:id="@+id/btn_kakao"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:visibility="gone"
-                android:src="@drawable/kakao_img" />
+                android:src="@drawable/kakao_img"
+                android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/btn_naver"
@@ -53,8 +53,8 @@
                 android:id="@+id/btn_google"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:visibility="gone"
-                android:src="@drawable/google_img" />
+                android:src="@drawable/google_img"
+                android:visibility="visible" />
 
         </LinearLayout>
 
