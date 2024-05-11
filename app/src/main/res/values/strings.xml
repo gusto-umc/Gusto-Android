@@ -6,4 +6,6 @@
     <string name="social_login_info_naver_client_id">LEp5Ue6viyNV1SyJuA9V</string>
     <string name="social_login_info_naver_client_secret">p0KtMuvtHp</string>
     <string name="social_login_info_naver_client_name">네이버아이디 로그인</string>
+
+
 </resources>
