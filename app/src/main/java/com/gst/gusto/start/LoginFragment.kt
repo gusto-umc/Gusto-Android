@@ -59,9 +59,9 @@ class LoginFragment: Fragment() {
     ): View? {
         binding = StartFragmentLoginBinding.inflate(inflater, container, false)
 
-        val naverClientId = getString(R.string.social_login_info_naver_client_id)
-        val naverClientSecret = getString(R.string.social_login_info_naver_client_secret)
-        val naverClientName = getString(R.string.social_login_info_naver_client_name)
+        val naverClientId = BuildConfig.NAVER_CLIENT_ID
+        val naverClientSecret = BuildConfig.NAVER_CLIENT_SECRET
+        val naverClientName = "네이버아이디 로그인"
         NaverIdLoginSDK.initialize(requireContext(), naverClientId, naverClientSecret , naverClientName)
 
         KakaoSdk.init(requireContext(), BuildConfig.KAKAO_NATIVE_APP_KEY)
