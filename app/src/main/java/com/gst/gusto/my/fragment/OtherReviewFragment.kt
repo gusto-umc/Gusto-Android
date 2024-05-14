@@ -37,11 +37,11 @@ class OtherReviewFragment : Fragment() {
 
     fun initView(){
 
-        adapter = InstaReviewAdapter(ArrayList(), context
+        /*adapter = InstaReviewAdapter(ArrayList(), context
         ) { reviewId ->
-            /*val bundle = Bundle()
+            *//*val bundle = Bundle()
             bundle.putLong("reviewId", reviewId)     //리뷰 아이디 넘겨 주면 됨
-            bundle.putString("page","review")*/
+            bundle.putString("page","review")*//*
 
             // gustoViewModel.currentFeedReviewId = reviewId
             gustoViewModel.getFeedReview { result ->
@@ -51,7 +51,7 @@ class OtherReviewFragment : Fragment() {
                     }
                 }
             }
-        }
+        }*/
 
         binding.apply {
             // 클릭 리스너 부분

@@ -21,8 +21,8 @@ class ReviewViewModel(
     private val xAuthToken = GustoApplication.prefs.getSharedPrefs().first
     private val refreshToken = GustoApplication.prefs.getSharedPrefs().second
 
-    private val _instaReviews = MutableLiveData<MutableList<InstaReview?>>()
-    val instaReviews : LiveData<MutableList<InstaReview?>> = _instaReviews
+    private val _instaReviews = MutableLiveData<List<InstaReview>>()
+    val instaReviews : LiveData<List<InstaReview>> = _instaReviews
 
     private val _instaCursorId = MutableLiveData<Long>()
     val instaCursorId : LiveData<Long> = _instaCursorId
@@ -39,9 +39,14 @@ class ReviewViewModel(
     private val _errorToastData: MutableLiveData<Unit> = MutableLiveData()
     val errorToastData: LiveData<Unit> = _errorToastData
 
+    private var isFetching = false
+
+    private val _scrollData: MutableLiveData<Unit> = MutableLiveData()
+    val scrollData: LiveData<Unit> = _scrollData
+
     init {
         viewModelScope.launch {
-            getInstaReview(18)
+            getInstaReview(15)
 
             _instaPagingData.addSource(_instaCursorId) { cursorId ->
                 _instaPagingData.value = Pair(cursorId, _instaHasNext.value)
@@ -75,14 +80,32 @@ class ReviewViewModel(
         }
     }
 
-    suspend fun getInstaReviewPaging(reviewId: Long?, size: Int): MutableList<InstaReview> {
+    fun onScrolled() {
+        if (isFetching) return
+        val previousItems: List<InstaReview> = _instaReviews.value ?: emptyList()
+
+        val hasNext = _instaHasNext.value
+        if (hasNext == true) {
+            val cursorId = _instaCursorId.value
+            viewModelScope.launch {
+                isFetching = true
+                val newItems = getInstaReviewPaging(cursorId, 15)
+                _instaReviews.value = previousItems + newItems
+                Log.d("reviews", _instaReviews.value?.size.toString())
+                isFetching = false
+            }
+        } else {
+            _scrollData.value = Unit
+        }
+    }
+
+    suspend fun getInstaReviewPaging(reviewId: Long?, size: Int): List<InstaReview> {
         val token = GustoApplication.prefs.getSharedPrefs().first
         when (val response = reviewsRepository.getInstaReview(token, reviewId, size)) {
             is ApiResponse.Success -> {
                 _instaCursorId.value = response.data.cursorId
                 _instaHasNext.value = response.data.hasNext
-                Log.d("reviews", "${instaPagingdata.value}")
-                return response.data.reviews.toMutableList()
+                return response.data.reviews
             }
 
             is ApiResponse.Error -> {
@@ -92,7 +115,7 @@ class ReviewViewModel(
                 } else {
                     _errorToastData.value = Unit
                 }
-                return emptyList<InstaReview>().toMutableList()
+                return emptyList()
             }
         }
     }
