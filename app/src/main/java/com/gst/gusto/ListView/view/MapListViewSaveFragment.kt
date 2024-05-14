@@ -8,9 +8,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.ListView.adapter.SavedStoreListAdapter
 import com.gst.gusto.MainActivity
@@ -27,15 +30,19 @@ class MapListViewSaveFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map_listview_save, container, false)
-        return binding.root
+        binding = FragmentMapListviewSaveBinding.inflate(inflater, container, false)
+        //binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map_listview_save, container, false) as FragmentMapListviewSaveBinding
+
+        val view = binding.root
+
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,6 +80,7 @@ class MapListViewSaveFragment : Fragment() {
         binding.rvMapSaveUnvisited.adapter = mSaveXAdapter
         binding.rvMapSaveUnvisited.layoutManager = LinearLayoutManager(this.requireActivity())
 
+        /*
         //뒤로가기 클리 리스너
         binding.ivMapMapBack.setOnClickListener{
             findNavController().popBackStack()
@@ -81,6 +89,9 @@ class MapListViewSaveFragment : Fragment() {
         //현재 위치(동) 받아오기
         binding.tvMapSaveDong.text = gustoViewModel.dong.value
 
+
+         */
     }
+
 
 }
