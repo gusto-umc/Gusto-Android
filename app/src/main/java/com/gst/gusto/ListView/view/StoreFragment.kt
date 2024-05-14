@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.ListView.Model.Store
 import com.gst.gusto.ListView.adapter.CategoryAdapter
 import com.gst.gusto.ListView.adapter.ListViewStoreAdapter
 import com.gst.gusto.ListView.adapter.StoreAdapter
@@ -25,6 +26,8 @@ class StoreFragment : Fragment() {
 
     private lateinit var binding : FragmentStoreBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
+    private lateinit var mStoreAdapter : StoreAdapter
+    private var hasNext = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +48,8 @@ class StoreFragment : Fragment() {
         val rvStore = binding.rvStore
         gustoViewModel.myAllStoreList.clear()
 
+        mStoreAdapter = StoreAdapter(view)
+
         /**
          * 1. 데이터 연결
          * viewmodel의 selectedCategoryInfo 변수에서 가져오기
@@ -58,31 +63,31 @@ class StoreFragment : Fragment() {
         /**
          * 2. , rv onclick 처리, 페이징
          */
-        val mStoreAdapter = StoreAdapter(view)
+
         //서버 연결
-        mStoreAdapter.mContext = context
-        mStoreAdapter.submitList(gustoViewModel.myAllStoreList)
-        mStoreAdapter.gustoViewModel = gustoViewModel
+        mStoreAdapter?.mContext = context
+        mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
+        mStoreAdapter?.gustoViewModel = gustoViewModel
         binding.rvStore.adapter = mStoreAdapter
         binding.rvStore.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        var hasNext = false
 
-        gustoViewModel.getPPMyStore(gustoViewModel. selectedCategoryInfo!!.myCategoryId, null){
-                result, getHasNext ->
-            when(result){
-                1 -> {
-                    //success
-                    mStoreAdapter.submitList(gustoViewModel.myAllStoreList)
-                    hasNext = getHasNext
-                    mStoreAdapter.notifyDataSetChanged()
-                }
-                else-> {
-                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                }
 
-            }
-        }
+//        gustoViewModel.getPPMyStore(gustoViewModel. selectedCategoryInfo!!.myCategoryId, null){
+//                result, getHasNext ->
+//            when(result){
+//                1 -> {
+//                    //success
+//                    mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
+//                    hasNext = getHasNext
+//                    mStoreAdapter?.notifyDataSetChanged()
+//                }
+//                else-> {
+//                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+//                }
+//
+//            }
+//        }
 
         rvStore.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -99,8 +104,8 @@ class StoreFragment : Fragment() {
                             1 -> {
                                 val handler = Handler(Looper.getMainLooper())
                                 handler.postDelayed({
-                                    mStoreAdapter.submitList(gustoViewModel.myAllStoreList)
-                                    mStoreAdapter.notifyDataSetChanged()
+                                    mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
+                                    mStoreAdapter?.notifyDataSetChanged()
                                 }, 1000)
 
                             }
@@ -155,6 +160,28 @@ class StoreFragment : Fragment() {
             }
             //서버 연결 -> rv 연결
             //order변수 화룡해서 서버에 정렬 순서 정보 보내기
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        gustoViewModel.myAllStoreList.clear()
+        gustoViewModel.getPPMyStore(gustoViewModel. selectedCategoryInfo!!.myCategoryId, null){
+                result, getHasNext ->
+            when(result){
+                1 -> {
+                    //success
+                    mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
+                    hasNext = getHasNext
+                    mStoreAdapter?.notifyDataSetChanged()
+                    binding.tvStoreCount.text = "${gustoViewModel.myAllStoreList.size}개"
+                }
+                else-> {
+                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                }
+
+            }
         }
 
     }

@@ -11,18 +11,19 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.PResponseStoreListItem
 import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.ItemStoreBinding
 import com.gst.gusto.databinding.ItemStoreEditBinding
 
-class StoreEditAdapter : ListAdapter<ResponseStoreListItem, StoreEditAdapter.ViewHolder>(diffUtil){
+class StoreEditAdapter : ListAdapter<PResponseStoreListItem, StoreEditAdapter.ViewHolder>(diffUtil){
 
     var gustoViewModel : GustoViewModel? = null
     var mContext : Context? = null
 
     inner class ViewHolder(private val binding : ItemStoreEditBinding) : RecyclerView.ViewHolder(binding.root){
-        var data : ResponseStoreListItem? = null
-        fun bind(item : ResponseStoreListItem){
+        var data : PResponseStoreListItem? = null
+        fun bind(item : PResponseStoreListItem){
             binding.apply {
                 binding.tvItemStoreEditTitle.text = item.storeName
                 //카테고리 -> 서버 추가 필요
@@ -42,12 +43,12 @@ class StoreEditAdapter : ListAdapter<ResponseStoreListItem, StoreEditAdapter.Vie
     }
     companion object {
         // diffUtil: currentList에 있는 각 아이템들을 비교하여 최신 상태를 유지하도록 한다.
-        val diffUtil = object : DiffUtil.ItemCallback<ResponseStoreListItem>() {
-            override fun areItemsTheSame(oldItem: ResponseStoreListItem, newItem: ResponseStoreListItem): Boolean {
+        val diffUtil = object : DiffUtil.ItemCallback<PResponseStoreListItem>() {
+            override fun areItemsTheSame(oldItem: PResponseStoreListItem, newItem: PResponseStoreListItem): Boolean {
                 return oldItem.storeId == newItem.storeId
             }
 
-            override fun areContentsTheSame(oldItem: ResponseStoreListItem, newItem: ResponseStoreListItem): Boolean {
+            override fun areContentsTheSame(oldItem: PResponseStoreListItem, newItem: PResponseStoreListItem): Boolean {
                 return oldItem == newItem
             }
         }
@@ -61,27 +62,27 @@ class StoreEditAdapter : ListAdapter<ResponseStoreListItem, StoreEditAdapter.Vie
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
 
-        holder.cb.isChecked = holder.data!!.storeId in gustoViewModel!!.selectedStoreIdList
+        holder.cb.isChecked = holder.data!!.pinId in gustoViewModel!!.selectedStoreIdList
 
         holder.itemLayout.setOnClickListener {
             if(holder.cb.isChecked){
-                gustoViewModel!!.selectedStoreIdList.remove(holder.data!!.storeId)
+                gustoViewModel!!.selectedStoreIdList.remove(holder.data!!.pinId)
                 holder.cb.isChecked = false
             }
             else{
-                gustoViewModel!!.selectedStoreIdList.add(holder.data!!.storeId)
+                gustoViewModel!!.selectedStoreIdList.add(holder.data!!.pinId)
                 holder.cb.isChecked = true
             }
         }
 
         holder.cb.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked){
-                gustoViewModel!!.selectedStoreIdList.remove(holder.data!!.storeId)
-                holder.cb.isChecked = false
+                gustoViewModel!!.selectedStoreIdList.add(holder.data!!.pinId)
+                holder.cb.isChecked = isChecked
             }
             else{
-                gustoViewModel!!.selectedStoreIdList.add(holder.data!!.storeId)
-                holder.cb.isChecked = true
+                gustoViewModel!!.selectedStoreIdList.remove(holder.data!!.pinId)
+                holder.cb.isChecked = isChecked
             }
         }
     }

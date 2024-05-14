@@ -1158,26 +1158,7 @@ class GustoViewModel: ViewModel() {
 
         })
     }
-    // 카테고리 삭제하기
-    fun deleteCategory(categoryId : Int, callback: (Int) -> Unit){
-        service.deleteCategory(xAuthToken, myCategoryId = categoryId).enqueue(object : Callback<Void>{
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    Log.e("viewmodel", "Successful response: ${response}")
-                    callback(0)
-                } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(1)
-                }
-            }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(1)
-            }
-
-        })
-    }
 
     fun deleteCateogories(data : MutableList<Int>, callback: (Int) -> Unit){
         val requestData = data
@@ -1292,13 +1273,6 @@ class GustoViewModel: ViewModel() {
     /**
      * 가게 api 함수 - mindy
      */
-    var testStoreData : List<ResponseStoreListItem> = listOf(
-        ResponseStoreListItem(0, "store1", "address1", 0, null),
-        ResponseStoreListItem(1, "store2", "address2", 1, null),
-        ResponseStoreListItem(2, "store3", "address3", 2, null),
-        ResponseStoreListItem(3, "store4", "address4", 3, null),
-        ResponseStoreListItem(4, "store5", "address5", 4, null),
-    )
     var selectedDetailStoreId = 1
     var myMapStoreList : List<ResponseStoreListItem>? = null
     var myAllStoreList : ArrayList<PResponseStoreListItem> = arrayListOf()
@@ -1316,8 +1290,6 @@ class GustoViewModel: ViewModel() {
     var mapVisitedCnt = 0
     var mapUnvisitedCnt = 0
 
-    //추천 맛집
-    var mapRecList : List<ResponseSavedStoreData>? = null
 
     //가게 삭제
     var selectedStoreIdList : ArrayList<Int> = arrayListOf()
@@ -1478,6 +1450,25 @@ class GustoViewModel: ViewModel() {
 
             override fun onFailure(call: Call<List<ResponseStoreListItem>>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
+    fun deleteStores(data : MutableList<Int>, callback: (Int) -> Unit){
+        service.deleteStores(xAuthToken, data).enqueue(object : Callback<Void>{
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.e("deleteStores", "Successful response: ${response}")
+                    callback(0)
+                } else {
+                    Log.e("deleteStores", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("deleteStores", "Failed to make the request", t)
                 callback(1)
             }
 

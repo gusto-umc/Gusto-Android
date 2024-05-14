@@ -258,11 +258,6 @@ interface GustoApi {
     ) : Call<ArrayList<ResponseMapCategory>>
 
     //4. 카테고리 삭제하기 -> 단 건 삭제 확인 완
-    @DELETE("myCategories")
-    fun deleteCategory(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("myCategoryId") myCategoryId : Int
-    ) : Call<Void>
 
     @DELETE("myCategories")
     fun deleteCategory2(
@@ -308,6 +303,13 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Query("pinId") pinId : Int
     ): Call<Void>
+
+    //가게 다중 삭제
+    @DELETE("myCategories/pins")
+    fun deleteStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("pinId") pinId : MutableList<Int>
+    ) : Call<Void>
 
     //3. 가게 상세 조회
     @GET("stores/{storeId}/detail")
