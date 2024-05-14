@@ -1,6 +1,8 @@
 package com.gst.gusto.ListView.view
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.adapter.CategoryAdapter
 import com.gst.gusto.ListView.adapter.ListViewStoreAdapter
 import com.gst.gusto.ListView.adapter.StoreAdapter
@@ -39,13 +42,16 @@ class StoreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val rvStore = binding.rvStore
+        gustoViewModel.myAllStoreList.clear()
+
         /**
          * 1. 데이터 연결
          * viewmodel의 selectedCategoryInfo 변수에서 가져오기
          */
-        //binding.ivStoreBack.setImageResource(gustoViewModel.findIconResource(gustoViewModel.selectedCategoryInfo!!.categoryIcon))
-        //binding.tvStoreCategoryName.text = gustoViewModel.selectedCategoryInfo!!.categoryName
-        //저장 개수
+        binding.ivStoreCategory.setImageResource(gustoViewModel.findIconResource(gustoViewModel.selectedCategoryInfo!!.categoryIcon))
+        binding.tvStoreCategoryName.text = gustoViewModel.selectedCategoryInfo!!.categoryName
+        binding.tvStoreCount.text = "${gustoViewModel.selectedCategoryInfo!!.pinCnt}개"
 
 
 
@@ -55,10 +61,55 @@ class StoreFragment : Fragment() {
         val mStoreAdapter = StoreAdapter(view)
         //서버 연결
         mStoreAdapter.mContext = context
-        mStoreAdapter.submitList(gustoViewModel.testStoreData!!)
+        mStoreAdapter.submitList(gustoViewModel.myAllStoreList)
         mStoreAdapter.gustoViewModel = gustoViewModel
         binding.rvStore.adapter = mStoreAdapter
         binding.rvStore.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        var hasNext = false
+
+        gustoViewModel.getPPMyStore(gustoViewModel. selectedCategoryInfo!!.myCategoryId, null){
+                result, getHasNext ->
+            when(result){
+                1 -> {
+                    //success
+                    mStoreAdapter.submitList(gustoViewModel.myAllStoreList)
+                    hasNext = getHasNext
+                    mStoreAdapter.notifyDataSetChanged()
+                }
+                else-> {
+                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                }
+
+            }
+        }
+
+        rvStore.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                // 리사이클러뷰 아이템 총개수 (index 접근 이기 때문에 -1)
+                val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+
+                // 페이징 처리
+                if(rvPosition == totalCount && hasNext) {
+                    gustoViewModel.getPPMyStore(gustoViewModel.selectedCategoryInfo!!.myCategoryId, gustoViewModel.myAllStoreList.last().pinId) { result, getHasNext ->
+                        hasNext = getHasNext
+                        when(result) {
+                            1 -> {
+                                val handler = Handler(Looper.getMainLooper())
+                                handler.postDelayed({
+                                    mStoreAdapter.submitList(gustoViewModel.myAllStoreList)
+                                    mStoreAdapter.notifyDataSetChanged()
+                                }, 1000)
+
+                            }
+                            else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        })
 
         /**
          * 3. onclick 처리

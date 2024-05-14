@@ -12,20 +12,21 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.PResponseStoreListItem
 import com.gst.gusto.api.ResponseMapCategory
 import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.CardWxampleBinding
 import com.gst.gusto.databinding.ItemCategoryBinding
 import com.gst.gusto.databinding.ItemStoreBinding
 
-class StoreAdapter(private val parentView : View) : ListAdapter<ResponseStoreListItem, StoreAdapter.ViewHolder>(diffUtil){
+class StoreAdapter(private val parentView : View) : ListAdapter<PResponseStoreListItem, StoreAdapter.ViewHolder>(diffUtil){
 
     var gustoViewModel : GustoViewModel? = null
     var mContext : Context? = null
 
     inner class ViewHolder(private val binding : ItemStoreBinding) : RecyclerView.ViewHolder(binding.root){
-        var data : ResponseStoreListItem? = null
-        fun bind(item : ResponseStoreListItem){
+        var data : PResponseStoreListItem? = null
+        fun bind(item : PResponseStoreListItem){
             binding.apply {
                 binding.tvItemStoreTitle.text = item.storeName
                 //카테고리 -> 서버 추가 필요
@@ -44,12 +45,12 @@ class StoreAdapter(private val parentView : View) : ListAdapter<ResponseStoreLis
     }
     companion object {
         // diffUtil: currentList에 있는 각 아이템들을 비교하여 최신 상태를 유지하도록 한다.
-        val diffUtil = object : DiffUtil.ItemCallback<ResponseStoreListItem>() {
-            override fun areItemsTheSame(oldItem: ResponseStoreListItem, newItem: ResponseStoreListItem): Boolean {
+        val diffUtil = object : DiffUtil.ItemCallback<PResponseStoreListItem>() {
+            override fun areItemsTheSame(oldItem: PResponseStoreListItem, newItem: PResponseStoreListItem): Boolean {
                 return oldItem.storeId == newItem.storeId
             }
 
-            override fun areContentsTheSame(oldItem: ResponseStoreListItem, newItem: ResponseStoreListItem): Boolean {
+            override fun areContentsTheSame(oldItem: PResponseStoreListItem, newItem: PResponseStoreListItem): Boolean {
                 return oldItem == newItem
             }
         }
@@ -67,6 +68,7 @@ class StoreAdapter(private val parentView : View) : ListAdapter<ResponseStoreLis
             //뷰모델에 storeId 저장 -> detail 로 이동
             gustoViewModel!!.selectedDetailStoreId = holder.data?.storeId!!.toInt()
             Navigation.findNavController(parentView).navigate(R.id.action_storeFragment_to_storeDetailFragment)
+
 
         }
     }

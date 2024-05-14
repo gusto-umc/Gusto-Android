@@ -350,6 +350,14 @@ interface GustoApi {
     ) : Call<List<ResponseSavedStore>>
 
 
+    // 8. (paging) 카테고리별 내 가게 조회
+    @GET("myCategories/pins")
+    fun ppGetAllMyStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("myCategoryId") categoryId : Int,
+        @Query("pinId") pinId : Int?
+    ): Call<PResponseStoreData>
+
 
 
     /**

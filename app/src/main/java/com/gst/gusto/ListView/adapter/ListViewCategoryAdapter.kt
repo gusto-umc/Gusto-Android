@@ -94,7 +94,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                                     //success
                                     val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
                                     mStoreAdapter.mContext = mContext
-                                    mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
+                                    //mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
                                     mStoreAdapter.gustoViewModel = viewModel
                                     holder.storeRv.adapter = mStoreAdapter
                                     holder.storeRv.layoutManager = LinearLayoutManager(holder.storeRv.context, LinearLayoutManager.VERTICAL, false)
@@ -114,7 +114,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                                 0 -> {
                                     //success
                                     val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
-                                    mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
+                                    //mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
                                     mStoreAdapter.gustoViewModel = viewModel
                                     mStoreAdapter.mContext = mContext
                                     holder.storeRv.adapter = mStoreAdapter
@@ -134,7 +134,7 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                                 0 -> {
                                     //success
                                     val mStoreAdapter = ListViewStoreAdapter(flag, parentView)
-                                    mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
+                                    //mStoreAdapter.submitList(viewModel!!.myAllStoreList!!)
                                     mStoreAdapter.gustoViewModel = viewModel
                                     mStoreAdapter.mContext = mContext
                                     holder.storeRv.adapter = mStoreAdapter

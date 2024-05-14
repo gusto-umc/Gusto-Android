@@ -1301,7 +1301,7 @@ class GustoViewModel: ViewModel() {
     )
     var selectedDetailStoreId = 1
     var myMapStoreList : List<ResponseStoreListItem>? = null
-    var myAllStoreList : List<ResponseStoreListItem>? = null
+    var myAllStoreList : ArrayList<PResponseStoreListItem> = arrayListOf()
 
     var myStoreDetail : ResponseStoreDetail? = null
     var storeDetailReviews = ArrayList<ResponseReviews>()
@@ -1377,7 +1377,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("getStoreDetail", response.body()!!.reviews.toString())
                     myStoreDetail = response.body()
                     if(detailReviewLastId == null){
-                        for (i in response.body()!!.reviews){
+                        for (i in response.body()!!.reviews.result){
                             detailReviewLastId = i.reviewId
                             detailReviewLastVisitedAt = i.visitedAt
                             storeDetailReviews.add(i)
@@ -1387,7 +1387,7 @@ class GustoViewModel: ViewModel() {
                     }
                     else{
                         Log.d("reviewId check", "more")
-                        for (i in response.body()!!.reviews){
+                        for (i in response.body()!!.reviews.result){
                             detailReviewLastId = i.reviewId
                             detailReviewLastVisitedAt = i.visitedAt
                             storeDetailReviews.add(i)
@@ -1444,7 +1444,7 @@ class GustoViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
-                    myAllStoreList = response.body()!!
+                    //myAllStoreList = response.body()!!
                     callback(0)
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -1468,7 +1468,7 @@ class GustoViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     Log.e("getAllUserStores", response.body()!!.toString())
-                    myAllStoreList = response.body()!!
+                    //myAllStoreList = response.body()!!
                     callback(0)
                 } else {
                     Log.e("getAllUserStores", "Unsuccessful response: ${response}")
@@ -1483,6 +1483,47 @@ class GustoViewModel: ViewModel() {
 
         })
     }
+
+    // paging api
+
+    fun getPPMyStore(categoryId: Int, pinId : Int?, callback: (Int, Boolean) -> Unit){
+        service.ppGetAllMyStores(xAuthToken, categoryId, pinId).enqueue(object : Callback<PResponseStoreData>{
+            override fun onResponse(
+                call: Call<PResponseStoreData>,
+                response: Response<PResponseStoreData>
+            ) {
+                if(response.isSuccessful){
+                    val body = response.body()
+                    if(body!=null){
+                        Log.e("getPPMyStore", "Successful response: ${response}")
+                        myAllStoreList.addAll(body.result)
+                        Log.e("getPPMyStore", myAllStoreList.toString())
+                        callback(1, body.hasNext)
+                    }
+                    else{
+                        callback(2, false)
+                    }
+                }
+                else if(response.code() == 403){
+                    //추가 예정
+                    callback(2, false)
+                }
+                else if(response.code() == 404){
+                    Log.e("getPPMyStore", "Unsuccessful response: ${response}")
+                    callback(2, false)
+                }
+            }
+
+            override fun onFailure(call: Call<PResponseStoreData>, t: Throwable) {
+                Log.e("getPPMyCategory", "Failed to make the request", t)
+                callback(3, false)
+            }
+
+        })
+
+    }
+
+    //---------------
     //저장된 맛집 리스트 -> 완
     var savedStoreIdList = ArrayList<Long>()
     var unsavedStoreIdList = ArrayList<Long>()

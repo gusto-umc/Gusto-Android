@@ -264,7 +264,7 @@ class StoreDetailFragment : Fragment() {
                         Log.d("reviews more load", gustoViewModel.myStoreDetail!!.reviews.toString())
                         Log.d("reviews more load", gustoViewModel.detailReviewLastId.toString())
                         loadReviews(gustoViewModel.storeDetailReviews)
-                        if(gustoViewModel.myStoreDetail!!.reviews.isEmpty()){
+                        if(gustoViewModel.myStoreDetail!!.reviews.result.isEmpty()){
                             binding.tvReviewLoad.visibility = View.INVISIBLE
                         }
                     }

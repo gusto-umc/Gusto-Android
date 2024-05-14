@@ -62,6 +62,7 @@ class CategoryAdapter(private val view : View, private var optionsMenuClickListe
         holder.bind(currentList[position])
 
         holder.categoryLayout.setOnClickListener {
+            viewModel!!.selectedCategoryInfo = holder.data
             Navigation.findNavController(view).navigate(R.id.action_categoryFragment_to_storeFragment)
         }
 
