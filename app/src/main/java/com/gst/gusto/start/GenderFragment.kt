@@ -26,21 +26,7 @@ class GenderFragment : Fragment() {
 
         binding.btnNext.setOnClickListener {
             LoginViewModel.setGender(gender)
-            LoginViewModel.signUp { resultCode ->
-                when (resultCode) {
-                    1 -> {
-                        findNavController().navigate(R.id.action_genderFragment_to_completeFragment)
-                        println("회원가입 성공")
-                    }
-                    2 -> {
-                        Toast.makeText(requireContext(), "회원가입 실패", Toast.LENGTH_SHORT).show()
-                        println("회원가입 실패")
-                    }
-                    else -> {
-                        println("알 수 없는 결과 코드")
-                    }
-                }
-            }
+            findNavController().navigate(R.id.action_genderFragment_to_profileFragment)
         }
         binding.btnBack.setOnClickListener {
             findNavController().navigate(R.id.action_genderFragment_to_ageFragment)
@@ -52,6 +38,8 @@ class GenderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.tvTitle.text = LoginViewModel.nickName + "님의\n성별을 선택해주세요."
 
         binding.etName.setOnClickListener {
             util.toggleLayout(true, binding.lyAges)

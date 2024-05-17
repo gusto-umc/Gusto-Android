@@ -33,6 +33,7 @@ import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 import java.io.File
+import java.net.URI
 
 class LoginFragment: Fragment() {
 
@@ -119,9 +120,10 @@ class LoginFragment: Fragment() {
         }
     }
     private fun successGoogleLogin(id: String, photoUrl: String) {
-        LoginViewModel.providerId = id
-        LoginViewModel.profileImg =  File(photoUrl)
+        LoginViewModel.providerId = id+"8"
+        LoginViewModel.profileUrl = photoUrl
         LoginViewModel.provider = "GOOGLE"
+        Log.d("GOOGLE_LOGIN",photoUrl)
         LoginViewModel.login { resultCode ->
             when (resultCode) {
                 1 -> {
@@ -179,8 +181,8 @@ class LoginFragment: Fragment() {
             } else if (user != null) {
                 Log.e("KAKAO", "사용자 정보 요청 성공 : $user")
                 LoginViewModel.providerId = user.id.toString()
-                LoginViewModel.profileImg =  File(user.kakaoAccount?.profile?.profileImageUrl ?: "")
                 LoginViewModel.provider = "KAKAO"
+                LoginViewModel.profileUrl = user.kakaoAccount?.profile?.profileImageUrl
                 LoginViewModel.login { resultCode ->
                     when (resultCode) {
                         1 -> {
@@ -216,8 +218,8 @@ class LoginFragment: Fragment() {
                 val tmpPI:String? = response.profile?.profileImage
 
                 LoginViewModel.providerId = tmpId ?: ""
-                LoginViewModel.profileImg =  File(tmpPI)
                 LoginViewModel.provider = "NAVER"
+                LoginViewModel.profileUrl = tmpPI
 
                 LoginViewModel.login { resultCode ->
                     when (resultCode) {

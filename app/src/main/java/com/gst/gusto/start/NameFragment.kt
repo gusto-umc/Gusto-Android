@@ -45,6 +45,8 @@ class NameFragment : Fragment() {
                         }
                     }
                 }
+            } else {
+                binding.tvChecknickname.text = "중복확인을 하지 않았습니다."
             }
         }
         binding.btnBack.setOnClickListener {
@@ -86,7 +88,7 @@ class NameFragment : Fragment() {
             LoginViewModel.checkNickname(tmpNick) { resultCode ->
                 when (resultCode) {
                     1 -> {
-                        binding.tvChecknickname.text = ""
+                        binding.tvChecknickname.text = "사용 가능한 닉네임입니다."
                         binding.imCheck.visibility = View.VISIBLE
                         checkNickname = true
                         binding.btnNext.setTextColor(getResources().getColor(R.color.white))

@@ -40,6 +40,8 @@ class AgeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.tvTitle.text = LoginViewModel.nickName+"님의\n나이를 선택해주세요."
+
         binding.etName.setOnClickListener {
             util.toggleLayout(true, binding.lyAges)
         }

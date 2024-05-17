@@ -30,6 +30,9 @@ import com.bumptech.glide.Glide
 import com.gst.gusto.R
 import java.io.File
 import java.io.FileOutputStream
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import kotlin.concurrent.thread
 
 class util {
