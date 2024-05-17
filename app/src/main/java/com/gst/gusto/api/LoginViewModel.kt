@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.gst.gusto.BuildConfig
 import com.gst.gusto.util.util
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -28,6 +30,7 @@ class LoginViewModel: ViewModel() {
     lateinit var provider : String
     var providerId : String=""
     var profileImg : File?=null
+    var profileUrl : String?=""
     lateinit var nickName : String
     lateinit var age : String
     lateinit var gender : String
@@ -63,7 +66,13 @@ class LoginViewModel: ViewModel() {
     }
     fun signUp(callback: (Int) -> Unit){
         val info = Singup(provider,providerId,nickName,age,gender)
-        service.signUp( null,info)
+        var profileMutipart : MultipartBody.Part?=null
+        if(profileImg!=null) {
+            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), profileImg!!)
+            profileMutipart = MultipartBody.Part.createFormData("profileImg", profileImg!!.name, requestFile)
+        }
+
+        service.signUp(profileMutipart,info)
             .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     if (response.isSuccessful) {
