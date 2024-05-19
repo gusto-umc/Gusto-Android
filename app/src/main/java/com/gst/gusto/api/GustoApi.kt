@@ -60,6 +60,14 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("routeId") routeId : Long
     ):Call<ResponseBody>
+
+    @PATCH("routes/{routeId}") // 루트 수정
+    fun editRoute(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("routeId") routeId : Long,
+        @Body requestEditRoute : RequestEditRoute
+    ):Call<ResponseBody>
+
     @DELETE("routeLists/{routeListId}") // 루트 내 식당(경로) 삭제
     fun deleteRouteStore(
         @Header("X-AUTH-TOKEN") token : String,
