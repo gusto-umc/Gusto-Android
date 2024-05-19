@@ -20,6 +20,10 @@ data class RequestCreateRoute(
     @SerializedName("groupId") val groupId : Long?,
     @SerializedName("routeList") val routeList : List<RouteList>
 )
+data class RequestEditRoute(
+    @SerializedName("routeName") val routeName : String,
+    @SerializedName("routeList") val routeList : List<RouteList>?
+)
 data class RouteList(
     @SerializedName("storeId") val storeId : Long,
     @SerializedName("ordinal") val ordinal : Int,
