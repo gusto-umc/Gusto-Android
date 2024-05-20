@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
@@ -19,13 +20,16 @@ import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMyBinding
 import com.gst.gusto.my.activity.MyProfileEditActivity
 import com.gst.gusto.my.activity.MySettingActivity
-import com.gst.gusto.my.adapter.MyViewpagerAdapter
 import com.gst.gusto.my.fragment.MyListFragment
+import com.gst.gusto.my.viewmodel.MyReviewViewModel
+import com.gst.gusto.my.viewmodel.MyReviewViewModelFactory
 
 class MyFragment : Fragment() {
 
     lateinit var binding: FragmentMyBinding
+
     private val gustoViewModel : GustoViewModel by activityViewModels()
+    private val myReviewFragment: MyReviewViewModel by viewModels { MyReviewViewModelFactory() }
 
     private var followed = false
     override fun onCreateView(
@@ -105,12 +109,13 @@ class MyFragment : Fragment() {
     private fun initViewPager() {
 
         //ViewPager2 Adapter 셋팅
-
-        var viewPager2Adatper = MyViewpagerAdapter(requireActivity())
+        var viewPager2Adatper = MyViewpagerAdapter(this)
         viewPager2Adatper.addFragment(MyReviewFragment())
         viewPager2Adatper.addFragment(MyListFragment())
         viewPager2Adatper.addFragment(MyRouteFragment())
-        //Adapter 연결
+
+        // Adapter 연결
+
         binding.viewpager.apply {
             adapter = viewPager2Adatper
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
