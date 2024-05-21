@@ -71,7 +71,7 @@ class InstaReviewAdapter(
     }
 
     fun addLoading(): Boolean {
-        if (!items.contains(null)) {
+        if (!items.contains(null) && items.size >= 12) {
             items.add(null)
             items.add(null)
             items.add(null)
