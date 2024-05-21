@@ -24,4 +24,20 @@ class ReviewsDataSource(
             ApiResponse.Error(response.code(), response.message())
         }
     }
+
+    suspend fun getOtherInstaViewReview(
+        token: String,
+        nickname: String,
+        reviewId: Long?,
+        size: Int
+    ): ApiResponse<ResponseInstaReviews> {
+        val response = reviewsService.otherInstaView(token, nickname, reviewId, size)
+        return if (response.isSuccessful) {
+            response.body()?.let {
+                ApiResponse.Success(it)
+            } ?: ApiResponse.Error(response.code(),"Response body is null + ${response.message()}")
+        } else {
+            ApiResponse.Error(response.code(), response.message())
+        }
+    }
 }

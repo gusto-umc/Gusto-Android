@@ -17,4 +17,16 @@ class ReviewsRepositoryImpl(
             is ApiResponse.Error -> ApiResponse.Error(response.errorCode, response.errorMessage)
         }
     }
+
+    override suspend fun getOtherInstaReview(
+        token: String,
+        nickname: String,
+        reviewId: Long?,
+        size: Int
+    ): ApiResponse<InstaReviews> {
+        return when (val response = reviewsDataSource.getOtherInstaViewReview(token, nickname, reviewId, size)) {
+            is ApiResponse.Success -> ApiResponse.Success(response.data.toDomainModel())
+            is ApiResponse.Error -> ApiResponse.Error(response.errorCode, response.errorMessage)
+        }
+    }
 }
