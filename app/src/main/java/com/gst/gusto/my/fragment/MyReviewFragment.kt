@@ -30,7 +30,7 @@ class MyReviewFragment : Fragment() {
             val bundle = Bundle()
             bundle.putLong("reviewId", reviewId)
             bundle.putString("page", "review")
-            findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail, bundle)
+            findNavController().navigate(R.id.action_myFragment_to_reviewDetail, bundle)
         }
     }
 
