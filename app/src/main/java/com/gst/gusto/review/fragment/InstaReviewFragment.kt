@@ -23,6 +23,7 @@ import com.gst.gusto.review.adapter.GridItemDecoration
 import com.gst.gusto.review.viewmodel.ReviewViewModel
 import com.gst.gusto.review.viewmodel.ReviewViewModelFactory
 import com.gst.gusto.util.ScrollUtil.addOnScrollEndListener
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class InstaReviewFragment : Fragment() {
@@ -73,7 +74,11 @@ class InstaReviewFragment : Fragment() {
         }
 
         viewModel.instaReviews.observe(viewLifecycleOwner){
-            adapter.addItems(it)
+            lifecycleScope.launch {
+                delay(2000)
+                adapter.addItems(it)
+                adapter.addLoading()
+            }
         }
     }
 
@@ -84,7 +89,10 @@ fun pagingRecyclerview(){
         viewModel.onScrolled()
     }
     viewModel.scrollData.observe(viewLifecycleOwner){
-        adapter.removeLoading()
+        lifecycleScope.launch {
+            delay(2000)
+            adapter.removeLoading()
+        }
     }
 }
 

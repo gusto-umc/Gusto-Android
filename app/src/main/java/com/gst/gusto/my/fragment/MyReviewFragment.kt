@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.R
@@ -17,6 +18,8 @@ import com.gst.gusto.my.viewmodel.MyReviewViewModelFactory
 import com.gst.gusto.review.adapter.InstaReviewAdapter
 import com.gst.gusto.review.adapter.GridItemDecoration
 import com.gst.gusto.util.ScrollUtil.addOnScrollEndListener
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MyReviewFragment : Fragment() {
 
@@ -32,6 +35,10 @@ class MyReviewFragment : Fragment() {
     }
 
     private val viewModel: MyReviewViewModel by viewModels( ownerProducer = { requireParentFragment() }, factoryProducer = { MyReviewViewModelFactory() } )
+
+    private val itemDecoration : GridItemDecoration by lazy {
+        GridItemDecoration(resources.getDimensionPixelSize(R.dimen.one_dp), Color.WHITE)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,14 +65,20 @@ class MyReviewFragment : Fragment() {
             recyclerView.adapter = adapter
             val size = resources.getDimensionPixelSize(R.dimen.one_dp)
             val color = Color.WHITE
-            val itemDecoration = GridItemDecoration(size, color)
+            if(itemDecoration != null){
+                recyclerView.removeItemDecoration(itemDecoration)
+            }
             recyclerView.addItemDecoration(itemDecoration)
             recyclerView.layoutManager = GridLayoutManager(activity, 3)
             adapter.addLoading()
         }
 
         viewModel.instaReviews.observe(viewLifecycleOwner){
-            adapter.addItems(it)
+            lifecycleScope.launch {
+                delay(2000)
+                adapter.addItems(it)
+                adapter.addLoading()
+            }
         }
     }
 
@@ -76,7 +89,10 @@ class MyReviewFragment : Fragment() {
             viewModel.onScrolled()
         }
         viewModel.scrollData.observe(viewLifecycleOwner){
-            adapter.removeLoading()
+            lifecycleScope.launch {
+                delay(2000)
+                adapter.removeLoading()
+            }
         }
     }
 
