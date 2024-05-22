@@ -81,7 +81,10 @@ data class ResponseGroup(
     @SerializedName("groupScript") val groupScript : String,
     @SerializedName("owner") val owner : Int,
     @SerializedName("notice") val notice : String,
-    @SerializedName("groupMembers") val groupMembers : List<Member>
+    @SerializedName("groupMembers") val groupMembers : List<Member>,
+
+    // 초대 코드로 그룹 정보 조회
+    @SerializedName("numMembers") val numMembers : Int
 )
 data class Member(
     @SerializedName("groupMemberId") val groupMemberId : Int,
@@ -119,6 +122,10 @@ data class RequestJoinGroup(
 data class ResoponseInvititionCode(
     @SerializedName("invitationCodeId") val invitationCodeId : Int,
     @SerializedName("groupId") val groupId : Long,
+    @SerializedName("code") val code : String
+)
+//
+data class RequestCheckGroup(
     @SerializedName("code") val code : String
 )
 // 프로필 조회

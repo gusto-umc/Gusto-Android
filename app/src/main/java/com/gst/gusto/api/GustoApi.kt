@@ -131,6 +131,12 @@ interface GustoApi {
         @Body body : RequestCreateGroup
     ):Call<ResponseBody>
 
+    @GET("groups/pre-join") // 초대 코드로 그룹 정보 조회
+    fun checkGroup(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Body body : RequestCheckGroup
+    ):Call<ResponseGroup>
+
     @DELETE("groups/{groupId}") // 그룹 삭제
     fun deleteGroup(
         @Header("X-AUTH-TOKEN") token : String,
