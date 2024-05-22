@@ -103,6 +103,8 @@ class RouteStoresFragment : Fragment() {
             binding.tvRouteName.isFocusableInTouchMode = true
             binding.tvRouteName.requestFocus()
             binding.tvRouteName.setSelection(binding.tvRouteName.text.length)
+            binding.tvRouteName.hint = binding.tvRouteName.text
+            binding.tvRouteName.setText("")
             binding.btnEdit.visibility = View.GONE
         }
 
