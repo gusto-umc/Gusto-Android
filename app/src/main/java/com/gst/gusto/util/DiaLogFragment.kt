@@ -103,9 +103,38 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                     // 텍스트가 변경될 때 수행할 작업
                     if(binding2.etCode.text.length==12) {
                         binding2.btnEnter.backgroundTintList = colorStateOnList
-                        binding2.btnEnter.setTextColor(Color.parseColor("#FFFFFF"))
+                        gustoViewModel.checkGroup(binding2.etCode.text.toString()) { result, data ->
+                            when (result) {
+                                1 -> {
+                                    binding2.bgCode.visibility = View.GONE
+                                    binding2.tvCode.visibility = View.GONE
+                                    binding2.tvCodeCorrect.visibility = View.VISIBLE
+                                    binding2.lyCheckGroup.visibility = View.VISIBLE
+                                    binding2.ivGusto.visibility = View.INVISIBLE
+
+                                    if (data != null) {
+                                        binding2.tvTitleGroup.text = data.groupName
+                                        binding2.tvMemberNum.text = "${data.numMembers}명"
+                                        binding2.tvPeople.text = "${data.groupMembers[0]} 님 외 ${data.numMembers-1}"
+                                        binding2.btnEnter.backgroundTintList = null
+                                        binding2.btnEnter.setBackgroundResource(R.drawable.gradient_background_orange_horizontal)
+                                        binding2.btnEnter.setTextColor(Color.parseColor("#FFFFFF"))
+                                    }
+                                }
+                                else -> {
+                                    binding2.ivGusto.visibility = View.VISIBLE
+                                    binding2.bgCode.visibility = View.VISIBLE
+                                    binding2.tvCode.visibility = View.VISIBLE
+                                    binding2.tvCodeCorrect.visibility = View.GONE
+                                    binding2.lyCheckGroup.visibility = View.GONE
+                                    binding2.btnEnter.setTextColor(Color.parseColor("#FFFFFF"))
+                                }
+                            }
+                        }
                     } else {
+                        binding2.ivGusto.visibility = View.VISIBLE
                         binding2.btnEnter.backgroundTintList = colorStateOffList
+                        binding2.lyCheckGroup.visibility = View.GONE
                         binding2.btnEnter.setTextColor(Color.parseColor("#717171"))
                     }
                 }

@@ -696,6 +696,32 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
+    // 초대 코드로 그룹 정보 조회
+    fun checkGroup(code: String, callback: (Int, ResponseCheckGroup?) -> Unit){
+        service.checkGroup(xAuthToken, RequestCheckGroup(code)).enqueue(object : Callback<ResponseCheckGroup> {
+            override fun onResponse(call: Call<ResponseCheckGroup>, response: Response<ResponseCheckGroup>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel", "Successful response: ${response}")
+                    val responseBody = response.body()
+                    if(responseBody!=null) {
+                        callback(1, responseBody)
+                    } else callback(3,null)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                } else if(response.code()==404) {
+                    callback(2,null)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3,null)
+                }
+            }
+            override fun onFailure(call: Call<ResponseCheckGroup>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3,null)
+            }
+        })
+    }
     // 그룹 삭제
     fun deleteGroup( callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
