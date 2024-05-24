@@ -220,7 +220,7 @@
             android:textSize="11sp"
             android:textColor="@color/gray_1"
             android:fontFamily="@font/pretendard_bold"
-            android:background="@drawable/background_radius_10"
+            android:background="@drawable/gradient_background_orange_horizontal"
             android:backgroundTint="@color/gray_6"/>
     </LinearLayout>
 

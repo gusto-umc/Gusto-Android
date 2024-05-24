@@ -116,7 +116,9 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                                         binding2.tvTitleGroup.text = data.groupName
                                         binding2.tvMemberNum.text = "${data.numMembers}명"
                                         binding2.tvPeople.text = "${data.groupMembers[0]} 님 외 ${data.numMembers-1}"
+                                        binding2.btnEnter.backgroundTintList = null
                                         binding2.btnEnter.setBackgroundResource(R.drawable.gradient_background_orange_horizontal)
+                                        binding2.btnEnter.setTextColor(Color.parseColor("#FFFFFF"))
                                     }
                                 }
                                 else -> {
