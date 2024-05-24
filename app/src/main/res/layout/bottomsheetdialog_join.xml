@@ -115,6 +115,8 @@
             android:text="그룹에서 친구들과 즐거운 시간을 보내세요!"/>
 
         <LinearLayout
+            android:id="@+id/ly_check_group"
+            android:visibility="gone"
             android:layout_marginHorizontal="16dp"
             android:layout_width="match_parent"
             android:layout_height="54dp"
@@ -199,6 +201,8 @@
                 android:text="..." />
         </LinearLayout>
         <ImageView
+
+            android:id="@+id/iv_gusto"
             android:layout_width="145dp"
             android:layout_height="100dp"
             android:layout_gravity="center"

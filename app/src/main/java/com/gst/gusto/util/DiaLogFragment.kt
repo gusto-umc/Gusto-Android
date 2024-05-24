@@ -109,6 +109,8 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                                     binding2.bgCode.visibility = View.GONE
                                     binding2.tvCode.visibility = View.GONE
                                     binding2.tvCodeCorrect.visibility = View.VISIBLE
+                                    binding2.lyCheckGroup.visibility = View.VISIBLE
+                                    binding2.ivGusto.visibility = View.INVISIBLE
 
                                     if (data != null) {
                                         binding2.tvTitleGroup.text = data.groupName
@@ -118,15 +120,19 @@ class DiaLogFragment(val itemClick: (Int) -> Unit, val layout : Int, val gustoVi
                                     }
                                 }
                                 else -> {
+                                    binding2.ivGusto.visibility = View.VISIBLE
                                     binding2.bgCode.visibility = View.VISIBLE
                                     binding2.tvCode.visibility = View.VISIBLE
                                     binding2.tvCodeCorrect.visibility = View.GONE
+                                    binding2.lyCheckGroup.visibility = View.GONE
                                     binding2.btnEnter.setTextColor(Color.parseColor("#FFFFFF"))
                                 }
                             }
                         }
                     } else {
+                        binding2.ivGusto.visibility = View.VISIBLE
                         binding2.btnEnter.backgroundTintList = colorStateOffList
+                        binding2.lyCheckGroup.visibility = View.GONE
                         binding2.btnEnter.setTextColor(Color.parseColor("#717171"))
                     }
                 }

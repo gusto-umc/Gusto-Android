@@ -86,6 +86,12 @@ data class ResponseGroup(
     // 초대 코드로 그룹 정보 조회
     @SerializedName("numMembers") val numMembers : Int
 )
+// 초대 코드로 그룹 정보 조회
+data class ResponseCheckGroup(
+    @SerializedName("groupName") val groupName : String,
+    @SerializedName("groupMembers") val groupMembers : List<String>,
+    @SerializedName("numMembers") val numMembers : Int
+)
 data class Member(
     @SerializedName("groupMemberId") val groupMemberId : Int,
     @SerializedName("nickname") val nickname : String,
