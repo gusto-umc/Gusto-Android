@@ -68,10 +68,16 @@ class StoreEditAdapter : ListAdapter<PResponseStoreListItem, StoreEditAdapter.Vi
             if(holder.cb.isChecked){
                 gustoViewModel!!.selectedStoreIdList.remove(holder.data!!.pinId)
                 holder.cb.isChecked = false
+                if(gustoViewModel!!.selectedStoreIdList.size != gustoViewModel!!.myAllStoreList.size){
+                    gustoViewModel!!.updateSelectFlag("false")
+                }
             }
             else{
                 gustoViewModel!!.selectedStoreIdList.add(holder.data!!.pinId)
                 holder.cb.isChecked = true
+                if(gustoViewModel!!.selectedStoreIdList.size == gustoViewModel!!.myAllStoreList.size){
+                    gustoViewModel!!.updateSelectFlag("all")
+                }
             }
         }
 
@@ -79,10 +85,16 @@ class StoreEditAdapter : ListAdapter<PResponseStoreListItem, StoreEditAdapter.Vi
             if(isChecked){
                 gustoViewModel!!.selectedStoreIdList.add(holder.data!!.pinId)
                 holder.cb.isChecked = isChecked
+                if(gustoViewModel!!.selectedStoreIdList.size == gustoViewModel!!.myAllStoreList.size){
+                    gustoViewModel!!.updateSelectFlag("all")
+                }
             }
             else{
                 gustoViewModel!!.selectedStoreIdList.remove(holder.data!!.pinId)
                 holder.cb.isChecked = isChecked
+                if(gustoViewModel!!.selectedStoreIdList.size != gustoViewModel!!.myAllStoreList.size){
+                    gustoViewModel!!.updateSelectFlag("false")
+                }
             }
         }
     }

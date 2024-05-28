@@ -73,7 +73,7 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
                     view?.findViewById<RecyclerView>(R.id.rv_category_add_icon)!!.visibility = View.VISIBLE
                 }
             }
-            //view?.findViewById<Switch>(R.id.switch_category_public)?.isEnabled = true
+            view?.findViewById<Switch>(R.id.switch_category_public)?.isEnabled = true
             view?.findViewById<TextView>(R.id.tv_category_save)?.setOnClickListener {
                 val title = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)!!.text.toString()
                 val desc = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)!!.text.toString()
@@ -192,8 +192,8 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
             override fun onClick(v: View, position: Int) {
                 //선택 아이콘 변경
                 selectedIconInt = (position+1)
-                //iv src 변경 적용 -> 오류
-                //view?.findViewById<ImageView>(R.id.iv_category_add_icon)!!.setImageResource(data)
+                //iv src 변경 적용
+                view?.findViewById<ImageView>(R.id.iv_category_add_icon)!!.setImageResource(sampleIconArray[position])
                 //rv visibility 변경
                 view?.findViewById<RecyclerView>(R.id.rv_category_add_icon)!!.visibility = View.GONE
             }

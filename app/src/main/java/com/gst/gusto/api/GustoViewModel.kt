@@ -1455,6 +1455,13 @@ class GustoViewModel: ViewModel() {
 
         })
     }
+    private var _allFlag = MutableLiveData<String>("false")
+    val allFlag : LiveData<String>
+        get() = _allFlag
+
+    fun updateSelectFlag(change : String){
+        _allFlag.value = change
+    }
     fun deleteStores(data : MutableList<Int>, callback: (Int) -> Unit){
         service.deleteStores(xAuthToken, data).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

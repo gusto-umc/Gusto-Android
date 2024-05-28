@@ -72,23 +72,6 @@ class StoreFragment : Fragment() {
         binding.rvStore.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
 
-
-//        gustoViewModel.getPPMyStore(gustoViewModel. selectedCategoryInfo!!.myCategoryId, null){
-//                result, getHasNext ->
-//            when(result){
-//                1 -> {
-//                    //success
-//                    mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
-//                    hasNext = getHasNext
-//                    mStoreAdapter?.notifyDataSetChanged()
-//                }
-//                else-> {
-//                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-//                }
-//
-//            }
-//        }
-
         rvStore.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)

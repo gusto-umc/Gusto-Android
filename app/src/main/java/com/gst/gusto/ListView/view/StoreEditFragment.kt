@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -133,6 +135,46 @@ class StoreEditFragment : Fragment() {
         /**
          * 4. 전체 선택
          */
+        binding.cbStoreEditAll.setOnClickListener {
+            binding.cbStoreEditAll.isChecked
+            if(binding.cbStoreEditAll.isChecked){
+                gustoViewModel.updateSelectFlag("all")
+            }
+            else{
+                gustoViewModel!!.updateSelectFlag("all delete")
+            }
+        }
+
+        gustoViewModel.allFlag.observe(viewLifecycleOwner, Observer {
+            if(gustoViewModel.allFlag.value == "all"){
+                //전체선택
+                val handler = Handler(Looper.getMainLooper())
+                handler.postDelayed({
+                    binding.cbStoreEditAll.isChecked = true
+                    gustoViewModel.selectedStoreIdList.clear()
+                    for(i in gustoViewModel.myAllStoreList){
+                        gustoViewModel.selectedStoreIdList.add(i.pinId)
+                    }
+                    mStoreEditAdapter.notifyDataSetChanged()
+                }, 1000)
+
+
+
+            }
+            else if(gustoViewModel.allFlag.value == "false"){
+                binding.cbStoreEditAll.isChecked = false
+            }
+            else{
+                //전체 해제
+                val handler = Handler(Looper.getMainLooper())
+                handler.postDelayed({
+                    binding.cbStoreEditAll.isChecked = false
+                    gustoViewModel.selectedStoreIdList.clear()
+                    mStoreEditAdapter.notifyDataSetChanged()
+                }, 1000)
+            }
+        })
+
     }
 
 }

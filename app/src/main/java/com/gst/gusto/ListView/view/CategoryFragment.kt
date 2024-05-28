@@ -58,7 +58,7 @@ class CategoryFragment : Fragment() {
 
         val mCategoryAdapter = CategoryAdapter(view, object : CategoryAdapter.OptionsMenuClickListener{
             override fun onOptionsMenuClicked(position: Int) {
-                Toast.makeText(context , "delete clicked" , Toast.LENGTH_SHORT).show()
+
             }
 
         })
