@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil.Companion.MarkerItem
 import com.gst.gusto.api.GustoViewModel
@@ -20,6 +21,7 @@ class RouteCreateFragment : Fragment() {
 
     lateinit var binding: FragmentListRouteCreateBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
+    private var tmp = 1
     private val itemList = ArrayList<MarkerItem>()
 
     override fun onCreateView(

@@ -225,6 +225,33 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
+    // 타인의 루트 조회
+    fun getOtherRoute(nickname: String,callback: (Int) -> Unit){
+        Log.e("token",xAuthToken)
+        service.getOtherRoute(xAuthToken,nickname).enqueue(object : Callback<List<Routes>> {
+            override fun onResponse(call: Call<List<Routes>>, response: Response<List<Routes>>) {
+                if (response.isSuccessful) {
+                    // 성공적이라면 일단 서버와의 연결에 성공 했다는 것!
+                    val responseBody = response.body()
+                    otherRouteList.clear()
+                    if(responseBody!=null) {
+                        Log.d("viewmodel", "Successful response: ${response}")
+                        for(data in responseBody) {
+                            otherRouteList.add(GroupItem(data.routeId, data.routeName, 0, true,data.numStore, 0))
+                        }
+                    }
+                    callback(1)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3)
+                }
+            }
+            override fun onFailure(call: Call<List<Routes>>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3)
+            }
+        })
+    }
     // 루트 생성/그룹 내 루트 추가
     fun createRoute(callback: (Int) -> Unit){
         Log.e("token",xAuthToken)

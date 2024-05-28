@@ -194,6 +194,7 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
                 selectedIconInt = (position+1)
                 //iv src 변경 적용
                 view?.findViewById<ImageView>(R.id.iv_category_add_icon)!!.setImageResource(sampleIconArray[position])
+                view?.findViewById<ImageView>(R.id.iv_category_add_icon)!!.setImageResource(sampleIconArray[position])
                 //rv visibility 변경
                 view?.findViewById<RecyclerView>(R.id.rv_category_add_icon)!!.visibility = View.GONE
             }

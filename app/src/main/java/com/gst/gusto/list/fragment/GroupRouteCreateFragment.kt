@@ -17,6 +17,7 @@ import com.gst.gusto.api.RequestCreateRoute
 import com.gst.gusto.api.RouteList
 import com.gst.gusto.databinding.FragmentListGroupMRouteCreateBinding
 import com.gst.gusto.list.adapter.MapRoutesAdapter
+import com.gst.gusto.search.RouteSearchFragment
 
 class GroupRouteCreateFragment : Fragment() {
 

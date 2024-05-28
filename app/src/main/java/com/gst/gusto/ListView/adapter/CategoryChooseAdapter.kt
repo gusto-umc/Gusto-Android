@@ -6,7 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.ListView.Model.CategorySimple
+import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.ResponseAllCategory
 import com.gst.gusto.api.ResponseMapCategory
 import com.gst.gusto.databinding.ItemMapCategoryChooseBinding
 

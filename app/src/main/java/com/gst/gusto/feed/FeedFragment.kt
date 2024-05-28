@@ -9,16 +9,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseFeedReview
-import com.gst.gusto.api.ResponseInstaReviews
 import com.gst.gusto.databinding.FragmentFeedBinding
-import com.gst.gusto.review.adapter.GalleryReviewAdapter
 import com.gst.gusto.review.adapter.GridItemDecoration
 
 class FeedFragment : Fragment() {
@@ -35,16 +33,31 @@ class FeedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentFeedBinding.inflate(inflater, container, false)
-
+        Log.d("CurrentFragment","onCreateView")
         initView()
-        getData()
+
 
         return binding.root
 
     }
 
-    fun initView(){
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        getData()
 
+        Log.d("CurrentFragment","onViewCreated")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("CurrentFragment","onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("CurrentFragment","onPause")
+    }
+    fun initView(){
         adapter = FeedReviewAdapter(ArrayList(), context,
             itemClickListener = { reviewId ->
                 gustoViewModel.currentFeedReviewId = reviewId
@@ -71,7 +84,7 @@ class FeedFragment : Fragment() {
                     if (focus){
                         val fragmentManger = activity?.supportFragmentManager
                         fragmentManger?.beginTransaction()
-                            ?.add(R.id.fl_container, FeedSearchFragment())
+                            ?.add(R.id.fl_container, FeedSearchFragment(),"FeedSearchFragmentTag")
                             ?.addToBackStack(null)
                             ?.commit()
                         clearFocus()
@@ -83,19 +96,36 @@ class FeedFragment : Fragment() {
 
 
     fun getData() {
-        gustoViewModel.getTokens(requireActivity() as MainActivity)
+
+        val feedList = ArrayList<ResponseFeedReview>()
+
         gustoViewModel.feed() { result, response ->
             if (result == 1) {
-                val feedList = ArrayList<ResponseFeedReview>()
-
-                response?.forEach {
-                    feedList.add(ResponseFeedReview(it.reviewId, it.images))
+                feedList.clear()
+                if(response != null) {
+                    response.forEach {
+                        feedList.add(ResponseFeedReview(it.reviewId, it.images))
+                    }
+                    adapter.feedList = feedList
+                    adapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(requireContext(),"네트워크 연결이 불안정합니다.", Toast.LENGTH_SHORT).show()
                 }
-                adapter.feedList = feedList
-                adapter.notifyDataSetChanged()
+
             }
-            Log.d("listResponse", response.toString())
+            Log.d("feedResponse", feedList.toString())
         }
+
+        gustoViewModel.searchFeedData.observe(viewLifecycleOwner, Observer { value ->
+            feedList.clear()
+            gustoViewModel.searchFeedData?.value?.reviews?.forEach {
+                feedList.add(ResponseFeedReview(it.reviewId, it.images))
+            }
+            adapter.feedList = feedList
+            adapter.notifyDataSetChanged()
+            Log.d("feedResponse2", feedList.toString())
+        })
+
     }
 
 }

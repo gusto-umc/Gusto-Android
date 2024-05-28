@@ -169,7 +169,6 @@ class ListViewCategoryAdapter(private var flag : String, private val fragmentMan
                         }
                     }
 
-
                 }
             }
             else {

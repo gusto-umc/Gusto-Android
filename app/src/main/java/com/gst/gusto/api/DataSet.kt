@@ -177,7 +177,7 @@ data class RequestPin(
 
 //가게 상세 조회
 data class ResponseStoreDetail(
-    @SerializedName("storeId") var storeId : Int,
+    @SerializedName("storeId") val storeId : Int,
     @SerializedName("storeName") val storeName : String,
     @SerializedName("categoryString") val categoryString : String,
     @SerializedName("address") val address : String,

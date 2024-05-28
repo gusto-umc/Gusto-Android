@@ -1,16 +1,15 @@
 package com.gst.gusto.review
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewBinding
 import com.gst.gusto.review.adapter.ReviewAdapter
 import com.gst.gusto.review.fragment.CalendarReviewFragment
@@ -21,7 +20,9 @@ class ReviewFragment : Fragment() {
 
     lateinit var binding: FragmentReviewBinding
 
-    val icons = listOf(R.drawable.gallery_review_img, R.drawable.calendar_review_img, R.drawable.calendar_review_img)
+    val icons = listOf(R.drawable.gallery_review_img, R.drawable.calendar_review_img, R.drawable.list_review_img)
+
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,8 +31,19 @@ class ReviewFragment : Fragment() {
 
         binding = FragmentReviewBinding.inflate(inflater, container, false)
         initViewPager()
-
+        if(gustoViewModel.currentReviewPage != 0){
+            binding.reviewVP.currentItem = gustoViewModel.currentReviewPage
+        }
         return binding.root
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(gustoViewModel.currentReviewPage != 0){
+            binding.reviewVP.currentItem = gustoViewModel.currentReviewPage
+        }
+        initViewPager()
 
     }
 
@@ -49,7 +61,9 @@ class ReviewFragment : Fragment() {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
+                    gustoViewModel.currentReviewPage = binding.reviewVP.currentItem
                 }
+
             })
         }
 
@@ -57,6 +71,15 @@ class ReviewFragment : Fragment() {
         TabLayoutMediator(binding.reviewTab, binding.reviewVP) { tab, position ->
             tab.setIcon(icons[position])
         }.attach()
+
+        // 각 탭에 OnClickListener 설정
+        for (i in 0 until binding.reviewTab.tabCount) {
+            val tab = binding.reviewTab.getTabAt(i)
+            tab?.view?.setOnClickListener {
+                binding.reviewVP.currentItem = i
+                gustoViewModel.currentReviewPage = i
+            }
+        }
 
     }
 

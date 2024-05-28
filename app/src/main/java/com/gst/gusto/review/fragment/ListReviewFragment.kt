@@ -50,20 +50,17 @@ class ListReviewFragment : Fragment() {
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(activity)
         }
-        
-        gustoViewModel.getTokens(requireActivity() as MainActivity)
-        gustoViewModel.timeLineView(null, 31) { result , response ->
-            when(result){
-                1 -> {
-                    adapter.setData(list = getData(response))
-                } else -> {
 
-                }
-            }
-
-        }
-        
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        gustoViewModel.timeLineView(null, 31) { result , response ->
+            if(result == 1){
+                adapter.setData(list = getData(response))
+            }
+        }
     }
 
     fun getData(response: ResponseListReview?): ArrayList<ListReviewData> {
@@ -71,31 +68,26 @@ class ListReviewFragment : Fragment() {
         val DF = SimpleDateFormat("MM/dd", Locale.KOREAN)
         Log.d("response", response?.reviews.toString())
 
-        var imageview1 = ""
-        var imageview2 = ""
-        var imageview3 = ""
-
         response?.reviews?.let {
             for(data in it){
                 val date = DF.format(data.visitedAt).toString()
-                val name = data.storeName
                 val visit = data.visitedCount.toString()
-                // Log.d("img", data.imgs.toString())
+                val imagesList : ArrayList<String> = ArrayList()
+
                 if(data.images != null){
-                    imageview1 = data.images.getOrNull(0).toString()
-                    imageview2 = data.images.getOrNull(1).toString()
-                    imageview3 = data.images.getOrNull(2).toString()
+                    for (image in data.images){
+                        imagesList.add(image)
+                    }
                 }
 
-
-                val reviewData = ListReviewData(date, name, visit, imageview1, imageview2, imageview3, data.reviewId)
+                val reviewData = ListReviewData(date, data.storeName, visit, imagesList, data.reviewId)
                 reviewList.add(reviewData)
             }
         }
 
         val NowTime = System.currentTimeMillis()
         val result = DF.format(NowTime).toString()
-        reviewList.add(ListReviewData(result, "","","","","", 0, ListReviewType.LISTBUTTON))
+        reviewList.add(ListReviewData(result, "","", ArrayList(), 0, ListReviewType.LISTBUTTON))
 
         return reviewList
     }

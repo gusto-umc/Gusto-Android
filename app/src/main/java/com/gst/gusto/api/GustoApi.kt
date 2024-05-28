@@ -65,9 +65,6 @@ interface GustoApi {
         @Body body : List<RouteList>
     ):Call<ResponseBody>
 
-
-
-
     //GROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUP
 
     @GET("groups") // 그룹 리스트 조회
@@ -379,7 +376,7 @@ interface GustoApi {
     fun editReview(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("reviewId") reviewId : Long,
-        @Part image: List<MultipartBody.Part>?,
+        @Part image: MultipartBody.Part?,
         @Part("info") info: RequestMyReview
     ) : Call<Void>
 

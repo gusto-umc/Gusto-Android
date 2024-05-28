@@ -8,7 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.ListView.adapter.CategoryChooseBottomSheetDialog
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.Util.mapUtil
@@ -17,9 +19,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.internal.notifyAll
 
 
 class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerItem>,val activity: MainActivity,val option : Int) : RecyclerView.Adapter<RouteViewPagerAdapter.ReviewDetailViewHolder>() {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewDetailViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_map_route_vp, parent, false)
@@ -31,7 +35,7 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
         holder.tv_route_order.text = "${position+1}"
         holder.tv_rest_name.text = item.storeName
         holder.tv_rest_loc.text = item.address
-        if(option == 1) holder.cv_parent.visibility = View.GONE // 0(루트), 1(일반 지도)
+        if(option == 1||option == 2) holder.cv_parent.visibility = View.GONE // 0(루트), 1(검색 지도), 2(메인 지도)
 
         activity.gustoViewModel.getStoreDetailQuick(item.storeId) { result,data ->
             when (result) {
@@ -43,6 +47,44 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
                             if(data.reviewImg3.size>2) setImage(holder.iv_3,data.reviewImg3[2],holder.itemView.context)
                         }
                         if(data.pin) holder.btn_bookmark.setImageResource(R.drawable.vector_black)
+                        holder.btn_bookmark.setOnClickListener {
+                            if(data.pin){
+                                //삭제 요청
+                                activity.gustoViewModel.deletePin(data.pinId.toInt()){
+                                        result ->
+                                    when(result){
+                                        0-> {
+                                            //성공
+                                            holder.btn_bookmark.setImageResource(R.drawable.save_x_img)
+                                            data.pin = false
+                                        }
+                                        1 -> {
+                                            //실패
+                                        }
+                                    }
+                                }
+
+                            }
+                            else{
+                                //추가 요청
+                                val mChooseBottomSheetDialog = CategoryChooseBottomSheetDialog(data.storeId.toInt().toString()){
+                                    result, rRata ->
+                                    when(result){
+                                        1 -> {
+                                            Log.d("bottomsheet", "카테고리 선택 click")
+                                            holder.btn_bookmark.setImageResource(R.drawable.vector_black)
+                                            data.pin = true
+                                            data.pinId = rRata!!.pinId.toLong()
+                                        }
+                                    }
+                                }
+                                mChooseBottomSheetDialog.viewModel = activity.gustoViewModel
+                                mChooseBottomSheetDialog.show(activity.supportFragmentManager, mChooseBottomSheetDialog.tag)
+
+                            }
+                        }
+                        item.latitude = data.latitude
+                        item.longitude = data.longitude
                     }
                 }
                 else -> {
@@ -51,9 +93,13 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
             }
         }
         holder.btn_detail.setOnClickListener {
-            activity.getCon().navigate(R.id.action_groupMRoutMapFragment_to_storeDetailFragment)
+            activity.gustoViewModel.selectedDetailStoreId = item.storeId.toInt()
+            if(option==0) activity.getCon().navigate(R.id.action_groupMRoutMapFragment_to_storeDetailFragment)
+            else if(option==1) activity.getCon().navigate(R.id.action_fragment_map_viewpager_to_storeDetailFragment)
+            else if(option==2) activity.getCon().navigate(R.id.action_fragment_map_to_storeDetailFragment)
         }
-        //holder.btn_bookmark
+
+
     }
 
     override fun getItemCount(): Int {
