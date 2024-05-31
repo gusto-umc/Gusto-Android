@@ -13,7 +13,6 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
-import retrofit2.http.QueryMap
 import java.time.LocalDate
 
 
@@ -36,13 +35,15 @@ interface GustoApi {
     //ROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTE
     @GET("routes") // 내 루트 조회
     fun getMyRoute(
-        @Header("X-AUTH-TOKEN") token : String
-    ):Call<List<Routes>>
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("routeId") routeId : Long?
+    ):Call<ResponseRoutes>
     @GET("routes/{nickname}") // 타인의 루트 조회
     fun getOtherRoute(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("nickname") nickname : String
-    ):Call<List<Routes>>
+        @Path("nickname") nickname : String,
+        @Query("routeId") routeId : Long?
+    ):Call<ResponseRoutes>
 
     @POST("routes") // 루트 생성 or 그룹 내 루트 추가
     fun createRoute(
@@ -59,6 +60,14 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Path("routeId") routeId : Long
     ):Call<ResponseBody>
+
+    @PATCH("routes/{routeId}") // 루트 수정
+    fun editRoute(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("routeId") routeId : Long,
+        @Body requestEditRoute : RequestEditRoute
+    ):Call<ResponseBody>
+
     @DELETE("routeLists/{routeListId}") // 루트 내 식당(경로) 삭제
     fun deleteRouteStore(
         @Header("X-AUTH-TOKEN") token : String,
@@ -79,19 +88,22 @@ interface GustoApi {
 
     @GET("groups") // 그룹 리스트 조회
     fun getGroups(
-        @Header("X-AUTH-TOKEN") token : String
-    ):Call<List<ResponseGetGroups>>
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("lastGroupId") lastGroupId: Long?
+    ):Call<ResponseGetGroups>
 
-    @GET("groups/{groupId}/groupLists") // 그룹 내 식당 목록 조회
+    @GET("groups/{groupId}/groupLists") // 그룹 내 찜 식당 목록 조회
     fun getGroupStores(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("groupId") groupId : Long
-    ):Call<List<ResponseStore>>
+        @Path("groupId") groupId : Long,
+        @Query("groupListId") groupListId : Long?
+    ):Call<ResponseStores>
     @GET("routes/groups/{groupId}") // 그룹 내 루트 목록
     fun getGroupRoutes(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("groupId") groupId : Long
-    ):Call<List<Routes>>
+        @Path("groupId") groupId : Long,
+        @Query("routeId") routeId : Long?
+    ):Call<ResponseRoutes>
 
     @POST("groups/{groupId}/groupList") // 그룹 내 식당 추가
     fun addGroupStore(
@@ -118,6 +130,12 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Body body : RequestCreateGroup
     ):Call<ResponseBody>
+
+    @POST("groups/check-invitation") // 초대 코드로 그룹 정보 조회
+    fun checkGroup(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Body body : RequestCheckGroup
+    ):Call<ResponseCheckGroup>
 
     @DELETE("groups/{groupId}") // 그룹 삭제
     fun deleteGroup(
@@ -153,8 +171,9 @@ interface GustoApi {
     @GET("groups/{groupId}/members") // 그룹 구성원 조회
     fun getGroupMembers(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("groupId") groupId : Long
-    ):Call<List<Member>>
+        @Path("groupId") groupId : Long,
+        @Query("lastMemberId") lastMemberId : Int?
+    ):Call<ResponseGroupMembers>
 
     @GET("groups/{groupId}/invitationCode") // 그룹 초대코드 조회
     fun getGroupInvitationCode(
@@ -393,13 +412,14 @@ interface GustoApi {
 
     @GET("users/follower") // 팔로워 조회
     fun getFollower(
-        @Header("X-AUTH-TOKEN") token : String
-    ):Call<List<Member>>
-    @GET("users/following") // 팔로워 조회
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("followId") followerId : Int?
+    ):Call<ResponseFollowMembers>
+    @GET("users/following") // 팔로잉 조회
     fun getFollowing(
-        @Header("X-AUTH-TOKEN") token : String
-    ):Call<List<Member>>
-
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("followId") followerId : Int?
+    ):Call<ResponseFollowMembers>
 
     @GET("reviews/calView") // 리뷰 모아보기 - 2 (cal view)
     fun calView(

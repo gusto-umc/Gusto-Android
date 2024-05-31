@@ -38,6 +38,16 @@
                 android:text="루트"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
+            <TextView
+                android:id="@+id/btn_remove_or_save"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:layout_marginRight="15dp"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="삭제"/>
 
         </LinearLayout>
 
@@ -63,17 +73,28 @@
                     android:gravity="center_vertical"
                     android:text="루트" />
 
-                <TextView
+                <EditText
                     android:id="@+id/tv_route_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:enabled="false"
+                    android:focusable="false"
                     android:textSize="20sp"
                     android:fontFamily="@font/pretendard_bold"
                     android:textColor="@color/white"
                     android:gravity="center_vertical"
                     android:layout_marginBottom="20dp"
-                    android:text="성수동 투어" />
+                    android:hint=""
+                    android:textColorHint="#4DFFFFFF"
+                    android:text="" />
             </LinearLayout>
+            <ImageView
+                android:id="@+id/btn_edit"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:padding="15dp"
+                android:src="@drawable/fab_edit_img"/>
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

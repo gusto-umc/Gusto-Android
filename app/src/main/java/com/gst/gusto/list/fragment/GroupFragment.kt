@@ -45,62 +45,30 @@ class GroupFragment : Fragment() {
 
 
         binding.ivBack.setOnClickListener {
-            val adapter = mPager.adapter as GroupViewpagerAdapter
-
-            gustoViewModel.itemList.clear()
-            gustoViewModel.tmpName =""
-
             binding.btnSave.visibility =View.GONE
-            val frag = adapter.getCurrentFragment()
-            Log.d("frag",frag.toString())
-            if(frag is GroupRoutesFragment) {
-                val tmp = frag.getCon()
-                if(tmp!=null) {
-                    if(tmp.currentDestination !=null && (tmp.currentDestination!!.id == R.id.fragment_group_m_route_stores
-                                || tmp.currentDestination!!.id == R.id.fragment_group_m_route_create)) {
-                        tmp.navigate(R.id.fragment_group_m_route_routes)
-                    } else findNavController().popBackStack()
-                } else findNavController().popBackStack()
 
-            } else findNavController().popBackStack()
+            if(gustoViewModel.groupFragment ==2) {
+                gustoViewModel.groupFragment = 1
+                gustoViewModel.groupRouteFragment.popBack()
+            } else {
+                findNavController().popBackStack()
+            }
         }
         binding.btnSave.setOnClickListener {
-            val adapter = mPager.adapter as GroupViewpagerAdapter
-            val frag = adapter.getCurrentFragment() as GroupRoutesFragment
-
-            (frag.getNavHost().childFragmentManager.primaryNavigationFragment as GroupRouteCreateFragment).getRequestRoutesData()
+            gustoViewModel.groupRouteCreateFragment.getRequestRoutesData()
             gustoViewModel.createRoute {result ->
                 when(result) {
                     1 -> {
                         gustoViewModel.requestRoutesData = null
-                        val tmp = frag.getCon()
-
-                        if(frag is GroupRoutesFragment) {
-                            if(tmp!=null) {
-                                if(tmp.currentDestination !=null && (tmp.currentDestination!!.id == R.id.fragment_group_m_route_stores)) {
-                                    tmp.navigate(R.id.fragment_group_m_route_routes)
-                                } else findNavController().popBackStack()
-                            } else findNavController().popBackStack()
-                        } else findNavController().popBackStack()
+                        gustoViewModel.groupRouteFragment.popBack()
                         binding.btnSave.visibility =View.GONE
                     }
                 }
             }
-
-            gustoViewModel.itemList.clear()
-            gustoViewModel.tmpName =""
         }
         binding.lyPeople.setOnClickListener {
-            gustoViewModel.getGroupMembers {result ->
-                when(result) {
-                    1 -> {
-
-                        gustoViewModel.followListTitleName= "그룹 리스트&루트"
-                        findNavController().navigate(R.id.action_groupFragment_to_followListFragment)
-                    }
-                    else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                }
-            }
+            gustoViewModel.followListTitleName= "그룹 리스트&루트"
+            findNavController().navigate(R.id.action_groupFragment_to_followListFragment)
         }
         binding.tvNotice.setOnClickListener {
             val mDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_notice, null)
@@ -271,14 +239,34 @@ class GroupFragment : Fragment() {
             }
         }
         mPager.adapter = GroupViewpagerAdapter(requireActivity(),GroupRoutesFragment(gustoViewModel.groupFragment),mPager,2)
+
+        if(gustoViewModel.routeStorTmpData != null) {
+            var data = gustoViewModel.routeStorTmpData
+            if(gustoViewModel.groupFragment==0) {
+                gustoViewModel.addGroupStore(data!!.storeId.toLong()) { result ->
+                    when(result) {
+                        1 -> {
+                            gustoViewModel.groupStoresFragment.setGroupStores()
+                        }
+                        2-> Toast.makeText(requireContext(), "이미 해당 그룹에 존재하는 식당입니다.", Toast.LENGTH_SHORT).show()
+                        else -> {
+                            Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                }
+            } else {
+                Log.d("viewmodel3","check")
+                gustoViewModel.groupRouteCreateFragment.addStore()
+            }
+            gustoViewModel.routeStorTmpData = null
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         Log.d("viewmodel","destroy gorup fragment ")
         gustoViewModel.groupFragment = 0
-        gustoViewModel.itemList.clear()
-        gustoViewModel.tmpName =""
     }
 
     override fun onPause() {
@@ -288,7 +276,8 @@ class GroupFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if(gustoViewModel.groupFragment > 0)  {
-            mPager.adapter = GroupViewpagerAdapter(requireActivity(),GroupRoutesFragment(gustoViewModel.groupFragment),mPager,2)
+            //mPager.adapter = GroupViewpagerAdapter(requireActivity(),GroupRoutesFragment(gustoViewModel.groupFragment),mPager,2)
+            if(gustoViewModel.groupFragment==2) binding.btnSave.visibility = View.VISIBLE
             mPager.setCurrentItem(1,false)
             binding.lyGroup.setBackgroundColor(Color.TRANSPARENT)
         }
