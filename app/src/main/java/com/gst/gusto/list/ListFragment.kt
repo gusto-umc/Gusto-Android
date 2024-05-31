@@ -21,10 +21,10 @@ import androidx.navigation.fragment.findNavController
 import com.gst.clock.Fragment.ListGroupFragment
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.util.DiaLogFragment
-import com.gst.gusto.util.util.Companion.dpToPixels
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListMainBinding
+import com.gst.gusto.util.DiaLogFragment
+import com.gst.gusto.util.util.Companion.dpToPixels
 
 
 class ListFragment : Fragment() {
