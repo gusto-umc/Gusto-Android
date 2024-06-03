@@ -99,7 +99,7 @@ class MyListFragment : Fragment() {
             //other(feed)
             gustoViewModel.myAllCategoryList.clear()
 
-            val mCategoryAdapter = CategoryAdapter(view, "my")
+            val mCategoryAdapter = CategoryAdapter(view, "feed")
             mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
             mCategoryAdapter.viewModel = gustoViewModel
             mCategoryAdapter.mContext = context
@@ -108,7 +108,7 @@ class MyListFragment : Fragment() {
 
             var hasNext = false
 
-            gustoViewModel.getPPMyCategory(null){
+            gustoViewModel.getPPOtherCategory(null, gustoViewModel.currentFeedNickname){
                     result, getHasNext ->
                 when(result){
                     1 -> {
@@ -133,7 +133,7 @@ class MyListFragment : Fragment() {
 
                     // 페이징 처리
                     if(rvPosition == totalCount && hasNext) {
-                        gustoViewModel.getPPMyCategory(gustoViewModel.myAllCategoryList.last().myCategoryId) {result, getHasNext ->
+                        gustoViewModel.getPPOtherCategory(gustoViewModel.myAllCategoryList.last().myCategoryId, gustoViewModel.currentFeedNickname) {result, getHasNext ->
                             hasNext = getHasNext
                             when(result) {
                                 1 -> {

@@ -378,6 +378,10 @@
         <action
             android:id="@+id/action_fragment_other_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_fragment_other_to_StoreFragment"
+            app:destination="@id/storeFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/fragment_my_profile"

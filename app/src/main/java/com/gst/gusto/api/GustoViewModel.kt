@@ -1269,6 +1269,45 @@ class GustoViewModel: ViewModel() {
 
     }
 
+    fun getPPOtherCategory(categoryId : Int?, nickname: String, callback: (Int, Boolean) -> Unit){
+        service.pGetOtherCategory(xAuthToken, nickname, categoryId).enqueue(object : Callback<ResponsePMyCategory>{
+            override fun onResponse(
+                call: Call<ResponsePMyCategory>,
+                response: Response<ResponsePMyCategory>
+            ) {
+                if(response.isSuccessful){
+                    val body = response.body()
+                    if(body!=null){
+                        Log.e("getPPOtherCategory", "Successful response: ${response}")
+                        myAllCategoryList.addAll(body.result)
+                        Log.e("getPPOtherCategory", myAllCategoryList.toString())
+                        callback(1, body.hasNext)
+                    }
+                    else{
+                        callback(2, false)
+                    }
+                }
+                else if(response.code() == 403){
+                    //추가 예정
+                    callback(2, false)
+                }
+                else if(response.code() == 404){
+                    Log.e("getPPOtherCategory", "Unsuccessful response: ${response}")
+                    callback(2, false)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponsePMyCategory>, t: Throwable) {
+                Log.e("getPPOtherCategory", "Failed to make the request", t)
+                callback(3, false)
+            }
+
+        })
+
+    }
+
+
+
 
     /**
      * 가게 api 함수 - mindy
@@ -1514,6 +1553,44 @@ class GustoViewModel: ViewModel() {
 
             override fun onFailure(call: Call<PResponseStoreData>, t: Throwable) {
                 Log.e("getPPMyCategory", "Failed to make the request", t)
+                callback(3, false)
+            }
+
+        })
+
+    }
+
+    //paging -> other user store
+    fun getPPOtherStore(categoryId: Int, nickname: String, pinId : Int?, callback: (Int, Boolean) -> Unit){
+        service.ppGetAllOtherStores(xAuthToken, nickname, categoryId, pinId).enqueue(object : Callback<PResponseStoreData>{
+            override fun onResponse(
+                call: Call<PResponseStoreData>,
+                response: Response<PResponseStoreData>
+            ) {
+                if(response.isSuccessful){
+                    val body = response.body()
+                    if(body!=null){
+                        Log.e("getPPOtherStore", "Successful response: ${response}")
+                        myAllStoreList.addAll(body.result)
+                        Log.e("getPPOtherStore", myAllStoreList.toString())
+                        callback(1, body.hasNext)
+                    }
+                    else{
+                        callback(2, false)
+                    }
+                }
+                else if(response.code() == 403){
+                    //추가 예정
+                    callback(2, false)
+                }
+                else if(response.code() == 404){
+                    Log.e("getPPOtherStore", "Unsuccessful response: ${response}")
+                    callback(2, false)
+                }
+            }
+
+            override fun onFailure(call: Call<PResponseStoreData>, t: Throwable) {
+                Log.e("getPPOtherStore", "Failed to make the request", t)
                 callback(3, false)
             }
 

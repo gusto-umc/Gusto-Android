@@ -282,6 +282,14 @@ interface GustoApi {
         @Query("myCategoryId") myCategoryId : Int?
     ) : Call<ResponsePMyCategory>
 
+    //9. 카테고리 전체조회(타유저)
+    @GET("myCategories")
+    fun pGetOtherCategory(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("nickname") nickname : String?,
+        @Query("myCategoryId") myCategoryId : Int?
+    ) : Call<ResponsePMyCategory>
+
     /**
      * 가게
      */
@@ -353,6 +361,15 @@ interface GustoApi {
     @GET("myCategories/pins")
     fun ppGetAllMyStores(
         @Header("X-AUTH-TOKEN") token : String,
+        @Query("myCategoryId") categoryId : Int,
+        @Query("pinId") pinId : Int?
+    ): Call<PResponseStoreData>
+
+    // 9. (paging) 카테고리별 타인 가게 조회
+    @GET("myCategories/pins")
+    fun ppGetAllOtherStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("nickname") nickname : String?,
         @Query("myCategoryId") categoryId : Int,
         @Query("pinId") pinId : Int?
     ): Call<PResponseStoreData>

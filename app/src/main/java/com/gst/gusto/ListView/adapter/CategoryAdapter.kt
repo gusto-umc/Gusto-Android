@@ -76,12 +76,12 @@ class CategoryAdapter(private val view: View, val flag : String) : ListAdapter<R
             }
         }
         else{
-            holder.popup.visibility = View.VISIBLE
+            holder.popup.visibility = View.INVISIBLE
             holder.categoryLayout.setOnClickListener {
                 viewModel!!.selectedCategoryInfo = holder.data
                 val bundle3 = Bundle()
                 bundle3.putString("sign", "feed")
-                Navigation.findNavController(view).navigate(R.id.action_categoryFragment_to_storeFragment, bundle3)
+                Navigation.findNavController(view).navigate(R.id.action_fragment_other_to_StoreFragment, bundle3)
             }
         }
 

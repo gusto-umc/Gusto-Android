@@ -28,6 +28,7 @@ class StoreFragment : Fragment() {
     private val gustoViewModel : GustoViewModel by activityViewModels()
     private lateinit var mStoreAdapter : StoreAdapter
     private var hasNext = false
+    private var signal = "map"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +55,7 @@ class StoreFragment : Fragment() {
          * 0. args 확인
          */
         var sign = arguments?.getString("sign")
+        signal = sign!!
         if(sign == "map"){
             binding.tvStoreEdit.visibility = View.VISIBLE
             binding.tvSavedStore.visibility = View.VISIBLE
@@ -76,41 +78,80 @@ class StoreFragment : Fragment() {
         /**
          * 2. , rv onclick 처리, 페이징
          */
+        if(sign != "feed"){
+            //서버 연결
+            mStoreAdapter?.mContext = context
+            mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
+            mStoreAdapter?.gustoViewModel = gustoViewModel
+            binding.rvStore.adapter = mStoreAdapter
+            binding.rvStore.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        //서버 연결
-        mStoreAdapter?.mContext = context
-        mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
-        mStoreAdapter?.gustoViewModel = gustoViewModel
-        binding.rvStore.adapter = mStoreAdapter
-        binding.rvStore.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
+            rvStore.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val rvPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                    // 리사이클러뷰 아이템 총개수 (index 접근 이기 때문에 -1)
+                    val totalCount = recyclerView.adapter?.itemCount?.minus(1)
 
-        rvStore.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
-                // 리사이클러뷰 아이템 총개수 (index 접근 이기 때문에 -1)
-                val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+                    // 페이징 처리
+                    if(rvPosition == totalCount && hasNext) {
+                        gustoViewModel.getPPMyStore(gustoViewModel.selectedCategoryInfo!!.myCategoryId, gustoViewModel.myAllStoreList.last().pinId) { result, getHasNext ->
+                            hasNext = getHasNext
+                            when(result) {
+                                1 -> {
+                                    val handler = Handler(Looper.getMainLooper())
+                                    handler.postDelayed({
+                                        mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
+                                        mStoreAdapter?.notifyDataSetChanged()
+                                    }, 1000)
 
-                // 페이징 처리
-                if(rvPosition == totalCount && hasNext) {
-                    gustoViewModel.getPPMyStore(gustoViewModel.selectedCategoryInfo!!.myCategoryId, gustoViewModel.myAllStoreList.last().pinId) { result, getHasNext ->
-                        hasNext = getHasNext
-                        when(result) {
-                            1 -> {
-                                val handler = Handler(Looper.getMainLooper())
-                                handler.postDelayed({
-                                    mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
-                                    mStoreAdapter?.notifyDataSetChanged()
-                                }, 1000)
-
+                                }
+                                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정m", Toast.LENGTH_SHORT).show()
                             }
-                            else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
-            }
-        })
+            })
+        }
+        else{
+            //서버 연결
+            mStoreAdapter?.mContext = context
+            mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
+            mStoreAdapter?.gustoViewModel = gustoViewModel
+            binding.rvStore.adapter = mStoreAdapter
+            binding.rvStore.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+
+            rvStore.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val rvPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                    // 리사이클러뷰 아이템 총개수 (index 접근 이기 때문에 -1)
+                    val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+
+                    // 페이징 처리
+                    if(rvPosition == totalCount && hasNext) {
+                        gustoViewModel.getPPOtherStore(gustoViewModel.selectedCategoryInfo!!.myCategoryId, gustoViewModel.currentFeedNickname, gustoViewModel.myAllStoreList.last().pinId) { result, getHasNext ->
+                            hasNext = getHasNext
+                            when(result) {
+                                1 -> {
+                                    val handler = Handler(Looper.getMainLooper())
+                                    handler.postDelayed({
+                                        mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
+                                        mStoreAdapter?.notifyDataSetChanged()
+                                    }, 1000)
+
+                                }
+                                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정f", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+
 
         /**
          * 3. onclick 처리
@@ -162,23 +203,50 @@ class StoreFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        gustoViewModel.myAllStoreList.clear()
-        gustoViewModel.getPPMyStore(gustoViewModel. selectedCategoryInfo!!.myCategoryId, null){
-                result, getHasNext ->
-            when(result){
-                1 -> {
-                    //success
-                    mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
-                    hasNext = getHasNext
-                    mStoreAdapter?.notifyDataSetChanged()
-                    binding.tvStoreCount.text = "${gustoViewModel.myAllStoreList.size}개"
-                }
-                else-> {
-                    Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                }
 
+        if(signal == "map" || signal == "my"){
+            gustoViewModel.myAllStoreList.clear()
+            gustoViewModel.getPPMyStore(gustoViewModel. selectedCategoryInfo!!.myCategoryId, null){
+                    result, getHasNext ->
+                when(result){
+                    1 -> {
+                        //success
+                        mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
+                        hasNext = getHasNext
+                        mStoreAdapter?.notifyDataSetChanged()
+                        binding.tvStoreCount.text = "${gustoViewModel.myAllStoreList.size}개"
+                    }
+                    else-> {
+                        Toast.makeText(requireContext(), "서버와의 연결 불안정r", Toast.LENGTH_SHORT).show()
+                    }
+
+                }
             }
         }
+        else if (signal == "feed"){
+            gustoViewModel.myAllStoreList.clear()
+            gustoViewModel.getPPOtherStore(gustoViewModel. selectedCategoryInfo!!.myCategoryId, gustoViewModel.currentFeedNickname, null){
+                    result, getHasNext ->
+                when(result){
+                    1 -> {
+                        //success
+                        mStoreAdapter?.submitList(gustoViewModel.myAllStoreList)
+                        hasNext = getHasNext
+                        mStoreAdapter?.notifyDataSetChanged()
+                        binding.tvStoreCount.text = "${gustoViewModel.myAllStoreList.size}개"
+                    }
+                    else-> {
+                        Toast.makeText(requireContext(), "서버와의 연결 불안정r", Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+            }
+        }
+        else{
+
+        }
+
+
 
     }
 
