@@ -188,8 +188,7 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
         // 아이콘 Rv 연결
         val dCategoryIconAdapter = CategoryIconAdapter(sampleIconArray)
         dCategoryIconAdapter.setItemClickListener(object : CategoryIconAdapter.OnItemClickListener{
-
-            override fun onClick(v: View, position: Int) {
+            override fun onClick(v: View, position: Int, data: Int) {
                 //선택 아이콘 변경
                 selectedIconInt = (position+1)
                 //iv src 변경 적용

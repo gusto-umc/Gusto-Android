@@ -3,15 +3,11 @@ package com.gst.gusto.ListView.view
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.ContextMenu
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -19,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.adapter.CategoryAdapter
 import com.gst.gusto.ListView.adapter.CategoryBottomSheetDialog
-import com.gst.gusto.ListView.adapter.ListViewCategoryAdapter
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentCategoryBinding
@@ -56,14 +51,10 @@ class CategoryFragment : Fragment() {
 
         gustoViewModel.myAllCategoryList.clear()
 
-        val mCategoryAdapter = CategoryAdapter(view, object : CategoryAdapter.OptionsMenuClickListener{
-            override fun onOptionsMenuClicked(position: Int) {
-
-            }
-
-        })
+        val mCategoryAdapter = CategoryAdapter(view, "map")
         mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
         mCategoryAdapter.viewModel = gustoViewModel
+        mCategoryAdapter.mContext = context
         rvCategory.adapter = mCategoryAdapter
         rvCategory.layoutManager = LinearLayoutManager(this.requireActivity())
 

@@ -51,6 +51,19 @@ class StoreFragment : Fragment() {
         mStoreAdapter = StoreAdapter(view)
 
         /**
+         * 0. args 확인
+         */
+        var sign = arguments?.getString("sign")
+        if(sign == "map"){
+            binding.tvStoreEdit.visibility = View.VISIBLE
+            binding.tvSavedStore.visibility = View.VISIBLE
+        }
+        else{
+            binding.tvStoreEdit.visibility = View.INVISIBLE
+            binding.tvSavedStore.visibility = View.INVISIBLE
+        }
+
+        /**
          * 1. 데이터 연결
          * viewmodel의 selectedCategoryInfo 변수에서 가져오기
          */

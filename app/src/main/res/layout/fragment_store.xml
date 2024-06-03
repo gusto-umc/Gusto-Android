@@ -38,6 +38,7 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_saved_store"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="저장된 맛집"

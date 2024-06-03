@@ -363,6 +363,9 @@
         <action
             android:id="@+id/action_myFragment_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_myFragment_to_storeFragment"
+            app:destination="@id/storeFragment"/>
     </fragment>
     <fragment
         android:id="@+id/fragment_other"
@@ -488,6 +491,9 @@
         <action
             android:id="@+id/action_myListFragment_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_myListFragment_to_storeFragment"
+            app:destination="@id/storeFragment"/>
     </fragment>
     <fragment
         android:id="@+id/mapListviewRecFragment"
