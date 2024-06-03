@@ -374,13 +374,13 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 mapUtil.LOCATION_PERMISSION_REQUEST_CODE
             )
         } else {
-            if(!::mapView.isInitialized) {/*
+            if(!::mapView.isInitialized) {
                 mapView = MapView(requireContext())
 
                 mapView.setPOIItemEventListener(this)
                 mapView.setMapViewEventListener(this)
 
-                setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)*/
+                setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)
             }
         }
 
@@ -663,7 +663,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     result ->
                 when(result){
                     0 -> {
-                        if(nextText == "가본 곳 만") {
+                        /*if(nextText == "가본 곳 만") {
                             Log.d("viewmodel", "visit : ${gustoViewModel.mapVisitedList}")
                             for( (index,data) in gustoViewModel.mapVisitedList!!.withIndex()) {
                                 gustoViewModel.getStoreDetailQuick(data.storeId.toLong()) {result, data ->
@@ -704,7 +704,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                                 }
 
                             }
-                        }
+                        }*/
                     }
                     1 -> {
                         Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()

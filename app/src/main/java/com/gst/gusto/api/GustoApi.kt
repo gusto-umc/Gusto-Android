@@ -13,6 +13,7 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 import java.time.LocalDate
 
 
@@ -438,11 +439,11 @@ interface GustoApi {
 
     //STORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORE
 
-    @GET("stores/{storeId}") // 가게 정보 조회(잛은 화면)
+    @GET("stores") // 가게 정보 조회(잛은 화면)
     fun getStoreDetailQuick(
         @Header("X-AUTH-TOKEN") token : String,
-        @Path("storeId") storeId : Long
-    ):Call<ResponseStoreDetailQuick>
+        @Query("storeId") storeId : MutableList<Long>
+    ):Call<List<ResponseStoreDetailQuick>>
 
     // 행정구역 가져오기
     @GET("v2/local/geo/coord2regioncode.json")
