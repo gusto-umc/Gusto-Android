@@ -173,20 +173,22 @@ class GroupRouteMapFragment : Fragment(),MapView.POIItemEventListener,MapView.Ma
 
             if (data != null) {
                 gustoViewModel.addRoute.add(data.storeId.toLong())
-                gustoViewModel.getStoreDetailQuick(data.storeId.toLong()) {result, data2 ->
+                gustoViewModel.getStoreDetailQuick(listOf(data.storeId.toLong())) {result, stores ->
                     when(result) {
                         1 -> {
-                            if(data2!=null) {
-                                gustoViewModel.markerListLiveData.value!!.add(mapUtil.Companion.MarkerItem(
-                                    data.storeId.toLong(),
-                                    0,
-                                    0,
-                                    data2.latitude,
-                                    data2.longitude,
-                                    data.storeName,
-                                    data.address,
-                                    false
-                                ))
+                            if(stores!=null) {
+                                for(store in stores) {
+                                    gustoViewModel.markerListLiveData.value!!.add(mapUtil.Companion.MarkerItem(
+                                        data.storeId.toLong(),
+                                        0,
+                                        0,
+                                        store.latitude,
+                                        store.longitude,
+                                        data.storeName,
+                                        data.address,
+                                        false
+                                    ))
+                                }
                                 mapUtil.setRoute(mapView, gustoViewModel.markerListLiveData.value!!)
                             }
                             binding.fabEdit.callOnClick()

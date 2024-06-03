@@ -1159,10 +1159,10 @@ class GustoViewModel: ViewModel() {
 
     }
     // 가게 정보 조회(짧은 화면)
-    fun getStoreDetailQuick(storedId: Long, callback: (Int,ResponseStoreDetailQuick?) -> Unit){
+    fun getStoreDetailQuick(storeIds: List<Long>, callback: (Int,List<ResponseStoreDetailQuick>?) -> Unit){
         Log.e("token",xAuthToken)
-        service.getStoreDetailQuick(xAuthToken,storedId).enqueue(object : Callback<ResponseStoreDetailQuick> {
-            override fun onResponse(call: Call<ResponseStoreDetailQuick>, response: Response<ResponseStoreDetailQuick>) {
+        service.getStoreDetailQuick(xAuthToken,storeIds.toMutableList()).enqueue(object : Callback<List<ResponseStoreDetailQuick>> {
+            override fun onResponse(call: Call<List<ResponseStoreDetailQuick>>, response: Response<List<ResponseStoreDetailQuick>>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if(responseBody!=null) {
@@ -1181,7 +1181,7 @@ class GustoViewModel: ViewModel() {
                     callback(3,null)
                 }
             }
-            override fun onFailure(call: Call<ResponseStoreDetailQuick>, t: Throwable) {
+            override fun onFailure(call: Call<List<ResponseStoreDetailQuick>>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
                 callback(3,null)
             }
