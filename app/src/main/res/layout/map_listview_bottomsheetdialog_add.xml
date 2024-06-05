@@ -125,7 +125,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:layout_marginHorizontal="28dp"
-        android:visibility="invisible"
         >
 
         <TextView

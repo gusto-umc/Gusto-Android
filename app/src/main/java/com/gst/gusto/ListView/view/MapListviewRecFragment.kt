@@ -1,60 +1,86 @@
 package com.gst.gusto.ListView.view
 
 import android.os.Bundle
+import android.provider.ContactsContract.RawContacts.Data
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.gst.gusto.ListView.adapter.SavedStoreListAdapter
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.ResponseSavedStoreData
+import com.gst.gusto.databinding.FragmentMapListviewRecBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MapListviewRecFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MapListviewRecFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var binding : FragmentMapListviewRecBinding
+    private val gustoViewModel : GustoViewModel by activityViewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map_listview_rec, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map_listview_rec, container, false)
+        return binding.root
     }
 
-    companion object {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MapListviewRecFragment.
+         * 뒤로 가기 클릭 리스너
          */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MapListviewRecFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        binding.ivMapRecBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        /**
+         * 동 이름 넣기
+         */
+        binding.tvMapRecDong.text = gustoViewModel.dong.value
+
+        /**
+         * rv 데이터 넣기
+         * 현재 : 임시로 추천 맛집 데이터 받아옴, 추후 api 연결 필요
+         */
+        val mRecAdapter = SavedStoreListAdapter("save", view)
+        mRecAdapter.mContext = context
+        mRecAdapter.submitList(gustoViewModel.mapVisitedList)
+        mRecAdapter.setItemClickListener(object : SavedStoreListAdapter.OnItemClickListener{
+            override fun onClick(v: View, dataSet: ResponseSavedStoreData) {
+                gustoViewModel.selectStoreId = dataSet.storeId.toLong()
+                gustoViewModel.storeIdList.clear()
+                gustoViewModel.storeIdList = gustoViewModel.savedStoreIdList
+                Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_fragment_map_viewpager)
             }
+
+        })
+        binding.rvMapRec.adapter = mRecAdapter
+        binding.rvMapRec.layoutManager = LinearLayoutManager(this.requireActivity())
+
+        /**
+         * 지도보기 클릭 리스너
+         * api 로직 변경 예정이라서 추후 보완 예정
+         */
+        binding.fabMapRecMap.setOnClickListener{
+            //데이터 저장
+            //gustoViewModel.selectStoreId = gustoViewModel.mapKeepStoreIdArray[0]
+            //gustoViewModel.storeIdList = gustoViewModel.mapKeepStoreIdArray
+
+            //페이지 이동
+            Navigation.findNavController(view).navigate(R.id.action_mapListviewRecFragment_to_fragment_map_viewpager)
+        }
     }
 }

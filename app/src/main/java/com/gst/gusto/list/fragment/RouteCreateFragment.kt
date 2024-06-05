@@ -20,6 +20,7 @@ class RouteCreateFragment : Fragment() {
 
     lateinit var binding: FragmentListRouteCreateBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
+    private var tmp = 1
     private val itemList = ArrayList<MarkerItem>()
 
     override fun onCreateView(

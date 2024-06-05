@@ -193,6 +193,12 @@ data class ResponseMapCategory(
     @SerializedName("pinCnt") var pinCnt : Int
 )
 
+// paging 내 카테고리 전체 조회
+data class ResponsePMyCategory(
+    @SerializedName("hasNext") val hasNext : Boolean,
+    @SerializedName("result") val result : ArrayList<ResponseMapCategory>
+)
+
 //카테고리 조회- 마이, 피드
 data class ResponseAllCategory(
     @SerializedName("myCategoryId") val myCategoryId : Int,
@@ -209,7 +215,7 @@ data class RequestPin(
 
 //가게 상세 조회
 data class ResponseStoreDetail(
-    @SerializedName("storeId") var storeId : Int,
+    @SerializedName("storeId") val storeId : Int,
     @SerializedName("storeName") val storeName : String,
     @SerializedName("categoryString") val categoryString : String,
     @SerializedName("address") val address : String,
@@ -217,7 +223,7 @@ data class ResponseStoreDetail(
     @SerializedName("pin") var pin : Boolean,
     @SerializedName("pinId") var pinId : Int,
     @SerializedName("reviewImg4") val reviewImg4: ArrayList<String>,
-    @SerializedName("reviews") val reviews : MutableList<ResponseReviews>
+    @SerializedName("reviews") val reviews : ResultReviews
 )
 
 //가게 상세 리뷰 -> 수정 필요
@@ -232,7 +238,11 @@ data class ResponseReviews(
     @SerializedName("img2") val img2 : String?,
     @SerializedName("img3") val img3 : String?,
     @SerializedName("img4") val img4 : String?
+)
 
+data class ResultReviews(
+    @SerializedName("hasNext") val hasNext : Boolean,
+    @SerializedName("result") val result : MutableList<ResponseReviews>
 )
 
 //가게 조회
@@ -244,7 +254,21 @@ data class ResponseStoreListItem(
     @SerializedName("reviewImg") val reviewImg : String?
 )
 
+data class PResponseStoreListItem(
+    @SerializedName("pinId") val pinId : Int,
+    @SerializedName("storeId") val storeId : Int,
+    @SerializedName("storeName") val storeName  :String,
+    @SerializedName("address") val address : String,
+    @SerializedName("reviewCnt") var reviewCnt : Int,
+    @SerializedName("reviewImg") val reviewImg : String?
+)
+
 // 저장된 가게 response
+
+data class PResponseStoreData(
+    @SerializedName("hasNext") val hasNext: Boolean,
+    @SerializedName("result") val result : ArrayList<PResponseStoreListItem>
+)
 data class ResponseSavedStore(
     @SerializedName("nickname") val nickname : String,
     @SerializedName("numPinStores") val numPinStores : Int,
