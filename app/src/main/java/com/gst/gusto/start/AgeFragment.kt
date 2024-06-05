@@ -9,11 +9,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.R
-import com.gst.gusto.Util.util
-import com.gst.gusto.Util.util.Companion.toggleLayout
+import com.gst.gusto.util.util
+import com.gst.gusto.util.util.Companion.toggleLayout
 import com.gst.gusto.databinding.StartFragmentAgeBinding
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class AgeFragment : Fragment() {
 
@@ -41,6 +39,8 @@ class AgeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.tvTitle.text = LoginViewModel.nickName+"님의\n나이를 선택해주세요."
 
         binding.etName.setOnClickListener {
             util.toggleLayout(true, binding.lyAges)

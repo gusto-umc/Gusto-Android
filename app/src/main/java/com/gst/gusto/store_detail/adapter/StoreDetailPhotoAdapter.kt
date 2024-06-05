@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.databinding.ItemStoreDetailPhotoBinding
 
 class StoreDetailPhotoAdapter(val dataSet : ArrayList<String>) : RecyclerView.Adapter<StoreDetailPhotoAdapter.ViewHolder>(){

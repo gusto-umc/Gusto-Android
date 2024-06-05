@@ -14,5 +14,6 @@
     <color name="gray_7">#CBCBCB</color>
     <color name="main_C">#F27781</color>
     <color name="chip_disabled">#515151</color>
+    <color name="trans">#FFFFFFFF</color>
 
 </resources>

@@ -17,6 +17,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayout
 import com.gst.gusto.ListView.Model.CategoryDetail
 import com.gst.gusto.ListView.Model.CategorySimple
 import com.gst.gusto.ListView.Model.Store
@@ -34,6 +35,8 @@ class MapListViewFragment : Fragment() {
     private val gustoViewModel : GustoViewModel by activityViewModels()
     private var orderFlag = 0
     // 0 : 최신순, 1 : 오래된 순, 2 : ㄱ 부터, 3: ㅎ부터, 4 : 방문횟수 높은 순, 5 : 방문회수 낮은 순
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

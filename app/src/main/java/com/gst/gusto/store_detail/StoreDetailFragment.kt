@@ -1,7 +1,5 @@
 package com.gst.gusto.store_detail
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -16,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.Navigation
@@ -29,7 +26,7 @@ import com.gst.gusto.ListView.Model.StoreDetail
 import com.gst.gusto.ListView.Model.StoreDetailReview
 import com.gst.gusto.ListView.adapter.CategoryChooseBottomSheetDialog
 import com.gst.gusto.R
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseReviews
 import com.gst.gusto.api.ResponseStoreDetail

@@ -8,18 +8,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.adapter.CategoryChooseBottomSheetDialog
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.mapUtil
-import com.gst.gusto.Util.util.Companion.setImage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import okhttp3.internal.notifyAll
+import com.gst.gusto.util.mapUtil
+import com.gst.gusto.util.util.Companion.setImage
 
 
 class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerItem>,val activity: MainActivity,val option : Int) : RecyclerView.Adapter<RouteViewPagerAdapter.ReviewDetailViewHolder>() {
@@ -37,10 +31,11 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
         holder.tv_rest_loc.text = item.address
         if(option == 1||option == 2) holder.cv_parent.visibility = View.GONE // 0(루트), 1(검색 지도), 2(메인 지도)
 
-        activity.gustoViewModel.getStoreDetailQuick(item.storeId) { result,data ->
+        activity.gustoViewModel.getStoreDetailQuick(listOf(item.storeId)) { result,stores ->
             when (result) {
                 1 -> {
-                    if(data!=null) {
+                    if(stores!=null) {
+                        val data = stores.get(0)
                         if(data.reviewImg3!=null) {
                             if(data.reviewImg3.size>0) setImage(holder.iv_1,data.reviewImg3[0],holder.itemView.context)
                             if(data.reviewImg3.size>1) setImage(holder.iv_2,data.reviewImg3[1],holder.itemView.context)

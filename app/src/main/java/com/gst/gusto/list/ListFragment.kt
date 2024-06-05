@@ -7,7 +7,6 @@ import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,16 +16,15 @@ import android.widget.ImageView
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.gst.clock.Fragment.ListGroupFragment
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.DiaLogFragment
-import com.gst.gusto.Util.util.Companion.dpToPixels
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListMainBinding
+import com.gst.gusto.util.DiaLogFragment
+import com.gst.gusto.util.util.Companion.dpToPixels
 
 
 class ListFragment : Fragment() {
@@ -42,7 +40,7 @@ class ListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentListMainBinding.inflate(inflater, container, false)
-
+        //gustoViewModel.refreshToken()
         val colorStateOnList = ColorStateList.valueOf(Color.parseColor("#FEB520"))
         val colorStateOffList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
         binding.btnGroup.setOnClickListener {

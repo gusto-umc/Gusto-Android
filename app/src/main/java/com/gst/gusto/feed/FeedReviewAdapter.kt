@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.ResponseFeedReview
 import com.gst.gusto.databinding.ItemReviewGalleryBinding
 

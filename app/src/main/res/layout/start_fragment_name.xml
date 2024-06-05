@@ -30,6 +30,21 @@
         android:textColor="@color/black"
         android:textSize="24sp" />
 
+    <TextView
+        android:id="@+id/btn_checknickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="227dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/main_C"
+        android:textSize="10sp"
+        android:fontFamily="@font/pretendard_regular"
+        android:layout_marginRight="15dp"
+        android:text="중복확인"
+        android:padding="5dp"
+        />
+
     <EditText
         android:id="@+id/et_name"
         app:layout_constraintTop_toTopOf="parent"
@@ -46,12 +61,39 @@
         android:background="@drawable/background_radius_10_stroke_1"
         android:backgroundTint="@color/gray_3"
         android:ems="10"
-        android:hint="용맹한 파스타 21"
+        android:hint=""
         android:inputType="text"
         android:maxLength="13"
         android:paddingLeft="15dp"
         android:textColorHint="@color/gray_3" />
-
+    <TextView
+        android:id="@+id/im_check"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="249dp"
+        android:layout_marginRight="27dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/main_C"
+        android:textSize="30sp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="✓"
+        />
+    <TextView
+        android:id="@+id/tv_checknickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="295dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/main_C"
+        android:textSize="8sp"
+        android:fontFamily="@font/pretendard_regular"
+        android:layout_marginStart="27dp"
+        android:text=""
+        android:padding="5dp"
+        />
     <TextView
         android:id="@+id/tv_num"
         app:layout_constraintTop_toTopOf="parent"
@@ -78,10 +120,10 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="93.5dp"
         android:background="@drawable/background_radius_15"
-        android:backgroundTint="@color/main_C"
+        android:backgroundTint="@color/gray_6"
         android:fontFamily="@font/pretendard_bold"
         android:gravity="center"
         android:text="다음으로 넘어가기"
-        android:textColor="@color/white"
+        android:textColor="@color/gray_1"
         android:textSize="16sp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

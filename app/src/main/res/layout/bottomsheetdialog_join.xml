@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -52,29 +53,156 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/pretendard_bold"
             android:text="친구에게 전송받은 초대코드를 입력해주세요."
-            android:textSize="10sp"
             android:textColor="@color/gray_3"
-            android:fontFamily="@font/pretendard_bold"/>
+            android:textSize="10sp" />
 
-        <EditText
-            android:id="@+id/et_code"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp">
+
+            <EditText
+                android:id="@+id/et_code"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/background_radius_10"
+                android:backgroundTint="@color/gray_6"
+                android:fontFamily="@font/pretendard_bold"
+                android:gravity="center"
+                android:hint="초대코드를 입력해주세요. (12자)"
+                android:maxLength="12"
+                android:textColor="@color/gray_1"
+                android:textColorHint="@color/gray_3"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/bg_code"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/background_radius_10_stroke_1"
+                android:backgroundTint="@color/sub_m"
+                android:text=""
+                android:visibility="gone" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_code"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
             android:gravity="center"
-            android:hint="초대코드를 입력해주세요. (12자)"
-            android:maxLength="12"
-            android:textColor="@color/gray_1"
-            android:textSize="15sp"
-            android:textColorHint="@color/gray_3"
-            android:fontFamily="@font/pretendard_bold"
-            android:background="@drawable/background_radius_10"
-            android:backgroundTint="@color/gray_6"/>
+            android:textSize="8sp"
+            android:textColor="@color/main"
+            android:fontFamily="@font/pretendard_regular"
+            android:layout_gravity="center"
+            android:text="잘못된 코드입니다. 글자수와 번호가 올바른지 확인 후 다시 시도해주세요."/>
+        <TextView
+            android:id="@+id/tv_code_correct"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:visibility="gone"
+            android:gravity="center"
+            android:textSize="8sp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/main_C"
+            android:fontFamily="@font/pretendard_regular"
+            android:layout_gravity="center"
+            android:text="그룹에서 친구들과 즐거운 시간을 보내세요!"/>
+
+        <LinearLayout
+            android:id="@+id/ly_check_group"
+            android:visibility="gone"
+            android:layout_marginHorizontal="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:elevation="4dp"
+            android:backgroundTint="@color/white"
+            android:background="@drawable/gradient_background_orange">
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="32dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="16dp"
+                android:src="@drawable/people_img"
+                app:tint="@color/black" />
+
+            <LinearLayout
+                android:layout_marginVertical="10dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_title_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:textColor="@color/black"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:maxEms="10"
+                        android:text="성수동 맛집 멤" />
+
+                    <TextView
+                        android:id="@+id/tv_member_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textSize="10sp"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:textColor="@color/sub_m"
+                        android:text="" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_people"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:text="발랄한 에그헨 님 외 3명"
+                        android:textColor="@color/main"
+                        android:textSize="8sp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btn_remove"
+                android:visibility="gone"
+                android:gravity="center"
+                android:layout_width="58dp"
+                android:layout_height="match_parent"
+                android:paddingBottom="10dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:text="..." />
+        </LinearLayout>
         <ImageView
+
+            android:id="@+id/iv_gusto"
             android:layout_width="145dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
@@ -90,9 +218,9 @@
             android:gravity="center"
             android:text="입장하기"
             android:textSize="11sp"
-            android:textColor="@color/gray_3"
+            android:textColor="@color/gray_1"
             android:fontFamily="@font/pretendard_bold"
-            android:background="@drawable/background_radius_10"
+            android:background="@drawable/gradient_background_orange_horizontal"
             android:backgroundTint="@color/gray_6"/>
     </LinearLayout>
 

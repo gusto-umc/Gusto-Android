@@ -1,8 +1,6 @@
 package com.gst.clock.Fragment
 
 import android.os.Bundle
-import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +8,10 @@ import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.Util.util.Companion.dpToPixels
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.util.Companion.dpToPixels
+import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewAdd1Binding
 

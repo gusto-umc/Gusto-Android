@@ -1,21 +1,17 @@
-package com.gst.gusto.Util
+package com.gst.gusto.util
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Handler
 import android.os.SystemClock
-import android.os.ext.SdkExtensions
-import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -34,6 +30,9 @@ import com.bumptech.glide.Glide
 import com.gst.gusto.R
 import java.io.File
 import java.io.FileOutputStream
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import kotlin.concurrent.thread
 
 class util {

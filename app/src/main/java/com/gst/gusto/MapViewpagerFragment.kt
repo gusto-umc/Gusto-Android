@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.gst.gusto.Util.mapUtil
-import com.gst.gusto.Util.util
+import com.gst.gusto.util.mapUtil
+import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMapViewpagerBinding
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter
@@ -62,7 +62,6 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_viewpager_to_searchFragment)
         }
 
-        Log.d("viewmodel","hi")
         val viewPager = binding.vpSlider
 
         val markers = ArrayList<mapUtil.Companion.MarkerItem>()
@@ -104,12 +103,11 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
         mapUtil.setMapInit(mapView, binding.kakaoMapSearch, requireContext(), requireActivity(),"route",this)
 
         var num = 2
-        for( id in gustoViewModel.storeIdList) {
-            var selectAfter = 0
-            gustoViewModel.getStoreDetailQuick(id) {result, data ->
-                when(result) {
-                    1 -> {
-                        if (data != null) {
+        gustoViewModel.getStoreDetailQuick(gustoViewModel.storeIdList) {result, stores ->
+            when(result) {
+                1 -> {
+                    if (stores != null) {
+                        for(data in stores) {
                             val tmpData = mapUtil.Companion.MarkerItem(
                                 data.storeId,
                                 num++,
@@ -127,17 +125,16 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
                             } else markers.add(tmpData)
                             Log.d("viewmodel","${tmpData.toString()}, ${markers.size+2}, ${gustoViewModel.storeIdList.size-1}")
                         }
-                        if (markers.size == gustoViewModel.storeIdList.size) {
-                            Log.d("viewmodel","set marker!!!")
-                            mapUtil.setStores(mapView, markers)
-                            adapter.notifyDataSetChanged()
-                        }
-
                     }
-                    else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                }
-            }
+                    if (markers.size == gustoViewModel.storeIdList.size) {
+                        Log.d("viewmodel","set marker!!!")
+                        mapUtil.setStores(mapView, markers)
+                        adapter.notifyDataSetChanged()
+                    }
 
+                }
+                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

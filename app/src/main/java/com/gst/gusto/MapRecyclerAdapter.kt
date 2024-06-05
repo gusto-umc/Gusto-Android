@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
-import com.gst.gusto.Util.util.Companion.setImage
+import com.gst.gusto.util.util.Companion.setImage
 
 class MapRecyclerAdapter(val list: ArrayList<String>) : RecyclerView.Adapter<MapRecyclerAdapter.ViewHolder>() {
 
@@ -24,9 +24,9 @@ class MapRecyclerAdapter(val list: ArrayList<String>) : RecyclerView.Adapter<Map
     }
 
     override fun getItemCount(): Int {
-        //리스트의 수를 return
-        Log.d("log_test","${list.count()}")
-        return list.count()
+        //리스트 수를 return
+        Log.d("log_test", "${list.take(10).count()}")
+        return minOf(10, list.size)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
