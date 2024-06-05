@@ -4,14 +4,26 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.internal.NavigationMenu
+import com.gst.gusto.ListView.Model.StoreDetail
+import com.gst.gusto.ListView.Model.StoreDetailReview
 import com.gst.gusto.ListView.adapter.CategoryChooseBottomSheetDialog
 import com.gst.gusto.R
 import com.gst.gusto.util.util.Companion.setImage
@@ -29,6 +41,7 @@ class StoreDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
     }
 
     override fun onCreateView(
@@ -37,7 +50,26 @@ class StoreDetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_store_detail, container, false)
+
+        val menuHost: MenuHost = requireActivity()
+
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when(menuItem.itemId) {
+                    android.R.id.home -> {
+                        findNavController().navigateUp()
+                    }
+                }
+                return true
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         return binding.root
+
+
     }
     var pinId : Int? = null
     val mReviewAdapter = StoreDetailReviewAdapter()
@@ -110,6 +142,31 @@ class StoreDetailFragment : Fragment() {
         Log.d("reviewId check enter", gustoViewModel.detailReviewLastId.toString())
 
         /**
+         * toolbar
+         */
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.arow_left_2)
+
+
+        binding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            if (Math.abs(verticalOffset) == appBarLayout.totalScrollRange) {
+                // Collapsed 상태
+//                binding.toolbarText.visibility = View.VISIBLE
+                binding.collapsingToolbar.title = gustoViewModel.myStoreDetail!!.storeName
+//                binding.hidden.visibility = View.VISIBLE
+                Log.d("appBarLayout", "a")
+            } else {
+//                binding.toolbarText.visibility = View.GONE
+                binding.collapsingToolbar.title = ""
+                // Expanded 또는 중간 상태
+//                binding.hidden.visibility = View.GONE
+                Log.d("appBarLayout", "b")
+            }
+        })
+
+        /**
          * 데이터 적용
          */
 
@@ -140,12 +197,6 @@ class StoreDetailFragment : Fragment() {
             }
         }
 
-        /**
-         * 뒤로가기 버튼 클릭 리스너
-         */
-        binding.ivStoreDetailBack.setOnClickListener {
-            findNavController().popBackStack()
-        }
 
         /**
          * tablayout 설정
@@ -210,7 +261,7 @@ class StoreDetailFragment : Fragment() {
                         Log.d("reviews more load", gustoViewModel.myStoreDetail!!.reviews.toString())
                         Log.d("reviews more load", gustoViewModel.detailReviewLastId.toString())
                         loadReviews(gustoViewModel.storeDetailReviews)
-                        if(gustoViewModel.myStoreDetail!!.reviews.isEmpty()){
+                        if(gustoViewModel.myStoreDetail!!.reviews.result.isEmpty()){
                             binding.tvReviewLoad.visibility = View.INVISIBLE
                         }
                     }

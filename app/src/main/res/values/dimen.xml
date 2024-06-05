@@ -2,4 +2,7 @@
 <resources>
     <dimen name="food_menu_text_size">50dp</dimen>
     <dimen name="one_dp">1dp</dimen>
+
+    <dimen name="toolbarTextSize">16sp</dimen>
+    <dimen name="toolbarFont"></dimen>
 </resources>

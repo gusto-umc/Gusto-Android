@@ -82,9 +82,6 @@ interface GustoApi {
         @Body body : List<RouteList>
     ):Call<ResponseBody>
 
-
-
-
     //GROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUPGROUP
 
     @GET("groups") // 그룹 리스트 조회
@@ -282,22 +279,15 @@ interface GustoApi {
     fun getMapCategory(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("townName") townName : String
-    ) : Call<List<ResponseMapCategory>>
+    ) : Call<ArrayList<ResponseMapCategory>>
 
     //4. 카테고리 삭제하기 -> 단 건 삭제 확인 완
-    @DELETE("myCategories")
-    fun deleteCategory(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("myCategoryId") myCategoryId : Int
-    ) : Call<Void>
 
     @DELETE("myCategories")
     fun deleteCategory2(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("myCategoryId") myCategoryId : MutableList<Int>
     ) : Call<Void>
-
-
 
     //5.카테고리 전체 조회 - 피드-> 서버 배포 후 다시 확인하기
     @GET("myCategories")
@@ -310,7 +300,22 @@ interface GustoApi {
     @GET("myCategories")
     fun getAllUserCategory(
         @Header("X-AUTH-TOKEN") token : String
-    ) : Call<List<ResponseMapCategory>>
+    ) : Call<ArrayList<ResponseMapCategory>>
+
+    //8. 카테고리 전체 조회(paging)
+    @GET("myCategories")
+    fun pGetMyCategory(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("myCategoryId") myCategoryId : Int?
+    ) : Call<ResponsePMyCategory>
+
+    //9. 카테고리 전체조회(타유저)
+    @GET("myCategories")
+    fun pGetOtherCategory(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("nickname") nickname : String?,
+        @Query("myCategoryId") myCategoryId : Int?
+    ) : Call<ResponsePMyCategory>
 
     /**
      * 가게
@@ -330,6 +335,13 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Query("pinId") pinId : Int
     ): Call<Void>
+
+    //가게 다중 삭제
+    @DELETE("myCategories/pins")
+    fun deleteStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("pinId") pinId : MutableList<Int>
+    ) : Call<Void>
 
     //3. 가게 상세 조회
     @GET("stores/{storeId}/detail")
@@ -372,6 +384,25 @@ interface GustoApi {
     ) : Call<List<ResponseSavedStore>>
 
 
+    // 8. (paging) 카테고리별 내 가게 조회
+    @GET("myCategories/pins")
+    fun ppGetAllMyStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("myCategoryId") categoryId : Int,
+        @Query("pinId") pinId : Int?
+    ): Call<PResponseStoreData>
+
+    // 9. (paging) 카테고리별 타인 가게 조회
+    @GET("myCategories/pins")
+    fun ppGetAllOtherStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("nickname") nickname : String?,
+        @Query("myCategoryId") categoryId : Int,
+        @Query("pinId") pinId : Int?
+    ): Call<PResponseStoreData>
+
+
+
     /**
      * 리뷰 - 연결 완
      */
@@ -389,7 +420,7 @@ interface GustoApi {
     fun editReview(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("reviewId") reviewId : Long,
-        @Part image: List<MultipartBody.Part>?,
+        @Part image: MultipartBody.Part?,
         @Part("info") info: RequestMyReview
     ) : Call<Void>
 

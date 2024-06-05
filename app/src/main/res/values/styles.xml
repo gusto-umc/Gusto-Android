@@ -20,4 +20,14 @@
         <item name="android:progressDrawable">@drawable/custom_ratingbar</item>
     </style>
 
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">@dimen/toolbarTextSize</item>
+        <item name="fontFamily">@font/pretendard_bold</item>
+    </style>
+
+    <style name="popupMenu" parent="Widget.AppCompat.Light.PopupMenu">
+        <item name="popupMenuBackground">@drawable/background_radius_20</item>
+    </style>
+
+
 </resources>
