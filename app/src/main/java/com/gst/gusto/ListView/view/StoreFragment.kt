@@ -20,6 +20,8 @@ import com.gst.gusto.ListView.adapter.ListViewStoreAdapter
 import com.gst.gusto.ListView.adapter.StoreAdapter
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.PResponseStoreListItem
+import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.FragmentStoreBinding
 
 class StoreFragment : Fragment() {
@@ -48,14 +50,36 @@ class StoreFragment : Fragment() {
 
         val rvStore = binding.rvStore
         gustoViewModel.myAllStoreList.clear()
+        var sign = arguments?.getString("sign")
+        signal = sign!!
 
-        mStoreAdapter = StoreAdapter(view)
+
+        if(sign != "search"){
+            mStoreAdapter = StoreAdapter(view, "map")
+        }
+        else if(sign == "search"){
+            mStoreAdapter = StoreAdapter(view, "search")
+        }
+
+        mStoreAdapter.setItemClickListener(object : StoreAdapter.OnItemClickListener{
+            override fun onClick(v: View, dataSet: PResponseStoreListItem, sign: String) {
+                if(sign == "map"){
+                    gustoViewModel!!.selectedDetailStoreId = dataSet.storeId!!.toInt()
+                    Navigation.findNavController(view).navigate(R.id.action_storeFragment_to_storeDetailFragment)
+                }
+                else if(sign == "search"){
+                    gustoViewModel!!.routeStorTmpData = ResponseStoreListItem(dataSet.storeId.toInt(),dataSet.storeName,dataSet.address,0,"")
+                    findNavController().popBackStack()
+                    findNavController().popBackStack()
+                }
+            }
+
+        })
 
         /**
          * 0. args 확인
          */
-        var sign = arguments?.getString("sign")
-        signal = sign!!
+
         if(sign == "map"){
             binding.tvStoreEdit.visibility = View.VISIBLE
             binding.tvSavedStore.visibility = View.VISIBLE
@@ -204,7 +228,7 @@ class StoreFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if(signal == "map" || signal == "my"){
+        if(signal == "map" || signal == "my" || signal == "search"){
             gustoViewModel.myAllStoreList.clear()
             gustoViewModel.getPPMyStore(gustoViewModel. selectedCategoryInfo!!.myCategoryId, null){
                     result, getHasNext ->

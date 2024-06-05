@@ -75,13 +75,22 @@ class CategoryAdapter(private val view: View, val flag : String) : ListAdapter<R
                 Navigation.findNavController(view).navigate(R.id.action_myFragment_to_storeFragment, bundle2)
             }
         }
-        else{
+        else if(flag == "feed"){
             holder.popup.visibility = View.INVISIBLE
             holder.categoryLayout.setOnClickListener {
                 viewModel!!.selectedCategoryInfo = holder.data
                 val bundle3 = Bundle()
                 bundle3.putString("sign", "feed")
                 Navigation.findNavController(view).navigate(R.id.action_fragment_other_to_StoreFragment, bundle3)
+            }
+        }
+        else if(flag == "search"){
+            holder.popup.visibility = View.INVISIBLE
+            holder.categoryLayout.setOnClickListener {
+                viewModel!!.selectedCategoryInfo = holder.data
+                val bundle4 = Bundle()
+                bundle4.putString("sign", "search")
+                Navigation.findNavController(view).navigate(R.id.action_routeSearchFragment_to_storeFragment, bundle4)
             }
         }
 

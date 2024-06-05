@@ -14,12 +14,13 @@ import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.PResponseStoreListItem
 import com.gst.gusto.api.ResponseMapCategory
+import com.gst.gusto.api.ResponseSearch
 import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.CardWxampleBinding
 import com.gst.gusto.databinding.ItemCategoryBinding
 import com.gst.gusto.databinding.ItemStoreBinding
 
-class StoreAdapter(private val parentView : View) : ListAdapter<PResponseStoreListItem, StoreAdapter.ViewHolder>(diffUtil){
+class StoreAdapter(private val parentView : View, private var sign : String) : ListAdapter<PResponseStoreListItem, StoreAdapter.ViewHolder>(diffUtil){
 
     var gustoViewModel : GustoViewModel? = null
     var mContext : Context? = null
@@ -65,13 +66,18 @@ class StoreAdapter(private val parentView : View) : ListAdapter<PResponseStoreLi
         holder.bind(getItem(position))
 
         holder.itemLayout.setOnClickListener {
-            //뷰모델에 storeId 저장 -> detail 로 이동
-            gustoViewModel!!.selectedDetailStoreId = holder.data?.storeId!!.toInt()
-            Navigation.findNavController(parentView).navigate(R.id.action_storeFragment_to_storeDetailFragment)
-
-
+            itemClickListener.onClick(it, holder.data!!, sign)
         }
     }
+    interface OnItemClickListener {
+        fun onClick(v: View, dataSet: PResponseStoreListItem, sign : String)
+    }
+    // (3) 외부에서 클릭 시 이벤트 설정
+    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.itemClickListener = onItemClickListener
+    }
+    // (4) setItemClickListener로 설정한 함수 실행
+    private lateinit var itemClickListener : OnItemClickListener
 
 
 }
