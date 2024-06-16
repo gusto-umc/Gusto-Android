@@ -40,6 +40,7 @@ class LoginFragment: Fragment() {
     lateinit var binding: StartFragmentLoginBinding
     private val LoginViewModel : LoginViewModel by activityViewModels()
     private val googleSignInClient: GoogleSignInClient by lazy { getGoogleClient() }
+
     private val googleAuthLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
 
@@ -200,10 +201,6 @@ class LoginFragment: Fragment() {
                 }
             }
         }
-    }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
     }
     /**
      * 로그인
