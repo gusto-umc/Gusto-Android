@@ -374,13 +374,13 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 mapUtil.LOCATION_PERMISSION_REQUEST_CODE
             )
         } else {
-            if(!::mapView.isInitialized) {
+            if(!::mapView.isInitialized) {/*
                 mapView = MapView(requireContext())
 
                 mapView.setPOIItemEventListener(this)
                 mapView.setMapViewEventListener(this)
 
-                setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)
+                setMapInit(mapView,binding.kakaoMap, requireContext(),requireActivity(),"map",this)*/
             }
         }
 
