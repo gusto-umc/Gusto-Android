@@ -2027,36 +2027,6 @@ class GustoViewModel: ViewModel() {
         })
     }
 
-
-
-    /*// 타인 리뷰 모아보기
-    fun otherInstaView(nickName: String, reviewId: Long?, size: Int, callback: (Int, ResponseInstaReview?) -> Unit){
-        service.otherInstaView(xAuthToken, nickName, reviewId, size).enqueue(object : Callback<ResponseInstaReview> {
-            override fun onResponse(call: Call<ResponseInstaReview>, response: Response<ResponseInstaReview>) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if(responseBody!=null) {
-                        Log.e("viewmodel", "1 Successful response: ${response}")
-                        callback(1, responseBody)
-                    } else {
-                        Log.e("viewmodel", "2 Successful response: ${response}")
-                        callback(2, null)
-                    }
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                }else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3, null)
-                }
-            }
-            override fun onFailure(call: Call<ResponseInstaReview>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(3, null)
-            }
-        })
-    }*/
-
     // 나의 콘텐츠 공개 여부 조회
     fun myPublishGet(callback: (Int, ResponseMyPublishGet?) -> Unit){
         service.myPublishGet(xAuthToken).enqueue(object : Callback<ResponseMyPublishGet> {
