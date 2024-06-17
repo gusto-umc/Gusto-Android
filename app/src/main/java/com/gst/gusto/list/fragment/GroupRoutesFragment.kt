@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupMRoutesBinding
@@ -18,6 +19,7 @@ class GroupRoutesFragment(val num: Int) : Fragment() {
 
     lateinit var binding: FragmentListGroupMRoutesBinding
     lateinit var navHostFragment : NavHostFragment
+    private val gustoViewModel : GustoViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +37,8 @@ class GroupRoutesFragment(val num: Int) : Fragment() {
         if(num==0) navHostFragment.navController.navigate(R.id.fragment_group_m_route_routes)
         else if(num==1) navHostFragment.navController.navigate(R.id.fragment_group_m_route_stores)
         else navHostFragment.navController.navigate(R.id.fragment_group_m_route_create)
+
+        gustoViewModel.groupRouteFragment = this
     }
     public fun getCon() : NavController?{
         if (::navHostFragment.isInitialized) {
@@ -51,6 +55,10 @@ class GroupRoutesFragment(val num: Int) : Fragment() {
     }
     public fun getNavHost() : NavHostFragment{
         return navHostFragment
+    }
+
+    public fun popBack( ) {
+        navHostFragment.findNavController().popBackStack()
     }
 
 }

@@ -22,6 +22,12 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "API_BASE", localProperties.getProperty("api_base"))
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", localProperties.getProperty("KAKAO_NATIVE_APP_KEY"))
+        buildConfigField("String", "GOOGLE_CLINET_ID", localProperties.getProperty("GOOGLE_CLINET_ID"))
+        buildConfigField("String", "NAVER_CLIENT_ID", localProperties.getProperty("NAVER_CLIENT_ID"))
+        buildConfigField("String", "NAVER_CLIENT_SECRET", localProperties.getProperty("NAVER_CLIENT_SECRET"))
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = properties["KAKAO_NATIVE_APP_KEY"] as? String ?: ""
+
     }
 
     buildTypes {
@@ -58,6 +64,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -97,6 +104,14 @@ dependencies {
 
     //네이버 로그인
     implementation ("com.navercorp.nid:oauth-jdk8:5.1.0") // jdk 8
+    // 카카오 로그인
+    implementation ("com.kakao.sdk:v2-all:2.17.0")
+    implementation ("com.kakao.sdk:v2-user:2.12.1")
+    // 구글 로그인
+    implementation ("com.google.gms:google-services:4.3.15")
+    implementation ("com.google.firebase:firebase-auth:22.0.0")
+    implementation ("com.google.firebase:firebase-bom:32.0.0")
+    implementation ("com.google.android.gms:play-services-auth:20.5.0")
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 }

@@ -68,26 +68,12 @@ class MyFragment : Fragment() {
                 startActivity(intent)
             }
             btnFollowerList.setOnClickListener {
-                gustoViewModel.getFollower {result ->
-                    when(result) {
-                        1 -> {
-                            gustoViewModel.followListTitleName= "팔로워"
-                            findNavController().navigate(R.id.action_myFragment_to_followList)
-                        }
-                        3 -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                gustoViewModel.followListTitleName= "팔로워"
+                findNavController().navigate(R.id.action_myFragment_to_followList)
             }
             btnFollowingList.setOnClickListener {
-                gustoViewModel.getFollowing {result ->
-                    when(result) {
-                        1 -> {
-                            gustoViewModel.followListTitleName= "팔로잉 중"
-                            findNavController().navigate(R.id.action_myFragment_to_followList)
-                        }
-                        3 -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                gustoViewModel.followListTitleName= "팔로잉"
+                findNavController().navigate(R.id.action_myFragment_to_followList)
             }
             btnBack.setOnClickListener {
                 //findNavController().popBackStack()

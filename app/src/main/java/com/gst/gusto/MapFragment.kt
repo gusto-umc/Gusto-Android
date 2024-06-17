@@ -84,15 +84,15 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         totalBtn.setOnClickListener {
             // 현재 버튼의 텍스트를 가져옴
             val currentText = totalBtn.text.toString()
-            // 다음 순서로 변경
-            /*val nextText = when (currentText) {
+            //다음 순서로 변경
+            val nextText = when (currentText) {
                 "전체" -> "가본 곳 만"
                 "가본 곳 만" -> "가본 곳 제외"
                 else -> "전체"
             }
 
             // 변경된 텍스트 설정
-            totalBtn.text = nextText*/
+            totalBtn.text = nextText
             reGetMapMarkers2("")
 
         }
@@ -215,7 +215,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
         gustoViewModel.changeDong("")
         //목록 보기 클릭 리스너 - 민디
         binding.listViewBtn.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
+            //Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_categoryFragment)
         }
 
 
@@ -270,9 +271,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
 
         binding.fragmentArea.apply {
 
-
             //사용자에 대한 정보 //
-
 
             val user_age = binding.root.findViewById<TextView>(R.id.user_age) //화면에 출력되는 나이값
             val age = binding.root.findViewById<TextView>(R.id.ageBtn) //아직 없길래 임의 값.. 불러오기
@@ -386,10 +385,8 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
             }
         }
 
-
         // 카테고리 조회 및 칩 추가
         getMapCategoryAndAddChips("성수1가1동")
-
 
         // 데이터 넣어둔 변수 : gustoViewModel.myMapCategoryList
         gustoViewModel.getMapCategory(gustoViewModel.dong.value!!){
@@ -404,6 +401,17 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                 }
             }
         }
+
+        //카테고리 변경 데이터//
+
+        //저장 맛집
+        var locRestSaveNum = binding.fragmentArea.locRestSaveNum
+
+        //방문 맛집
+        var noVisNum = binding.fragmentArea.noVisNum
+        var visNum = binding.fragmentArea.visNum
+
+
         /**
          * 저장된 맛집 조회 - mindy
          * 현재 카테고리 선택이 구현 보류로 categoryId에 null 넣고 추후 보완 예정
@@ -656,7 +664,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                     result ->
                 when(result){
                     0 -> {
-                        if(nextText == "가본 곳 만") {
+                        /*if(nextText == "가본 곳 만") {
                             Log.d("viewmodel", "visit : ${gustoViewModel.mapVisitedList}")
                             for( (index,data) in gustoViewModel.mapVisitedList!!.withIndex()) {
                                 gustoViewModel.getStoreDetailQuick(data.storeId.toLong()) {result, data ->
@@ -697,7 +705,7 @@ class MapFragment : Fragment(),MapView.POIItemEventListener,MapView.MapViewEvent
                                 }
 
                             }
-                        }
+                        }*/
                     }
                     1 -> {
                         Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()

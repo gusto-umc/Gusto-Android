@@ -31,6 +31,12 @@
         <action
             android:id="@+id/action_fragment_map_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_fragment_map_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
+        <action
+            android:id="@+id/action_fragment_map_self"
+            app:destination="@id/fragment_map" />
     </fragment>
     <fragment
         android:id="@+id/fragment_map_viewpager"
@@ -191,6 +197,10 @@
         android:id="@+id/fragment_route_search"
         android:name="com.gst.gusto.search.RouteSearchFragment"
         android:label="FragmentRouteSearch">
+
+        <action
+            android:id="@+id/action_routeSearchFragment_to_storeFragment"
+            app:destination="@id/storeFragment"/>
     </fragment>
 
     <!-- Review 작성 화면의 프래그먼트들 -->
@@ -362,6 +372,9 @@
         <action
             android:id="@+id/action_myFragment_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_myFragment_to_storeFragment"
+            app:destination="@id/storeFragment"/>
     </fragment>
     <fragment
         android:id="@+id/fragment_other"
@@ -374,6 +387,10 @@
         <action
             android:id="@+id/action_fragment_other_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_fragment_other_to_StoreFragment"
+            app:destination="@id/storeFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/fragment_my_profile"
@@ -487,5 +504,39 @@
         <action
             android:id="@+id/action_myListFragment_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_myListFragment_to_storeFragment"
+            app:destination="@id/storeFragment"/>
     </fragment>
+    <fragment
+        android:id="@+id/mapListviewRecFragment"
+        android:name="com.gst.gusto.ListView.view.MapListviewRecFragment"
+        android:label="MapListviewRecFragment" >
+        <action
+            android:id="@+id/action_mapListviewRecFragment_to_fragment_map_viewpager"
+            app:destination="@id/fragment_map_viewpager" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.gst.gusto.ListView.view.CategoryFragment"
+        android:label="CategoryFragment" >
+        <action
+            android:id="@+id/action_categoryFragment_to_storeFragment"
+            app:destination="@id/storeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/storeFragment"
+        android:name="com.gst.gusto.ListView.view.StoreFragment"
+        android:label="StoreFragment" >
+        <action
+            android:id="@+id/action_storeFragment_to_storeEditFragment"
+            app:destination="@id/storeEditFragment" />
+        <action
+            android:id="@+id/action_storeFragment_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment" />'
+    </fragment>
+    <fragment
+        android:id="@+id/storeEditFragment"
+        android:name="com.gst.gusto.ListView.view.StoreEditFragment"
+        android:label="StoreEditFragment" />
 </navigation>

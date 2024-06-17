@@ -8,9 +8,15 @@ import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.retrofit.RetrofitInstance
 import com.gst.gusto.dto.ResponseInstaReviews
+import com.gst.gusto.list.adapter.GroupAdapter
 import com.gst.gusto.util.mapUtil
 import com.gst.gusto.list.adapter.GroupItem
+import com.gst.gusto.list.adapter.MapRoutesAdapter
 import com.gst.gusto.list.adapter.RestItem
+import com.gst.gusto.list.fragment.GroupRouteCreateFragment
+import com.gst.gusto.list.fragment.GroupRoutesFragment
+import com.gst.gusto.list.fragment.GroupStoresFragment
+import com.gst.gusto.list.fragment.RouteCreateFragment
 import com.gst.gusto.util.GustoApplication
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -40,9 +46,13 @@ class GustoViewModel: ViewModel() {
     // 루트 가게 정보 임시 데이터
     var routeStorTmpData : ResponseStoreListItem? = null
 
-    // 그룹 루트 생성 임시 데이터들
-    var tmpName = ""
-    val itemList = ArrayList<mapUtil.Companion.MarkerItem>()
+
+    // 그룹 store 프래그먼트
+    lateinit var groupStoresFragment: GroupStoresFragment
+    // 그룹 route 프래그먼트
+    lateinit var groupRouteFragment: GroupRoutesFragment
+    // 그룹 route create 프래그먼트
+    lateinit var groupRouteCreateFragment : GroupRouteCreateFragment
 
     // 루트 이름
     var routeName = ""
@@ -211,62 +221,62 @@ class GustoViewModel: ViewModel() {
     }
 
     // 내 루트 조회
-    fun getMyRoute(callback: (Int) -> Unit){
+    fun getMyRoute(lastRouteId: Long?, callback: (Int, Boolean) -> Unit){
         Log.e("token",xAuthToken)
-        service.getMyRoute(xAuthToken).enqueue(object : Callback<List<Routes>> {
-            override fun onResponse(call: Call<List<Routes>>, response: Response<List<Routes>>) {
+        service.getMyRoute(xAuthToken,lastRouteId).enqueue(object : Callback<ResponseRoutes> {
+            override fun onResponse(call: Call<ResponseRoutes>, response: Response<ResponseRoutes>) {
                 if (response.isSuccessful) {
                     // 성공적이라면 일단 서버와의 연결에 성공 했다는 것!
                     val responseBody = response.body()
                     myRouteList.clear()
                     if(responseBody!=null) {
-                        Log.d("viewmodel", "Successful response: ${response}")
-                        for(data in responseBody) {
+                        Log.d("viewmodel2", "Successful response: ${responseBody}")
+                        for(data in responseBody.result) {
                             myRouteList.add(GroupItem(data.routeId, data.routeName, 0, true,data.numStore, 0))
                         }
-                    }
-                    callback(1)
+                        callback(1,responseBody.hasNext)
+                    } else callback(2,false)
                 } else if(response.code()==403) {
                     _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3)
+                    callback(3,false)
                 }
             }
-            override fun onFailure(call: Call<List<Routes>>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseRoutes>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
-                callback(3)
+                callback(3,false)
             }
         })
     }
     // 타인의 루트 조회
-    fun getOtherRoute(nickname: String,callback: (Int) -> Unit){
+    fun getOtherRoute(lastRouteId: Long?,nickname: String,callback: (Int, Boolean) -> Unit){
         Log.e("token",xAuthToken)
-        service.getOtherRoute(xAuthToken,nickname).enqueue(object : Callback<List<Routes>> {
-            override fun onResponse(call: Call<List<Routes>>, response: Response<List<Routes>>) {
+        service.getOtherRoute(xAuthToken,nickname,lastRouteId).enqueue(object : Callback<ResponseRoutes> {
+            override fun onResponse(call: Call<ResponseRoutes>, response: Response<ResponseRoutes>) {
                 if (response.isSuccessful) {
-                    // 성공적이라면 일단 서버와의 연결에 성공 했다는 것!
                     val responseBody = response.body()
                     otherRouteList.clear()
                     if(responseBody!=null) {
-                        Log.d("viewmodel", "Successful response: ${response}")
-                        for(data in responseBody) {
+                        Log.d("viewmodel2", "Successful response: ${responseBody}")
+                        for(data in responseBody.result) {
                             otherRouteList.add(GroupItem(data.routeId, data.routeName, 0, true,data.numStore, 0))
                         }
-                    }
-                    callback(1)
+                        callback(1,responseBody.hasNext)
+                    } else callback(2,false)
+
                 } else if(response.code()==403) {
                     _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3)
+                    callback(3,false)
                 }
             }
-            override fun onFailure(call: Call<List<Routes>>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseRoutes>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
-                callback(3)
+                callback(3,false)
             }
         })
     }
@@ -440,6 +450,7 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
+
     // 루트 내 식당 삭제
     fun deleteRouteStore(routeListId : Long,callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
@@ -459,6 +470,27 @@ class GustoViewModel: ViewModel() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
                 callback(2)
+            }
+        })
+    }
+    // 루트 수정
+    fun editRoute(routeListId : Long,routeName : String, routeList : List<RouteList>?, callback: (Int) -> Unit){
+        service.editRoute(xAuthToken, routeListId ,RequestEditRoute(routeName, routeList)).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel", "Successful response: ${response}")
+                    callback(1)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}, ${requestRoutesData}")
+                    callback(3)
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3)
             }
         })
     }
@@ -485,98 +517,99 @@ class GustoViewModel: ViewModel() {
         })
     }
     // 그룹 리스트 조회
-    fun getGroups(callback: (Int) -> Unit){
-        Log.e("token",xAuthToken)
-        service.getGroups(xAuthToken).enqueue(object : Callback<List<ResponseGetGroups>> {
-            override fun onResponse(call: Call<List<ResponseGetGroups>>, response: Response<List<ResponseGetGroups>>) {
+    fun getGroups(lastGroupId : Long?,callback: (Int, Boolean) -> Unit){
+        service.getGroups(xAuthToken,lastGroupId).enqueue(object : Callback<ResponseGetGroups> {
+            override fun onResponse(call: Call<ResponseGetGroups>, response: Response<ResponseGetGroups>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     myGroupList.clear()
-                    if(responseBody!=null) {
-                        Log.d("viewmodel", "Successful response: ${response}")
-                        for(data in responseBody) {
+                    Log.d("viewmodel", "Successful response: ${responseBody}")
+                    if(responseBody!=null&&responseBody.groups!=null) {
+                        for(data in responseBody.groups) {
                             myGroupList.add(GroupItem(data.groupId,data.groupName,data.numMembers,data.isOwner,data.numRestaurants,data.numRoutes))
                         }
+                        callback(1,responseBody.hasNext)
+                    }else {
+                        callback(2,false)
                     }
-                    callback(1)
                 } else if(response.code()==403) {
                     _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3)
+                    callback(3,false)
                 }
             }
-            override fun onFailure(call: Call<List<ResponseGetGroups>>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseGetGroups>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
-                callback(3)
+                callback(3,false)
             }
         })
     }
-    // 그룹 내 식당 목록 조회
-    fun getGroupStores(callback: (Int) -> Unit){
+    // 그룹 내 찜 식당 목록 조회
+    fun getGroupStores(lastStoreId : Long?,callback: (Int, Boolean) -> Unit){
         Log.e("token",xAuthToken)
-        service.getGroupStores(xAuthToken,currentGroupId).enqueue(object : Callback<List<ResponseStore>> {
-            override fun onResponse(call: Call<List<ResponseStore>>, response: Response<List<ResponseStore>>) {
+        service.getGroupStores(xAuthToken,currentGroupId,lastStoreId).enqueue(object : Callback<ResponseStores> {
+            override fun onResponse(call: Call<ResponseStores>, response: Response<ResponseStores>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if(responseBody!=null) {
                         storeListLiveData.clear()
                         Log.d("viewmodel", "Successful response: ${response}")
-                        for(data in responseBody) {
+                        for(data in responseBody.stores) {
                             storeListLiveData.add(RestItem(data.storeName,data.address,data.storeProfileImg,data.userProfileImg,data.storeId,data.groupListId))
                         }
-                    }
-                    callback(1)
+                        callback(1,responseBody.hasNext)
+                    } else callback(3,false)
                 } else if(response.code()==403) {
                     _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3)
+                    callback(3,false)
                 }
             }
-            override fun onFailure(call: Call<List<ResponseStore>>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseStores>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
-                callback(3)
+                callback(3,false)
             }
         })
     }
     // 그룹 내 루트 목록
-    fun getGroupRoutes(callback: (Int,ArrayList<GroupItem>?) -> Unit){
-        service.getGroupRoutes(xAuthToken,currentGroupId).enqueue(object : Callback<List<Routes>> {
-            override fun onResponse(call: Call<List<Routes>>, response: Response<List<Routes>>) {
+    fun getGroupRoutes(lastRouteId : Long?, callback: (Int,ArrayList<GroupItem>?, Boolean) -> Unit){
+        service.getGroupRoutes(xAuthToken,currentGroupId,lastRouteId).enqueue(object : Callback<ResponseRoutes> {
+            override fun onResponse(call: Call<ResponseRoutes>, response: Response<ResponseRoutes>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if(responseBody!=null) {
-                        Log.d("viewmodel", "Successful response: ${response}")
+                        Log.d("viewmodel2", "Successful response: ${responseBody}")
                         val tmpRouteList = ArrayList<GroupItem>()
-                        for(data in responseBody) {
+                        for(data in responseBody.result) {
                             tmpRouteList.add(GroupItem(data.routeId, data.routeName, 0, true,data.numStore, 0))
                         }
-                        callback(1,tmpRouteList)
-                    } else callback(2,null)
+                        callback(1,tmpRouteList,responseBody.hasNext)
+                    } else callback(2,null,false)
                 } else if(response.code()==403) {
                     _tokenToastData.value = Unit
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3,null)
+                    callback(3,null,false)
                 }
             }
-            override fun onFailure(call: Call<List<Routes>>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseRoutes>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
-                callback(3,null)
+                callback(3,null,false)
             }
         })
     }
     // 그룹 내 식당 추가
     fun addGroupStore(storeId : Long, callback: (Int) -> Unit){
-        Log.e("token",xAuthToken)
+        Log.e("viewmodel add group",storeId.toString())
         service.addGroupStore(xAuthToken,currentGroupId,StoredId(storeId)).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    Log.d("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel", "addGroupStore response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
                     _tokenToastData.value = Unit
@@ -660,6 +693,32 @@ class GustoViewModel: ViewModel() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
                 callback(2)
+            }
+        })
+    }
+    // 초대 코드로 그룹 정보 조회
+    fun checkGroup(code: String, callback: (Int, ResponseCheckGroup?) -> Unit){
+        service.checkGroup(xAuthToken, RequestCheckGroup(code)).enqueue(object : Callback<ResponseCheckGroup> {
+            override fun onResponse(call: Call<ResponseCheckGroup>, response: Response<ResponseCheckGroup>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel", "Successful response: ${response}")
+                    val responseBody = response.body()
+                    if(responseBody!=null) {
+                        callback(1, responseBody)
+                    } else callback(3,null)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                } else if(response.code()==404) {
+                    callback(2,null)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(3,null)
+                }
+            }
+            override fun onFailure(call: Call<ResponseCheckGroup>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3,null)
             }
         })
     }
@@ -773,18 +832,19 @@ class GustoViewModel: ViewModel() {
         })
     }
     // 그룹 구성원 조회
-    fun getGroupMembers(callback: (Int) -> Unit){
+    fun getGroupMembers(lastMemberId : Int?, callback: (Int, Boolean) -> Unit){
         Log.e("token",xAuthToken)
-        service.getGroupMembers(xAuthToken,currentGroupId).enqueue(object : Callback<List<Member>> {
-            override fun onResponse(call: Call<List<Member>>, response: Response<List<Member>>) {
+        service.getGroupMembers(xAuthToken,currentGroupId,lastMemberId).enqueue(object : Callback<ResponseGroupMembers> {
+            override fun onResponse(call: Call<ResponseGroupMembers>, response: Response<ResponseGroupMembers>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if(responseBody!=null) {
-                        followList = responseBody
-                        Log.d("viewmodel", "Successful response: ${response}")
-                        callback(1)
+                        followList = responseBody.groupMembers
+                        Log.e("viewmodel", "Successful response: ${response}")
+                        Log.d("viewmodel", "Successful response: ${responseBody}")
+                        callback(1,responseBody.hasNext)
                     } else {
-                        callback(2)
+                        callback(2,false)
                         Log.e("viewmodel", "Unsuccessful response: ${response}")
                     }
                 } else if(response.code()==403) {
@@ -792,12 +852,12 @@ class GustoViewModel: ViewModel() {
                     refreshToken()
                 } else {
                     Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(2)
+                    callback(2,false)
                 }
             }
-            override fun onFailure(call: Call<List<Member>>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseGroupMembers>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
-                callback(2)
+                callback(2,false)
             }
         })
     }
@@ -1037,113 +1097,72 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
-    // 팔로워 조회
-    fun getFollower(callback: (Int) -> Unit){
-        Log.e("token",xAuthToken)
-        service.getFollower(xAuthToken).enqueue(object : Callback<List<Member>> {
-            override fun onResponse(call: Call<List<Member>>, response: Response<List<Member>>) {
-                if (response.isSuccessful) {
-                    followList = response.body()!!
-                    Log.d("viewmodel", "Successful response: ${response} ${response.body()}")
-                    callback(1)
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                }else if(response.code()==404){
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(2)
-                } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3)
+
+    // 팔로잉,팔로우 조회
+    fun getFollow(followId : Int?, option : Int, callback: (Int, Boolean) -> Unit){
+        if(option == 0) {
+            service.getFollowing(xAuthToken,followId).enqueue(object : Callback<ResponseFollowMembers> {
+                override fun onResponse(call: Call<ResponseFollowMembers>, response: Response<ResponseFollowMembers>) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if(responseBody!=null) {
+                            Log.e("viewmodel", "Unsuccessful response: ${responseBody}")
+                            followList = responseBody.result
+                            callback(1,responseBody.hasNext)
+                        }else {
+                            callback(2,false)
+                        }
+                    } else if(response.code()==403) {
+                        _tokenToastData.value = Unit
+                        refreshToken()
+                    } else if(response.code()==404){
+                        Log.e("viewmodel", "Unsuccessful response: ${response}")
+                        callback(2,false)
+                    } else {
+                        Log.e("viewmodel", "Unsuccessful response: ${response}")
+                        callback(3,false)
+                    }
                 }
-            }
-            override fun onFailure(call: Call<List<Member>>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(3)
-            }
-        })
-    }
-    // 팔로워 조회 paging
-    fun getFollowerP(lastId : Int,callback: (Int,followList : List<Member>?) -> Unit){
-        service.getFollowerP(xAuthToken,lastId).enqueue(object : Callback<List<Member>> {
-            override fun onResponse(call: Call<List<Member>>, response: Response<List<Member>>) {
-                if (response.isSuccessful) {
-                    val tmpFollowList = response.body()!!
-                    Log.d("viewmodel", "Successful response: ${response} ${response.body()}")
-                    callback(1,tmpFollowList)
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                }else if(response.code()==404){
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(2,null)
-                } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3,null)
+                override fun onFailure(call: Call<ResponseFollowMembers>, t: Throwable) {
+                    Log.e("viewmodel", "Failed to make the request", t)
+                    callback(3,false)
                 }
-            }
-            override fun onFailure(call: Call<List<Member>>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(3,null)
-            }
-        })
-    }
-    // 팔로잉 조회
-    fun getFollowing(callback: (Int) -> Unit){
-        Log.e("token",xAuthToken)
-        service.getFollowing(xAuthToken).enqueue(object : Callback<List<Member>> {
-            override fun onResponse(call: Call<List<Member>>, response: Response<List<Member>>) {
-                if (response.isSuccessful) {
-                    followList = response.body()!!
-                    Log.d("viewmodel", "Successful response: ${response}")
-                    callback(1)
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                } else if(response.code()==404){
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(2)
-                } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3)
+            })
+        } else if(option == 1) {
+            service.getFollower(xAuthToken,followId).enqueue(object : Callback<ResponseFollowMembers> {
+                override fun onResponse(call: Call<ResponseFollowMembers>, response: Response<ResponseFollowMembers>) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if(responseBody!=null) {
+                            followList = responseBody.result
+                            callback(1,responseBody.hasNext)
+                        }else {
+                            callback(2,false)
+                        }
+                    } else if(response.code()==403) {
+                        _tokenToastData.value = Unit
+                        refreshToken()
+                    } else if(response.code()==404){
+                        Log.e("viewmodel", "Unsuccessful response: ${response}")
+                        callback(2,false)
+                    } else {
+                        Log.e("viewmodel", "Unsuccessful response: ${response}")
+                        callback(3,false)
+                    }
                 }
-            }
-            override fun onFailure(call: Call<List<Member>>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(3)
-            }
-        })
-    }
-    // 팔로잉 조회 paging
-    fun getFollowingP(lastId : Int,callback: (Int,followList : List<Member>?) -> Unit){
-        service.getFollowingP(xAuthToken,lastId).enqueue(object : Callback<List<Member>> {
-            override fun onResponse(call: Call<List<Member>>, response: Response<List<Member>>) {
-                if (response.isSuccessful) {
-                    val tmpFollowList = response.body()!!
-                    Log.d("viewmodel", "Successful response: ${response} ${response.body()}")
-                    callback(1,tmpFollowList)
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                }else if(response.code()==404){
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(2,null)
-                } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3,null)
+                override fun onFailure(call: Call<ResponseFollowMembers>, t: Throwable) {
+                    Log.e("viewmodel", "Failed to make the request", t)
+                    callback(3,false)
                 }
-            }
-            override fun onFailure(call: Call<List<Member>>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(3,null)
-            }
-        })
+            })
+        }
+
     }
     // 가게 정보 조회(짧은 화면)
-    fun getStoreDetailQuick(storedId: Long, callback: (Int,ResponseStoreDetailQuick?) -> Unit){
+    fun getStoreDetailQuick(storeIds: List<Long>, callback: (Int,List<ResponseStoreDetailQuick>?) -> Unit){
         Log.e("token",xAuthToken)
-        service.getStoreDetailQuick(xAuthToken,storedId).enqueue(object : Callback<ResponseStoreDetailQuick> {
-            override fun onResponse(call: Call<ResponseStoreDetailQuick>, response: Response<ResponseStoreDetailQuick>) {
+        service.getStoreDetailQuick(xAuthToken,storeIds.toMutableList()).enqueue(object : Callback<List<ResponseStoreDetailQuick>> {
+            override fun onResponse(call: Call<List<ResponseStoreDetailQuick>>, response: Response<List<ResponseStoreDetailQuick>>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if(responseBody!=null) {
@@ -1162,7 +1181,7 @@ class GustoViewModel: ViewModel() {
                     callback(3,null)
                 }
             }
-            override fun onFailure(call: Call<ResponseStoreDetailQuick>, t: Throwable) {
+            override fun onFailure(call: Call<List<ResponseStoreDetailQuick>>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
                 callback(3,null)
             }
@@ -1174,8 +1193,25 @@ class GustoViewModel: ViewModel() {
     //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 
     //내 위치 장소보기 카테고리 array
-    var myMapCategoryList : List<ResponseMapCategory>? = null
-    var myAllCategoryList : List<ResponseMapCategory>? = null
+    var myMapCategoryList : ArrayList<ResponseMapCategory>? = null
+    var myAllCategoryList : ArrayList<ResponseMapCategory> = arrayListOf()
+    var testList : List<ResponseMapCategory> = listOf(
+        ResponseMapCategory(1, "Category1", 1, "PUBLIC", "desc1", 1),
+        ResponseMapCategory(2, "Category2", 2, "PUBLIC", "desc2", 2),
+        ResponseMapCategory(3, "Category3", 3, "PUBLIC", "desc3", 3),
+        ResponseMapCategory(4, "Category4", 4, "PUBLIC", "desc4", 4),
+        ResponseMapCategory(5, "Category5", 5, "PUBLIC", "desc5", 5),
+        ResponseMapCategory(1, "Category1", 1, "PUBLIC", "desc1", 1),
+        ResponseMapCategory(2, "Category2", 2, "PUBLIC", "desc2", 2),
+        ResponseMapCategory(3, "Category3", 3, "PUBLIC", "desc3", 3),
+        ResponseMapCategory(4, "Category4", 4, "PUBLIC", "desc4", 4),
+        ResponseMapCategory(5, "Category5", 5, "PUBLIC", "desc5", 5),
+        ResponseMapCategory(1, "Category1", 1, "PUBLIC", "desc1", 1),
+        ResponseMapCategory(2, "Category2", 2, "PUBLIC", "desc2", 2),
+        ResponseMapCategory(3, "Category3", 3, "PUBLIC", "desc3", 3),
+        ResponseMapCategory(4, "Category4", 4, "PUBLIC", "desc4", 4),
+        ResponseMapCategory(5, "Category5", 5, "PUBLIC", "desc5", 5)
+    )
 
     private val _cateEditFlag = MutableLiveData<Boolean?>(false)
     val cateEditFlag: LiveData<Boolean?>
@@ -1260,6 +1296,9 @@ class GustoViewModel: ViewModel() {
         return iconResource
     }
 
+    // storeFragment에서 사용하는 선택된 카테고리 정보
+    var selectedCategoryInfo : ResponseMapCategory? = null
+
     // 카테고리 추가 -> 확인 완료
     fun addCategory(categoryName : String,categoryIcon : Int, public : String, desc : String,  callback: (Int) -> Unit){
         var categoryRequestData = RequestAddCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = public, myCategoryScript = desc )
@@ -1313,10 +1352,10 @@ class GustoViewModel: ViewModel() {
     }
     // 카테고리 조회(위치 기반, 내 위치 장소보기) -> 확인 완료
     fun getMapCategory(townName : String, callback: (Int) -> Unit){
-        service.getMapCategory(xAuthToken, townName = townName).enqueue(object :Callback<List<ResponseMapCategory>>{
+        service.getMapCategory(xAuthToken, townName = townName).enqueue(object :Callback<ArrayList<ResponseMapCategory>>{
             override fun onResponse(
-                call: Call<List<ResponseMapCategory>>,
-                response: Response<List<ResponseMapCategory>>
+                call: Call<ArrayList<ResponseMapCategory>>,
+                response: Response<ArrayList<ResponseMapCategory>>
             ) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", response.body()!!.toString())
@@ -1332,36 +1371,14 @@ class GustoViewModel: ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<List<ResponseMapCategory>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<ResponseMapCategory>>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
                 callback(1)
             }
 
         })
     }
-    // 카테고리 삭제하기
-    fun deleteCategory(categoryId : Int, callback: (Int) -> Unit){
-        service.deleteCategory(xAuthToken, myCategoryId = categoryId).enqueue(object : Callback<Void>{
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    Log.e("viewmodel", "Successful response: ${response}")
-                    callback(0)
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(1)
-                }
-            }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(1)
-            }
-
-        })
-    }
 
     fun deleteCateogories(data : MutableList<Int>, callback: (Int) -> Unit){
         val requestData = data
@@ -1396,7 +1413,7 @@ class GustoViewModel: ViewModel() {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
                     Log.d("getAllMap", response.body()!!.toString())
-                    myAllCategoryList = response.body()!!
+                    //myAllCategoryList = response.body()!!
                     callback(0)
                 } else if(response.code()==403) {
                     _tokenToastData.value = Unit
@@ -1416,10 +1433,10 @@ class GustoViewModel: ViewModel() {
     }
     //카테고리 전체 조회 - 피드, 마이 -> 확인 완, nickname 전달 필요
     fun getAllUserCategory(callback: (Int) -> Unit){
-        service.getAllUserCategory(xAuthToken).enqueue(object : Callback<List<ResponseMapCategory>>{
+        service.getAllUserCategory(xAuthToken).enqueue(object : Callback<ArrayList<ResponseMapCategory>>{
             override fun onResponse(
-                call: Call<List<ResponseMapCategory>>,
-                response: Response<List<ResponseMapCategory>>
+                call: Call<ArrayList<ResponseMapCategory>>,
+                response: Response<ArrayList<ResponseMapCategory>>
             ) {
                 if (response.isSuccessful) {
                     Log.e("getAllUserCategory", "Successful response: ${response}")
@@ -1435,7 +1452,7 @@ class GustoViewModel: ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<List<ResponseMapCategory>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<ResponseMapCategory>>, t: Throwable) {
                 Log.e("getAllUserCategory", "Failed to make the request", t)
                 callback(1)
             }
@@ -1443,12 +1460,90 @@ class GustoViewModel: ViewModel() {
         })
     }
 
+
+    fun getPPMyCategory(categoryId : Int?, callback: (Int, Boolean) -> Unit){
+            service.pGetMyCategory(xAuthToken, categoryId).enqueue(object : Callback<ResponsePMyCategory>{
+                override fun onResponse(
+                    call: Call<ResponsePMyCategory>,
+                    response: Response<ResponsePMyCategory>
+                ) {
+                    if(response.isSuccessful){
+                        val body = response.body()
+                        if(body!=null){
+                            Log.e("getPPMyCategory", "Successful response: ${response}")
+                            myAllCategoryList.addAll(body.result)
+                            Log.e("getPPMyCategory", myAllCategoryList.toString())
+                            callback(1, body.hasNext)
+                        }
+                        else{
+                            callback(2, false)
+                        }
+                    }
+                    else if(response.code() == 403){
+                        //추가 예정
+                        callback(2, false)
+                    }
+                    else if(response.code() == 404){
+                        Log.e("getPPMyCategory", "Unsuccessful response: ${response}")
+                        callback(2, false)
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponsePMyCategory>, t: Throwable) {
+                    Log.e("getPPMyCategory", "Failed to make the request", t)
+                    callback(3, false)
+                }
+
+            })
+
+    }
+
+    fun getPPOtherCategory(categoryId : Int?, nickname: String, callback: (Int, Boolean) -> Unit){
+        service.pGetOtherCategory(xAuthToken, nickname, categoryId).enqueue(object : Callback<ResponsePMyCategory>{
+            override fun onResponse(
+                call: Call<ResponsePMyCategory>,
+                response: Response<ResponsePMyCategory>
+            ) {
+                if(response.isSuccessful){
+                    val body = response.body()
+                    if(body!=null){
+                        Log.e("getPPOtherCategory", "Successful response: ${response}")
+                        myAllCategoryList.addAll(body.result)
+                        Log.e("getPPOtherCategory", myAllCategoryList.toString())
+                        callback(1, body.hasNext)
+                    }
+                    else{
+                        callback(2, false)
+                    }
+                }
+                else if(response.code() == 403){
+                    //추가 예정
+                    callback(2, false)
+                }
+                else if(response.code() == 404){
+                    Log.e("getPPOtherCategory", "Unsuccessful response: ${response}")
+                    callback(2, false)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponsePMyCategory>, t: Throwable) {
+                Log.e("getPPOtherCategory", "Failed to make the request", t)
+                callback(3, false)
+            }
+
+        })
+
+    }
+
+
+
+
     /**
      * 가게 api 함수 - mindy
      */
     var selectedDetailStoreId = 1
     var myMapStoreList : List<ResponseStoreListItem>? = null
-    var myAllStoreList : List<ResponseStoreListItem>? = null
+    var myAllStoreList : ArrayList<PResponseStoreListItem> = arrayListOf()
 
     var myStoreDetail : ResponseStoreDetail? = null
     var storeDetailReviews = ArrayList<ResponseReviews>()
@@ -1457,10 +1552,15 @@ class GustoViewModel: ViewModel() {
 
     var userNickname : String = "Gusto"
 
+    //저장된 맛집
     var mapVisitedList : List<ResponseSavedStoreData>? = null
     var mapUnvisitedList : List<ResponseSavedStoreData>? = null
     var mapVisitedCnt = 0
     var mapUnvisitedCnt = 0
+
+
+    //가게 삭제
+    var selectedStoreIdList : ArrayList<Int> = arrayListOf()
 
 
 
@@ -1523,7 +1623,7 @@ class GustoViewModel: ViewModel() {
                     Log.d("getStoreDetail", response.body()!!.reviews.toString())
                     myStoreDetail = response.body()
                     if(detailReviewLastId == null){
-                        for (i in response.body()!!.reviews){
+                        for (i in response.body()!!.reviews.result){
                             detailReviewLastId = i.reviewId
                             detailReviewLastVisitedAt = i.visitedAt
                             storeDetailReviews.add(i)
@@ -1533,7 +1633,7 @@ class GustoViewModel: ViewModel() {
                     }
                     else{
                         Log.d("reviewId check", "more")
-                        for (i in response.body()!!.reviews){
+                        for (i in response.body()!!.reviews.result){
                             detailReviewLastId = i.reviewId
                             detailReviewLastVisitedAt = i.visitedAt
                             storeDetailReviews.add(i)
@@ -1596,7 +1696,7 @@ class GustoViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     Log.e("viewmodel", "Successful response: ${response}")
-                    myAllStoreList = response.body()!!
+                    //myAllStoreList = response.body()!!
                     callback(0)
                 } else if(response.code()==403) {
                     _tokenToastData.value = Unit
@@ -1623,7 +1723,7 @@ class GustoViewModel: ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     Log.e("getAllUserStores", response.body()!!.toString())
-                    myAllStoreList = response.body()!!
+                    //myAllStoreList = response.body()!!
                     callback(0)
                 } else if(response.code()==403) {
                     _tokenToastData.value = Unit
@@ -1641,6 +1741,111 @@ class GustoViewModel: ViewModel() {
 
         })
     }
+    private var _allFlag = MutableLiveData<String>("false")
+    val allFlag : LiveData<String>
+        get() = _allFlag
+
+    fun updateSelectFlag(change : String){
+        _allFlag.value = change
+    }
+    fun deleteStores(data : MutableList<Int>, callback: (Int) -> Unit){
+        service.deleteStores(xAuthToken, data).enqueue(object : Callback<Void>{
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.e("deleteStores", "Successful response: ${response}")
+                    callback(0)
+                } else {
+                    Log.e("deleteStores", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("deleteStores", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
+    }
+
+    // paging api
+
+    fun getPPMyStore(categoryId: Int, pinId : Int?, callback: (Int, Boolean) -> Unit){
+        service.ppGetAllMyStores(xAuthToken, categoryId, pinId).enqueue(object : Callback<PResponseStoreData>{
+            override fun onResponse(
+                call: Call<PResponseStoreData>,
+                response: Response<PResponseStoreData>
+            ) {
+                if(response.isSuccessful){
+                    val body = response.body()
+                    if(body!=null){
+                        Log.e("getPPMyStore", "Successful response: ${response}")
+                        myAllStoreList.addAll(body.result)
+                        Log.e("getPPMyStore", myAllStoreList.toString())
+                        callback(1, body.hasNext)
+                    }
+                    else{
+                        callback(2, false)
+                    }
+                }
+                else if(response.code() == 403){
+                    //추가 예정
+                    callback(2, false)
+                }
+                else if(response.code() == 404){
+                    Log.e("getPPMyStore", "Unsuccessful response: ${response}")
+                    callback(2, false)
+                }
+            }
+
+            override fun onFailure(call: Call<PResponseStoreData>, t: Throwable) {
+                Log.e("getPPMyCategory", "Failed to make the request", t)
+                callback(3, false)
+            }
+
+        })
+
+    }
+
+    //paging -> other user store
+    fun getPPOtherStore(categoryId: Int, nickname: String, pinId : Int?, callback: (Int, Boolean) -> Unit){
+        service.ppGetAllOtherStores(xAuthToken, nickname, categoryId, pinId).enqueue(object : Callback<PResponseStoreData>{
+            override fun onResponse(
+                call: Call<PResponseStoreData>,
+                response: Response<PResponseStoreData>
+            ) {
+                if(response.isSuccessful){
+                    val body = response.body()
+                    if(body!=null){
+                        Log.e("getPPOtherStore", "Successful response: ${response}")
+                        myAllStoreList.addAll(body.result)
+                        Log.e("getPPOtherStore", myAllStoreList.toString())
+                        callback(1, body.hasNext)
+                    }
+                    else{
+                        callback(2, false)
+                    }
+                }
+                else if(response.code() == 403){
+                    //추가 예정
+                    callback(2, false)
+                }
+                else if(response.code() == 404){
+                    Log.e("getPPOtherStore", "Unsuccessful response: ${response}")
+                    callback(2, false)
+                }
+            }
+
+            override fun onFailure(call: Call<PResponseStoreData>, t: Throwable) {
+                Log.e("getPPOtherStore", "Failed to make the request", t)
+                callback(3, false)
+            }
+
+        })
+
+    }
+
+    //---------------
     //저장된 맛집 리스트 -> 완
     var savedStoreIdList = ArrayList<Long>()
     var unsavedStoreIdList = ArrayList<Long>()
@@ -1743,26 +1948,23 @@ class GustoViewModel: ViewModel() {
             filesToUpload.add(filePart)
         }
         Log.d("edit checking", requestBody.toString())
-        service.editReview(xAuthToken, reviewId, filesToUpload, requestBody).enqueue(object : Callback<Void>{
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    Log.e("viewmodel", "Successful response: ${response}")
-                    callback(0)
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(1)
-                }
-            }
-
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(1)
-            }
-
-        })
+//        service.editReview(xAuthToken, reviewId, filesToUpload, requestBody).enqueue(object : Callback<Void>{
+//            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+//                if (response.isSuccessful) {
+//                    Log.e("viewmodel", "Successful response: ${response}")
+//                    callback(0)
+//                } else {
+//                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+//                    callback(1)
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<Void>, t: Throwable) {
+//                Log.e("viewmodel", "Failed to make the request", t)
+//                callback(1)
+//            }
+//
+//        })
     }
     //리뷰 삭제
     fun deleteReview(reviewId: Long, callback: (Int) -> Unit){
@@ -1999,33 +2201,30 @@ class GustoViewModel: ViewModel() {
     }
 
     //내 카테고리 전체 조회 + 카테고리 담기
-    fun getMyMapCategory(townName: String, callback: (Int) -> Unit) {
-        service.getMapCategory(xAuthToken, townName = townName).enqueue(object : Callback<List<ResponseMapCategory>> {
-            override fun onResponse(
-                call: Call<List<ResponseMapCategory>>,
-                response: Response<List<ResponseMapCategory>>
-            ) {
-                if (response.isSuccessful) {
-                    Log.e("viewmodel", response.body()!!.toString())
-                    Log.e("viewmodel", "Successful response: ${response}")
-                    myMapCategoryList = response.body()!! // 서버에서 받아온 카테고리 목록을 저장
-                    callback(0)
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(1)
-                }
-            }
-
-            override fun onFailure(call: Call<List<ResponseMapCategory>>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(1)
-            }
-
-        })
-    }
+//    fun getMyMapCategory(townName: String, callback: (Int) -> Unit) {
+//        service.getMapCategory(xAuthToken, townName = townName).enqueue(object : Callback<ArrayList<ResponseMapCategory>> {
+//            override fun onResponse(
+//                call: Call<ArrayList<ResponseMapCategory>>,
+//                response: Response<ArrayList<ResponseMapCategory>>
+//            ) {
+//                if (response.isSuccessful) {
+//                    Log.e("viewmodel", response.body()!!.toString())
+//                    Log.e("viewmodel", "Successful response: ${response}")
+//                    myMapCategoryList = response.body()!! // 서버에서 받아온 카테고리 목록을 저장
+//                    callback(0)
+//                } else {
+//                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+//                    callback(1)
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ArrayList<ResponseMapCategory>>, t: Throwable) {
+//                Log.e("viewmodel", "Failed to make the request", t)
+//                callback(1)
+//            }
+//
+//        })
+//    }
 
     // 나의 콘텐츠 공개 여부 조회
     fun myPublishGet(callback: (Int, ResponseMyPublishGet?) -> Unit){
