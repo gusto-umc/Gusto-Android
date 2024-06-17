@@ -2,9 +2,6 @@ package com.gst.gusto.review.fragment
 
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,15 +11,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentGalleryReviewBinding
 import com.gst.gusto.review.adapter.InstaReviewAdapter
 import com.gst.gusto.review.adapter.GridItemDecoration
 import com.gst.gusto.review.viewmodel.ReviewViewModel
 import com.gst.gusto.review.viewmodel.ReviewViewModelFactory
-import com.gst.gusto.util.ScrollUtil.addOnScrollEndListener
+import com.gst.gusto.util.ScrollUtil.addGridOnScrollEndListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -70,27 +65,23 @@ class InstaReviewFragment : Fragment() {
             val itemDecoration = GridItemDecoration(size, color)
             recyclerView.addItemDecoration(itemDecoration)
             recyclerView.layoutManager = GridLayoutManager(activity, 3)
-            adapter.addLoading()
         }
 
-        viewModel.instaReviews.observe(viewLifecycleOwner){
-            lifecycleScope.launch {
-                delay(2000)
-                adapter.addItems(it)
-                adapter.addLoading()
-            }
+        viewModel.instaReviews.observe(viewLifecycleOwner) {
+            adapter.addItems(it)
         }
     }
 
 
 
 fun pagingRecyclerview(){
-    binding.recyclerView.addOnScrollEndListener {
+    binding.recyclerView.addGridOnScrollEndListener {
         viewModel.onScrolled()
     }
     viewModel.scrollData.observe(viewLifecycleOwner){
-        lifecycleScope.launch {
-            delay(2000)
+        viewLifecycleOwner.lifecycleScope.launch {
+            delay(1000)
+            adapter.addLoading()
             adapter.removeLoading()
         }
     }

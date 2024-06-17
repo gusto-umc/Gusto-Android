@@ -1,11 +1,12 @@
 package com.gst.gusto.util
 
+import android.util.Log
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 
 object ScrollUtil {
-    fun RecyclerView.addOnScrollEndListener(
+    fun RecyclerView.addGridOnScrollEndListener(
         threshold: Int = 1,
         callback: () -> Unit,
     ) {
@@ -17,11 +18,11 @@ object ScrollUtil {
                 }
             }
 
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            /*override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (recyclerView.hasLessItemThan(threshold)) {
                     callback.invoke()
                 }
-            }
+            }*/
 
             private fun RecyclerView.hasLessItemThan(threshold: Int): Boolean {
                 // 목록이 갱신되는 중인 경우에는 false 반환
@@ -30,6 +31,7 @@ object ScrollUtil {
                 }
                 (layoutManager as? GridLayoutManager)?.let {
                     val lastVisibleItem = it.findLastVisibleItemPosition()
+
                     return lastVisibleItem >= it.itemCount - threshold
                 }
                 return false
