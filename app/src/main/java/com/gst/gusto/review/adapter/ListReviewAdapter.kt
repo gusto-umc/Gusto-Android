@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.databinding.ItemReviewListBinding
 import com.gst.gusto.databinding.ItemReviewListButtonBinding
+import com.gst.gusto.review.adapter.viewholder.ListReviewBtnViewHolder
+import com.gst.gusto.review.adapter.viewholder.ListReviewViewHolder
 
 class ListReviewAdapter(private val itemClickListener: (ListReviewData) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

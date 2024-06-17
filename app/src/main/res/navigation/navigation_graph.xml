@@ -378,7 +378,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragment_other"
-        android:name="com.gst.gusto.my.OtherFragment"
+        android:name="com.gst.gusto.other.OtherFragment"
         android:label="FragmentOther"
         tools:layout="@layout/fragment_my">
         <action
