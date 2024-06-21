@@ -190,16 +190,16 @@ class GustoViewModel: ViewModel() {
     }
 
     // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
-    fun getCurrentMapStores(cateId : Int?,callback: (Int,List<RouteList>?) -> Unit){
+    fun getCurrentMapStores(cateId : Int?, isVisited : Boolean,callback: (Int,List<RouteList>?) -> Unit){
         Log.e("token",xAuthToken)
         Log.d("viewmodel","view : ${_dong.value}")
-        service.getCurrentMapStores(xAuthToken,_dong.value!!,cateId).enqueue(object : Callback<List<RouteList>> {
+        service.getCurrentMapStores(xAuthToken,_dong.value!!,cateId, isVisited).enqueue(object : Callback<List<RouteList>> {
             override fun onResponse(call: Call<List<RouteList>>, response: Response<List<RouteList>>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     myRouteList.clear()
                     if(responseBody!=null) {
-                        Log.d("viewmodel", "Successful response: ${response}")
+                        Log.d("viewmodel helo", "Successful response: ${response.body()}")
                         callback(1,responseBody)
                     } else {
                         Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -209,7 +209,7 @@ class GustoViewModel: ViewModel() {
                     _tokenToastData.value = Unit
                     refreshToken()
                 } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    Log.e("viewmodel helo3", "Unsuccessful response: ${response}")
                     callback(3,null)
                 }
             }

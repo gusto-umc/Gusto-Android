@@ -6,6 +6,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.Point
+import android.graphics.PointF
 import android.location.Location
 import android.util.Log
 import android.widget.RelativeLayout
@@ -13,12 +15,18 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.LocationServices
 import com.gst.gusto.R
-import net.daum.mf.map.api.CameraUpdateFactory
-import net.daum.mf.map.api.MapPOIItem
-import net.daum.mf.map.api.MapPoint
-import net.daum.mf.map.api.MapPointBounds
-import net.daum.mf.map.api.MapPolyline
-import net.daum.mf.map.api.MapView
+import com.kakao.vectormap.KakaoMap
+import com.kakao.vectormap.LatLng
+import com.kakao.vectormap.camera.CameraAnimation
+import com.kakao.vectormap.camera.CameraUpdateFactory
+import com.kakao.vectormap.label.LabelLayer
+import com.kakao.vectormap.label.LabelOptions
+import com.kakao.vectormap.label.LabelStyle
+import com.kakao.vectormap.label.LabelStyles
+import com.kakao.vectormap.route.RouteLineOptions
+import com.kakao.vectormap.route.RouteLineSegment
+import com.kakao.vectormap.route.RouteLineStyle
+import com.kakao.vectormap.route.RouteLineStyles
 
 
 class mapUtil {
@@ -47,10 +55,10 @@ class mapUtil {
             R.drawable.route_marker_5_img,
             R.drawable.route_marker_6_img
         )
-        @SuppressLint("MissingPermission")
-        fun setMapInit(mapView : MapView,kakaoMap : RelativeLayout,context : Context,activity : Activity,option : String,fragment: Fragment)  {
-            kakaoMap.addView(mapView)
 
+        @SuppressLint("MissingPermission")
+        fun getCurrentLocation(context : Context, fragment: Fragment, activity: Activity,
+                               callback: (Location) -> Unit) {
             if (!hasPermission(context)) {
                 fragment.requestPermissions(
                     MAPPERMISSIONS,
@@ -59,42 +67,69 @@ class mapUtil {
             } else {
                 val fusedLocationProviderClient =
                     LocationServices.getFusedLocationProviderClient(activity)
-
                 fusedLocationProviderClient.lastLocation
                     .addOnSuccessListener { success: Location? ->
                         success?.let { location ->
-                            Log.d("viewmodel","${location.latitude}, ${location.longitude}")
-                            if(option =="map") {
-                                mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(location.latitude, location.longitude), true)
-                                mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeadingWithoutMapMoving)
-                                mapView.setShowCurrentLocationMarker(true)
-                            } else if(option == "route") {
-
-                            }
+                            callback(location)
                         }
                     }
                     .addOnFailureListener { fail ->
-                        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.53737528, 127.00557633), true)
                     }
             }
+
         }
 
 
-        fun setMarker(mapView : MapView,markerList: ArrayList<MarkerItem>) {
-            mapView.removeAllPOIItems()
-            for(data in markerList) {
-                val marker = MapPOIItem()
-                marker.itemName = data.ordinal.toString()
-                marker.tag = data.ordinal // id
-                marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
-                marker.markerType = MapPOIItem.MarkerType.CustomImage
-                marker.customImageResourceId = R.drawable.marker_color_small_img
-                marker.isShowCalloutBalloonOnTouch = false
-                marker.showAnimationType = MapPOIItem.ShowAnimationType.DropFromHeaven
+        fun setMarker(kakaoMap: KakaoMap,markerList: ArrayList<MarkerItem>) {
+            var labelManager = kakaoMap.labelManager
+            if(labelManager!=null) {
+                var styles = labelManager.addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.marker_color_small_img)))
+                var layer = labelManager.layer
+                if (layer != null) {
+                    layer.removeAll()
+                    for(data in markerList) {
+                        val label = LabelOptions.from(LatLng.from(data.latitude,data.longitude))
+                            .setStyles(styles);
+                        label.tag = data.ordinal
+                        label.clickable = true
+                        layer.addLabel(label)
+                    }
+                }
 
-                mapView.addPOIItem(marker)
             }
         }
+        fun setRoute(kakaoMap: KakaoMap,markerList: ArrayList<MarkerItem>) {
+            var labelManager = kakaoMap.labelManager
+            val routeLineStyle = RouteLineStyles.from(RouteLineStyle.from(16f,Color.argb(255, 253, 105, 7)))
+            val routeManager = kakaoMap.routeLineManager
+            if(labelManager!=null&&routeManager!=null) {
+                var layer = labelManager.layer
+                var routLayer = routeManager.layer
+                var latLngArray = ArrayList<LatLng>()
+                if (layer != null) {
+                    layer.removeAll()
+                    for((index, data) in markerList.withIndex()) {
+                        var labelStyle = LabelStyle.from(ROUTE_MARKER_IMAGES[index])
+                        labelStyle.anchorPoint = PointF(0.5f,0.5f)
+                        var styles = labelManager.addLabelStyles(LabelStyles.from(labelStyle))
+
+                        val label = LabelOptions.from(LatLng.from(data.latitude,data.longitude))
+                            .setStyles(styles);
+                        label.tag = data.ordinal
+                        label.clickable = true
+                        layer.addLabel(label)
+                        latLngArray.add(LatLng.from(data.latitude,data.longitude))
+                    }
+                }
+
+                var routeLineSegment = RouteLineSegment.from(latLngArray).setStyles(routeLineStyle)
+                routLayer.addRouteLine(RouteLineOptions.from(routeLineSegment))
+
+                var cameraUpdate = CameraUpdateFactory.fitMapPoints(latLngArray.toArray(arrayOf<LatLng>()),300)
+                kakaoMap.moveCamera(cameraUpdate, CameraAnimation.from(0, true, true))
+            }
+        }
+        /*
         fun setStores(mapView : MapView,markerList: ArrayList<MarkerItem>) {
             mapView.removeAllPOIItems()
             for(data in markerList) {
@@ -111,33 +146,7 @@ class mapUtil {
             }
             if(!markerList.isEmpty())
                 mapView.moveCamera(CameraUpdateFactory.newMapPoint(MapPoint.mapPointWithGeoCoord(markerList[0].latitude, markerList[0].longitude)))
-        }
-        fun setRoute(mapView: MapView, markerList: List<MarkerItem>) {
-            mapView.removeAllPOIItems()
-            mapView.removeAllPolylines()
-            val route = MapPolyline()
-            route.lineColor = Color.argb(255, 253, 105, 7)
-            for((index, data) in markerList.withIndex()) {
-                route.addPoint(MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude))
-                val marker = MapPOIItem()
-                marker.itemName = data.ordinal.toString()
-                marker.setCustomImageAnchor(0.5f,0.5f)
-                marker.tag = data.ordinal // id
-                marker.showAnimationType = MapPOIItem.ShowAnimationType.SpringFromGround
-                marker.mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
-                marker.markerType = MapPOIItem.MarkerType.CustomImage
-                marker.customImageResourceId = ROUTE_MARKER_IMAGES[index]
-                marker.isShowCalloutBalloonOnTouch = false
-
-                mapView.addPOIItem(marker)
-            }
-            mapView.addPolyline(route)
-
-            val mapPointBounds = MapPointBounds(route.mapPoints)
-
-            mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,300))
-
-        }
+        }*/
         fun hasPermission(context : Context): Boolean {
             for (permission in MAPPERMISSIONS) {
                 if (ContextCompat.checkSelfPermission(

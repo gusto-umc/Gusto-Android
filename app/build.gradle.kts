@@ -95,8 +95,8 @@ dependencies {
     implementation("io.github.ParkSangGwon:tedpermission-rx3:3.3.0")
 
     // kakao
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation(files("libs/libDaumMapAndroid.jar"))
+    implementation("com.kakao.maps.open:android:2.6.0")
+
 // Java language implementation
     implementation("androidx.activity:activity:1.6.0")
     // Kotlin

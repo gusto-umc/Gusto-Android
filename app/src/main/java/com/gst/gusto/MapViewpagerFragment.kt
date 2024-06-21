@@ -20,16 +20,21 @@ import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMapViewpagerBinding
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter
-import net.daum.mf.map.api.CameraUpdateFactory
-import net.daum.mf.map.api.MapPOIItem
-import net.daum.mf.map.api.MapPoint
-import net.daum.mf.map.api.MapView
+import com.kakao.vectormap.KakaoMap
+import com.kakao.vectormap.KakaoMapReadyCallback
+import com.kakao.vectormap.LatLng
+import com.kakao.vectormap.MapLifeCycleCallback
+import com.kakao.vectormap.camera.CameraAnimation
+import com.kakao.vectormap.camera.CameraUpdateFactory
 
-class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.MapViewEventListener{
+class MapViewpagerFragment : Fragment(){
 
     lateinit var binding: FragmentMapViewpagerBinding
-    lateinit var mapView : MapView
     private val gustoViewModel : GustoViewModel by activityViewModels()
+
+    val markerList = ArrayList<mapUtil.Companion.MarkerItem>()
+    lateinit var kakaoMap: KakaoMap
+    private val TAG = "MapViewpagerFragment"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,7 +48,7 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
             gustoViewModel.keepFlag = true
             findNavController().popBackStack()
         }
-
+        getMarker()
         return binding.root
     }
 
@@ -62,11 +67,48 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_viewpager_to_searchFragment)
         }
 
+
+    }
+    fun getMarker() {
+        var num = 2
+        gustoViewModel.getStoreDetailQuick(gustoViewModel.storeIdList) {result, stores ->
+            when(result) {
+                1 -> {
+                    if (stores != null) {
+                        for(data in stores) {
+                            val tmpData = mapUtil.Companion.MarkerItem(
+                                data.storeId,
+                                num++,
+                                0,
+                                data.latitude,
+                                data.longitude,
+                                data.storeName,
+                                data.address,
+                                data.pin
+                            )
+                            if(data.storeId == gustoViewModel.selectStoreId) {
+                                tmpData.ordinal = 1
+                                num--
+                                markerList.add(0,tmpData)
+                            } else markerList.add(tmpData)
+                            Log.d("viewmodel","${tmpData.toString()}, ${markerList.size+2}, ${gustoViewModel.storeIdList.size-1}")
+                        }
+                    }
+                    if (markerList.size == gustoViewModel.storeIdList.size) {
+                        Log.d("viewmodel","set marker!!!")
+                    }
+                    initMap()
+
+                }
+                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    fun initMap() {
         val viewPager = binding.vpSlider
 
-        val markers = ArrayList<mapUtil.Companion.MarkerItem>()
         // 이미지 슬라이드
-        val adapter = RouteViewPagerAdapter(markers,requireActivity() as MainActivity,1)
+        val adapter = RouteViewPagerAdapter(markerList,requireActivity() as MainActivity,1)
         viewPager.adapter = adapter
 
         viewPager.offscreenPageLimit = 1
@@ -87,99 +129,80 @@ class MapViewpagerFragment : Fragment(), MapView.POIItemEventListener,MapView.Ma
             }
         })
         viewPager.setPageTransformer(compositePageTransformer)
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                // 페이지가 선택되었을 때의 작업 수행
-                val mapPoint = MapPoint.mapPointWithGeoCoord(markers[position].latitude, markers[position].longitude)
-                mapView.moveCamera(CameraUpdateFactory.newMapPoint(mapPoint,mapView.zoomLevelFloat))
-            }
-        })
 
-        mapView = MapView(requireContext())
-        mapView.setPOIItemEventListener(this)
-        mapView.setMapViewEventListener(this)
+        mapUtil.getCurrentLocation(requireContext(), this, requireActivity()) { location ->
+            Log.d(
+                "CurrentLocation",
+                "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
+            )
+            binding.kakaoMap.start(object : MapLifeCycleCallback() {
+                override fun onMapDestroy() {
+                    Log.e(TAG, "onMapDestroy")
+                }
 
-        mapUtil.setMapInit(mapView, binding.kakaoMapSearch, requireContext(), requireActivity(),"route",this)
-
-        var num = 2
-        gustoViewModel.getStoreDetailQuick(gustoViewModel.storeIdList) {result, stores ->
-            when(result) {
-                1 -> {
-                    if (stores != null) {
-                        for(data in stores) {
-                            val tmpData = mapUtil.Companion.MarkerItem(
-                                data.storeId,
-                                num++,
-                                0,
-                                data.latitude,
-                                data.longitude,
-                                data.storeName,
-                                data.address,
-                                data.pin
-                            )
-                            if(data.storeId == gustoViewModel.selectStoreId) {
-                                tmpData.ordinal = 1
-                                num--
-                                markers.add(0,tmpData)
-                            } else markers.add(tmpData)
-                            Log.d("viewmodel","${tmpData.toString()}, ${markers.size+2}, ${gustoViewModel.storeIdList.size-1}")
-                        }
-                    }
-                    if (markers.size == gustoViewModel.storeIdList.size) {
-                        Log.d("viewmodel","set marker!!!")
-                        mapUtil.setStores(mapView, markers)
-                        adapter.notifyDataSetChanged()
-                    }
+                override fun onMapError(error: Exception?) {
+                    Log.e(TAG, "onMApError", error)
 
                 }
-                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-            }
+
+            }, object : KakaoMapReadyCallback() {
+                override fun onMapReady(getKakaoMap: KakaoMap) {
+                    //var cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(37.402005, 127.108621))
+                    //kakaoMap.moveCamera(cameraUpdate, CameraAnimation.from(500, true, true))
+                    kakaoMap = getKakaoMap
+                    kakaoMap.setOnCameraMoveEndListener { kakaoMap, cameraPosition, gestureType ->
+                        // 카메라 움직임 종료 시 이벤트 호출
+                        // 사용자 제스쳐가 아닌 코드에 의해 카메라가 움직이면 GestureType 은 Unknown
+                    }
+                    kakaoMap.setOnCameraMoveStartListener { kakaoMap, gestureType ->
+                        // 카메라 움직임 시작 시 이벤트 호출
+                        // 사용자 제스쳐가 아닌 코드에 의해 카메라가 움직이면 GestureType 은 Unknown
+                    }
+                    kakaoMap.setOnLabelClickListener { kakaoMap, layer, label ->
+                        binding.vpSlider.visibility = View.VISIBLE
+                        if (label != null) {
+                            Log.d(TAG, label.tag.toString())
+                            binding.vpSlider.currentItem = (label.tag as Int) - 1
+                        }
+                    }
+                    viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                        override fun onPageSelected(position: Int) {
+                            super.onPageSelected(position)
+                            // 페이지가 선택되었을 때의 작업 수행
+                            if(!markerList.isEmpty()) {
+                                var cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(markerList[position].latitude, markerList[position].longitude))
+
+                                kakaoMap.moveCamera(cameraUpdate, CameraAnimation.from(500, true, true))
+                            } else {
+                                viewPager.visibility = View.GONE
+                            }
+                        }
+                    })
+                    mapUtil.setMarker(kakaoMap, markerList)
+                    Log.e(TAG, "onMapReady")
+                }
+
+                override fun getZoomLevel(): Int {
+                    // 지도 시작 시 확대/축소 줌 레벨 설정
+                    return 16
+                }
+
+                override fun getPosition(): LatLng {
+                    return LatLng.from(markerList[0].latitude,markerList[0].longitude)
+                }
+            })
         }
+
+
     }
 
     override fun onPause() {
         super.onPause()
-        binding.kakaoMapSearch.removeAllViews()
-    }
-    override fun onPOIItemSelected(mapView: MapView?, poiItem: MapPOIItem?) {
-        // 마커 클릭 시 이벤트
-        binding.vpSlider.visibility = View.VISIBLE
-
-        if (poiItem != null) {
-            binding.vpSlider.currentItem = poiItem.itemName.toInt()-1
-        }
-    }
-    override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?) {}
-    override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, poiItem: MapPOIItem?, buttonType: MapPOIItem.CalloutBalloonButtonType?) {}
-    override fun onDraggablePOIItemMoved(mapView: MapView?, poiItem: MapPOIItem?, mapPoint: MapPoint?) {}
-
-
-    override fun onMapViewInitialized(p0: MapView?) {
+        binding.kakaoMap.pause()
     }
 
-    override fun onMapViewCenterPointMoved(p0: MapView?, p1: MapPoint?) {
-    }
-
-    override fun onMapViewZoomLevelChanged(p0: MapView?, p1: Int) {
-    }
-
-    override fun onMapViewSingleTapped(p0: MapView?, p1: MapPoint?) {
-    }
-
-    override fun onMapViewDoubleTapped(p0: MapView?, p1: MapPoint?) {
-    }
-
-    override fun onMapViewLongPressed(p0: MapView?, p1: MapPoint?) {
-    }
-
-    override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {
-        binding.vpSlider.visibility=View.GONE
-    }
-
-    override fun onMapViewDragEnded(p0: MapView?, p1: MapPoint?) {
-    }
-
-    override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
+    override fun onResume() {
+        super.onResume()
+        binding.kakaoMap.resume()
     }
 }
