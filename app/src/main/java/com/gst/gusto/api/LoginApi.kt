@@ -24,6 +24,7 @@ interface LoginApi {
         @Part("info") info: Singup
     ): Call<ResponseBody>
 
+    // 소셜 로그인
     @POST("users/sign-in")
     fun login(
         @Body body : Login

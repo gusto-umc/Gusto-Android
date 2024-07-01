@@ -444,13 +444,15 @@ data class LocalCategoryResponse (
 data class Singup(
     @SerializedName("provider") val provider: String,
     @SerializedName("providerId") val providerId: String,
+    @SerializedName("accessToken") val accessToken : String,
     @SerializedName("nickname") val nickname: String,
     @SerializedName("age") val age: String,
     @SerializedName("gender") val gender: String
 )
 data class Login(
     @SerializedName("provider") val provider: String,
-    @SerializedName("providerId") val providerId: String
+    @SerializedName("providerId") val providerId: String,
+    @SerializedName("accessToken") val accessToken : String
 )
 data class Nickname(
     @SerializedName("nickname") val nickname: String
