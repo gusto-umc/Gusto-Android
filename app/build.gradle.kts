@@ -86,6 +86,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.6.4")
     implementation ("com.squareup.retrofit2:converter-scalars:2.6.4")
     implementation ("com.squareup.okhttp3:okhttp:4.9.2")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.2")
 
     // Extended Floating Button
     implementation("com.google.android.material:material:1.4.0-alpha02")
@@ -94,8 +95,8 @@ dependencies {
     implementation("io.github.ParkSangGwon:tedpermission-rx3:3.3.0")
 
     // kakao
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation(files("libs/libDaumMapAndroid.jar"))
+    implementation("com.kakao.maps.open:android:2.6.0")
+
 // Java language implementation
     implementation("androidx.activity:activity:1.6.0")
     // Kotlin

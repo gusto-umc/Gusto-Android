@@ -4,9 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.api.retrofit.RetrofitInstance
+import com.gst.gusto.dto.ResponseInstaReviews
 import com.gst.gusto.list.adapter.GroupAdapter
 import com.gst.gusto.util.mapUtil
 import com.gst.gusto.list.adapter.GroupItem
@@ -30,9 +31,8 @@ import java.io.File
 import java.time.LocalDate
 
 class GustoViewModel: ViewModel() {
-    private val retrofit = Retrofit.Builder().baseUrl(BuildConfig.API_BASE)
-        .addConverterFactory(GsonConverterFactory.create()).build()
-    private val service = retrofit.create(GustoApi::class.java)
+
+    private val service = RetrofitInstance.createService(GustoApi::class.java)
     private var xAuthToken = ""
     private var refreshToken = ""
 
@@ -190,16 +190,16 @@ class GustoViewModel: ViewModel() {
     }
 
     // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
-    fun getCurrentMapStores(cateId : Int?,callback: (Int,List<RouteList>?) -> Unit){
+    fun getCurrentMapStores(cateId : Int?, isVisited : Boolean,callback: (Int,List<RouteList>?) -> Unit){
         Log.e("token",xAuthToken)
         Log.d("viewmodel","view : ${_dong.value}")
-        service.getCurrentMapStores(xAuthToken,_dong.value!!,cateId).enqueue(object : Callback<List<RouteList>> {
+        service.getCurrentMapStores(xAuthToken,_dong.value!!,cateId, isVisited).enqueue(object : Callback<List<RouteList>> {
             override fun onResponse(call: Call<List<RouteList>>, response: Response<List<RouteList>>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     myRouteList.clear()
                     if(responseBody!=null) {
-                        Log.d("viewmodel", "Successful response: ${response}")
+                        Log.d("viewmodel helo", "Successful response: ${response.body()}")
                         callback(1,responseBody)
                     } else {
                         Log.e("viewmodel", "Unsuccessful response: ${response}")
@@ -209,7 +209,7 @@ class GustoViewModel: ViewModel() {
                     _tokenToastData.value = Unit
                     refreshToken()
                 } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    Log.e("viewmodel helo3", "Unsuccessful response: ${response}")
                     callback(3,null)
                 }
             }
@@ -2085,34 +2085,6 @@ class GustoViewModel: ViewModel() {
             })
     }
 
-
-    // 리뷰 모아보기-1 (Insta view)
-    fun instaView(reviewId: Long?, size: Int, callback: (Int, ResponseInstaReview?) -> Unit){
-        service.instaView(xAuthToken, reviewId, size).enqueue(object : Callback<ResponseInstaReview> {
-            override fun onResponse(call: Call<ResponseInstaReview>, response: Response<ResponseInstaReview>) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if(responseBody!=null) {
-                        Log.e("viewmodel", "1 Successful response: ${response}")
-                        callback(1, responseBody)
-                    } else {
-                        Log.e("viewmodel", "2 Successful response: ${response}")
-                        callback(2, null)
-                    }
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                }else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3, null)
-                }
-            }
-            override fun onFailure(call: Call<ResponseInstaReview>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(3, null)
-            }
-        })
-    }
     // 리뷰 모아보기-3 (timeline view)
     fun timeLineView(reviewId: Long?, size: Int, callback: (Int, ResponseListReview?) -> Unit){
         Log.e("token",xAuthToken)
@@ -2253,36 +2225,6 @@ class GustoViewModel: ViewModel() {
 //
 //        })
 //    }
-
-
-
-    // 타인 리뷰 모아보기
-    fun otherInstaView(nickName: String, reviewId: Long?, size: Int, callback: (Int, ResponseInstaReview?) -> Unit){
-        service.otherInstaView(xAuthToken, nickName, reviewId, size).enqueue(object : Callback<ResponseInstaReview> {
-            override fun onResponse(call: Call<ResponseInstaReview>, response: Response<ResponseInstaReview>) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if(responseBody!=null) {
-                        Log.e("viewmodel", "1 Successful response: ${response}")
-                        callback(1, responseBody)
-                    } else {
-                        Log.e("viewmodel", "2 Successful response: ${response}")
-                        callback(2, null)
-                    }
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                }else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3, null)
-                }
-            }
-            override fun onFailure(call: Call<ResponseInstaReview>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(3, null)
-            }
-        })
-    }
 
     // 나의 콘텐츠 공개 여부 조회
     fun myPublishGet(callback: (Int, ResponseMyPublishGet?) -> Unit){

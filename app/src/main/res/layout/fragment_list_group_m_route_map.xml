@@ -41,8 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <RelativeLayout
-                android:id="@+id/kakao_route_map"
+            <com.kakao.vectormap.MapView
+                android:id="@+id/kakao_map"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <com.google.android.material.floatingactionbutton.FloatingActionButton

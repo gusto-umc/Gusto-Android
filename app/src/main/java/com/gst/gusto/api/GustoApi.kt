@@ -1,5 +1,6 @@
 package com.gst.gusto.api
 
+import com.gst.gusto.dto.ResponseInstaReview
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -30,7 +31,8 @@ interface GustoApi {
     fun getCurrentMapStores(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("townName") townName : String,
-        @Query("myCategoryId") myCategoryId : Int?
+        @Query("myCategoryId") myCategoryId : Int?,
+        @Query("visited") visited : Boolean
     ):Call<List<RouteList>>
 
     //ROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTE
@@ -461,13 +463,6 @@ interface GustoApi {
         @Query("date") date: LocalDate
     ):Call<ResponseCalReview>
 
-    @GET("reviews/instaView") // 리뷰 모아보기 - 1 (insta view)
-    fun instaView(
-        @Header("X-AUTH-TOKEN") token: String,
-        @Query("reviewId") reviewId: Long?,
-        @Query("size") size: Int
-    ):Call<ResponseInstaReview>
-
     //STORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORESTORE
 
     @GET("stores") // 가게 정보 조회(잛은 화면)
@@ -505,14 +500,6 @@ interface GustoApi {
         @Query("longtitude") longitude: Double,
         @Query("latitude") latitude: Double
     ): Call<LocalCategoryResponse>
-
-    @GET("reviews") // 타인 리뷰 모아보기
-    fun otherInstaView(
-        @Header("X-AUTH-TOKEN") token: String,
-        @Query("nickName") nickname: String,
-        @Query("reviewId") reviewId: Long?,
-        @Query("size") size: Int
-    ):Call<ResponseInstaReview>
 
     //나의 콘텐츠 공개 여부 조회
     @GET("users/my-info/publishing")

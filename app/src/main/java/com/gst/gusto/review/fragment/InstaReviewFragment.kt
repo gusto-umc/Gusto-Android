@@ -1,4 +1,4 @@
-package com.gst.clock.Fragment
+package com.gst.gusto.review.fragment
 
 import android.graphics.Color
 import android.os.Bundle
@@ -12,40 +12,37 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.R
-import com.gst.gusto.databinding.FragmentMyReviewBinding
-import com.gst.gusto.my.viewmodel.MyReviewViewModel
-import com.gst.gusto.my.viewmodel.MyReviewViewModelFactory
+import com.gst.gusto.databinding.FragmentGalleryReviewBinding
 import com.gst.gusto.review.adapter.InstaReviewAdapter
 import com.gst.gusto.review.adapter.GridItemDecoration
+import com.gst.gusto.review.viewmodel.ReviewViewModel
+import com.gst.gusto.review.viewmodel.ReviewViewModelFactory
 import com.gst.gusto.util.ScrollUtil.addGridOnScrollEndListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MyReviewFragment : Fragment() {
+class InstaReviewFragment : Fragment() {
 
-    lateinit var binding: FragmentMyReviewBinding
+    lateinit var binding: FragmentGalleryReviewBinding
 
     private val adapter: InstaReviewAdapter by lazy {
         InstaReviewAdapter(context) { reviewId ->
             val bundle = Bundle()
             bundle.putLong("reviewId", reviewId)
             bundle.putString("page", "review")
-            findNavController().navigate(R.id.action_myFragment_to_reviewDetail, bundle)
+            findNavController().navigate(R.id.action_reviewFragment_to_reviewDetail, bundle)
         }
     }
 
-    private val viewModel: MyReviewViewModel by viewModels( ownerProducer = { requireParentFragment() }, factoryProducer = { MyReviewViewModelFactory() } )
 
-    private val itemDecoration : GridItemDecoration by lazy {
-        GridItemDecoration(resources.getDimensionPixelSize(R.dimen.one_dp), Color.WHITE)
-    }
+    private val viewModel: ReviewViewModel by viewModels( ownerProducer = { requireParentFragment()}, factoryProducer = { ReviewViewModelFactory() } )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentMyReviewBinding.inflate(inflater, container, false)
+        binding = FragmentGalleryReviewBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -65,9 +62,7 @@ class MyReviewFragment : Fragment() {
             recyclerView.adapter = adapter
             val size = resources.getDimensionPixelSize(R.dimen.one_dp)
             val color = Color.WHITE
-            if(itemDecoration != null){
-                recyclerView.removeItemDecoration(itemDecoration)
-            }
+            val itemDecoration = GridItemDecoration(size, color)
             recyclerView.addItemDecoration(itemDecoration)
             recyclerView.layoutManager = GridLayoutManager(activity, 3)
         }
@@ -79,17 +74,18 @@ class MyReviewFragment : Fragment() {
 
 
 
-    fun pagingRecyclerview(){
-        binding.recyclerView.addGridOnScrollEndListener {
-            viewModel.onScrolled()
-        }
-        viewModel.scrollData.observe(viewLifecycleOwner){
-            viewLifecycleOwner.lifecycleScope.launch {
-                delay(1000)
-                adapter.removeLoading()
-            }
+fun pagingRecyclerview(){
+    binding.recyclerView.addGridOnScrollEndListener {
+        viewModel.onScrolled()
+    }
+    viewModel.scrollData.observe(viewLifecycleOwner){
+        viewLifecycleOwner.lifecycleScope.launch {
+            delay(1000)
+            adapter.addLoading()
+            adapter.removeLoading()
         }
     }
+}
 
     fun setToast(){
         viewModel.tokenToastData.observe(viewLifecycleOwner){

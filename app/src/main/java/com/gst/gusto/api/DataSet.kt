@@ -340,19 +340,6 @@ data class RequestCreateReview(
     @SerializedName("comment") val comment : String?
 )
 
-// insta (gallery) review 조회- reviews & MyReviewFragment와 OtherReviewFragment
-data class ResponseInstaReviews(
-    @SerializedName("reviewId") val reviewId: Long,
-    @SerializedName("images") val images: String,
-)
-
-// insta (gallery) review 조회 & MyReviewFragment와 OtherReviewFragment
-data class ResponseInstaReview(
-    @SerializedName("reviews") val reviews: List<ResponseInstaReviews>,
-    @SerializedName("hasNext") val hasNext: Boolean
-)
-
-
 //검색결과
 data class ResponseSearch(
     @SerializedName("storeId") val storeId : Long,
@@ -457,13 +444,15 @@ data class LocalCategoryResponse (
 data class Singup(
     @SerializedName("provider") val provider: String,
     @SerializedName("providerId") val providerId: String,
+    @SerializedName("accessToken") val accessToken : String,
     @SerializedName("nickname") val nickname: String,
     @SerializedName("age") val age: String,
     @SerializedName("gender") val gender: String
 )
 data class Login(
     @SerializedName("provider") val provider: String,
-    @SerializedName("providerId") val providerId: String
+    @SerializedName("providerId") val providerId: String,
+    @SerializedName("accessToken") val accessToken : String
 )
 data class Nickname(
     @SerializedName("nickname") val nickname: String

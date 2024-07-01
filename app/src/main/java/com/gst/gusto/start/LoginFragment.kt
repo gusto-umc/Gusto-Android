@@ -40,6 +40,7 @@ class LoginFragment: Fragment() {
     lateinit var binding: StartFragmentLoginBinding
     private val LoginViewModel : LoginViewModel by activityViewModels()
     private val googleSignInClient: GoogleSignInClient by lazy { getGoogleClient() }
+
     private val googleAuthLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
 
@@ -48,7 +49,7 @@ class LoginFragment: Fragment() {
 
             Log.d("GOOGLE_Login","${account.id}")
             Log.d("GOOGLE_Login","${account.photoUrl}")
-            successGoogleLogin("${account.id}","${account.photoUrl}")
+            successGoogleLogin("${account.id}","${account.photoUrl}","${account.serverAuthCode}")
         } catch (e: ApiException) {
             Log.d("GOOGLE_Login","${e.toString()}")
         }
@@ -119,10 +120,11 @@ class LoginFragment: Fragment() {
             }
         }
     }
-    private fun successGoogleLogin(id: String, photoUrl: String) {
-        LoginViewModel.providerId = id+"8"
+    private fun successGoogleLogin(id: String, photoUrl: String,socialAccessToken : String) {
+        LoginViewModel.providerId = id
         LoginViewModel.profileUrl = photoUrl
         LoginViewModel.provider = "GOOGLE"
+        LoginViewModel.socialAccessToken = socialAccessToken
         Log.d("GOOGLE_LOGIN",photoUrl)
         LoginViewModel.login { resultCode ->
             when (resultCode) {
@@ -145,7 +147,7 @@ class LoginFragment: Fragment() {
             if (error != null) {
                 Log.e("KAKAO", "카카오계정으로 로그인 실패", error)
             } else if (token != null) {
-                successKakaoLogin()
+                successKakaoLogin(token.accessToken)
                 Log.i("KAKAO", "카카오계정으로 로그인 성공 ${token.accessToken}")
             }
         }
@@ -167,7 +169,7 @@ class LoginFragment: Fragment() {
 
 
                 } else if (token != null) {
-                    successKakaoLogin()
+                    successKakaoLogin(token.accessToken)
                     Log.i("KAKAO", "카카오톡으로 로그인 성공 ${token.accessToken}")
                 }
             }
@@ -175,7 +177,7 @@ class LoginFragment: Fragment() {
             UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
         }
     }
-    private fun successKakaoLogin() {
+    private fun successKakaoLogin(accessToken : String) {
         UserApiClient.instance.me { user, error ->
             if (error != null) {
             } else if (user != null) {
@@ -183,6 +185,7 @@ class LoginFragment: Fragment() {
                 LoginViewModel.providerId = user.id.toString()
                 LoginViewModel.provider = "KAKAO"
                 LoginViewModel.profileUrl = user.kakaoAccount?.profile?.profileImageUrl
+                LoginViewModel.socialAccessToken = accessToken
                 LoginViewModel.login { resultCode ->
                     when (resultCode) {
                         1 -> {
@@ -200,10 +203,6 @@ class LoginFragment: Fragment() {
                 }
             }
         }
-    }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
     }
     /**
      * 로그인
@@ -253,16 +252,14 @@ class LoginFragment: Fragment() {
             override fun onSuccess() {
                 // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
                 naverToken = NaverIdLoginSDK.getAccessToken()
-                LoginViewModel.setAccessToken(naverToken.toString())
+                LoginViewModel.socialAccessToken = naverToken.toString()
+                /*
                 LoginViewModel.setRefreshToken(NaverIdLoginSDK.getRefreshToken().toString())
-
                 var naverRefreshToken = NaverIdLoginSDK.getRefreshToken()
                 var naverExpiresAt = NaverIdLoginSDK.getExpiresAt().toString()
                 var naverTokenType = NaverIdLoginSDK.getTokenType()
-                var naverState = NaverIdLoginSDK.getState().toString()
+                var naverState = NaverIdLoginSDK.getState().toString()*/
 
-                Log.d("helpgogogo",
-                    naverExpiresAt+", "+naverTokenType+", "+naverState)
                 //로그인 유저 정보 가져오기
                 NidOAuthLogin().callProfileApi(profileCallback)
             }
