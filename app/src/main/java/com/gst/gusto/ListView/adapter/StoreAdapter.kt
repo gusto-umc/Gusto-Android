@@ -19,6 +19,7 @@ import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.CardWxampleBinding
 import com.gst.gusto.databinding.ItemCategoryBinding
 import com.gst.gusto.databinding.ItemStoreBinding
+import com.gst.gusto.util.util
 
 class StoreAdapter(private val parentView : View, private var sign : String) : ListAdapter<PResponseStoreListItem, StoreAdapter.ViewHolder>(diffUtil){
 
@@ -30,13 +31,18 @@ class StoreAdapter(private val parentView : View, private var sign : String) : L
         fun bind(item : PResponseStoreListItem){
             binding.apply {
                 binding.tvItemStoreTitle.text = item.storeName
-                //카테고리 -> 서버 추가 필요
-                //binding.tvItemStoreCategory.text =
+                //카테고리
                 binding.tvItemStoreLocation.text = item.address
                 //리뷰 사진 3개 -> 서버 추가 필요
-                binding.ivItemStoreImg1.setImageResource(R.drawable.gst_dummypic)
-                binding.ivItemStoreImg2.setImageResource(R.drawable.gst_dummypic)
-                binding.ivItemStoreImg3.setImageResource(R.drawable.gst_dummypic)
+                if(!item.reviewImg3[0].isNullOrBlank()){
+                    util.setImage(binding.ivItemStoreImg1, item.reviewImg3[0], mContext!!)
+                }
+                if(!item.reviewImg3[1].isNullOrBlank()){
+                    util.setImage(binding.ivItemStoreImg1, item.reviewImg3[1], mContext!!)
+                }
+                if(!item.reviewImg3[2].isNullOrBlank()){
+                    util.setImage(binding.ivItemStoreImg1, item.reviewImg3[2], mContext!!)
+                }
             }
             data = item
         }

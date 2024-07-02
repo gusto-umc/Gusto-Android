@@ -260,7 +260,7 @@ data class PResponseStoreListItem(
     @SerializedName("storeName") val storeName  :String,
     @SerializedName("address") val address : String,
     @SerializedName("reviewCnt") var reviewCnt : Int,
-    @SerializedName("reviewImg") val reviewImg : String?
+    @SerializedName("reviewImg3") val reviewImg3 : MutableList<String?>
 )
 
 // 저장된 가게 response

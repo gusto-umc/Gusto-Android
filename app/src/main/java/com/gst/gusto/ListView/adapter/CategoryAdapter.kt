@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,7 +14,7 @@ import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseMapCategory
 import com.gst.gusto.databinding.ItemCategoryBinding
-
+import com.gst.gusto.util.util
 
 
 class CategoryAdapter(private val view: View, val flag : String) : ListAdapter<ResponseMapCategory, CategoryAdapter.ViewHolder>(diffUtil){
@@ -64,6 +65,35 @@ class CategoryAdapter(private val view: View, val flag : String) : ListAdapter<R
                 val bundle1 = Bundle()
                 bundle1.putString("sign", "map")
                 Navigation.findNavController(view).navigate(R.id.action_categoryFragment_to_storeFragment, bundle1)
+            }
+            holder.popup.setOnClickListener {
+                val popup = PopupMenu(mContext, it)
+                popup.menuInflater.inflate(R.menu.category_menu, popup.menu)
+                popup.setOnMenuItemClickListener {
+                    when(it.itemId){
+                        R.id.category_edit -> {
+                            //수정 페이지 등장
+                        }
+                        R.id.category_delete -> {
+                            //삭제 다이얼로그 등장
+                            util.setPopupTwo(mContext!!, "카테고리 삭제 시, 카테고리에\n포함된 맛집들도 함께 삭제됩니다", desc = "*카테고리 삭제 시 데이터복원은 불가능합니다", 1){
+                                result ->
+                                when(result){
+                                    0 -> {
+                                        //yes : remove
+
+                                    }
+                                    1 -> {
+                                        //no
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    true
+                }
+                popup.show()
             }
         }
         else if(flag == "my"){
