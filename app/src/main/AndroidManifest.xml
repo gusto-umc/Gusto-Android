@@ -58,7 +58,7 @@
         </activity>
         <!-- kakao map-->
         <meta-data
-            android:name="com.kakao.sdk.AppKey"
+            android:name="com.kakao.vectormap.APP_KEY"
             android:value="160e833f29df2c137b5db8865a983993" />
         <!-- Trigger Google Play services to install the backported photo picker module. -->
         <service android:name="com.google.android.gms.metadata.ModuleDependencies"
