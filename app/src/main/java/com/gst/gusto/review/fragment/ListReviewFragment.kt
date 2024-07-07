@@ -5,36 +5,29 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseListReview
 import com.gst.gusto.databinding.FragmentListReviewBinding
+import com.gst.gusto.model.TimeLineReview
 import com.gst.gusto.review.adapter.ListReviewAdapter
-import com.gst.gusto.review.adapter.ListReviewData
 import com.gst.gusto.review.adapter.ListReviewType
+import com.gst.gusto.review.viewmodel.ListReviewViewModel
+import com.gst.gusto.review.viewmodel.ListReviewViewModelFactory
+import com.gst.gusto.util.ScrollUtil.addLinearOnScrollEndListener
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class ListReviewFragment : Fragment() {
 
     lateinit var binding: FragmentListReviewBinding
-    lateinit var adapter: ListReviewAdapter
-    private val gustoViewModel : GustoViewModel by activityViewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-       binding = FragmentListReviewBinding.inflate(inflater, container, false)
-
-        // 클릭 리스너 부분
-        adapter = ListReviewAdapter(itemClickListener = {
+    private val adapter: ListReviewAdapter by lazy{
+        ListReviewAdapter(itemClickListener = {
             if(it.viewType == ListReviewType.LISTREVIEW){
                 val bundle = Bundle()
                 bundle.putLong("reviewId", it.reviewId)     //리뷰 아이디 넘겨 주면 됨
@@ -45,51 +38,54 @@ class ListReviewFragment : Fragment() {
             }
 
         })
+    }
 
-        binding.apply{
-            recyclerView.adapter = adapter
-            recyclerView.layoutManager = LinearLayoutManager(activity)
-        }
+    private val gustoViewModel : GustoViewModel by activityViewModels()
+    private val listReviewViewModel: ListReviewViewModel by viewModels(ownerProducer = { requireParentFragment() }, factoryProducer = { ListReviewViewModelFactory() })
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        binding = FragmentListReviewBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        gustoViewModel.timeLineView(null, 31) { result , response ->
-            if(result == 1){
-                adapter.setData(list = getData(response))
+        initView()
+        pagingRecyclerview()
+    }
+
+    fun initView(){
+        with(binding){
+            recyclerView.adapter = adapter
+
+            listReviewViewModel.timeLineReviews.observe(viewLifecycleOwner){
+                adapter.addData(it)
             }
         }
     }
 
-    fun getData(response: ResponseListReview?): ArrayList<ListReviewData> {
-        val reviewList: ArrayList<ListReviewData> = ArrayList()
-        val DF = SimpleDateFormat("MM/dd", Locale.KOREAN)
-        Log.d("response", response?.reviews.toString())
-
-        response?.reviews?.let {
-            for(data in it){
-                val date = DF.format(data.visitedAt).toString()
-                val visit = data.visitedCount.toString()
-                val imagesList : ArrayList<String> = ArrayList()
-
-                if(data.images != null){
-                    for (image in data.images){
-                        imagesList.add(image)
-                    }
-                }
-
-                val reviewData = ListReviewData(date, data.storeName, visit, imagesList, data.reviewId)
-                reviewList.add(reviewData)
+    fun pagingRecyclerview(){
+        binding.recyclerView.addLinearOnScrollEndListener{
+            listReviewViewModel.onScrolled()
+        }
+        listReviewViewModel.timeLineHasNext.observe(viewLifecycleOwner){
+            if(it == false){
+                listReviewViewModel.addLastData()
             }
         }
+    }
 
-        val NowTime = System.currentTimeMillis()
-        val result = DF.format(NowTime).toString()
-        reviewList.add(ListReviewData(result, "","", ArrayList(), 0, ListReviewType.LISTBUTTON))
-
-        return reviewList
+    fun setToast(){
+        listReviewViewModel.tokenToastData.observe(viewLifecycleOwner){
+            Toast.makeText(requireActivity(), "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+        }
+        listReviewViewModel.errorToastData.observe(viewLifecycleOwner){
+            Toast.makeText(requireActivity(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }

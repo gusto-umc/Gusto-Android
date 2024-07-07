@@ -6,12 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.databinding.ItemReviewListBinding
 import com.gst.gusto.databinding.ItemReviewListButtonBinding
+import com.gst.gusto.model.TimeLineReview
 import com.gst.gusto.review.adapter.viewholder.ListReviewBtnViewHolder
 import com.gst.gusto.review.adapter.viewholder.ListReviewViewHolder
 
-class ListReviewAdapter(private val itemClickListener: (ListReviewData) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ListReviewAdapter(private val itemClickListener: (TimeLineReview) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var items = ArrayList<ListReviewData>()
+    private var items: MutableList<TimeLineReview> = mutableListOf()
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         if(viewType == ListReviewType.LISTREVIEW){
@@ -51,8 +52,8 @@ class ListReviewAdapter(private val itemClickListener: (ListReviewData) -> Unit)
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(list: ArrayList<ListReviewData>){
-        items = list
+    fun addData(list: List<TimeLineReview>){
+        items = list.toMutableList()
         notifyDataSetChanged()
     }
 }
