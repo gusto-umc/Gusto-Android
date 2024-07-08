@@ -457,6 +457,13 @@ data class Login(
 data class Nickname(
     @SerializedName("nickname") val nickname: String
 )
+//구글 토큰
+data class AccessTokenResponse(
+    @SerializedName("access_token") val accessToken: String,
+    @SerializedName("expires_in") val expiresIn: Long,
+    @SerializedName("token_type") val tokenType: String,
+    @SerializedName("refresh_token") val refreshToken: String?
+)
 
 // 나의 콘텐츠 공개 여부 조회
 data class ResponseMyPublishGet(

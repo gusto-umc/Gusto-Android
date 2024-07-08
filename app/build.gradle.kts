@@ -5,6 +5,7 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -24,6 +25,8 @@ android {
         buildConfigField("String", "API_BASE", localProperties.getProperty("api_base"))
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", localProperties.getProperty("KAKAO_NATIVE_APP_KEY"))
         buildConfigField("String", "GOOGLE_CLINET_ID", localProperties.getProperty("GOOGLE_CLINET_ID"))
+        buildConfigField("String", "GOOGLE_SECRET", localProperties.getProperty("GOOGLE_SECRET"))
+        buildConfigField("String", "GOOGLE_REDIRECT", localProperties.getProperty("GOOGLE_REDIRECT"))
         buildConfigField("String", "NAVER_CLIENT_ID", localProperties.getProperty("NAVER_CLIENT_ID"))
         buildConfigField("String", "NAVER_CLIENT_SECRET", localProperties.getProperty("NAVER_CLIENT_SECRET"))
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = properties["KAKAO_NATIVE_APP_KEY"] as? String ?: ""
@@ -112,6 +115,9 @@ dependencies {
     implementation ("com.google.firebase:firebase-auth:22.0.0")
     implementation ("com.google.firebase:firebase-bom:32.0.0")
     implementation ("com.google.android.gms:play-services-auth:20.5.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
+    implementation("com.google.firebase:firebase-analytics")
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 }
