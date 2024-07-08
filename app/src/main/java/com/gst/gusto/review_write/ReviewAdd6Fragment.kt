@@ -39,7 +39,6 @@ class ReviewAdd6Fragment : Fragment() {
             gustoViewModel.toilet = howList[3]
             gustoViewModel.parking = howList[4]
             findNavController().navigate(R.id.action_reviewAdd6Fragment_to_reviewAdd7Fragment)
-            Log.d("howList",howList.toString())
         }
 
         return binding.root
