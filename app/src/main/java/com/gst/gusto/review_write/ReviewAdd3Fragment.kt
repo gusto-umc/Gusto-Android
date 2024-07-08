@@ -60,7 +60,6 @@ class ReviewAdd3Fragment : Fragment() {
                     }
                 }
             }
-            Log.d("viewmodel images",gustoViewModel.imageFiles.get(0).toString())
 
             findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
         }
@@ -132,7 +131,8 @@ class ReviewAdd3Fragment : Fragment() {
                     binding.tvUpload2.text = "이제 리뷰를 작성하러 가볼까요?"
                     binding.btnNext.text = "리뷰 작성하러 가기"
                 }
-                imageList[0] = convertContentToFile(requireContext(),uri[0])
+                if(uri.size>0)
+                    imageList[0] = convertContentToFile(requireContext(),uri[0])
                 for (j in 0 .. uri.size-1) {
                     Log.e("viewmodel",uri[j].toString())
                     gustoViewModel.imageFiles?.add(convertContentToFile(requireContext(),uri[j]))
