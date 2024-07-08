@@ -60,6 +60,7 @@ class LoginViewModel: ViewModel() {
     }
     fun signUp(callback: (Int) -> Unit){
         val info = Singup(provider,providerId,socialAccessToken,nickName,age,gender)
+        Log.d("SOCIAL LOGIN INFO2", "${provider}, ${providerId}, ${socialAccessToken}")
         var profileMutipart : MultipartBody.Part?=null
         if(profileImg!=null) {
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), profileImg!!)
@@ -103,7 +104,6 @@ class LoginViewModel: ViewModel() {
                         callback(3)
                     }
                 }
-
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e("LoginViewModel", "Failed to make the request", t)
                     callback(3)

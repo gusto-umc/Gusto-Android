@@ -21,6 +21,8 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.api.AccessTokenResponse
+import com.gst.gusto.api.LoginApi
 import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.databinding.StartFragmentLoginBinding
 import com.kakao.sdk.auth.model.OAuthToken
@@ -33,6 +35,11 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class LoginFragment: Fragment() {
@@ -52,11 +59,39 @@ class LoginFragment: Fragment() {
             Log.d("GOOGLE_Login","${account.idToken}")
             Log.d("GOOGLE_Login","${account.serverAuthCode}")
 
-            successGoogleLogin("${account.id}","${account.photoUrl}","${account.idToken}")
+            getAccessToken("${account.id}","${account.photoUrl}",account.serverAuthCode)
         } catch (e: ApiException) {
             Log.e("GOOGLE_Login", e.stackTraceToString())
         }
     }
+    private fun getAccessToken(id: String, photoUrl: String,serverAuthCode: String?) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://oauth2.googleapis.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service = retrofit.create(LoginApi::class.java)
+
+        val call = service.getAccessToken("authorization_code", serverAuthCode, BuildConfig.GOOGLE_CLINET_ID, BuildConfig.GOOGLE_SECRET, BuildConfig.GOOGLE_REDIRECT)
+        call.enqueue(object : Callback<AccessTokenResponse> {
+            override fun onResponse(call: Call<AccessTokenResponse>, response: Response<AccessTokenResponse>) {
+                if (response.isSuccessful) {
+                    val accessToken = response.body()?.accessToken
+                    if (accessToken != null) {
+                        successGoogleLogin(id,photoUrl,accessToken)
+                    }
+                    Log.d("GOOGLE_LOGIN_TOKEN", "Access Token: $accessToken")
+                } else {
+                    Log.e("GOOGLE_LOGIN_TOKEN", "Access Token request failed ${response}")
+                }
+            }
+
+            override fun onFailure(call: Call<AccessTokenResponse>, t: Throwable) {
+                Log.e("GOOGLE_LOGIN_TOKEN", "Access Token request error", t)
+            }
+        })
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
