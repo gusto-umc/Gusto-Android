@@ -1770,8 +1770,8 @@ class GustoViewModel: ViewModel() {
 
     // paging api
 
-    fun getPPMyStore(categoryId: Int, pinId : Int?, callback: (Int, Boolean) -> Unit){
-        service.ppGetAllMyStores(xAuthToken, categoryId, pinId).enqueue(object : Callback<PResponseStoreData>{
+    fun getPPMyStore(categoryId: Int, pinId : Int?, storeName : String? = null, sort : String? = null,  callback: (Int, Boolean) -> Unit){
+        service.ppGetAllMyStores(xAuthToken, categoryId, pinId, sort, storeName).enqueue(object : Callback<PResponseStoreData>{
             override fun onResponse(
                 call: Call<PResponseStoreData>,
                 response: Response<PResponseStoreData>
