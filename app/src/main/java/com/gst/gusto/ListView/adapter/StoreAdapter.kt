@@ -1,6 +1,7 @@
 package com.gst.gusto.ListView.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,15 +35,23 @@ class StoreAdapter(private val parentView : View, private var sign : String) : L
                 //카테고리
                 binding.tvItemStoreLocation.text = item.address
                 //리뷰 사진 3개 -> 서버 추가 필요
-                if(!item.reviewImg3[0].isNullOrBlank()){
-                    util.setImage(binding.ivItemStoreImg1, item.reviewImg3[0], mContext!!)
+                if(item.reviewImg3.isNullOrEmpty()){
+                    util.setImage(binding.ivItemStoreImg1, null, mContext!!)
+                    util.setImage(binding.ivItemStoreImg2, null, mContext!!)
+                    util.setImage(binding.ivItemStoreImg3, null, mContext!!)
                 }
-                if(!item.reviewImg3[1].isNullOrBlank()){
-                    util.setImage(binding.ivItemStoreImg1, item.reviewImg3[1], mContext!!)
+                else{
+                    if(!item.reviewImg3[0].isNullOrBlank()){
+                        util.setImage(binding.ivItemStoreImg1, item.reviewImg3[0], mContext!!)
+                    }
+                    if(!item.reviewImg3[1].isNullOrBlank()){
+                        util.setImage(binding.ivItemStoreImg2, item.reviewImg3[1], mContext!!)
+                    }
+                    if(!item.reviewImg3[2].isNullOrBlank()){
+                        util.setImage(binding.ivItemStoreImg3, item.reviewImg3[2], mContext!!)
+                    }
                 }
-                if(!item.reviewImg3[2].isNullOrBlank()){
-                    util.setImage(binding.ivItemStoreImg1, item.reviewImg3[2], mContext!!)
-                }
+
             }
             data = item
         }

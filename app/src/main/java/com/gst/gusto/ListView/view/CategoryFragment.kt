@@ -3,6 +3,7 @@ package com.gst.gusto.ListView.view
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -51,7 +52,7 @@ class CategoryFragment : Fragment() {
 
         gustoViewModel.myAllCategoryList.clear()
 
-        val mCategoryAdapter = CategoryAdapter(view, "map")
+        val mCategoryAdapter = CategoryAdapter(view, "map", requireFragmentManager())
         mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
         mCategoryAdapter.viewModel = gustoViewModel
         mCategoryAdapter.mContext = context

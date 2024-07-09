@@ -2,14 +2,18 @@ package com.gst.gusto.ListView.adapter
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.ListView.Model.CategoryDetail
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseMapCategory
@@ -17,9 +21,10 @@ import com.gst.gusto.databinding.ItemCategoryBinding
 import com.gst.gusto.util.util
 
 
-class CategoryAdapter(private val view: View, val flag : String) : ListAdapter<ResponseMapCategory, CategoryAdapter.ViewHolder>(diffUtil){
+class CategoryAdapter(private val view: View, val flag : String, private val fragmentManager : FragmentManager) : ListAdapter<ResponseMapCategory, CategoryAdapter.ViewHolder>(diffUtil){
     var viewModel : GustoViewModel? = null
     var mContext : Context? = null
+    private val mFragmentManager = fragmentManager
     inner class ViewHolder(private val binding : ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root){
         var data : ResponseMapCategory? = null
         fun bind(item : ResponseMapCategory){
@@ -73,6 +78,17 @@ class CategoryAdapter(private val view: View, val flag : String) : ListAdapter<R
                     when(it.itemId){
                         R.id.category_edit -> {
                             //수정 페이지 등장
+                            val categoryBottomSheetDialog = CategoryBottomSheetDialog(){
+                                when(it){
+                                    0 -> {
+                                        Log.d("bottomsheet", "저장 click")
+                                    }
+                                }
+                            }
+                            categoryBottomSheetDialog.isAdd = false
+                            var isPublic : Boolean = holder.data!!.publishCategory == "PUBLIC"
+                            categoryBottomSheetDialog.categoryEdiBottomSheetData = CategoryDetail(id = holder.data!!.myCategoryId, categoryName = holder.data!!.categoryName, categoryDesc = holder.data!!.myCategoryScript, categoryIcon = holder.data!!.categoryIcon, isPublic = isPublic)
+                            categoryBottomSheetDialog.show(mFragmentManager, categoryBottomSheetDialog.tag)
                         }
                         R.id.category_delete -> {
                             //삭제 다이얼로그 등장
@@ -81,6 +97,20 @@ class CategoryAdapter(private val view: View, val flag : String) : ListAdapter<R
                                 when(result){
                                     0 -> {
                                         //yes : remove
+                                        //카테고리 삭제 진행
+                                        viewModel!!.deleteCateogories(mutableListOf(holder.data!!.myCategoryId)){
+                                                result ->
+                                            when(result){
+                                                0 -> {
+                                                    //success
+//                                                    getMapCategories()
+                                                }
+                                                1 -> {
+                                                    //fail
+                                                    Toast.makeText(mContext, "삭제 실패", Toast.LENGTH_SHORT).show()
+                                                }
+                                            }
+                                        }
 
                                     }
                                     1 -> {
