@@ -74,7 +74,7 @@ class ProfileFragment : Fragment() {
                 Log.d("PhotoPicker", "No media selected")
             }
         }
-        binding.ivProfile.setOnClickListener {
+        binding.btnProfileEdit.setOnClickListener {
             pickMedia1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 
 

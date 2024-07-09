@@ -134,9 +134,8 @@ class ReviewAdd3Fragment : Fragment() {
                 if(uri.size>0)
                     imageList[0] = convertContentToFile(requireContext(),uri[0])
                 for (j in 0 .. uri.size-1) {
-                    Log.e("viewmodel",uri[j].toString())
-                    gustoViewModel.imageFiles?.add(convertContentToFile(requireContext(),uri[j]))
                     setImage(imageViews[j],uri[j].toString(),requireContext())
+                    imageList[j] = convertContentToFile(requireContext(),uri[j])
                 }
                 for (j in uri.size .. 3) {
                     setImage(imageViews[j],"",requireContext())
@@ -147,7 +146,6 @@ class ReviewAdd3Fragment : Fragment() {
         }
         val pickMedia1 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                gustoViewModel.imageFiles.clear()
                 imageList[selectImage] = convertContentToFile(requireContext(),uri)
                 setImage(imageViews[selectImage],uri.toString(),requireContext())
             } else {

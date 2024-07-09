@@ -121,6 +121,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
+        android:id="@+id/btn_profile_edit"
         app:layout_constraintBottom_toTopOf="@id/btn_next"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
