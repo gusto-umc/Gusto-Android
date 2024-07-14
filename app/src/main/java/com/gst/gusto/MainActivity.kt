@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.findNavController()
         binding.bottomNavigationView.setupWithNavController(navController)
         navController.popBackStack()
-        navController.navigate(R.id.fragment_group)
+        navController.navigate(R.id.fragment_map)
 
         //Log.d("viewmodel","dsasda : ${ getExtensionVersion(Build.VERSION_CODES.R)}")
         navController.addOnDestinationChangedListener { _, destination, _ ->
