@@ -17,7 +17,7 @@ data class ResponseRoutes(
 // 루트 생성
 data class RequestCreateRoute(
     @SerializedName("routeName") val routeName : String,
-    @SerializedName("groupId") val groupId : Long?,
+    @SerializedName("publishRoute") val publishRoute : Boolean,
     @SerializedName("routeList") val routeList : List<RouteList>
 )
 data class RequestEditRoute(

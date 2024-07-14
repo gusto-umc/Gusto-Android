@@ -53,6 +53,13 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Body requestBody : RequestCreateRoute
     ):Call<ResponseBody>
+
+    @POST("routes/{groupId}") // 루트 생성 or 그룹 내 루트 추가
+    fun createGroupRoute(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Body requestBody : RequestCreateRoute,
+        @Path("groupId") groupId : Long
+    ):Call<ResponseBody>
     @GET("routeLists/{routeId}/order") // 내/그룹 루트 거리 조회(공통)
     fun getRouteMap(
         @Header("X-AUTH-TOKEN") token : String,
