@@ -58,25 +58,24 @@ class InstaReviewFragment : Fragment() {
         setToast()
         pagingRecyclerview()
         setFab()
+        setReviewWriteBtn()
+    }
+
+    private fun setReviewWriteBtn() {
+        with(binding) {
+            reviewWriteButton.setOnClickListener {
+
+            }
+
+            reviewFab.setOnClickListener{
+
+            }
+        }
     }
 
     private fun setFab(){
 
-        var isTop = true
-
         with(binding){
-           /* instaReviewRecyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
-                    if(!instaReviewRecyclerView.canScrollVertically(-1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        binding.reviewFab.visibility = View.GONE
-                        isTop = true
-                    } else if(isTop) {
-                        binding.reviewFab.visibility = View.VISIBLE
-                        isTop = false
-                    }
-                }
-            })*/
 
             instaReviewRecyclerView.addFabOnScrollListener(
                 onHide = {
@@ -86,6 +85,7 @@ class InstaReviewFragment : Fragment() {
                     binding.reviewFab.visibility = View.VISIBLE
                 }
             )
+
         }
     }
 
