@@ -5,13 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
     tools:context=".review.fragment.CalendarReviewFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/insta_icon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/calendar_icon"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_line"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <View
+            android:id="@+id/bottom_line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/gray_7"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginTop="40dp">
 
         <ImageView
             android:id="@+id/gustoIcon"
@@ -22,7 +50,6 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_gravity="center"
             android:orientation="horizontal">
 
@@ -45,7 +72,7 @@
                 android:gravity="center"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="12월"
+                tools:text="12월"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -59,8 +86,6 @@
 
         </LinearLayout>
 
-
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="wrap_content"
@@ -70,5 +95,17 @@
 
     </LinearLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/cal_review_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="40dp"
+        android:src="@drawable/review_fab_icon"
+        app:tint="@color/white"
+        app:backgroundTint="@color/sub_m"
+        app:shapeAppearance="@style/reviewFabstyle"/>
 
 </LinearLayout>
+
