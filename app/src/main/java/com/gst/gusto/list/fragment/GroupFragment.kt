@@ -56,7 +56,7 @@ class GroupFragment : Fragment() {
         }
         binding.btnSave.setOnClickListener {
             gustoViewModel.groupRouteCreateFragment.getRequestRoutesData()
-            gustoViewModel.createRoute {result ->
+            gustoViewModel.createGroupRoute {result ->
                 when(result) {
                     1 -> {
                         gustoViewModel.requestRoutesData = null

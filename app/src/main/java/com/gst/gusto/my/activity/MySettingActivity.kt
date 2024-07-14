@@ -11,9 +11,12 @@ import androidx.lifecycle.Observer
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.ActivityMySettingBinding
+import com.gst.gusto.start.StartActivity
+import com.gst.gusto.util.GustoApplication
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthLogin
@@ -49,9 +52,38 @@ class MySettingActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             unregister.setOnClickListener {
-                //startNaverDeleteToken()
-                //startKakaoDeleteToken()
-                //startGoogleDeletetoken()
+                GustoApplication.prefs.setSharedPrefsBoolean("logout",true)
+                val social = GustoApplication.prefs.getSharedPrefsString("social")
+                if(social=="naver"){
+                    startNaverDeleteToken()
+                } else if(social=="google") {
+                    startGoogleDeletetoken()
+                } else if(social=="kakao") {
+                    startKakaoDeleteToken()
+                }
+
+            }
+            logout.setOnClickListener {
+                GustoApplication.prefs.setSharedPrefsBoolean("logout",true)
+                val social = GustoApplication.prefs.getSharedPrefsString("social")
+                if(social=="naver"){
+                    NaverIdLoginSDK.logout()
+                } else if(social=="google") {
+                    logoutGoogle()
+                } else if(social=="kakao") {
+                    logoutKakao()
+                }
+                gustoViewModel.logout { response ->
+                    if(response==1) {
+                        val intent = Intent(this@MySettingActivity, StartActivity::class.java)
+                        startActivity(intent)
+                        finish()
+
+                        Toast.makeText(this@MySettingActivity, "로그아웃 성공", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@MySettingActivity, "로그아웃 실패", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }
@@ -125,9 +157,27 @@ class MySettingActivity : AppCompatActivity() {
 
         val googleSignInClient = GoogleSignIn.getClient(this, googleSignInOption)
 
-        googleSignInClient.signOut().addOnCompleteListener {
-            Toast.makeText(this@MySettingActivity, "구글 아이디 토큰삭제 성공!", Toast.LENGTH_SHORT).show()
+        googleSignInClient.revokeAccess().addOnCompleteListener {
         }
     }
+    fun logoutGoogle() {
+        val googleSignInOption = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestScopes(Scope("https://www.googleapis.com/auth/pubsub"))
+            .requestEmail() // 이메일도 요청할 수 있다.
+            .build()
 
+        val googleSignInClient = GoogleSignIn.getClient(this, googleSignInOption)
+
+        googleSignInClient.signOut().addOnCompleteListener {
+        }
+    }
+    fun logoutKakao() {
+        UserApiClient.instance.logout { error ->
+            if (error != null) {
+                Log.d("kakao", "error")
+            }
+            else {
+            }
+        }
+    }
 }

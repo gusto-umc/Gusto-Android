@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
@@ -53,15 +54,17 @@ class ReviewAdd3Fragment : Fragment() {
             findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
         }
         binding.btnNext.setOnClickListener {
-            if(gustoViewModel.imageFiles.isEmpty()) {
-                for(data in imageList) {
-                    if(data !=null) {
-                        gustoViewModel.imageFiles.add(data)
-                    }
+            var count = 0
+            for(data in imageList) {
+                if(data !=null) {
+                    gustoViewModel.imageFiles.add(data)
+                    count++
                 }
             }
-
-            findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
+            if(count != 0)
+                findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
+            else
+                Toast.makeText(context,"사진은 최소 1장이 필요합니다", Toast.LENGTH_SHORT ).show()
         }
 
 

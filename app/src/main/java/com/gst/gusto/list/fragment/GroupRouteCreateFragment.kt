@@ -81,7 +81,7 @@ class GroupRouteCreateFragment : Fragment() {
         for((index,data) in itemList.withIndex()) {
             routeList.add(RouteList(data.storeId,index+1,null,null,null,null,null))
         }
-        gustoViewModel.requestRoutesData = RequestCreateRoute(binding.etRouteName.text.toString(),gustoViewModel.currentGroupId,routeList)
+        gustoViewModel.requestRoutesData = RequestCreateRoute(binding.etRouteName.text.toString(),false,routeList)
     }
 
 
