@@ -41,6 +41,7 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Query("routeId") routeId : Long?
     ):Call<ResponseRoutes>
+
     @GET("routes/{nickname}") // 타인의 루트 조회
     fun getOtherRoute(
         @Header("X-AUTH-TOKEN") token : String,
@@ -77,7 +78,12 @@ interface GustoApi {
         @Path("routeId") routeId : Long,
         @Body requestEditRoute : RequestEditRoute
     ):Call<ResponseBody>
-
+    @PATCH("routes/{routeId}/publishing/{publishStatus}") // (생성 이후)루트별 공개/비공개 수정
+    fun patchPublish(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("routeId") routeId : Long,
+        @Path("publishStatus") publishStatus : Boolean
+    ):Call<ResponseBody>
     @DELETE("routeLists/{routeListId}") // 루트 내 식당(경로) 삭제
     fun deleteRouteStore(
         @Header("X-AUTH-TOKEN") token : String,

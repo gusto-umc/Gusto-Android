@@ -515,6 +515,26 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
+    fun patchPublish(routeListId : Long,publish : Boolean, callback: (Int) -> Unit){
+        service.patchPublish(xAuthToken, routeListId ,publish).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel", "Successful response: ${response}")
+                    callback(1)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}, ${requestRoutesData}")
+                    callback(3)
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3)
+            }
+        })
+    }
     // 루트 내 식당 추가 (공통)
     fun addRouteStore(addList: ArrayList<RouteList>,  callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
