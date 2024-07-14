@@ -5,12 +5,11 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.databinding.ItemReviewListBinding
-import com.gst.gusto.review.adapter.ListReviewData
+import com.gst.gusto.model.TimeLineReview
 
 class ListReviewViewHolder(
     private val binding: ItemReviewListBinding,
-    private val itemClickListener: (ListReviewData) -> Unit,
-    var testcount: Int = 0
+    private val itemClickListener: (TimeLineReview) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     val datetextview = binding.dateTextView
@@ -21,36 +20,39 @@ class ListReviewViewHolder(
     val imageview3 = binding.imageView3
     val linearLayout = binding.linearLayout
 
-    fun bind(listReviewList: ListReviewData){
+    fun bind(listReviewList: TimeLineReview) {
         datetextview.text = listReviewList.date
         nametextview.text = listReviewList.name
         visittextview.text = "${listReviewList.visit}번 방문"
 
-        setImageView(listReviewList.images,itemView.context)
+        setImageView(listReviewList.images, itemView.context)
 
         linearLayout.setOnClickListener {
             itemClickListener.invoke(listReviewList)
         }
     }
 
-    fun setImageView(images: ArrayList<String>, context: Context){
+    fun setImageView(images: List<String>, context: Context) {
 
-        when(images.size){
-            0-> {
+        when (images.size) {
+            0 -> {
                 imageview1.visibility = View.VISIBLE
                 setImage(imageview1, null, context)
             }
+
             1 -> {
                 imageview1.visibility = View.VISIBLE
                 setImage(imageview1, images[0], context)
 
             }
+
             2 -> {
                 imageview1.visibility = View.VISIBLE
                 imageview2.visibility = View.VISIBLE
                 setImage(imageview1, images[0], context)
                 setImage(imageview2, images[1], context)
             }
+
             else -> {
                 imageview1.visibility = View.VISIBLE
                 imageview2.visibility = View.VISIBLE
