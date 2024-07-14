@@ -521,4 +521,10 @@ interface GustoApi {
         @Body data: RequestMyPublish
     ): Call<ResponseBody>
 
+    // 로그아웃
+    @POST("users/sign-out")
+    fun logout(
+        @Header("X-AUTH-TOKEN") xtoken: String,
+        @Header("refresh-token") rtoken: String
+    ): Call<ResponseBody>
 }

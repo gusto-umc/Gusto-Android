@@ -2303,4 +2303,24 @@ class GustoViewModel: ViewModel() {
         })
     }
 
+    fun logout(callback: (Int) -> Unit) {
+        service.logout(xAuthToken,refreshToken).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel", "Successful response: ${response}")
+                    callback(1)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2)
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(2)
+            }
+        })
+    }
 }

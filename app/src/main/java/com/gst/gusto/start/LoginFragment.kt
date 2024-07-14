@@ -25,6 +25,7 @@ import com.gst.gusto.api.AccessTokenResponse
 import com.gst.gusto.api.LoginApi
 import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.databinding.StartFragmentLoginBinding
+import com.gst.gusto.util.GustoApplication
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
@@ -107,13 +108,15 @@ class LoginFragment: Fragment() {
         KakaoSdk.init(requireContext(), BuildConfig.KAKAO_NATIVE_APP_KEY)
 
         binding.btnNaver.setOnClickListener {
+            GustoApplication.prefs.setSharedPrefsString("social","naver")
             startNaverLogin()
         }
         binding.btnKakao.setOnClickListener {
+            GustoApplication.prefs.setSharedPrefsString("social","kakao")
             startKakaoLogin()
-            //startKakaoDeleteToken()
         }
         binding.btnGoogle.setOnClickListener {
+            GustoApplication.prefs.setSharedPrefsString("social","google")
             startGoogleLogin()
         }
         binding.btnNoLogin.setOnClickListener {

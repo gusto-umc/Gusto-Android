@@ -20,4 +20,25 @@ class PreferenceUtil(context: Context) {
 
         editor.apply()
     }
+
+    fun setSharedPrefsBoolean(key : String, value : Boolean) {
+        val editor = prefs.edit()
+        editor.putBoolean(key, value)
+
+        editor.apply()
+    }
+    fun setSharedPrefsString(key : String, value : String) {
+        val editor = prefs.edit()
+        editor.putString(key, value)
+
+        editor.apply()
+    }
+    fun getSharedPrefsBoolean(key : String) : Boolean{
+        val returnValue = prefs.getBoolean(key, false)?: false
+        return returnValue
+    }
+    fun getSharedPrefsString(key : String) : String{
+        val returnValue = prefs.getString(key, "")?:""
+        return returnValue
+    }
 }
