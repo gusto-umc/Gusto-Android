@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".review.fragment.InstaReviewFragment"
-    android:layout_marginTop="20dp"
     android:background="@color/white">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -36,7 +35,7 @@
                     android:textColor="@color/black"/>
 
                 <ImageView
-                    android:id="@+id/review_write_button"
+                    android:id="@+id/insta_review_write_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/review_button"
@@ -82,17 +81,20 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/review_fab"
+        android:id="@+id/insta_review_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="40dp"
         android:src="@drawable/review_fab_icon"
         app:tint="@color/white"
         android:visibility="gone"
         app:backgroundTint="@color/sub_m"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         app:shapeAppearance="@style/reviewFabstyle"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 

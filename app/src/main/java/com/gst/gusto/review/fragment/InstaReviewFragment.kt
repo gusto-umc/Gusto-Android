@@ -11,9 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
-import com.gst.gusto.databinding.FragmentGalleryReviewBinding
+import com.gst.gusto.databinding.FragmentInstaReviewBinding
 import com.gst.gusto.review.adapter.InstaReviewAdapter
 import com.gst.gusto.review.adapter.GridItemDecoration
 import com.gst.gusto.review.viewmodel.InstaReviewViewModel
@@ -25,7 +24,7 @@ import kotlinx.coroutines.launch
 
 class InstaReviewFragment : Fragment() {
 
-    lateinit var binding: FragmentGalleryReviewBinding
+    lateinit var binding: FragmentInstaReviewBinding
 
     private val adapter: InstaReviewAdapter by lazy {
         InstaReviewAdapter(context) { reviewId ->
@@ -46,7 +45,7 @@ class InstaReviewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentGalleryReviewBinding.inflate(inflater, container, false)
+        binding = FragmentInstaReviewBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -63,11 +62,11 @@ class InstaReviewFragment : Fragment() {
 
     private fun setReviewWriteBtn() {
         with(binding) {
-            reviewWriteButton.setOnClickListener {
+            instaReviewWriteButton.setOnClickListener {
 
             }
 
-            reviewFab.setOnClickListener{
+            instaReviewFab.setOnClickListener{
 
             }
         }
@@ -79,10 +78,10 @@ class InstaReviewFragment : Fragment() {
 
             instaReviewRecyclerView.addFabOnScrollListener(
                 onHide = {
-                    binding.reviewFab.visibility = View.GONE
+                    binding.instaReviewFab.visibility = View.GONE
                 },
                 onShow = {
-                    binding.reviewFab.visibility = View.VISIBLE
+                    binding.instaReviewFab.visibility = View.VISIBLE
                 }
             )
 
