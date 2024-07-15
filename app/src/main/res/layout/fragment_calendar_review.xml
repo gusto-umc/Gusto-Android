@@ -13,7 +13,7 @@
         android:background="@color/white">
 
         <ImageView
-            android:id="@+id/insta_icon"
+            android:id="@+id/cal_icon"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:src="@drawable/calendar_icon"

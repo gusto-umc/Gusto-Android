@@ -65,6 +65,10 @@ class ListReviewFragment : Fragment() {
             listReviewViewModel.timeLineReviews.observe(viewLifecycleOwner){
                 adapter.addData(it)
             }
+
+            listReviewFab.setOnClickListener {
+
+            }
         }
     }
 

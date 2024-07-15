@@ -12,6 +12,7 @@ import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewBinding
 import com.gst.gusto.review.fragment.CalendarReviewFragment
 import com.gst.gusto.review.fragment.InstaReviewFragment
+import com.gst.gusto.review.fragment.ListReviewFragment
 import com.gst.gusto.review.viewmodel.InstaReviewViewModel
 import com.gst.gusto.review.viewmodel.InstaReviewViewModelFactory
 
@@ -39,8 +40,9 @@ class ReviewFragment : Fragment() {
 
     private fun setFragment() {
         val fragmentMananger = childFragmentManager.beginTransaction()
-        // fragmentMananger.replace(R.id.review_fragment, InstaReviewFragment())
-        fragmentMananger.replace(R.id.review_fragment, CalendarReviewFragment())
+        fragmentMananger.replace(R.id.review_fragment, InstaReviewFragment())
+        // fragmentMananger.replace(R.id.review_fragment, CalendarReviewFragment())
+        // fragmentMananger.replace(R.id.review_fragment, ListReviewFragment())
         fragmentMananger.commit()
 
     }
