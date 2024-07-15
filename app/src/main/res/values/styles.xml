@@ -6,6 +6,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="reviewFabstyle" parent="">
+        <item name="android:background">@drawable/review_fab_round</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
     <!--Bottomnavigation 글자 설정-->
     <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
         <item name="android:textSize">10sp</item>

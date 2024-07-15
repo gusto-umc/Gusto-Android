@@ -7,6 +7,27 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 
 object ScrollUtil {
+
+    fun RecyclerView.addFabOnScrollListener(
+        onHide: () -> Unit,
+        onShow: () -> Unit
+    ) {
+        addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            var isTop = true
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(-1) && newState == SCROLL_STATE_IDLE) {
+                    onHide()
+                    isTop = true
+                } else if (isTop) {
+                    onShow()
+                    isTop = false
+                }
+            }
+        })
+    }
+
     fun RecyclerView.addGridOnScrollEndListener(
         threshold: Int = 1,
         callback: () -> Unit,
