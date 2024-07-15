@@ -2,10 +2,20 @@ package com.gst.gusto.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.gst.gusto.R
 
 class PreferenceUtil(context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences("token_pref", Context.MODE_PRIVATE)
+
+    fun setReviewSharePrefs(reviewSetting: Int){
+        val editor = prefs.edit()
+        editor.putInt("reviewSetting", reviewSetting)
+        editor.apply()
+    }
+    fun getReviewSharedPrefs(): Int{
+        return prefs.getInt("reviewSetting", R.id.instaButton)
+    }
 
     fun getSharedPrefs(): Pair<String, String> {
         val accessToken = prefs.getString("accessToken", "")?: ""
