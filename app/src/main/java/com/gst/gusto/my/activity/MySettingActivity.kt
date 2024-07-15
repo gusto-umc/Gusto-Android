@@ -35,11 +35,32 @@ class MySettingActivity : AppCompatActivity() {
         gustoViewModel.getTokens()
         getPublishData()
         setContentView(binding.root)
+        setReviewButton()
     }
 
     override fun onPause() {
         setPublishData()
         super.onPause()
+    }
+
+    fun setReviewButton(){
+        with(binding){
+            val buttons = listOf(instaButton, calendarButton, listButton)
+
+            buttons.forEach { button ->
+
+                // selected 초기 세팅
+                button.isSelected = button.id == GustoApplication.prefs.getReviewSharedPrefs()
+
+                // button 클릭시
+                button.setOnClickListener {
+                    buttons.forEach { it.isSelected = false }
+                    button.isSelected = true
+                    GustoApplication.prefs.setReviewSharePrefs(button.id)
+                }
+
+            }
+        }
     }
 
     fun buttonSetting() {
@@ -95,7 +116,7 @@ class MySettingActivity : AppCompatActivity() {
                     Log.d("publish", response.toString())
                     gustoViewModel.myPublishData.observe(this, Observer { value ->
                         binding.reviewSwitch.isChecked = value?.publishReview ?: false
-                        binding.pinSwitch.isChecked = value?.publishPin ?: false
+                        binding.jimSwitch.isChecked = value?.publishPin ?: false
                     })
                 }
             }
@@ -105,7 +126,7 @@ class MySettingActivity : AppCompatActivity() {
     fun setPublishData() {
         with(binding) {
             val reviewSwitch = this.reviewSwitch.isChecked
-            val pinSwitch = this.pinSwitch.isChecked
+            val pinSwitch = this.jimSwitch.isChecked
             gustoViewModel.myPublishSet(reviewSwitch,pinSwitch) {result, ->
             when(result) {
                 1 -> {

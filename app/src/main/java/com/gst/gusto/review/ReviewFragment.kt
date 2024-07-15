@@ -15,6 +15,7 @@ import com.gst.gusto.review.fragment.InstaReviewFragment
 import com.gst.gusto.review.fragment.ListReviewFragment
 import com.gst.gusto.review.viewmodel.InstaReviewViewModel
 import com.gst.gusto.review.viewmodel.InstaReviewViewModelFactory
+import com.gst.gusto.util.GustoApplication
 
 class ReviewFragment : Fragment() {
 
@@ -35,14 +36,18 @@ class ReviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setFragment()
+        setFragment(GustoApplication.prefs.getReviewSharedPrefs())
     }
 
-    private fun setFragment() {
+    private fun setFragment(reviewSetting: Int) {
         val fragmentMananger = childFragmentManager.beginTransaction()
-        fragmentMananger.replace(R.id.review_fragment, InstaReviewFragment())
-        // fragmentMananger.replace(R.id.review_fragment, CalendarReviewFragment())
-        // fragmentMananger.replace(R.id.review_fragment, ListReviewFragment())
+
+        when(reviewSetting) {
+            R.id.instaButton -> fragmentMananger.replace(R.id.review_fragment, InstaReviewFragment())
+            R.id.calendarButton -> fragmentMananger.replace(R.id.review_fragment, CalendarReviewFragment())
+            R.id.listButton -> fragmentMananger.replace(R.id.review_fragment, ListReviewFragment())
+        }
+
         fragmentMananger.commit()
 
     }
