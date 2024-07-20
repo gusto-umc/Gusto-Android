@@ -138,10 +138,6 @@ class GustoViewModel: ViewModel() {
     val searchFeedData:MutableLiveData<ResponseFeedSearchReviews?> = MutableLiveData<ResponseFeedSearchReviews?>().apply{
         value = null
     }
-    // 나의 콘텐츠 공개 여부 조회
-    private val _myPublishData: MutableLiveData<ResponseMyPublishGet?> = MutableLiveData<ResponseMyPublishGet?>()
-    val myPublishData: LiveData<ResponseMyPublishGet?>
-        get() = _myPublishData
 
     //방문 여부
     var whetherVisit : Int?= null
@@ -2266,40 +2262,6 @@ class GustoViewModel: ViewModel() {
 //
 //        })
 //    }
-
-    // 나의 콘텐츠 공개 여부 조회
-    fun myPublishGet(callback: (Int, ResponseMyPublishGet?) -> Unit){
-        service.myPublishGet(xAuthToken).enqueue(object : Callback<ResponseMyPublishGet> {
-            override fun onResponse(
-                call: Call<ResponseMyPublishGet>,
-                response: Response<ResponseMyPublishGet>
-            ) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    _myPublishData.value = responseBody
-                    if(responseBody!= null) {
-                        Log.e("viewmodel", "1 Successful response: ${response}")
-                        callback(1, responseBody)
-                    } else {
-                        Log.e("viewmodel", "2 Successful response: ${response}")
-                        callback(2, null)
-                    }
-
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                }
-                else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3, null)
-                }
-            }
-            override fun onFailure(call: Call<ResponseMyPublishGet>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(3, null)
-            }
-        })
-    }
 
     // 나의 콘텐츠 공개 여부 변경
     fun myPublishSet(publishReview: Boolean, publishPin: Boolean, callback: (Int) -> Unit){
