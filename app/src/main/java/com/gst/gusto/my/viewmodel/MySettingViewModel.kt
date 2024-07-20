@@ -50,7 +50,25 @@ class MySettingViewModel(
         }
     }
 
-    suspend fun setRefreshToken() = viewModelScope.launch {
+    fun setMyPublish(myPublishData: MyPublishData) = viewModelScope.launch {
+        val token = GustoApplication.prefs.getSharedPrefs().first
+        when(val response = usersRepository.setMyPublish(token, myPublishData)){
+            is ApiResponse.Success -> {
+
+            }
+            is ApiResponse.Error -> {
+                if(response.errorCode == 403){
+                    _tokenToastData.value = Unit
+                    setRefreshToken()
+                } else {
+                    _errorToastData.value = Unit
+                }
+            }
+        }
+    }
+
+
+    fun setRefreshToken() = viewModelScope.launch {
         while (true) {
             when (val response = authRepository.getRefreshToken(xAuthToken, refreshToken)) {
                 is ApiResponse.Success -> {

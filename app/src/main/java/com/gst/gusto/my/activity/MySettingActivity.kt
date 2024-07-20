@@ -11,6 +11,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.ActivityMySettingBinding
+import com.gst.gusto.model.MyPublishData
 import com.gst.gusto.my.viewmodel.MySettingViewModel
 import com.gst.gusto.my.viewmodel.MySettingViewModelFactory
 import com.gst.gusto.start.StartActivity
@@ -123,18 +124,18 @@ class MySettingActivity : AppCompatActivity() {
 
     fun setPublishData() {
         with(binding) {
-            val reviewSwitch = this.reviewSwitch.isChecked
-            val pinSwitch = this.pinSwitch.isChecked
-            gustoViewModel.myPublishSet(reviewSwitch,pinSwitch) {result, ->
-            when(result) {
-                1 -> {
-                    Log.d("publishSet", result.toString())
-                }
-                else -> Toast.makeText(this@MySettingActivity, "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+            val reviewSwitch = reviewSwitch.isChecked
+            val pinSwitch = pinSwitch.isChecked
+            val routeSwitch = routeSwitch.isChecked
 
+            mySettingViewModel.setMyPublish(
+                MyPublishData(
+                    publishReview = reviewSwitch,
+                    publishPin = pinSwitch,
+                    publishRoute = routeSwitch
+                )
+            )
+        }
     }
 
     fun startNaverDeleteToken(){
