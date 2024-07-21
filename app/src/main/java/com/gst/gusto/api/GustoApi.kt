@@ -533,4 +533,10 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") xtoken: String,
         @Header("refresh-token") rtoken: String
     ): Call<ResponseBody>
+
+    // 회원탈퇴
+    @DELETE("users/my")
+    fun unregister(
+        @Header("X-AUTH-TOKEN") xtoken: String
+    ): Call<ResponseBody>
 }

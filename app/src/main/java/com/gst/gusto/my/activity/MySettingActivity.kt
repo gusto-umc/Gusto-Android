@@ -73,15 +73,22 @@ class MySettingActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             unregister.setOnClickListener {
-                GustoApplication.prefs.setSharedPrefsBoolean("logout",true)
-                val social = GustoApplication.prefs.getSharedPrefsString("social")
-                if(social=="naver"){
-                    startNaverDeleteToken()
-                } else if(social=="google") {
-                    startGoogleDeletetoken()
-                } else if(social=="kakao") {
-                    startKakaoDeleteToken()
+                gustoViewModel.unregister { response ->
+                    if(response==1) {
+                        GustoApplication.prefs.setSharedPrefsBoolean("logout",true)
+                        val social = GustoApplication.prefs.getSharedPrefsString("social")
+                        if(social=="naver"){
+                            startNaverDeleteToken()
+                        } else if(social=="google") {
+                            startGoogleDeletetoken()
+                        } else if(social=="kakao") {
+                            startKakaoDeleteToken()
+                        }
+                    } else {
+                        Toast.makeText(this@MySettingActivity, "회원탈퇴 실패", Toast.LENGTH_SHORT).show()
+                    }
                 }
+
 
             }
             logout.setOnClickListener {
@@ -143,7 +150,10 @@ class MySettingActivity : AppCompatActivity() {
         NidOAuthLogin().callDeleteTokenApi(this, object : OAuthLoginCallback {
             override fun onSuccess() {
                 //서버에서 토큰 삭제에 성공한 상태입니다.
-                Toast.makeText(this@MySettingActivity, "네이버 아이디 토큰삭제 성공!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@MySettingActivity, StartActivity::class.java)
+                startActivity(intent)
+                finish()
+                //Toast.makeText(this@MySettingActivity, "네이버 아이디 토큰삭제 성공!", Toast.LENGTH_SHORT).show()
             }
             override fun onFailure(httpStatus: Int, message: String) {
                 // 서버에서 토큰 삭제에 실패했어도 클라이언트에 있는 토큰은 삭제되어 로그아웃된 상태입니다.
@@ -165,7 +175,10 @@ class MySettingActivity : AppCompatActivity() {
                 Log.d("kakao", "error")
             }
             else {
-                Toast.makeText(this@MySettingActivity, "카카오 아이디 토큰삭제 성공!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@MySettingActivity, StartActivity::class.java)
+                startActivity(intent)
+                finish()
+                //Toast.makeText(this@MySettingActivity, "카카오 아이디 토큰삭제 성공!", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -179,6 +192,9 @@ class MySettingActivity : AppCompatActivity() {
         val googleSignInClient = GoogleSignIn.getClient(this, googleSignInOption)
 
         googleSignInClient.revokeAccess().addOnCompleteListener {
+            val intent = Intent(this@MySettingActivity, StartActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
     fun logoutGoogle() {

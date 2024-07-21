@@ -2343,4 +2343,24 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
+    fun unregister(callback: (Int) -> Unit) {
+        service.unregister(xAuthToken).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel UNREGISTER", "Successful response: ${response}")
+                    callback(1)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                } else {
+                    Log.e("viewmodel UNREGISTER", "Unsuccessful response: ${response}")
+                    callback(2)
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("viewmodel UNREGISTER", "Failed to make the request", t)
+                callback(2)
+            }
+        })
+    }
 }
