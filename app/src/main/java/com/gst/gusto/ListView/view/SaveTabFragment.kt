@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
-import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentSaveTabBinding
 
 class SaveTabFragment : Fragment() {
@@ -29,10 +28,10 @@ class SaveTabFragment : Fragment() {
         viewPager2.adapter = pagerAdapter
 
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
-            // Tab의 이름을 설정
-            when (position) {
-                0 -> tab.text = "저장된 맛집"
-                1 -> tab.text = "저장되지 않은 맛집"
+            tab.text = when (position) {
+                0 -> "아는 가게에요!"
+                1 -> "NEW PLACE"
+                else -> "Unknown" // 안전하게 처리
             }
         }.attach()
 
@@ -48,7 +47,7 @@ class SaveTabFragment : Fragment() {
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> MapListViewSaveFragment() // 첫 번째 탭
-                1 -> MapListViewSaveFragment() // 두 번째 탭
+                1 -> MapListViewNewPlaceFragment() // 두 번째 탭
                 else -> throw IllegalArgumentException("Invalid tab position")
             }
         }

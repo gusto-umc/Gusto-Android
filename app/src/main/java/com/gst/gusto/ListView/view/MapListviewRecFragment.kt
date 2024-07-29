@@ -1,12 +1,11 @@
 package com.gst.gusto.ListView.view
 
 import android.os.Bundle
-import android.provider.ContactsContract.RawContacts.Data
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
@@ -59,7 +58,7 @@ class MapListviewRecFragment : Fragment() {
         mRecAdapter.mContext = context
         mRecAdapter.submitList(gustoViewModel.mapVisitedList)
         mRecAdapter.setItemClickListener(object : SavedStoreListAdapter.OnItemClickListener{
-            override fun onClick(v: View, dataSet: ResponseSavedStoreData) {
+            override fun onClick(dataSet: ResponseSavedStoreData) {
                 gustoViewModel.selectStoreId = dataSet.storeId.toLong()
                 gustoViewModel.storeIdList.clear()
                 gustoViewModel.storeIdList = gustoViewModel.savedStoreIdList

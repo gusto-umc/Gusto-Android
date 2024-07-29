@@ -229,14 +229,23 @@ class MapFragment : Fragment() {
         gustoViewModel.changeDong("")
         //목록 보기 클릭 리스너 - 민디
         binding.listViewBtn.setOnClickListener {
-            //Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_categoryFragment)
         }
+
+        /*Tabbar로 전체 수정
+        *더보기 페이지로 이동 후 5개씩 페이징 처리
+         */
+
+        binding.fragmentArea.firstVisit.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_savetabFragment)
+        }
+
 
 
         /**
          * 방문 o 클릭 리스너 -> 보완 예정
-         */
+
         binding.fragmentArea.firstVisit.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
         }
@@ -246,6 +255,8 @@ class MapFragment : Fragment() {
         binding.fragmentArea.prevVisited.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
         }
+        */
+
 
         /**
          * 검색화면 클릭 리스너 - mindy

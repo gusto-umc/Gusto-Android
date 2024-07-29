@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_fragment_map_self"
             app:destination="@id/fragment_map" />
+        <action
+            android:id="@+id/action_fragment_map_to_savetabFragment"
+            app:destination="@id/saveTabFragment" />
     </fragment>
     <fragment
         android:id="@+id/fragment_map_viewpager"
@@ -539,4 +542,8 @@
         android:id="@+id/storeEditFragment"
         android:name="com.gst.gusto.ListView.view.StoreEditFragment"
         android:label="StoreEditFragment" />
+    <fragment
+        android:id="@+id/saveTabFragment"
+        android:name="com.gst.gusto.ListView.view.SaveTabFragment"
+        android:label="SaveTabFragment" />
 </navigation>

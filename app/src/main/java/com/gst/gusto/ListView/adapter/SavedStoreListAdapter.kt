@@ -7,65 +7,72 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.ResponseSavedStoreData
 import com.gst.gusto.databinding.ItemListviewStoreCardBinding
 
-class SavedStoreListAdapter(private var flag : String, private val parentView : View) : ListAdapter<ResponseSavedStoreData, SavedStoreListAdapter.ViewHolder>(DiffCallback) {
+class SavedStoreListAdapter(private val flag: String, private val parentView: View) : ListAdapter<ResponseSavedStoreData, SavedStoreListAdapter.ViewHolder>(DiffCallback) {
 
-    var mContext : Context? = null
+    var mContext: Context? = null
+
+    private lateinit var itemClickListener: OnItemClickListener
+
+
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<ResponseSavedStoreData>(){
+        private val DiffCallback = object : DiffUtil.ItemCallback<ResponseSavedStoreData>() {
             override fun areItemsTheSame(oldItem: ResponseSavedStoreData, newItem: ResponseSavedStoreData): Boolean {
-                //아이템  id 가 같은지 확인
                 return oldItem.storeId == newItem.storeId
             }
 
             override fun areContentsTheSame(oldItem: ResponseSavedStoreData, newItem: ResponseSavedStoreData): Boolean {
-                //아이템 내용이 같은 지 확인
                 return oldItem == newItem
             }
-
         }
     }
 
-    inner class ViewHolder(private val binding : ItemListviewStoreCardBinding) : RecyclerView.ViewHolder(binding.root){
-        var data : ResponseSavedStoreData? = null
-        fun bind(store: ResponseSavedStoreData){
+    inner class ViewHolder(private val binding: ItemListviewStoreCardBinding) : RecyclerView.ViewHolder(binding.root) {
+        private var data: ResponseSavedStoreData? = null
+
+        init {
+            binding.root.setOnClickListener {
+                data?.let { itemClickListener.onClick(it) }
+            }
+        }
+
+        fun bind(store: ResponseSavedStoreData) {
             data = store
-            setImage(binding.ivItemListviewCardImg, store.reviewImg, mContext!!)
+            // 이미지 설정 예시 (setImage 함수를 구현하여 사용할 것)
+            // setImage(binding.ivItemListviewCardImg, store.reviewImg3, mContext!!)
             binding.tvItemListviewCardTitle.text = store.storeName
             binding.tvItemListviewCardLocation.text = store.address
             binding.tvItemListviewCardCount.text = store.categoryName
+
+            // 플래그에 따른 동작 처리
+            when (flag) {
+                "save" -> {
+                    // '저장' 플래그에 따른 동작 처리
+                }
+                "visited" -> {
+                    // '방문' 플래그에 따른 동작 처리
+                }
+                // 필요에 따라 추가적인 플래그 처리 가능
+            }
         }
-        var layoutData = binding.cvItemListviewCard
     }
-
-
 
     interface OnItemClickListener {
-        fun onClick(v: View, dataSet: ResponseSavedStoreData)
+        fun onClick(dataSet: ResponseSavedStoreData)
     }
-    // (3) 외부에서 클릭 시 이벤트 설정
+
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {
         this.itemClickListener = onItemClickListener
     }
-    // (4) setItemClickListener로 설정한 함수 실행
-    private lateinit var itemClickListener : OnItemClickListener
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): SavedStoreListAdapter.ViewHolder {
-        val viewHolder = ViewHolder(ItemListviewStoreCardBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-        return viewHolder
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemListviewStoreCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: SavedStoreListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
-
-        holder.layoutData.setOnClickListener {
-            itemClickListener.onClick(it, holder.data!!)
-        }
-
     }
 }

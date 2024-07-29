@@ -1,7 +1,6 @@
 package com.gst.gusto.start
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,15 +12,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
-import com.gst.gusto.api.LoginViewModel
+import com.google.android.gms.tasks.OnCompleteListener
 import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
+import com.gst.gusto.api.AccessTokenResponse
+import com.gst.gusto.api.LoginApi
+import com.gst.gusto.api.LoginViewModel
 import com.gst.gusto.databinding.StartFragmentLoginBinding
+import com.gst.gusto.util.GustoApplication
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
@@ -32,8 +36,12 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
-import java.io.File
-import java.net.URI
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
 
 class LoginFragment: Fragment() {
 
@@ -49,11 +57,42 @@ class LoginFragment: Fragment() {
 
             Log.d("GOOGLE_Login","${account.id}")
             Log.d("GOOGLE_Login","${account.photoUrl}")
-            successGoogleLogin("${account.id}","${account.photoUrl}")
+            Log.d("GOOGLE_Login","${account.idToken}")
+            Log.d("GOOGLE_Login","${account.serverAuthCode}")
+
+            getAccessToken("${account.id}","${account.photoUrl}",account.serverAuthCode)
         } catch (e: ApiException) {
-            Log.d("GOOGLE_Login","${e.toString()}")
+            Log.e("GOOGLE_Login", e.stackTraceToString())
         }
     }
+    private fun getAccessToken(id: String, photoUrl: String,serverAuthCode: String?) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://oauth2.googleapis.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service = retrofit.create(LoginApi::class.java)
+
+        val call = service.getAccessToken("authorization_code", serverAuthCode, BuildConfig.GOOGLE_CLINET_ID, BuildConfig.GOOGLE_SECRET, BuildConfig.GOOGLE_REDIRECT)
+        call.enqueue(object : Callback<AccessTokenResponse> {
+            override fun onResponse(call: Call<AccessTokenResponse>, response: Response<AccessTokenResponse>) {
+                if (response.isSuccessful) {
+                    val accessToken = response.body()?.accessToken
+                    if (accessToken != null) {
+                        successGoogleLogin(id,photoUrl,accessToken)
+                    }
+                    Log.d("GOOGLE_LOGIN_TOKEN", "Access Token: $accessToken")
+                } else {
+                    Log.e("GOOGLE_LOGIN_TOKEN", "Access Token request failed ${response}")
+                }
+            }
+
+            override fun onFailure(call: Call<AccessTokenResponse>, t: Throwable) {
+                Log.e("GOOGLE_LOGIN_TOKEN", "Access Token request error", t)
+            }
+        })
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,12 +108,15 @@ class LoginFragment: Fragment() {
         KakaoSdk.init(requireContext(), BuildConfig.KAKAO_NATIVE_APP_KEY)
 
         binding.btnNaver.setOnClickListener {
+            GustoApplication.prefs.setSharedPrefsString("social","naver")
             startNaverLogin()
         }
         binding.btnKakao.setOnClickListener {
+            GustoApplication.prefs.setSharedPrefsString("social","kakao")
             startKakaoLogin()
         }
         binding.btnGoogle.setOnClickListener {
+            GustoApplication.prefs.setSharedPrefsString("social","google")
             startGoogleLogin()
         }
         binding.btnNoLogin.setOnClickListener {
@@ -87,44 +129,29 @@ class LoginFragment: Fragment() {
 
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private fun startGoogleLogin() {
+        googleSignInClient.signOut()
+        val signInIntent = googleSignInClient.signInIntent
+        googleAuthLauncher.launch(signInIntent)
 
     }
     private fun getGoogleClient(): GoogleSignInClient {
         val googleSignInOption = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestScopes(Scope("https://www.googleapis.com/auth/pubsub"))
+            .requestIdToken(BuildConfig.GOOGLE_CLINET_ID)
+            .requestServerAuthCode(BuildConfig.GOOGLE_CLINET_ID)
             .requestEmail() // 이메일도 요청할 수 있다.
             .build()
 
         return GoogleSignIn.getClient(requireActivity(), googleSignInOption)
     }
 
-    private fun startGoogleLogin() {
-        googleSignInClient.signOut()
-        val signInIntent = googleSignInClient.signInIntent
-        googleAuthLauncher.launch(signInIntent)
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when(requestCode) {
-            1000 -> {
-                try {
-                    val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-                    val account = task.result!!
-
-                    Log.d("PASS", account.email ?: "")
-                } catch (e: ApiException) {
-                    e.printStackTrace()
-                }
-            }
-        }
-    }
-    private fun successGoogleLogin(id: String, photoUrl: String) {
-        LoginViewModel.providerId = id+"8"
+    private fun successGoogleLogin(id: String, photoUrl: String,socialAccessToken : String) {
+        LoginViewModel.providerId = id
         LoginViewModel.profileUrl = photoUrl
         LoginViewModel.provider = "GOOGLE"
-        Log.d("GOOGLE_LOGIN",photoUrl)
+        LoginViewModel.socialAccessToken = socialAccessToken
+
         LoginViewModel.login { resultCode ->
             when (resultCode) {
                 1 -> {
@@ -136,7 +163,7 @@ class LoginFragment: Fragment() {
                     findNavController().navigate(R.id.action_loginFragment_to_nameFragment)
                 }
                 else -> {
-                    Toast.makeText(requireContext(), "서버와의 통신 불안정", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "서버와의 통신 불안정!!!", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -146,7 +173,7 @@ class LoginFragment: Fragment() {
             if (error != null) {
                 Log.e("KAKAO", "카카오계정으로 로그인 실패", error)
             } else if (token != null) {
-                successKakaoLogin()
+                successKakaoLogin(token.accessToken)
                 Log.i("KAKAO", "카카오계정으로 로그인 성공 ${token.accessToken}")
             }
         }
@@ -168,7 +195,7 @@ class LoginFragment: Fragment() {
 
 
                 } else if (token != null) {
-                    successKakaoLogin()
+                    successKakaoLogin(token.accessToken)
                     Log.i("KAKAO", "카카오톡으로 로그인 성공 ${token.accessToken}")
                 }
             }
@@ -176,7 +203,7 @@ class LoginFragment: Fragment() {
             UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
         }
     }
-    private fun successKakaoLogin() {
+    private fun successKakaoLogin(accessToken : String) {
         UserApiClient.instance.me { user, error ->
             if (error != null) {
             } else if (user != null) {
@@ -184,6 +211,7 @@ class LoginFragment: Fragment() {
                 LoginViewModel.providerId = user.id.toString()
                 LoginViewModel.provider = "KAKAO"
                 LoginViewModel.profileUrl = user.kakaoAccount?.profile?.profileImageUrl
+                LoginViewModel.socialAccessToken = accessToken
                 LoginViewModel.login { resultCode ->
                     when (resultCode) {
                         1 -> {
@@ -250,16 +278,14 @@ class LoginFragment: Fragment() {
             override fun onSuccess() {
                 // 네이버 로그인 인증이 성공했을 때 수행할 코드 추가
                 naverToken = NaverIdLoginSDK.getAccessToken()
-                LoginViewModel.setAccessToken(naverToken.toString())
+                LoginViewModel.socialAccessToken = naverToken.toString()
+                /*
                 LoginViewModel.setRefreshToken(NaverIdLoginSDK.getRefreshToken().toString())
-
                 var naverRefreshToken = NaverIdLoginSDK.getRefreshToken()
                 var naverExpiresAt = NaverIdLoginSDK.getExpiresAt().toString()
                 var naverTokenType = NaverIdLoginSDK.getTokenType()
-                var naverState = NaverIdLoginSDK.getState().toString()
+                var naverState = NaverIdLoginSDK.getState().toString()*/
 
-                Log.d("helpgogogo",
-                    naverExpiresAt+", "+naverTokenType+", "+naverState)
                 //로그인 유저 정보 가져오기
                 NidOAuthLogin().callProfileApi(profileCallback)
             }
