@@ -11,7 +11,7 @@ import com.gst.gusto.repository.AuthRepositoryImpl
 import com.gst.gusto.repository.ReviewsRepositoryImpl
 import java.lang.IllegalArgumentException
 
-class ReviewViewModelFactory(): ViewModelProvider.Factory {
+class InstaReviewViewModelFactory(): ViewModelProvider.Factory {
     private val reviewsRepository = ReviewsRepositoryImpl(
         ReviewsDataSource(RetrofitInstance.createService(ReviewsApi::class.java)),
     )
@@ -20,8 +20,8 @@ class ReviewViewModelFactory(): ViewModelProvider.Factory {
     )
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ReviewViewModel::class.java)){
-            return ReviewViewModel(reviewsRepository, authRepository) as T
+        if (modelClass.isAssignableFrom(InstaReviewViewModel::class.java)){
+            return InstaReviewViewModel(reviewsRepository, authRepository) as T
         }
         throw IllegalArgumentException("unknown ViewModel class")
     }

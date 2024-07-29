@@ -281,11 +281,14 @@ class LoginFragment: Fragment() {
                 LoginViewModel.socialAccessToken = naverToken.toString()
                 /*
                 LoginViewModel.setRefreshToken(NaverIdLoginSDK.getRefreshToken().toString())
+
                 var naverRefreshToken = NaverIdLoginSDK.getRefreshToken()
                 var naverExpiresAt = NaverIdLoginSDK.getExpiresAt().toString()
                 var naverTokenType = NaverIdLoginSDK.getTokenType()
                 var naverState = NaverIdLoginSDK.getState().toString()*/
 
+                Log.d("helpgogogo",
+                    naverExpiresAt+", "+naverTokenType+", "+naverState)
                 //로그인 유저 정보 가져오기
                 NidOAuthLogin().callProfileApi(profileCallback)
             }

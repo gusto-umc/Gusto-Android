@@ -89,6 +89,9 @@ class RouteStoresFragment : Fragment() {
                             binding.tvRouteName.isFocusable = false
                             binding.tvRouteName.isFocusableInTouchMode = false
                             binding.btnEdit.visibility = View.VISIBLE
+                            binding.fabMap.visibility = View.VISIBLE
+                            binding.fabEdit.visibility = View.VISIBLE
+                            binding.lyPrivate.visibility = View.GONE
                         }
                     }
                 }
@@ -106,8 +109,21 @@ class RouteStoresFragment : Fragment() {
             binding.tvRouteName.hint = binding.tvRouteName.text
             binding.tvRouteName.setText("")
             binding.btnEdit.visibility = View.GONE
+
+            binding.fabEdit.visibility = View.GONE
+            binding.fabMap.visibility = View.GONE
+            binding.lyPrivate.visibility = View.VISIBLE
         }
 
+        binding.switchPrivate.setOnClickListener {
+            gustoViewModel.patchPublish(gustoViewModel.currentRouteId, binding.switchPrivate.isClickable) { result ->
+                when(result) {
+                    1-> {
+                        Toast.makeText(context,"공개/비공개 설정 완료", Toast.LENGTH_SHORT ).show()
+                    }
+                }
+            }
+        }
         return binding.root
 
     }

@@ -3,6 +3,7 @@ package com.gst.gusto.ListView.adapter
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,59 +35,6 @@ class CategoryChooseBottomSheetDialog(var flag : String?, val itemClick : (Int, 
             itemClick(0, null)
             dialog?.dismiss()
         }
-
-        //데이터 연결
-//        viewModel!!.getAllUserCategory {
-//            result ->
-//            when(result){
-//                0 -> {
-//                    categoryArray = viewModel!!.myAllCategoryList
-//                    //카테고리 댑터 선언 + 연결
-//                    val dCategoryChooseAdapter = CategoryChooseAdapter(object : CategoryChooseAdapter {
-//
-//                    })
-//                    dCategoryChooseAdapter.viewModel = viewModel
-//                    dCategoryChooseAdapter.setItemClickListener(object : CategoryChooseAdapter.OnItemClickListener{
-//                        override fun onClick(v: View, dataSet: ResponseMapCategory) {
-//                            //서버 연결 (찜)
-//                            //storeId 받아오기!
-//                            val storeId = if(flag == null){viewModel!!.myStoreDetail!!.storeId} else{flag!!.toInt()}
-//                            viewModel!!.addPin(dataSet.myCategoryId.toLong(), storeId.toLong()){
-//                                    result, data ->
-//                                when(result){
-//                                    0 -> {
-//                                        //성공
-//                                        itemClick(1, data)
-//                                        dialog?.dismiss()
-//                                    }
-//                                    1 -> {
-//                                        //실패
-//                                        itemClick(0, data)
-//                                        dialog?.dismiss()
-//                                    }
-//
-//                                }
-//                            }
-//
-//                        }
-//
-//                    })
-//                    val dChooseAdapter = CategoryChooseAdapter(object : CategoryChooseAdapter {
-//
-//                    })
-//                    dCategoryChooseAdapter.submitList(categoryArray)
-//                    view?.findViewById<RecyclerView>(R.id.rv_category_choose)?.adapter = dCategoryChooseAdapter
-//                    view?.findViewById<RecyclerView>(R.id.rv_category_choose)?.layoutManager = LinearLayoutManager(this.requireActivity())
-//                }
-//                1 -> {
-//
-//                }
-//
-//            }
-//        }
-
-
-        //----
 
         viewModel!!.myAllCategoryList.clear()
 

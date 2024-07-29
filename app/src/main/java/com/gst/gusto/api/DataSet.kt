@@ -17,7 +17,7 @@ data class ResponseRoutes(
 // 루트 생성
 data class RequestCreateRoute(
     @SerializedName("routeName") val routeName : String,
-    @SerializedName("groupId") val groupId : Long?,
+    @SerializedName("publishRoute") val publishRoute : Boolean,
     @SerializedName("routeList") val routeList : List<RouteList>
 )
 data class RequestEditRoute(
@@ -444,16 +444,25 @@ data class LocalCategoryResponse (
 data class Singup(
     @SerializedName("provider") val provider: String,
     @SerializedName("providerId") val providerId: String,
+    @SerializedName("accessToken") val accessToken : String,
     @SerializedName("nickname") val nickname: String,
     @SerializedName("age") val age: String,
     @SerializedName("gender") val gender: String
 )
 data class Login(
     @SerializedName("provider") val provider: String,
-    @SerializedName("providerId") val providerId: String
+    @SerializedName("providerId") val providerId: String,
+    @SerializedName("accessToken") val accessToken : String
 )
 data class Nickname(
     @SerializedName("nickname") val nickname: String
+)
+//구글 토큰
+data class AccessTokenResponse(
+    @SerializedName("access_token") val accessToken: String,
+    @SerializedName("expires_in") val expiresIn: Long,
+    @SerializedName("token_type") val tokenType: String,
+    @SerializedName("refresh_token") val refreshToken: String?
 )
 
 // 나의 콘텐츠 공개 여부 조회

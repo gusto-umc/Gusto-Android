@@ -82,6 +82,9 @@ class StoreDetailFragment : Fragment() {
             if (data.pin){
                 binding.ivStoreDetailSave.setImageResource(R.drawable.save_o_img)
             }
+            else{
+                binding.ivStoreDetailSave.setImageResource(R.drawable.save_x_img)
+            }
             //리뷰사진 리사이클러뷰 연결
             val mStorePhotos = ArrayList<String>().apply {
                 for(i in data.reviewImg4){
@@ -207,7 +210,7 @@ class StoreDetailFragment : Fragment() {
          */
         binding.ivStoreDetailSave.setOnClickListener {
             if(gustoViewModel.myStoreDetail!!.pin){
-                gustoViewModel.deletePin(gustoViewModel.myStoreDetail!!.pinId){
+                gustoViewModel.deletePin(gustoViewModel.myStoreDetail!!.pinId!!){
                     result ->
                     when(result){
                         0-> {

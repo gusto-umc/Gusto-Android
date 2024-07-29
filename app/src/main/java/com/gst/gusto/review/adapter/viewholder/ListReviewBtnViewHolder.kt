@@ -2,15 +2,15 @@ package com.gst.gusto.review.adapter.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.databinding.ItemReviewListButtonBinding
-import com.gst.gusto.review.adapter.ListReviewData
+import com.gst.gusto.model.TimeLineReview
 
-class ListReviewBtnViewHolder(private val binding: ItemReviewListButtonBinding, private val itemClickListener: (ListReviewData) -> Unit) : RecyclerView.ViewHolder(binding.root) {
-    val dateTextView = binding.date
-    val frameLayout = binding.frameLayout
+class ListReviewBtnViewHolder(
+    private val binding: ItemReviewListButtonBinding,
+    private val itemClickListener: (TimeLineReview) -> Unit
+) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(listReviewList: ListReviewData){
-        dateTextView.text = listReviewList.date
-        frameLayout.setOnClickListener{
+    fun bind(listReviewList: TimeLineReview) {
+        binding.addButton.setOnClickListener {
             itemClickListener.invoke(listReviewList)
         }
     }

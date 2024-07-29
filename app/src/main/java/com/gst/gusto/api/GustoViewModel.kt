@@ -280,7 +280,7 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
-    // 루트 생성/그룹 내 루트 추가
+    // 루트 생성
     fun createRoute(callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
         service.createRoute(xAuthToken, requestRoutesData!!).enqueue(object : Callback<ResponseBody> {
@@ -298,6 +298,27 @@ class GustoViewModel: ViewModel() {
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e("viewmodel", "Failed to make the request", t)
+                callback(3)
+            }
+        })
+    }
+    // 그룹 내 루트 추가
+    fun createGroupRoute(callback: (Int) -> Unit){
+        service.createGroupRoute(xAuthToken, requestRoutesData!!, currentGroupId).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodelGR", "Successful response: ${response}")
+                    callback(1)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                } else {
+                    Log.e("viewmodelGR", "Unsuccessful response: ${response}, ${requestRoutesData}")
+                    callback(3)
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("viewmodelGR", "Failed to make the request", t)
                 callback(3)
             }
         })
@@ -494,6 +515,26 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
+    fun patchPublish(routeListId : Long,publish : Boolean, callback: (Int) -> Unit){
+        service.patchPublish(xAuthToken, routeListId ,publish).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel", "Successful response: ${response}")
+                    callback(1)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}, ${requestRoutesData}")
+                    callback(3)
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(3)
+            }
+        })
+    }
     // 루트 내 식당 추가 (공통)
     fun addRouteStore(addList: ArrayList<RouteList>,  callback: (Int) -> Unit){
         Log.e("token",xAuthToken)
@@ -555,7 +596,7 @@ class GustoViewModel: ViewModel() {
                     val responseBody = response.body()
                     if(responseBody!=null) {
                         storeListLiveData.clear()
-                        Log.d("viewmodel", "Successful response: ${response}")
+                        Log.d("viewmodel_getGroupStores", "Successful response: ${response}")
                         for(data in responseBody.stores) {
                             storeListLiveData.add(RestItem(data.storeName,data.address,data.storeProfileImg,data.userProfileImg,data.storeId,data.groupListId))
                         }
@@ -565,12 +606,12 @@ class GustoViewModel: ViewModel() {
                     _tokenToastData.value = Unit
                     refreshToken()
                 } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    Log.e("viewmodel_getGroupStores", "Unsuccessful response: ${response}")
                     callback(3,false)
                 }
             }
             override fun onFailure(call: Call<ResponseStores>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
+                Log.e("viewmodel_getGroupStores", "Failed to make the request", t)
                 callback(3,false)
             }
         })
@@ -2282,4 +2323,44 @@ class GustoViewModel: ViewModel() {
         })
     }
 
+    fun logout(callback: (Int) -> Unit) {
+        service.logout(xAuthToken,refreshToken).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel", "Successful response: ${response}")
+                    callback(1)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(2)
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(2)
+            }
+        })
+    }
+    fun unregister(callback: (Int) -> Unit) {
+        service.unregister(xAuthToken).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.d("viewmodel UNREGISTER", "Successful response: ${response}")
+                    callback(1)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                } else {
+                    Log.e("viewmodel UNREGISTER", "Unsuccessful response: ${response}")
+                    callback(2)
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("viewmodel UNREGISTER", "Failed to make the request", t)
+                callback(2)
+            }
+        })
+    }
 }

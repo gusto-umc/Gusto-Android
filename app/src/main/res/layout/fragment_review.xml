@@ -17,28 +17,10 @@
         android:textColor="@color/black"
         android:fontFamily="@font/pretendard_bold"/>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/reviewTab"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/review_fragment"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="17dp"
-        android:background="@color/white"
-        app:tabIndicatorColor="#00000000"
-        app:tabRippleColor="#00000000"
-        app:tabIconTint="@color/tab_icon_review_color">
-
-    </com.google.android.material.tabs.TabLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#CBCBCB"/>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/reviewVP"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-    </androidx.viewpager2.widget.ViewPager2>
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"/>
 
 </LinearLayout>

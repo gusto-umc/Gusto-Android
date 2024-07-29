@@ -3,6 +3,7 @@ package com.gst.gusto.my.fragment
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +38,9 @@ class MyListFragment : Fragment() {
         /**
          * 서버 연결 - 데이터 로드
          */
-        if(gustoViewModel.currentFeedNickname == gustoViewModel.userNickname){
+        Log.d("currentFeedNickName", gustoViewModel.currentFeedNickname)
+        Log.d("userNickname", gustoViewModel.userNickname)
+        if(gustoViewModel.currentFeedNickname.isBlank()){
             //my
             gustoViewModel.myAllCategoryList.clear()
 
@@ -60,7 +63,7 @@ class MyListFragment : Fragment() {
                         mCategoryAdapter.notifyDataSetChanged()
                     }
                     else-> {
-                        Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "서버와의 연결 불안정1", Toast.LENGTH_SHORT).show()
                     }
 
                 }
@@ -86,7 +89,7 @@ class MyListFragment : Fragment() {
                                     }, 1000)
 
                                 }
-                                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정2", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
@@ -118,7 +121,7 @@ class MyListFragment : Fragment() {
                         mCategoryAdapter.notifyDataSetChanged()
                     }
                     else-> {
-                        Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "서버와의 연결 불안정3", Toast.LENGTH_SHORT).show()
                     }
 
                 }
@@ -144,7 +147,7 @@ class MyListFragment : Fragment() {
                                     }, 1000)
 
                                 }
-                                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정4", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }

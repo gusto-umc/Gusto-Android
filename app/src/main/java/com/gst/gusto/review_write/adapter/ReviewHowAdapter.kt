@@ -15,9 +15,9 @@ data class HowItem(val name: String, val option: Int)
 class ReviewHowAdapter(val gradeList : MutableList<Int>, val option : Int):
     RecyclerView.Adapter<ReviewHowAdapter.ReviewHowViewHolder>(){
 
-    private val itemList = arrayListOf(HowItem("맛슐랭",0),HowItem("맵기",1)
-        ,HowItem("분위기",2),HowItem("화장실",3),HowItem("주차장",4))
-
+    private val itemList = arrayListOf(HowItem("맛슐랭",0))
+    //,HowItem("맵기",1)
+    //        ,HowItem("분위기",2),HowItem("화장실",3),HowItem("주차장",4)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewHowViewHolder {
         val view =
             if(option == 0) LayoutInflater.from(parent.context).inflate(R.layout.item_review_howabout, parent, false)

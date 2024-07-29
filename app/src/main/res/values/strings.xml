@@ -5,5 +5,6 @@
 
     <string name="social_login_info_naver_client_name">네이버아이디 로그인</string>
 
+    <string name="google_login_client_id">943604482928-so75u6rq8o25m2irr6mpcne8h14ake5u.apps.googleusercontent.com</string>
 
 </resources>

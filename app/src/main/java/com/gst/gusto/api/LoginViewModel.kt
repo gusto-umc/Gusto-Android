@@ -28,7 +28,9 @@ class LoginViewModel: ViewModel() {
     private var refreshToken = ""
 
     lateinit var provider : String
-    var providerId : String=""
+    var providerId  = ""
+    var socialAccessToken = ""
+
     var profileImg : File?=null
     var profileUrl : String?=""
     lateinit var nickName : String
@@ -50,14 +52,6 @@ class LoginViewModel: ViewModel() {
         this.gender = gender
         return true
     }
-    fun setAccessToken(accessToken : String) : Boolean  {
-        this.accessToken = accessToken
-        return true
-    }
-    fun setRefreshToken(refreshToken : String) : Boolean  {
-        this.refreshToken = refreshToken
-        return true
-    }
     fun getAccessToken() : String  {
         return accessToken
     }
@@ -65,7 +59,8 @@ class LoginViewModel: ViewModel() {
         return refreshToken
     }
     fun signUp(callback: (Int) -> Unit){
-        val info = Singup(provider,providerId,nickName,age,gender)
+        val info = Singup(provider,providerId,socialAccessToken,nickName,age,gender)
+        Log.d("SOCIAL LOGIN INFO2", "${provider}, ${providerId}, ${socialAccessToken}")
         var profileMutipart : MultipartBody.Part?=null
         if(profileImg!=null) {
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), profileImg!!)
@@ -93,7 +88,8 @@ class LoginViewModel: ViewModel() {
             })
     }
     fun login(callback: (Int) -> Unit){
-        service.login( Login(provider,providerId))
+        Log.d("SOCIAL LOGIN INFO", "${provider}, ${providerId}, ${socialAccessToken}")
+        service.login( Login(provider,providerId,socialAccessToken))
             .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     if (response.isSuccessful) {
@@ -108,7 +104,6 @@ class LoginViewModel: ViewModel() {
                         callback(3)
                     }
                 }
-
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e("LoginViewModel", "Failed to make the request", t)
                     callback(3)

@@ -214,7 +214,7 @@ class GroupRouteMapFragment : Fragment() {
             })
         }
 
-        /*if(gustoViewModel.routeStorTmpData != null) {
+        if(gustoViewModel.routeStorTmpData != null) {
            var data = gustoViewModel.routeStorTmpData
 
            if (data != null) {
@@ -234,8 +234,8 @@ class GroupRouteMapFragment : Fragment() {
                                        data.address,
                                        false
                                    ))
-                               }*//*
-                                mapUtil.setRoute(mapView, gustoViewModel.markerListLiveData.value!!)
+                               }
+                                mapUtil.setRoute(kakaoMap, gustoViewModel.markerListLiveData.value!!)
                             }
                             binding.fabEdit.callOnClick()
                             gustoViewModel.routeStorTmpData = null
@@ -245,7 +245,7 @@ class GroupRouteMapFragment : Fragment() {
                 }
             }
         }
-        )*/
+
 
     }
     override fun onPause() {
