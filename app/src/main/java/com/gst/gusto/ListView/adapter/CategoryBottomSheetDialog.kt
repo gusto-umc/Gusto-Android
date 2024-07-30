@@ -58,6 +58,9 @@ class CategoryBottomSheetDialog(var data : CategoryDetail? = null, val itemClick
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        Log.d("dialog data", categoryEdiBottomSheetData.toString())
+
         view?.findViewById<ImageView>(R.id.iv_bottomsheet_category_x)?.setOnClickListener {
             dialog?.dismiss()
         }

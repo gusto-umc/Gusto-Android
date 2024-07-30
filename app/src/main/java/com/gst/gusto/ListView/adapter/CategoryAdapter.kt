@@ -88,6 +88,7 @@ class CategoryAdapter(private val view: View, val flag : String, private val fra
                                     }
                                 }
                             }
+                            categoryBottomSheetDialog.viewModel = viewModel!!
                             categoryBottomSheetDialog.isAdd = false
                             Log.d("data check", categoryBottomSheetDialog.categoryEdiBottomSheetData.toString())
                             categoryBottomSheetDialog.show(mFragmentManager, categoryBottomSheetDialog.tag)

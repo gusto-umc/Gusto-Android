@@ -31,20 +31,6 @@ class SearchFragment : Fragment() {
     private lateinit var binding : FragmentSearchBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        val callback = object : OnBackPressedCallback(
-            true // default to enabled
-        ) {
-            override fun handleOnBackPressed() {
-
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            this, // LifecycleOwner
-            callback
-        )
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
