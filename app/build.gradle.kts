@@ -114,4 +114,7 @@ dependencies {
     implementation ("com.google.android.gms:play-services-auth:20.5.0")
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+
+    //flexbox - hashtag rv
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
 }

@@ -78,16 +78,18 @@ class CategoryAdapter(private val view: View, val flag : String, private val fra
                     when(it.itemId){
                         R.id.category_edit -> {
                             //수정 페이지 등장
-                            val categoryBottomSheetDialog = CategoryBottomSheetDialog(){
+                            var isPublic : Boolean = holder.data!!.publishCategory == "PUBLIC"
+                            var categoryData = CategoryDetail(id = holder.data!!.myCategoryId, categoryName = holder.data!!.categoryName, categoryDesc = holder.data!!.myCategoryScript, categoryIcon = holder.data!!.categoryIcon, isPublic = isPublic)
+                            val categoryBottomSheetDialog = CategoryBottomSheetDialog(data = categoryData){
                                 when(it){
                                     0 -> {
                                         Log.d("bottomsheet", "저장 click")
+                                        //카테고리 data update
                                     }
                                 }
                             }
                             categoryBottomSheetDialog.isAdd = false
-                            var isPublic : Boolean = holder.data!!.publishCategory == "PUBLIC"
-                            categoryBottomSheetDialog.categoryEdiBottomSheetData = CategoryDetail(id = holder.data!!.myCategoryId, categoryName = holder.data!!.categoryName, categoryDesc = holder.data!!.myCategoryScript, categoryIcon = holder.data!!.categoryIcon, isPublic = isPublic)
+                            Log.d("data check", categoryBottomSheetDialog.categoryEdiBottomSheetData.toString())
                             categoryBottomSheetDialog.show(mFragmentManager, categoryBottomSheetDialog.tag)
                         }
                         R.id.category_delete -> {
@@ -104,6 +106,7 @@ class CategoryAdapter(private val view: View, val flag : String, private val fra
                                                 0 -> {
                                                     //success
 //                                                    getMapCategories()
+                                                    //카테고리 data update
                                                 }
                                                 1 -> {
                                                     //fail

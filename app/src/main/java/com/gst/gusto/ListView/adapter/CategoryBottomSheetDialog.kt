@@ -23,11 +23,11 @@ import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.RequestAddCategory
 import org.w3c.dom.Text
 
-class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDialogFragment() {
+class CategoryBottomSheetDialog(var data : CategoryDetail? = null, val itemClick : (Int) -> Unit) : BottomSheetDialogFragment() {
 
 
     var isAdd = false
-    var categoryEdiBottomSheetData : CategoryDetail? = null
+    var categoryEdiBottomSheetData = data
     var viewModel : GustoViewModel? = null
 
     var selectedIconInt : Int = 1
