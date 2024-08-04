@@ -514,19 +514,6 @@ interface GustoApi {
         @Query("latitude") latitude: Double
     ): Call<LocalCategoryResponse>
 
-    //나의 콘텐츠 공개 여부 조회
-    @GET("users/my-info/publishing")
-    fun myPublishGet(
-        @Header("X-AUTH-TOKEN") token: String
-    ): Call<ResponseMyPublishGet>
-
-    //나의 콘텐츠 공개 여부 변경
-    @PATCH("users/my-info/publishing")
-    fun myPublishSet(
-        @Header("X-AUTH-TOKEN") token: String,
-        @Body data: RequestMyPublish
-    ): Call<ResponseBody>
-
     // 로그아웃
     @POST("users/sign-out")
     fun logout(
