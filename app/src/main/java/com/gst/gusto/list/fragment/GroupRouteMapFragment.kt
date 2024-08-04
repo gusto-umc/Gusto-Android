@@ -106,6 +106,15 @@ class GroupRouteMapFragment : Fragment() {
 
         return binding.root
     }
+    override fun onPause() {
+        super.onPause()
+        binding.kakaoMap.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.kakaoMap.resume()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -248,15 +257,7 @@ class GroupRouteMapFragment : Fragment() {
 
 
     }
-    override fun onPause() {
-        super.onPause()
-        binding.kakaoMap.pause()
-    }
 
-    override fun onResume() {
-        super.onResume()
-        binding.kakaoMap.resume()
-    }
     override fun onDestroy() {
         super.onDestroy()
         gustoViewModel.groupFragment = 1

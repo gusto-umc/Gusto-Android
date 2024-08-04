@@ -90,6 +90,13 @@
                     android:text="" />
             </LinearLayout>
             <ImageView
+                android:id="@+id/iv_lock"
+                android:visibility="gone"
+                android:layout_marginLeft="8dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/lock_img"/>
+            <ImageView
                 android:id="@+id/btn_edit"
                 android:layout_width="45dp"
                 android:layout_height="45dp"

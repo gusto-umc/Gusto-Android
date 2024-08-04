@@ -7,7 +7,8 @@ import java.util.Date
 data class Routes(
     @SerializedName("routeId") val routeId : Long,
     @SerializedName("routeName") val routeName : String,
-    @SerializedName("numStore") val numStore : Int
+    @SerializedName("numStore") val numStore : Int,
+    @SerializedName("publishRoute") val publishRoute : Boolean
 )
 data class ResponseRoutes(
     @SerializedName("result") val result : List<Routes>,
@@ -40,6 +41,7 @@ data class RouteList(
 data class ResponseRouteDetail(
     @SerializedName("routeId") val routeId : Long,
     @SerializedName("routeName") val routeName : String,
+    @SerializedName("publishRoute") val publishRoute : Boolean,
     @SerializedName("routes") val routes : List<RouteList>
 )
 data class StoredId(
