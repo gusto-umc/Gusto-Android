@@ -56,6 +56,8 @@ class GustoViewModel: ViewModel() {
 
     // 루트 이름
     var routeName = ""
+    // 루트 공개 여부
+    var publishRoute = false
     // 루트 편집 정보
     var removeRoute = ArrayList<Long>()
     var addRoute = ArrayList<Long>()
@@ -385,8 +387,9 @@ class GustoViewModel: ViewModel() {
                             // ordinal 속성을 기준으로 리스트를 정렬
                             list.sortBy { it.ordinal }
                         }
-                        Log.d("viewmodel","route data : ${markerListLiveData.value}")
+                        Log.d("viewmodel","route data : ${responseBody}")
                         routeName = responseBody.routeName
+                        publishRoute = responseBody.publishRoute
                         callback(1)
                     } else callback(2)
 
