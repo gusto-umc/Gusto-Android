@@ -309,7 +309,8 @@ data class ResponseMyReview(
     @SerializedName("toilet") val toilet : Int?,
     @SerializedName("parking") val parking : Int?,
     @SerializedName("comment") val comment : String?,
-    @SerializedName("likeCnt") val likeCnt : Int
+    @SerializedName("likeCnt") val likeCnt : Int,
+    @SerializedName("publicCheck") val publicCheck : Boolean
 )
 
 data class ResponseMyReview2(
@@ -324,7 +325,8 @@ data class RequestMyReview(
     @SerializedName("mood") val mood : Int?,
     @SerializedName("toilet") val toilet : Int?,
     @SerializedName("parking") val parking : Int?,
-    @SerializedName("comment") val comment : String?
+    @SerializedName("comment") val comment : String?,
+    @SerializedName("publicCheck") val publicCheck : Boolean
 )
 
 // 리뷰 작성
@@ -335,11 +337,12 @@ data class RequestCreateReview(
     @SerializedName("menuName") val menuName : String?,
     @SerializedName("hashTagId") val hashTagId : List<Long>?,
     @SerializedName("taste") val taste : Int?,
-    @SerializedName("spiciness") val spiciness : Int?,
-    @SerializedName("mood") val mood : Int?,
-    @SerializedName("toilet") val toilet : Int?,
-    @SerializedName("parking") val parking : Int?,
-    @SerializedName("comment") val comment : String?
+    //@SerializedName("spiciness") val spiciness : Int?,
+    //@SerializedName("mood") val mood : Int?,
+    //@SerializedName("toilet") val toilet : Int?,
+    //@SerializedName("parking") val parking : Int?,
+    @SerializedName("comment") val comment : String?,
+    @SerializedName("publicCheck") val publicCheck : Boolean
 )
 
 //검색결과

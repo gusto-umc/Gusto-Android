@@ -100,6 +100,7 @@ class GustoViewModel: ViewModel() {
     var toilet: Int? = null
     var parking: Int? = null
     var comment: String? = null
+    var publishCheck = false
 
     // 팔로우 리스트
     var followList: List<Member> = listOf()
@@ -1032,7 +1033,7 @@ class GustoViewModel: ViewModel() {
     }
     // 리뷰 작성
     fun createReview(callback: (Int) -> Unit){
-        val data = RequestCreateReview(skipCheck,myStoreDetail?.storeId!!.toLong(),visitedAt,menuName,hashTagId,taste,spiciness,mood,toilet,parking,comment)
+        val data = RequestCreateReview(skipCheck,myStoreDetail?.storeId!!.toLong(),visitedAt,menuName,hashTagId,taste,comment,publishCheck)
         val filesToUpload: MutableList<MultipartBody.Part> = mutableListOf()
 
         // 이미지 파일들을 반복하면서 MultipartBody.Part 리스트에 추가
@@ -1977,8 +1978,8 @@ class GustoViewModel: ViewModel() {
         })
     }
     //리뷰 수정 -> 확인 완
-    fun editReview(reviewId : Long, img : String?, menuName : String?, taste : Int, spiceness : Int, mood : Int, toilet : Int, parking : Int, comment : String?, callback: (Int) -> Unit){
-        var requestBody = RequestMyReview(menuName = menuName, taste = taste, spiciness = spiceness, mood = mood, toilet = toilet, parking = parking, comment = comment)
+    fun editReview(reviewId : Long, img : String?, menuName : String?, taste : Int, spiceness : Int, mood : Int, toilet : Int, parking : Int, comment : String?,publish : Boolean, callback: (Int) -> Unit){
+        var requestBody = RequestMyReview(menuName = menuName, taste = taste, spiciness = spiceness, mood = mood, toilet = toilet, parking = parking, comment = comment,publicCheck=publish)
         val filesToUpload: MutableList<MultipartBody.Part> = mutableListOf()
 
         // 이미지 파일들을 반복하면서 MultipartBody.Part 리스트에 추가
@@ -1988,23 +1989,23 @@ class GustoViewModel: ViewModel() {
             filesToUpload.add(filePart)
         }
         Log.d("edit checking", requestBody.toString())
-//        service.editReview(xAuthToken, reviewId, filesToUpload, requestBody).enqueue(object : Callback<Void>{
-//            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-//                if (response.isSuccessful) {
-//                    Log.e("viewmodel", "Successful response: ${response}")
-//                    callback(0)
-//                } else {
-//                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-//                    callback(1)
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<Void>, t: Throwable) {
-//                Log.e("viewmodel", "Failed to make the request", t)
-//                callback(1)
-//            }
-//
-//        })
+        service.editReview(xAuthToken, reviewId, filesToUpload, requestBody).enqueue(object : Callback<Void>{
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.e("viewmodel", "Successful response: ${response}")
+                    callback(0)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
     }
     //리뷰 삭제
     fun deleteReview(reviewId: Long, callback: (Int) -> Unit){

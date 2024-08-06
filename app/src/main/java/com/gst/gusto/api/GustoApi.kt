@@ -435,7 +435,7 @@ interface GustoApi {
     fun editReview(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("reviewId") reviewId : Long,
-        @Part image: MultipartBody.Part?,
+        @Part image: List<MultipartBody.Part>?,
         @Part("info") info: RequestMyReview
     ) : Call<Void>
 
