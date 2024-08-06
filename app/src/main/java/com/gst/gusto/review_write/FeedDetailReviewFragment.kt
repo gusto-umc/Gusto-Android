@@ -1,44 +1,56 @@
 package com.gst.clock.Fragment
 
-import android.graphics.Typeface
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.BounceInterpolator
 import android.view.animation.ScaleAnimation
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
+import com.gst.gusto.MainActivity
 import com.gst.gusto.R
-import com.gst.gusto.util.util.Companion.dpToPixels
 import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentFeedDetailBinding
-import com.gst.gusto.review_write.adapter.ImageViewPagerAdapter
-import com.gst.gusto.review_write.adapter.ReviewHowAdapter
-import java.lang.Math.abs
+import com.gst.gusto.review_write.adapter.ReviewHashTagAdapter
 
 class FeedDetailReviewFragment : Fragment() {
 
     lateinit var binding: FragmentFeedDetailBinding
-    lateinit var  chipGroup: ChipGroup
     private lateinit var scaleUpAnimation: ScaleAnimation
     private lateinit var scaleDownAnimation: ScaleAnimation
     private lateinit var bounceInterpolator: BounceInterpolator
     private val gustoViewModel : GustoViewModel by activityViewModels()
     lateinit var page : String
     private var likeIt = 0
+    private lateinit var activity : MainActivity
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val callback = object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                activity = requireActivity() as MainActivity
+                activity.hideBottomNavigation(false)
+                findNavController().popBackStack()
+            }
+
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity = requireActivity() as MainActivity
+        activity.hideBottomNavigation(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,15 +58,11 @@ class FeedDetailReviewFragment : Fragment() {
     ): View? {
         binding = FragmentFeedDetailBinding.inflate(inflater, container, false)
 
-        binding.btnBack.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.btnProfile.setOnClickListener {
-            if(gustoViewModel.currentFeedNickname!="")
-                findNavController().navigate(R.id.action_feedDetailReview_to_otherFragment)
-        }
+//        binding.btnProfile.setOnClickListener {
+//            if(gustoViewModel.currentFeedNickname!="")
+//                findNavController().navigate(R.id.action_feedDetailReview_to_otherFragment)
+//        }
 
-        chipGroup = binding.chipGroup
 
         return binding.root
 
@@ -64,61 +72,91 @@ class FeedDetailReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // 데이터 세팅
         val feedDetail = gustoViewModel.currentFeedData
-        binding.tvRestName.text = feedDetail.storeName
-        binding.restInfo.setOnClickListener {
+        gustoViewModel.currentFeedNickname = feedDetail.nickName
+
+        /**
+         * storename, menu, comment
+         */
+
+        binding.tvFeedStoreName.text = feedDetail.storeName
+        binding.tvFeedStoreName.setOnClickListener {
             gustoViewModel.selectedDetailStoreId = gustoViewModel.currentFeedData.storeId.toInt()
             findNavController().navigate(R.id.action_feedDetailReview_to_storeDetailFragment)
+            activity.hideBottomNavigation(false)
         }
-        binding.tvRestLoc.text = feedDetail.address
-        binding.tvNickname.text = feedDetail.nickName
-        gustoViewModel.currentFeedNickname = feedDetail.nickName
-        setImage(binding.ivProfileImage,feedDetail.profileImage,requireContext())
-        binding.tvHeartNum.text = "${feedDetail.likeCnt}"
-        Log.d("viewmodel","heart num : ${feedDetail}")
-        val imageList = mutableListOf<String>()
-        for(image in feedDetail.images) {
-            imageList.add(image)
-        }
-        binding.tvMenuName.text = feedDetail.menuName
-        if(feedDetail.hashTags!=null) {
-            for(tagNum in feedDetail.hashTags) {
-                addChip(gustoViewModel.hashTag[tagNum.toInt()-1])
+        binding.feedMenuTextTv.text = feedDetail.menuName
+        binding.feedReviewTextTv.text = feedDetail.comment
+
+        /**
+         *  review img, taste, hashtag
+         */
+
+        //img 적용
+        setImage(binding.ivFeedImg, feedDetail.images!!.first(), requireContext() )
+
+        //taste 처리
+        binding.feedRate1.visibility = View.INVISIBLE
+        binding.feedRate2.visibility = View.INVISIBLE
+        binding.feedRate3.visibility = View.INVISIBLE
+        binding.feedRate4.visibility = View.INVISIBLE
+        binding.feedRate5.visibility = View.INVISIBLE
+
+        when(feedDetail.taste){
+            0 -> {}
+            1 -> {
+                binding.feedRate1.visibility = View.VISIBLE
             }
+            2 -> {
+                binding.feedRate1.visibility = View.VISIBLE
+                binding.feedRate2.visibility = View.VISIBLE
+            }
+            3 -> {
+                binding.feedRate1.visibility = View.VISIBLE
+                binding.feedRate2.visibility = View.VISIBLE
+                binding.feedRate3.visibility = View.VISIBLE
+
+            }
+            4 -> {
+                binding.feedRate1.visibility = View.VISIBLE
+                binding.feedRate2.visibility = View.VISIBLE
+                binding.feedRate3.visibility = View.VISIBLE
+                binding.feedRate4.visibility = View.VISIBLE
+            }
+            5 -> {
+                binding.feedRate1.visibility = View.VISIBLE
+                binding.feedRate2.visibility = View.VISIBLE
+                binding.feedRate3.visibility = View.VISIBLE
+                binding.feedRate4.visibility = View.VISIBLE
+                binding.feedRate5.visibility = View.VISIBLE
+            }
+            else -> {}
         }
 
-        binding.tvMemo.text = feedDetail.comment
+        //hashtag 처리
+        val flexboxLayoutManager = FlexboxLayoutManager(context)
+        flexboxLayoutManager.justifyContent = JustifyContent.FLEX_START
+        val hashtagAdapter = feedDetail.hashTags?.let {
+            ReviewHashTagAdapter(
+                it
+            )
+        }
+        hashtagAdapter?.gustoViewModel = gustoViewModel
+        binding.feedFlexboxRv.adapter = hashtagAdapter
+        binding.feedFlexboxRv.layoutManager = flexboxLayoutManager
 
-        val viewPager = binding.vpImgSlider
-        // 이미지 슬라이드
-        val adapter = ImageViewPagerAdapter(imageList)
-        viewPager.adapter = adapter
+        /**
+         * heart 처리
+         */
+        // 하트 적용
+        binding.tvFeedHeartNum.text = "${feedDetail.likeCnt}"
+        if(feedDetail.likeCheck){
+            val color = ContextCompat.getColor(requireContext(), R.color.main_C)
+            binding.ivFeedHeart.setColorFilter(color)
+        }
+        else{
+            binding.ivFeedHeart.setColorFilter(null)
+        }
 
-        viewPager.offscreenPageLimit = 2
-        viewPager.clipToPadding = false
-        viewPager.clipChildren = false
-        viewPager.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER)
-
-        val compositePageTransformer = CompositePageTransformer()
-        compositePageTransformer.addTransformer(MarginPageTransformer(
-            dpToPixels(12f, resources.displayMetrics).toInt()
-        ))
-        compositePageTransformer.addTransformer(object : ViewPager2.PageTransformer {
-            override fun transformPage(page: View, position: Float) {
-                val r = 1 - abs(position)
-                page.alpha = 0.5f + r * 0.5f
-            }
-        })
-        viewPager.setPageTransformer(compositePageTransformer)
-
-
-        // 평가 리사이클러뷰
-        val rv_board = binding.rvHows
-        val howList = mutableListOf(feedDetail.taste,feedDetail.spiciness,feedDetail.mood,feedDetail.toilet,feedDetail.parking)
-        val howAdapter = ReviewHowAdapter(howList,1)
-        howAdapter.notifyDataSetChanged()
-
-        rv_board.adapter = howAdapter
-        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         // 하트 클릭 리스너
         bounceInterpolator = BounceInterpolator()
@@ -140,45 +178,30 @@ class FeedDetailReviewFragment : Fragment() {
         )
         scaleDownAnimation.duration = 500
         scaleDownAnimation.interpolator = bounceInterpolator
-        binding.btnHeart.setOnClickListener {
+
+        binding.btnFeedHeart.setOnClickListener {
             if (it.isSelected) {
                 // 좋아요 취소
                 likeIt = 2
-                binding.ivHeart.setColorFilter(null)
+                binding.ivFeedHeart.setColorFilter(null)
                 it.startAnimation(scaleDownAnimation)
-                binding.tvHeartNum.text = (binding.tvHeartNum.text.toString().toInt()-1).toString()
+                binding.tvFeedHeartNum.text = (binding.tvFeedHeartNum.text.toString().toInt()-1).toString()
             } else {
                 // 좋아요
                 likeIt = 1
                 val color = ContextCompat.getColor(requireContext(), R.color.main_C)
-                binding.ivHeart.setColorFilter(color)
+                binding.ivFeedHeart.setColorFilter(color)
                 it.startAnimation(scaleUpAnimation)
-                binding.tvHeartNum.text = (binding.tvHeartNum.text.toString().toInt()+1).toString()
+                binding.tvFeedHeartNum.text = (binding.tvFeedHeartNum.text.toString().toInt()+1).toString()
             }
             it.isSelected = !it.isSelected
         }
         if(feedDetail.likeCheck) {
-            binding.btnHeart.callOnClick()
-            binding.tvHeartNum.text = (binding.tvHeartNum.text.toString().toInt()-1).toString()
+            binding.btnFeedHeart.callOnClick()
+            binding.tvFeedHeartNum.text = (binding.tvFeedHeartNum.text.toString().toInt()-1).toString()
         }
     }
 
-    private fun addChip(text:String) {
-        val chip = Chip(requireContext())
-        chip.isClickable = false
-        chip.isCheckable = false
-
-        chip.text  = text
-        chip.chipBackgroundColor = ContextCompat.getColorStateList(requireContext(), R.color.sub_m)
-        chip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.white))
-        chip.chipStrokeWidth = 0f
-        chip.textSize = 10f
-        chip.typeface = Typeface.createFromAsset(requireActivity().assets, "font/pretendard_bold.otf")
-        chip.chipCornerRadius = dpToPixels(41f,resources.displayMetrics)
-
-
-        chipGroup.addView(chip)
-    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -200,6 +223,11 @@ class FeedDetailReviewFragment : Fragment() {
             }
         }
 
+    }
+    override fun onResume() {
+        super.onResume()
+        activity = requireActivity() as MainActivity
+        activity.hideBottomNavigation(true)
     }
 
 

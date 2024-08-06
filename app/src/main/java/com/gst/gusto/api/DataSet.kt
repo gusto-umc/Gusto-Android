@@ -399,7 +399,7 @@ data class ResponseFeedDetail(
     @SerializedName("likeCheck") val likeCheck: Boolean,
     @SerializedName("images") val images: List<String>,
     @SerializedName("menuName") val menuName: String,
-    @SerializedName("hashTags") val hashTags: List<Long>?,
+    @SerializedName("hashTags") val hashTags: List<Int>?,
     @SerializedName("taste") val taste: Int,
     @SerializedName("spiciness") val spiciness: Int,
     @SerializedName("mood") val mood: Int,
