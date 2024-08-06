@@ -53,6 +53,12 @@ class CategoryFragment : Fragment() {
         gustoViewModel.myAllCategoryList.clear()
 
         val mCategoryAdapter = CategoryAdapter(view, "map", requireFragmentManager())
+        mCategoryAdapter.setItemChangeListener(object : CategoryAdapter.OnItemChangeListener{
+            override fun onChange(v: View) {
+                mCategoryAdapter.notifyDataSetChanged()
+            }
+
+        })
         mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
         mCategoryAdapter.viewModel = gustoViewModel
         mCategoryAdapter.mContext = context
