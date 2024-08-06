@@ -84,6 +84,8 @@ class ReviewDetailEditFragment : Fragment() {
             setImage(binding.ivFoodImg,gustoViewModel.myReview!!.img!![0],requireContext())
         }
 
+        //공개 비공개
+        var publish = false
 
         //사진 변경
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -125,7 +127,7 @@ class ReviewDetailEditFragment : Fragment() {
             //comment
             val comment = binding.edtMemo.text.toString()
 
-            gustoViewModel.editReview(gustoViewModel.myReviewId!!, taste = taste, spiceness = 0, mood = 0, toilet = 0, parking = 0, menuName = menu, comment = comment, img = img){
+            gustoViewModel.editReview(gustoViewModel.myReviewId!!, taste = taste, spiceness = 0, mood = 0, toilet = 0, parking = 0, menuName = menu, comment = comment, img = img,publish = publish){
                 result ->
                 when(result){
                     0 -> {
@@ -147,12 +149,14 @@ class ReviewDetailEditFragment : Fragment() {
         }
 
         binding.btnPrivate.setOnClickListener {
+            publish = false
             binding.btnPrivate.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.main_C))
             binding.btnPublic.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.gray_3))
             binding.btnPrivate.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.main_C)
             binding.btnPublic.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.gray_3)
         }
         binding.btnPublic.setOnClickListener {
+            publish = true
             binding.btnPublic.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.main_C))
             binding.btnPrivate.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.gray_3))
             binding.btnPublic.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.main_C)
