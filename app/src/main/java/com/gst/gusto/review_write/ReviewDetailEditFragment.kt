@@ -54,10 +54,6 @@ class ReviewDetailEditFragment : Fragment() {
 
         //ratingbar 적용
         binding.ratingbarTasteEdit.rating = editReview!!.taste.toFloat()
-        binding.ratingbarSpicenessEdit.rating = if(editReview!!.spiciness == null){ 3.0F } else{ editReview!!.spiciness!!.toFloat() }
-        binding.ratingbarMoodEdit.rating = if(editReview!!.mood == null){ 3.0F } else{editReview!!.mood!!.toFloat()}
-        binding.ratingbarToiletEdit.rating = if(editReview!!.toilet == null ){3.0F}else{editReview!!.toilet!!.toFloat()}
-        binding.ratingbarParkingEdit.rating = if(editReview!!.parking == null){3.0F} else{editReview!!.parking!!.toFloat()}
 
         //메뉴이름, comment 적용
         binding.edtMenu.setText(if(editReview!!.menuName == null){""}else{editReview!!.menuName!!})

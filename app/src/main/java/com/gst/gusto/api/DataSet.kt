@@ -302,12 +302,9 @@ data class ResponseMyReview(
     @SerializedName("menuName") val menuName : String?,
     @SerializedName("hashTags") val hashTags : List<Int>?,
     @SerializedName("taste") val taste : Int,
-    @SerializedName("spiciness") val spiciness : Int?,
-    @SerializedName("mood") val mood : Int?,
-    @SerializedName("toilet") val toilet : Int?,
-    @SerializedName("parking") val parking : Int?,
     @SerializedName("comment") val comment : String?,
-    @SerializedName("likeCnt") val likeCnt : Int
+    @SerializedName("likeCnt") val likeCnt : Int,
+    @SerializedName("publicCheck") val publicCheck : Boolean
 )
 
 data class ResponseMyReview2(

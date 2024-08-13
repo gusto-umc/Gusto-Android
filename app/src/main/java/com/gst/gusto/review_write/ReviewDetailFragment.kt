@@ -110,6 +110,12 @@ class ReviewDetailFragment : Fragment() {
                     } else{
                         gustoViewModel.myReview!!.menuName
                     }
+                    //데이터 적용 - lock
+                    if(gustoViewModel.myReview!!.publicCheck){
+                        binding.ivReviewLock.visibility = View.INVISIBLE
+                    }else{
+                        binding.ivReviewLock.visibility = View.VISIBLE
+                    }
                     //taste 처리
                     //init rating bar
                     binding.reviewRate1.visibility = View.INVISIBLE
@@ -193,10 +199,6 @@ class ReviewDetailFragment : Fragment() {
         /**
          * setting 클릭 리스너
          */
-        binding.ivReviewLock.setOnClickListener {
-            //lock 처리
-            Toast.makeText(context, "lock click", Toast.LENGTH_SHORT).show()
-        }
 
         binding.ivReviewEdit.setOnClickListener {
             findNavController().navigate(R.id.action_reviewDetail_to_reviewDetailEdit)
