@@ -404,7 +404,9 @@ interface GustoApi {
     fun ppGetAllMyStores(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("myCategoryId") categoryId : Int,
-        @Query("pinId") pinId : Int?
+        @Query("pinId") pinId : Int?,
+        @Query("sort") sort : String?,
+        @Query("storeName") storeName: String?
     ): Call<PResponseStoreData>
 
     // 9. (paging) 카테고리별 타인 가게 조회
@@ -415,6 +417,9 @@ interface GustoApi {
         @Query("myCategoryId") categoryId : Int,
         @Query("pinId") pinId : Int?
     ): Call<PResponseStoreData>
+
+
+
 
 
 

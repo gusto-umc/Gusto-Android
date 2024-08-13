@@ -533,7 +533,7 @@
             app:destination="@id/storeEditFragment" />
         <action
             android:id="@+id/action_storeFragment_to_storeDetailFragment"
-            app:destination="@id/storeDetailFragment" />'
+            app:destination="@id/storeDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/storeEditFragment"

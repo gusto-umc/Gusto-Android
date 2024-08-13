@@ -1367,7 +1367,7 @@ class GustoViewModel: ViewModel() {
     }
     // 카테고리 수정 -> 확인 완료, comment 일단 제외
     fun editCategory(categoryId: Long, categoryName: String, categoryIcon: Int, public: String, desc: String, callback: (Int) -> Unit){
-        var categoryRequestData = RequestEditCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = "PUBLIC", myCategoryScript = desc)
+        var categoryRequestData = RequestEditCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = public, myCategoryScript = desc)
         Log.d("checking edit", categoryRequestData.toString())
         Log.d("checking edit", categoryId.toString())
         service.editCategory(token = xAuthToken, myCategoryId = categoryId, data = categoryRequestData).enqueue(object : Callback<Void>{
@@ -1811,8 +1811,8 @@ class GustoViewModel: ViewModel() {
 
     // paging api
 
-    fun getPPMyStore(categoryId: Int, pinId : Int?, callback: (Int, Boolean) -> Unit){
-        service.ppGetAllMyStores(xAuthToken, categoryId, pinId).enqueue(object : Callback<PResponseStoreData>{
+    fun getPPMyStore(categoryId: Int, pinId : Int?, storeName : String? = null, sort : String? = null,  callback: (Int, Boolean) -> Unit){
+        service.ppGetAllMyStores(xAuthToken, categoryId, pinId, sort, storeName).enqueue(object : Callback<PResponseStoreData>{
             override fun onResponse(
                 call: Call<PResponseStoreData>,
                 response: Response<PResponseStoreData>

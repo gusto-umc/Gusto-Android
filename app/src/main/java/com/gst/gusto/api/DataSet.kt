@@ -179,7 +179,7 @@ data class RequestAddCategory(
 data class RequestEditCategory(
     @SerializedName("myCategoryName") var myCategoryName : String,
     @SerializedName("myCategoryIcon") var myCategoryIcon : Int,
-    @SerializedName("publishCategory") var publishCategory : String,
+    @SerializedName("publishCategory") var publishCategory : String?,
     @SerializedName("myCategoryScript") var myCategoryScript : String
 )
 
@@ -262,7 +262,7 @@ data class PResponseStoreListItem(
     @SerializedName("storeName") val storeName  :String,
     @SerializedName("address") val address : String,
     @SerializedName("reviewCnt") var reviewCnt : Int,
-    @SerializedName("reviewImg") val reviewImg : String?
+    @SerializedName("reviewImg3") val reviewImg3 : ArrayList<String>
 )
 
 // 저장된 가게 response
@@ -302,7 +302,7 @@ data class ResponseMyReview(
     @SerializedName("visitedAt") var visitedAt : String?,
     @SerializedName("images") val img : List<String>?,
     @SerializedName("menuName") val menuName : String?,
-//    @SerializedName("hashTags") val hashTags : String?,
+    @SerializedName("hashTags") val hashTags : List<Int>?,
     @SerializedName("taste") val taste : Int,
     @SerializedName("spiciness") val spiciness : Int?,
     @SerializedName("mood") val mood : Int?,
@@ -404,7 +404,7 @@ data class ResponseFeedDetail(
     @SerializedName("likeCheck") val likeCheck: Boolean,
     @SerializedName("images") val images: List<String>,
     @SerializedName("menuName") val menuName: String,
-    @SerializedName("hashTags") val hashTags: List<Long>?,
+    @SerializedName("hashTags") val hashTags: List<Int>?,
     @SerializedName("taste") val taste: Int,
     @SerializedName("spiciness") val spiciness: Int,
     @SerializedName("mood") val mood: Int,
