@@ -78,7 +78,7 @@ class CategoryAdapter(private val view: View, val flag : String, private val fra
                     when(it.itemId){
                         R.id.category_edit -> {
                             //수정 페이지 등장
-                            var isPublic : Boolean = holder.data!!.publishCategory == "PUBLIC"
+                            var isPublic : Boolean = holder.data!!.publishCategory
                             var categoryData = CategoryDetail(id = holder.data!!.myCategoryId, categoryName = holder.data!!.categoryName, categoryDesc = holder.data!!.myCategoryScript, categoryIcon = holder.data!!.categoryIcon, isPublic = isPublic)
                             val categoryBottomSheetDialog = CategoryBottomSheetDialog(data = categoryData){
                                 when(it){

@@ -188,7 +188,8 @@ data class ResponseMapCategory(
     @SerializedName("myCategoryId") val myCategoryId : Int,
     @SerializedName("myCategoryName") var categoryName : String,
     @SerializedName("myCategoryIcon") var categoryIcon : Int,
-    @SerializedName("publishCategory") var publishCategory : String,
+    @SerializedName("publishCategory") var publishCategory : Boolean,
+    @SerializedName("userPublishCategory") val userPublishCategory : Boolean,
     @SerializedName("myCategoryScript") var myCategoryScript : String?,
     @SerializedName("pinCnt") var pinCnt : Int
 )
