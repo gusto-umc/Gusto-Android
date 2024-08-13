@@ -107,16 +107,13 @@ class CategoryBottomSheetDialog(var data : CategoryDetail? = null, val itemClick
                         }
                     }
                     dialog?.dismiss()
-
                 }
-
             }
-
         }
         else{
-
             // 수정 상황
             view?.findViewById<ImageView>(R.id.iv_bottomsheet_category_x)?.visibility = View.GONE
+            view?.findViewById<TextView>(R.id.tv_category_save)?.visibility = View.INVISIBLE
             view?.findViewById<TextView>(R.id.tv_category_edit)?.visibility = View.VISIBLE
             view?.findViewById<TextView>(R.id.tv_category_bottomsheet_banner)?.text = "카테고리 수정하기"
             view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)?.setText(categoryEdiBottomSheetData?.categoryName)
@@ -129,6 +126,7 @@ class CategoryBottomSheetDialog(var data : CategoryDetail? = null, val itemClick
 
             view?.findViewById<TextView>(R.id.tv_category_edit)?.setOnClickListener {
                 view?.findViewById<ImageView>(R.id.iv_bottomsheet_category_x)?.visibility = View.VISIBLE
+                view?.findViewById<TextView>(R.id.tv_category_save)?.visibility = View.VISIBLE
                 view?.findViewById<TextView>(R.id.tv_category_edit)?.visibility = View.GONE
                 view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)?.isEnabled = true
                 view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)?.isEnabled = true
@@ -149,7 +147,6 @@ class CategoryBottomSheetDialog(var data : CategoryDetail? = null, val itemClick
             //스위치 변경 불가
             view?.findViewById<Switch>(R.id.switch_category_public)?.isChecked =
                 categoryEdiBottomSheetData!!.isPublic
-            view?.findViewById<Switch>(R.id.switch_category_public)?.isEnabled = false
 
             view?.findViewById<TextView>(R.id.tv_category_save)?.setOnClickListener {
                 val title = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)!!.text.toString()
@@ -166,8 +163,15 @@ class CategoryBottomSheetDialog(var data : CategoryDetail? = null, val itemClick
                     else{
                         descData = desc
                     }
+                    var publicString = "PUBLIC"
+
+                    if(view?.findViewById<Switch>(R.id.switch_category_public)?.isChecked == true){
+                        publicString = "PUBLIC"
+                    }else{
+                        publicString = "PRIVATE"
+                    }
                     //2. 서버 연결
-                    viewModel!!.editCategory(categoryName = title, desc = descData, categoryIcon = selectedIconInt, public = "PUBLIC", categoryId = categoryEdiBottomSheetData!!.id.toLong()){
+                    viewModel!!.editCategory(categoryName = title, desc = descData, categoryIcon = selectedIconInt, public = publicString, categoryId = categoryEdiBottomSheetData!!.id.toLong()){
                             result ->
                         when(result){
                             0 -> {

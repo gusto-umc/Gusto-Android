@@ -77,7 +77,6 @@ class FeedDetailReviewFragment : Fragment() {
         /**
          * storename, menu, comment
          */
-
         binding.tvFeedStoreName.text = feedDetail.storeName
         binding.tvFeedStoreName.setOnClickListener {
             gustoViewModel.selectedDetailStoreId = gustoViewModel.currentFeedData.storeId.toInt()
@@ -88,11 +87,12 @@ class FeedDetailReviewFragment : Fragment() {
         binding.feedReviewTextTv.text = feedDetail.comment
 
         /**
-         *  review img, taste, hashtag
+         *  review img, user img, taste, hashtag
          */
 
         //img 적용
         setImage(binding.ivFeedImg, feedDetail.images!!.first(), requireContext() )
+        setImage(binding.ivUserImgFeedDetail, feedDetail.profileImage, requireContext())
 
         //taste 처리
         binding.feedRate1.visibility = View.INVISIBLE

@@ -126,11 +126,29 @@ class CategoryFragment : Fragment() {
                     0 -> {
                         //추가 성공
                         //카테고리 새로 받아와서 연결시키기
-                        //getMapCategories()
+                        gustoViewModel.myAllCategoryList.clear()
+                        var hasNext = false
+
+                        gustoViewModel.getPPMyCategory(null){
+                                result, getHasNext ->
+                            when(result){
+                                1 -> {
+                                    //success
+                                    mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
+                                    hasNext = getHasNext
+                                    mCategoryAdapter.notifyDataSetChanged()
+                                }
+                                else-> {
+                                    Toast.makeText(requireContext(), "서버와의 연결 불안정합니다", Toast.LENGTH_SHORT).show()
+                                }
+
+                            }
+                        }
+
                     }
                     1 -> {
                         //추가 실페
-                        Toast.makeText(context, "추가 fail", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "이미 존재하는 카테고리 입니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

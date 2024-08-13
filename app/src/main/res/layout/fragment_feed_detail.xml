@@ -10,7 +10,6 @@
         android:id="@+id/iv_feed_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/sample_store_4_img"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,7 +25,7 @@
         android:src="@drawable/review_shadow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_day1"
-        />
+        tools:ignore="NotSibling" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/feed_detail_bar_layout"
@@ -59,19 +58,18 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--    <TextView-->
-<!--        android:id="@+id/tv_feed_day1"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:fontFamily="@font/pretendard_bold"-->
-<!--        android:textSize="20sp"-->
-<!--        android:text="3월 17일"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/feed_detail_bar_layout"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_marginStart="31dp"-->
-<!--        />-->
+    <TextView
+        android:id="@+id/tv_feed_day1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:fontFamily="@font/pretendard_bold"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/feed_detail_bar_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="31dp"
+        />
 
     <LinearLayout
         android:id="@+id/feed_detail_text_layout"
@@ -92,57 +90,72 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             >
+            
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="300dp"
+                app:cardElevation="@dimen/cardview_compat_inset_shadow"
+                >
+                <ImageView
+                    android:id="@+id/iv_user_img_feed_detail"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+
+                    />
+            </androidx.cardview.widget.CardView>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:text="맛슐랭"
                 android:textSize="12sp"
                 android:fontFamily="@font/pretendard_semibold"
                 android:layout_marginRight="6dp"
+                android:layout_marginLeft="8dp"
                 />
             <ImageView
                 android:id="@+id/feed_rate_1"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:src="@drawable/group_38457"
-                app:tint="@color/black" />
+                app:tint="@color/white" />
             <ImageView
                 android:id="@+id/feed_rate_2"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:src="@drawable/group_38457"
-                app:tint="@color/black"
+                app:tint="@color/white"
                 />
             <ImageView
                 android:id="@+id/feed_rate_3"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:src="@drawable/group_38457"
-                app:tint="@color/black"
+                app:tint="@color/white"
                 />
             <ImageView
                 android:id="@+id/feed_rate_4"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:src="@drawable/group_38457"
-                app:tint="@color/black"
+                app:tint="@color/white"
                 />
             <ImageView
                 android:id="@+id/feed_rate_5"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:src="@drawable/group_38457"
-                app:tint="@color/black"
+                app:tint="@color/white"
                 />
         </LinearLayout>
         <TextView
             android:id="@+id/feed_menu_text_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="벵쇼"
             android:textSize="15sp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:fontFamily="@font/pretendard_bold"
             android:layout_marginTop="8dp"
             />
@@ -151,11 +164,10 @@
             android:id="@+id/feed_review_text_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="12sp"
             android:fontFamily="@font/pretendard_bold"
             android:layout_marginTop="8dp"
-            android:text="친구따라 안국에 놀러가서 알게 된 카페:)\n\n 테이블이 좁아서 음료를 다 쏟을 뻔 했지만 한옥을 개조한 카페 분위기가 좋다"
             />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -176,21 +188,19 @@
                 android:id="@+id/tv_feed_store_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gusto Restaurant"
                 android:textSize="12sp"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:fontFamily="@font/pretendard_bold"
                 android:layout_marginRight="13dp"
                 />
-<!--            <TextView-->
-<!--                android:id="@+id/tv_feed_day2"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:textSize="12sp"-->
-<!--                android:fontFamily="@font/pretendard_regular"-->
-<!--                android:text="2023 12 3 방문"-->
-<!--                />-->
+            <TextView
+                android:id="@+id/tv_feed_day2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:fontFamily="@font/pretendard_regular"
+                />
         </LinearLayout>
     </LinearLayout>
 
@@ -228,7 +238,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendard_bold"
                 android:text="123"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="10sp"
                 android:layout_gravity="center_horizontal"/>
         </LinearLayout>

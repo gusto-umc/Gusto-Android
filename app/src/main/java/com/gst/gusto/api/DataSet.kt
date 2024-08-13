@@ -177,7 +177,7 @@ data class RequestAddCategory(
 data class RequestEditCategory(
     @SerializedName("myCategoryName") var myCategoryName : String,
     @SerializedName("myCategoryIcon") var myCategoryIcon : Int,
-    @SerializedName("publishCategory") var publishCategory : String,
+    @SerializedName("publishCategory") var publishCategory : String?,
     @SerializedName("myCategoryScript") var myCategoryScript : String
 )
 
