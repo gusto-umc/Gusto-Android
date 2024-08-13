@@ -40,7 +40,7 @@ class MyListFragment : Fragment() {
          */
         Log.d("currentFeedNickName", gustoViewModel.currentFeedNickname)
         Log.d("userNickname", gustoViewModel.userNickname)
-        if(gustoViewModel.currentFeedNickname.isBlank()){
+        if(gustoViewModel.profileNickname == ""){
             //my
             gustoViewModel.myAllCategoryList.clear()
 

@@ -77,6 +77,7 @@ class CategoryBottomSheetDialog(var data : CategoryDetail? = null, val itemClick
                 }
             }
             view?.findViewById<Switch>(R.id.switch_category_public)?.isEnabled = true
+            view?.findViewById<Switch>(R.id.switch_category_public)?.isChecked = true
             view?.findViewById<TextView>(R.id.tv_category_save)?.setOnClickListener {
                 val title = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)!!.text.toString()
                 val desc = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)!!.text.toString()
