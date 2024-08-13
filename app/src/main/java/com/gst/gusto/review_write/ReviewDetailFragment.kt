@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
@@ -60,6 +61,7 @@ class ReviewDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
         activity = requireActivity() as MainActivity
         activity.hideBottomNavigation(true)
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -261,7 +261,9 @@ data class PResponseStoreListItem(
     @SerializedName("storeName") val storeName  :String,
     @SerializedName("address") val address : String,
     @SerializedName("reviewCnt") var reviewCnt : Int,
-    @SerializedName("reviewImg3") val reviewImg3 : ArrayList<String>
+    @SerializedName("img1") val img1 : String?,
+    @SerializedName("img2") val img2 : String?,
+    @SerializedName("img3") val img3 : String?
 )
 
 // 저장된 가게 response

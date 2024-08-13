@@ -82,7 +82,7 @@
                 android:layout_marginRight="30dp"
                 app:cardCornerRadius="600dp"
                 android:layout_gravity="bottom|right"
-                android:elevation="4dp">
+                android:elevation="45dp">
                 <ImageButton
                     android:id="@+id/review_add_btn"
                     android:layout_width="60dp"
