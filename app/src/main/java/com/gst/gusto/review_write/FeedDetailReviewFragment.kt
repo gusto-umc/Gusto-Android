@@ -92,6 +92,9 @@ class FeedDetailReviewFragment : Fragment() {
 
         //img 적용
         setImage(binding.ivFeedImg, feedDetail.images!!.first(), requireContext() )
+        binding.ivUserImgFeedDetail.setOnClickListener {
+            findNavController().navigate(R.id.action_feedDetailReview_to_otherFragment)
+        }
         setImage(binding.ivUserImgFeedDetail, feedDetail.profileImage, requireContext())
 
         //taste 처리
