@@ -87,7 +87,7 @@
                     android:id="@+id/review_add_btn"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:background="@drawable/background_radius_600"
+                    android:background="@drawable/background_radius_40"
                     android:backgroundTint="@color/sub_m"
                     android:elevation="20dp"
                     android:padding="17dp"

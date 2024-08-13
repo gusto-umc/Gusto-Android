@@ -259,6 +259,9 @@ class MapFragment : Fragment() {
         binding.fragmentMapMainScreen.tvMapSearch.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_searchFragment)
         }
+        binding.reviewAddBtn.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_searchFragment)
+        }
 
         /**
          * 카테고리 전체 조회 - mindy
@@ -320,6 +323,7 @@ class MapFragment : Fragment() {
                 when (newState) {
                     BottomSheetBehavior.STATE_COLLAPSED -> {
                         binding.listViewBtn.visibility = View.VISIBLE
+                        binding.reviewAddBtn.visibility = View.VISIBLE
                         // 바텀 시트가 축소된 상태입니다.
                         // 원하는 동작을 수행하세요.
                     }
@@ -329,6 +333,7 @@ class MapFragment : Fragment() {
                     }
                     BottomSheetBehavior.STATE_DRAGGING -> {
                         binding.listViewBtn.visibility = View.GONE
+                        binding.reviewAddBtn.visibility = View.GONE
                         // 바텀 시트가 드래그 중인 상태입니다.
                         // 원하는 동작을 수행하세요.
                     }
