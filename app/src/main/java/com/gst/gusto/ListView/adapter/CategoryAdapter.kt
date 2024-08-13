@@ -83,8 +83,9 @@ class CategoryAdapter(private val view: View, val flag : String, private val fra
                             val categoryBottomSheetDialog = CategoryBottomSheetDialog(data = categoryData){
                                 when(it){
                                     0 -> {
-                                        Log.d("bottomsheet", "저장 click")
-                                        //카테고리 data update
+                                        //success
+                                        viewModel!!.myAllCategoryList.clear()
+                                        itemchangeListener.onChange(view, "edit")
                                     }
                                 }
                             }
@@ -105,16 +106,14 @@ class CategoryAdapter(private val view: View, val flag : String, private val fra
                                                 result ->
                                             when(result){
                                                 0 -> {
-                                                    //success
-//                                                    getMapCategories()
                                                     //카테고리 data update
                                                     viewModel!!.myAllCategoryList.remove(holder.data)
-                                                    itemchangeListener.onChange(view)
+                                                    itemchangeListener.onChange(view, "delete")
                                                 }
                                                 1 -> {
                                                     //fail
                                                     Toast.makeText(mContext, "삭제 실패", Toast.LENGTH_SHORT).show()
-                                                    itemchangeListener.onChange(view)
+                                                    itemchangeListener.onChange(view, "delete")
                                                 }
                                             }
                                         }
@@ -167,7 +166,7 @@ class CategoryAdapter(private val view: View, val flag : String, private val fra
 
     // (2) 리스너 인터페이스
     interface OnItemChangeListener {
-        fun onChange(v: View)
+        fun onChange(v: View, flag : String)
     }
     // (3) 외부에서 클릭 시 이벤트 설정
     fun setItemChangeListener(onItemChangeListener: OnItemChangeListener) {
