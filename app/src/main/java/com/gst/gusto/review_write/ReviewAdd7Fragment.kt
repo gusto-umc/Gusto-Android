@@ -1,5 +1,6 @@
 package com.gst.clock.Fragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -7,6 +8,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -23,6 +25,9 @@ class ReviewAdd7Fragment : Fragment() {
     private val progressPoint = 600
     private val gustoViewModel : GustoViewModel by activityViewModels()
     lateinit var activity: MainActivity
+
+    var public = true
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,6 +42,7 @@ class ReviewAdd7Fragment : Fragment() {
         binding.btnEnd.setOnClickListener {
             binding.btnEnd.isClickable = false
             gustoViewModel.comment = binding.etContent.text.toString()
+            gustoViewModel.publishCheck = public
             gustoViewModel.createReview() {result ->
                 when(result) {
                     1 -> {
@@ -47,6 +53,20 @@ class ReviewAdd7Fragment : Fragment() {
                 }
             }
 
+        }
+        binding.btnPublic.setOnClickListener {
+            binding.btnPublic.text = "• 전체공개"
+            binding.btnPrivate.text = "나만보기"
+            binding.btnPublic.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.main_C))
+            binding.btnPrivate.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.gray_7))
+            public = true
+        }
+        binding.btnPrivate.setOnClickListener {
+            binding.btnPublic.text = "전체공개"
+            binding.btnPrivate.text = "• 나만보기"
+            binding.btnPublic.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.gray_7))
+            binding.btnPrivate.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.main_C))
+            public = false
         }
         return binding.root
 

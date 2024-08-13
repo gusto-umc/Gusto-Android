@@ -13,60 +13,16 @@
             android:layout_marginRight="11dp"
             android:background="#F27781" />
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:elevation="2dp">
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginLeft="16.5dp"
+        android:backgroundTint="#F27781"
+        android:id="@+id/addButton"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp">
 
-        <LinearLayout
-            android:layout_width="280dp"
-            android:layout_height="24dp"
-            android:layout_marginLeft="26dp"
-            android:background="@drawable/background_radius_5_pink">
+    </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:fontFamily="@font/pretendard_medium"
-                android:text="12/31"
-                android:textColor="@color/white"
-                android:textSize="10sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:text="오늘의 후기를 남겨주세요!"
-                android:textColor="@color/white"
-                android:textSize="10sp" />
-
-        </LinearLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginLeft="16.5dp"
-            android:backgroundTint="#F27781"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            app:strokeWidth="0dp">
-
-            <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_gravity="center"
-                android:scaleType="fitCenter"
-                android:src="@drawable/plus_img" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-
-    </FrameLayout>
     </LinearLayout>

@@ -13,7 +13,7 @@ import com.gst.gusto.repository.ReviewsRepositoryImpl
 import com.gst.gusto.util.GustoApplication
 import kotlinx.coroutines.launch
 
-class ReviewViewModel(
+class InstaReviewViewModel(
     private val reviewsRepository: ReviewsRepositoryImpl,
     private val authRepository: AuthRepositoryImpl
 ) : ViewModel() {

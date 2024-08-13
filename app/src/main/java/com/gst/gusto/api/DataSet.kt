@@ -7,7 +7,8 @@ import java.util.Date
 data class Routes(
     @SerializedName("routeId") val routeId : Long,
     @SerializedName("routeName") val routeName : String,
-    @SerializedName("numStore") val numStore : Int
+    @SerializedName("numStore") val numStore : Int,
+    @SerializedName("publishRoute") val publishRoute : Boolean
 )
 data class ResponseRoutes(
     @SerializedName("result") val result : List<Routes>,
@@ -17,7 +18,7 @@ data class ResponseRoutes(
 // 루트 생성
 data class RequestCreateRoute(
     @SerializedName("routeName") val routeName : String,
-    @SerializedName("groupId") val groupId : Long?,
+    @SerializedName("publishRoute") val publishRoute : Boolean,
     @SerializedName("routeList") val routeList : List<RouteList>
 )
 data class RequestEditRoute(
@@ -40,6 +41,7 @@ data class RouteList(
 data class ResponseRouteDetail(
     @SerializedName("routeId") val routeId : Long,
     @SerializedName("routeName") val routeName : String,
+    @SerializedName("publishRoute") val publishRoute : Boolean,
     @SerializedName("routes") val routes : List<RouteList>
 )
 data class StoredId(
@@ -307,7 +309,8 @@ data class ResponseMyReview(
     @SerializedName("toilet") val toilet : Int?,
     @SerializedName("parking") val parking : Int?,
     @SerializedName("comment") val comment : String?,
-    @SerializedName("likeCnt") val likeCnt : Int
+    @SerializedName("likeCnt") val likeCnt : Int,
+    @SerializedName("publicCheck") val publicCheck : Boolean
 )
 
 data class ResponseMyReview2(
@@ -322,7 +325,8 @@ data class RequestMyReview(
     @SerializedName("mood") val mood : Int?,
     @SerializedName("toilet") val toilet : Int?,
     @SerializedName("parking") val parking : Int?,
-    @SerializedName("comment") val comment : String?
+    @SerializedName("comment") val comment : String?,
+    @SerializedName("publicCheck") val publicCheck : Boolean
 )
 
 // 리뷰 작성
@@ -333,11 +337,12 @@ data class RequestCreateReview(
     @SerializedName("menuName") val menuName : String?,
     @SerializedName("hashTagId") val hashTagId : List<Long>?,
     @SerializedName("taste") val taste : Int?,
-    @SerializedName("spiciness") val spiciness : Int?,
-    @SerializedName("mood") val mood : Int?,
-    @SerializedName("toilet") val toilet : Int?,
-    @SerializedName("parking") val parking : Int?,
-    @SerializedName("comment") val comment : String?
+    //@SerializedName("spiciness") val spiciness : Int?,
+    //@SerializedName("mood") val mood : Int?,
+    //@SerializedName("toilet") val toilet : Int?,
+    //@SerializedName("parking") val parking : Int?,
+    @SerializedName("comment") val comment : String?,
+    @SerializedName("publicCheck") val publicCheck : Boolean
 )
 
 //검색결과
@@ -457,17 +462,10 @@ data class Login(
 data class Nickname(
     @SerializedName("nickname") val nickname: String
 )
-
-// 나의 콘텐츠 공개 여부 조회
-data class ResponseMyPublishGet(
-    @SerializedName("publishReview") val publishReview: Boolean,
-    @SerializedName("publishPin") val publishPin: Boolean,
-    @SerializedName("publishRoute") val publishRoute: Boolean,
-)
-
-// 나의 콘텐츠 공개 여부 변경
-data class RequestMyPublish(
-    @SerializedName("publishReview") val publishReview: Boolean,
-    @SerializedName("publishPin") val publishPin: Boolean,
-    @SerializedName("publishRoute") val publishRoute: Boolean,
+//구글 토큰
+data class AccessTokenResponse(
+    @SerializedName("access_token") val accessToken: String,
+    @SerializedName("expires_in") val expiresIn: Long,
+    @SerializedName("token_type") val tokenType: String,
+    @SerializedName("refresh_token") val refreshToken: String?
 )

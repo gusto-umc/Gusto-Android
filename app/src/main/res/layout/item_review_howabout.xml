@@ -45,7 +45,7 @@
                 android:layout_width="47dp"
                 android:layout_height="46dp"
                 android:layout_weight="1"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:src="@drawable/rice_img"
                 app:tint="@color/main_C" />
 
@@ -54,7 +54,7 @@
                 android:layout_width="47dp"
                 android:layout_height="46dp"
                 android:layout_weight="1"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:src="@drawable/rice_img"
                 app:tint="@color/main_C" />
 
@@ -63,7 +63,7 @@
                 android:layout_width="47dp"
                 android:layout_height="46dp"
                 android:layout_weight="1"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:src="@drawable/rice_img"
                 app:tint="@color/main_C" />
 
@@ -72,7 +72,7 @@
                 android:layout_width="47dp"
                 android:layout_height="46dp"
                 android:layout_weight="1"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:src="@drawable/rice_img"
                 app:tint="#B7B7B7" />
 
@@ -81,7 +81,7 @@
                 android:layout_width="47dp"
                 android:layout_height="46dp"
                 android:layout_weight="1"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:src="@drawable/rice_img"
                 app:tint="#B7B7B7" />
         </LinearLayout>
