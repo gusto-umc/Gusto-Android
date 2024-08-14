@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/iv_feed_img"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,8 +24,17 @@
         android:scaleType="centerCrop"
         android:src="@drawable/review_shadow"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_day1"
-        tools:ignore="NotSibling" />
+        app:layout_constraintTop_toBottomOf="@id/tv_feed_day1"
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/review_shadow2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/tv_feed_day1"
+        />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/feed_detail_bar_layout"

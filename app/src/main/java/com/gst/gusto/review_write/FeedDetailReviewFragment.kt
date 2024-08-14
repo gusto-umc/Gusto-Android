@@ -58,10 +58,6 @@ class FeedDetailReviewFragment : Fragment() {
     ): View? {
         binding = FragmentFeedDetailBinding.inflate(inflater, container, false)
 
-//        binding.btnProfile.setOnClickListener {
-//            if(gustoViewModel.currentFeedNickname!="")
-//                findNavController().navigate(R.id.action_feedDetailReview_to_otherFragment)
-//        }
 
 
         return binding.root
@@ -72,6 +68,8 @@ class FeedDetailReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // 데이터 세팅
         val feedDetail = gustoViewModel.currentFeedData
+        var feedId = arguments?.getLong("reviewId")
+
         gustoViewModel.currentFeedNickname = feedDetail.nickName
 
         /**
@@ -92,6 +90,11 @@ class FeedDetailReviewFragment : Fragment() {
 
         //img 적용
         setImage(binding.ivFeedImg, feedDetail.images!!.first(), requireContext() )
+        binding.ivUserImgFeedDetail.setOnClickListener {
+            if(gustoViewModel.currentFeedNickname!=""){
+                findNavController().navigate(R.id.action_feedDetailReview_to_otherFragment)
+            }
+        }
         setImage(binding.ivUserImgFeedDetail, feedDetail.profileImage, requireContext())
 
         //taste 처리

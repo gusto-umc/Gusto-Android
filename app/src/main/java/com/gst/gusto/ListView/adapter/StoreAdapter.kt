@@ -34,23 +34,14 @@ class StoreAdapter(private val parentView : View, private var sign : String) : L
                 binding.tvItemStoreTitle.text = item.storeName
                 //카테고리
                 binding.tvItemStoreLocation.text = item.address
-                //리뷰 사진 3개 -> 서버 추가 필요
-                if(item.reviewImg3.isNullOrEmpty()){
-                    util.setImage(binding.ivItemStoreImg1, null, mContext!!)
-                    util.setImage(binding.ivItemStoreImg2, null, mContext!!)
-                    util.setImage(binding.ivItemStoreImg3, null, mContext!!)
-                }
-                else{
-                    if(!item.reviewImg3[0].isNullOrBlank()){
-                        util.setImage(binding.ivItemStoreImg1, item.reviewImg3[0], mContext!!)
-                    }
-                    if(!item.reviewImg3[1].isNullOrBlank()){
-                        util.setImage(binding.ivItemStoreImg2, item.reviewImg3[1], mContext!!)
-                    }
-                    if(!item.reviewImg3[2].isNullOrBlank()){
-                        util.setImage(binding.ivItemStoreImg3, item.reviewImg3[2], mContext!!)
-                    }
-                }
+                //리뷰 사진 3개
+                if(!item.img1.isNullOrBlank()){
+                    util.setImage(binding.ivItemStoreImg1, item.img1, mContext!!)
+                }else{binding.ivItemStoreImg1.visibility = View.INVISIBLE}
+                if(!item.img2.isNullOrBlank()){util.setImage(binding.ivItemStoreImg2, item.img2, mContext!!)
+                }else{binding.ivItemStoreImg2.visibility = View.INVISIBLE}
+                if(!item.img3.isNullOrBlank()){util.setImage(binding.ivItemStoreImg3, item.img3, mContext!!)
+                }else{binding.ivItemStoreImg3.visibility = View.INVISIBLE}
 
             }
             data = item

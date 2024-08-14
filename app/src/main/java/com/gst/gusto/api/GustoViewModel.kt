@@ -1,6 +1,7 @@
 package com.gst.gusto.api
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -1069,7 +1070,7 @@ class GustoViewModel: ViewModel() {
             override fun onResponse(call: Call<ResponseFeedDetail>, response: Response<ResponseFeedDetail>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
-                    if(responseBody!=null) {
+                    if (responseBody != null) {
                         Log.d("getFeedReview", "Successful response: ${response}")
                         currentFeedData = responseBody
                         Log.d("currentFeedData", currentFeedData.toString())
@@ -1078,7 +1079,10 @@ class GustoViewModel: ViewModel() {
                         Log.e("getFeedReview success", "Unsuccessful response: ${response}")
                         callback(3)
                     }
-                } else if(response.code()==403) {
+                } else if(response.code() == 403204){
+                    Log.d("feed private", "해당 리뷰는 private입니다")
+                }
+                else if(response.code()==403) {
                     _tokenToastData.value = Unit
                     refreshToken()
                 } else {
@@ -1236,23 +1240,7 @@ class GustoViewModel: ViewModel() {
     //내 위치 장소보기 카테고리 array
     var myMapCategoryList : ArrayList<ResponseMapCategory>? = null
     var myAllCategoryList : ArrayList<ResponseMapCategory> = arrayListOf()
-    var testList : List<ResponseMapCategory> = listOf(
-        ResponseMapCategory(1, "Category1", 1, "PUBLIC", "desc1", 1),
-        ResponseMapCategory(2, "Category2", 2, "PUBLIC", "desc2", 2),
-        ResponseMapCategory(3, "Category3", 3, "PUBLIC", "desc3", 3),
-        ResponseMapCategory(4, "Category4", 4, "PUBLIC", "desc4", 4),
-        ResponseMapCategory(5, "Category5", 5, "PUBLIC", "desc5", 5),
-        ResponseMapCategory(1, "Category1", 1, "PUBLIC", "desc1", 1),
-        ResponseMapCategory(2, "Category2", 2, "PUBLIC", "desc2", 2),
-        ResponseMapCategory(3, "Category3", 3, "PUBLIC", "desc3", 3),
-        ResponseMapCategory(4, "Category4", 4, "PUBLIC", "desc4", 4),
-        ResponseMapCategory(5, "Category5", 5, "PUBLIC", "desc5", 5),
-        ResponseMapCategory(1, "Category1", 1, "PUBLIC", "desc1", 1),
-        ResponseMapCategory(2, "Category2", 2, "PUBLIC", "desc2", 2),
-        ResponseMapCategory(3, "Category3", 3, "PUBLIC", "desc3", 3),
-        ResponseMapCategory(4, "Category4", 4, "PUBLIC", "desc4", 4),
-        ResponseMapCategory(5, "Category5", 5, "PUBLIC", "desc5", 5)
-    )
+
 
     private val _cateEditFlag = MutableLiveData<Boolean?>(false)
     val cateEditFlag: LiveData<Boolean?>
@@ -1341,8 +1329,9 @@ class GustoViewModel: ViewModel() {
     var selectedCategoryInfo : ResponseMapCategory? = null
 
     // 카테고리 추가 -> 확인 완료
-    fun addCategory(categoryName : String,categoryIcon : Int, public : String, desc : String,  callback: (Int) -> Unit){
-        var categoryRequestData = RequestAddCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = public, myCategoryScript = desc )
+    fun addCategory(categoryName : String,categoryIcon : Int, public : Boolean?, desc : String,  callback: (Int) -> Unit){
+        var publicString = if(public!!){"PUBLIC"}else{"PRIVATE"}
+        var categoryRequestData = RequestAddCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = publicString, myCategoryScript = desc )
         Log.d("checking", categoryRequestData.toString())
         service.addCategory(xAuthToken, data = categoryRequestData).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

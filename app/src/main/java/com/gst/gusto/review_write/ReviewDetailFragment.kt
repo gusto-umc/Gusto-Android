@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
@@ -60,6 +61,7 @@ class ReviewDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
         activity = requireActivity() as MainActivity
         activity.hideBottomNavigation(true)
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -109,6 +111,12 @@ class ReviewDetailFragment : Fragment() {
                         ""
                     } else{
                         gustoViewModel.myReview!!.menuName
+                    }
+                    //데이터 적용 - lock
+                    if(gustoViewModel.myReview!!.publicCheck){
+                        binding.ivReviewLock.visibility = View.INVISIBLE
+                    }else{
+                        binding.ivReviewLock.visibility = View.VISIBLE
                     }
                     //taste 처리
                     //init rating bar
@@ -193,10 +201,6 @@ class ReviewDetailFragment : Fragment() {
         /**
          * setting 클릭 리스너
          */
-        binding.ivReviewLock.setOnClickListener {
-            //lock 처리
-            Toast.makeText(context, "lock click", Toast.LENGTH_SHORT).show()
-        }
 
         binding.ivReviewEdit.setOnClickListener {
             findNavController().navigate(R.id.action_reviewDetail_to_reviewDetailEdit)

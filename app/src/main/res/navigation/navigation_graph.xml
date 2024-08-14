@@ -337,6 +337,10 @@
         <action
             android:id="@+id/action_feedFragment_to_feedDetailReviewFragment"
             app:destination="@id/fragment_feed_detail_review" />
+        <action
+            android:id="@+id/action_fragment_feed_to_fragment_review_detail"
+            app:destination="@id/fragment_review_detail" />
+
     </fragment>
     <fragment
         android:id="@+id/fragment_feed_detail_review"

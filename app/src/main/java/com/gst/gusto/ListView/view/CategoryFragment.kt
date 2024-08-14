@@ -54,8 +54,30 @@ class CategoryFragment : Fragment() {
 
         val mCategoryAdapter = CategoryAdapter(view, "map", requireFragmentManager())
         mCategoryAdapter.setItemChangeListener(object : CategoryAdapter.OnItemChangeListener{
-            override fun onChange(v: View) {
-                mCategoryAdapter.notifyDataSetChanged()
+            override fun onChange(v: View, flag : String) {
+                if(flag == "delete"){
+                    mCategoryAdapter.notifyDataSetChanged()
+                }
+                else if(flag == "edit"){
+                    gustoViewModel.myAllCategoryList.clear()
+                    var hasNext = false
+                    gustoViewModel.getPPMyCategory(null){
+                            result, getHasNext ->
+                        when(result){
+                            1 -> {
+                                //success
+                                mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
+                                hasNext = getHasNext
+                                mCategoryAdapter.notifyDataSetChanged()
+                            }
+                            else-> {
+                                Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+                    }
+                }
+
             }
 
         })

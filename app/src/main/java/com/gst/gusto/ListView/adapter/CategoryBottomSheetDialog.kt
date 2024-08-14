@@ -77,6 +77,7 @@ class CategoryBottomSheetDialog(var data : CategoryDetail? = null, val itemClick
                 }
             }
             view?.findViewById<Switch>(R.id.switch_category_public)?.isEnabled = true
+            view?.findViewById<Switch>(R.id.switch_category_public)?.isChecked = true
             view?.findViewById<TextView>(R.id.tv_category_save)?.setOnClickListener {
                 val title = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)!!.text.toString()
                 val desc = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)!!.text.toString()
@@ -93,7 +94,7 @@ class CategoryBottomSheetDialog(var data : CategoryDetail? = null, val itemClick
                         descData = desc
                     }
                     //2. 서버 연결
-                    viewModel!!.addCategory(categoryName = title, desc = descData, categoryIcon = selectedIconInt, public = "PUBLIC"){
+                    viewModel!!.addCategory(categoryName = title, desc = descData, categoryIcon = selectedIconInt, public = view?.findViewById<Switch>(R.id.switch_category_public)?.isChecked){
                             result ->
                         when(result){
                             0 -> {
@@ -163,15 +164,14 @@ class CategoryBottomSheetDialog(var data : CategoryDetail? = null, val itemClick
                     else{
                         descData = desc
                     }
-                    var publicString = "PUBLIC"
-
+                    var isPublic : String = "PUBLIC"
                     if(view?.findViewById<Switch>(R.id.switch_category_public)?.isChecked == true){
-                        publicString = "PUBLIC"
-                    }else{
-                        publicString = "PRIVATE"
+                        isPublic = "PUBLIC"
+                    } else{
+                        isPublic = "PRIVATE"
                     }
                     //2. 서버 연결
-                    viewModel!!.editCategory(categoryName = title, desc = descData, categoryIcon = selectedIconInt, public = publicString, categoryId = categoryEdiBottomSheetData!!.id.toLong()){
+                    viewModel!!.editCategory(categoryName = title, desc = descData, categoryIcon = selectedIconInt, public = isPublic, categoryId = categoryEdiBottomSheetData!!.id.toLong()){
                             result ->
                         when(result){
                             0 -> {

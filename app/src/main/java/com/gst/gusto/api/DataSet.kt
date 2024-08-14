@@ -190,7 +190,8 @@ data class ResponseMapCategory(
     @SerializedName("myCategoryId") val myCategoryId : Int,
     @SerializedName("myCategoryName") var categoryName : String,
     @SerializedName("myCategoryIcon") var categoryIcon : Int,
-    @SerializedName("publishCategory") var publishCategory : String,
+    @SerializedName("publishCategory") var publishCategory : Boolean,
+    @SerializedName("userPublishCategory") val userPublishCategory : Boolean,
     @SerializedName("myCategoryScript") var myCategoryScript : String?,
     @SerializedName("pinCnt") var pinCnt : Int
 )
@@ -262,7 +263,9 @@ data class PResponseStoreListItem(
     @SerializedName("storeName") val storeName  :String,
     @SerializedName("address") val address : String,
     @SerializedName("reviewCnt") var reviewCnt : Int,
-    @SerializedName("reviewImg3") val reviewImg3 : ArrayList<String>
+    @SerializedName("img1") val img1 : String?,
+    @SerializedName("img2") val img2 : String?,
+    @SerializedName("img3") val img3 : String?
 )
 
 // 저장된 가게 response
@@ -304,10 +307,6 @@ data class ResponseMyReview(
     @SerializedName("menuName") val menuName : String?,
     @SerializedName("hashTags") val hashTags : List<Int>?,
     @SerializedName("taste") val taste : Int,
-    @SerializedName("spiciness") val spiciness : Int?,
-    @SerializedName("mood") val mood : Int?,
-    @SerializedName("toilet") val toilet : Int?,
-    @SerializedName("parking") val parking : Int?,
     @SerializedName("comment") val comment : String?,
     @SerializedName("likeCnt") val likeCnt : Int,
     @SerializedName("publicCheck") val publicCheck : Boolean
