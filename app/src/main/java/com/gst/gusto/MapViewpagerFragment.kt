@@ -66,9 +66,6 @@ class MapViewpagerFragment : Fragment(){
         binding.ivMapSearchboxShort.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_viewpager_to_searchFragment)
         }
-        binding.reviewAddBtn.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_fragment_map_viewpager_to_searchFragment)
-        }
 
 
     }

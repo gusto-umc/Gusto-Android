@@ -75,26 +75,6 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
-                android:layout_marginRight="30dp"
-                app:cardCornerRadius="600dp"
-                android:layout_gravity="bottom|right"
-                android:elevation="45dp">
-                <ImageButton
-                    android:id="@+id/review_add_btn"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:background="@drawable/background_radius_40"
-                    android:backgroundTint="@color/sub_m"
-                    android:elevation="20dp"
-                    android:padding="17dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/edit"
-                    app:tint="@color/white" />
-            </androidx.cardview.widget.CardView>
             <ImageButton
                 android:id="@+id/list_view_btn"
                 android:layout_marginBottom="18dp"
@@ -106,8 +86,7 @@
                 android:elevation="4dp"
                 android:padding="12dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/save_x_img"
-                app:tint="@color/main_C" />
+                android:src="@drawable/fab_list_img" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_slider"
