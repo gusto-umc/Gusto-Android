@@ -1,12 +1,15 @@
 package com.gst.clock.Fragment
 
 import android.content.Context
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
@@ -44,6 +47,8 @@ class ReviewDetailFragment : Fragment() {
     lateinit var page : String
     private lateinit var activity : MainActivity
 
+
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         val callback = object : OnBackPressedCallback(true){
@@ -61,6 +66,7 @@ class ReviewDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
         activity = requireActivity() as MainActivity
         activity.hideBottomNavigation(true)
+
 
     }
     override fun onCreateView(
@@ -246,7 +252,15 @@ class ReviewDetailFragment : Fragment() {
         super.onResume()
         activity = requireActivity() as MainActivity
         activity.hideBottomNavigation(true)
+        activity.setTrans(true)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        activity.setTrans(false)
+    }
+
+
 
 
 

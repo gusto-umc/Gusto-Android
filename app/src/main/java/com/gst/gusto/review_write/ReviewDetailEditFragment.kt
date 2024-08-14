@@ -137,6 +137,7 @@ class ReviewDetailEditFragment : Fragment() {
                                 0 -> {
                                     Log.d("img check edit", gustoViewModel.myReview!!.img.toString())
                                     gustoViewModel.changeReviewFlag(true)
+                                    findNavController().popBackStack()
                                 }
                                 1 -> {}
                             }
@@ -145,7 +146,7 @@ class ReviewDetailEditFragment : Fragment() {
                     1 -> {}
                 }
             }
-            findNavController().popBackStack()
+
         }
 
         binding.btnPrivate.setOnClickListener {

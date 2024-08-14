@@ -4,17 +4,22 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.ext.SdkExtensions.getExtensionVersion
 import android.util.Base64
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -116,6 +121,39 @@ class MainActivity : AppCompatActivity() {
         gustoViewModel.tokenToastData.observe(this, Observer {
             Toast.makeText(this, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
         })
+
+
+    }
+
+    fun setTrans(flag : Boolean){
+        if(flag){
+            //상태창 투명
+            if(Build.VERSION.SDK_INT >= 19) {
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                if(Build.VERSION.SDK_INT < 21) {
+                    setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true)
+                } else {
+                    setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
+                    window.statusBarColor = Color.TRANSPARENT
+                }
+            }
+        }else{
+            //상태창 투명
+            if(Build.VERSION.SDK_INT >= 19) {
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                if(Build.VERSION.SDK_INT < 21) {
+                    setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
+                } else {
+                    setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
+                }
+            }
+        }
+    }
+
+    private fun setWindowFlag(bits: Int, on: Boolean) {
+        val winAttr = window.attributes
+        winAttr.flags = if(on) winAttr.flags or bits else winAttr.flags and bits.inv()
+        window.attributes = winAttr
     }
 
     fun getCon(): NavController {
