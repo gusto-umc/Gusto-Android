@@ -12,12 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
-import com.google.android.gms.tasks.OnCompleteListener
 import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
@@ -287,8 +285,11 @@ class LoginFragment: Fragment() {
                 var naverTokenType = NaverIdLoginSDK.getTokenType()
                 var naverState = NaverIdLoginSDK.getState().toString()*/
 
+                /*
                 Log.d("helpgogogo",
                     naverExpiresAt+", "+naverTokenType+", "+naverState)
+                 */
+
                 //로그인 유저 정보 가져오기
                 NidOAuthLogin().callProfileApi(profileCallback)
             }

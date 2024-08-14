@@ -28,6 +28,7 @@ import com.google.android.material.chip.ChipGroup
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.ResponseMapCategory
 import com.gst.gusto.databinding.FragmentMapBinding
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter
 import com.gst.gusto.util.mapUtil
@@ -122,25 +123,82 @@ class MapFragment : Fragment() {
 
 
 // 카테고리 조회 및 칩 추가
+
+    /*
     fun getMapCategoryAndAddChips(townName: String) {
         gustoViewModel.getMapCategory(townName) { result ->
             if (result == 0) {
                 // 카테고리 목록을 성공적으로 가져왔을 때
                 val categoryList = gustoViewModel.myMapCategoryList
-                if (categoryList != null) {
+                Log.d("chip", "Category list: $categoryList")
+
+                if (categoryList != null && categoryList.isNotEmpty()) {
                     for ((index, category) in categoryList.withIndex()) {
-                        addChip(category.categoryName, category.myCategoryId, index,category.categoryIcon)
-                        Log.d("chip","칩 불러오기")
+                        addChip(category.categoryName, category.myCategoryId, index, category.categoryIcon)
+                        Log.d("chip", "칩 불러오기")
                     }
                 } else {
-                    Log.e("getMapCategoryAndAddChips", "Category list is null")
+                    Log.d("chip", "Category list is empty or null")
+                    Log.e("getMapCategoryAndAddChips", "Category list is empty or null")
                 }
             } else {
-                // 카테고리 목록을 가져오지 못했을 때
+                Log.d("chip", "Failed to get category list")
                 Log.e("getMapCategoryAndAddChips", "Failed to get category list")
             }
         }
     }
+     */
+    // ViewModel 또는 Fragment에서 호출
+// Fragment 또는 Activity에서 호출
+    private fun loadCategories(townName: String) {
+        val token = "your_auth_token" // 실제 인증 토큰 사용
+        gustoViewModel.getMapCategory(townName) { resultCode ->
+            when (resultCode) {
+                0 -> {
+                    // 성공적으로 데이터를 가져왔을 때
+                    val categories = gustoViewModel.myMapCategoryList
+                    populateChips(categories)
+                }
+                1 -> {
+                    // 에러 처리
+                    Log.e("LoadCategories", "Error loading categories")
+                    // 사용자에게 오류를 알리거나 UI 업데이트
+                }
+            }
+        }
+    }
+
+
+
+    /*
+    private fun populateChips(categories: List<ResponseMapCategory>) {
+        chipGroup.removeAllViews() // 기존 칩 제거 (재로드하는 경우 필요)
+        for ((index, category) in categories.withIndex()) {
+            addChip(
+                text = category.categoryName,
+                chipId = category.myCategoryId,
+                chipIndex = index,
+                categoryIcon = category.categoryIcon
+            )
+        }
+    }
+       */
+
+    private fun populateChips(categories: ArrayList<ResponseMapCategory>?) {
+        val nonNullCategories = categories ?: return // null일 경우 함수 종료
+        chipGroup.removeAllViews() // 기존 칩 제거 (재로드하는 경우 필요)
+        for ((index, category) in nonNullCategories.withIndex()) {
+            addChip(
+                text = category.categoryName,
+                chipId = category.myCategoryId,
+                chipIndex = index,
+                categoryIcon = category.categoryIcon
+            )
+        }
+    }
+
+
+
 
     // 칩 추가
     private fun addChip(text: String, chipId: Int, chipIndex: Int, categoryIcon: Int) {
@@ -360,7 +418,7 @@ class MapFragment : Fragment() {
         binding.kakaoMap.resume()
 
         // 카테고리 조회 및 칩 추가
-        getMapCategoryAndAddChips("성수1가1동")
+        loadCategories("성수1가1동")
 
         // 데이터 넣어둔 변수 : gustoViewModel.myMapCategoryList
         gustoViewModel.getMapCategory(gustoViewModel.dong.value!!){

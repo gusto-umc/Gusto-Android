@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.google.android.material.tabs.TabLayoutMediator
+import com.gst.gusto.R
 import com.gst.gusto.databinding.FragmentSaveTabBinding
 
 class SaveTabFragment : Fragment() {
@@ -21,36 +19,49 @@ class SaveTabFragment : Fragment() {
         binding = FragmentSaveTabBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        val tabLayout = binding.tabLayout
-        val viewPager2 = binding.viewpager2
-
-        val pagerAdapter = SaveTabPagerAdapter(requireActivity())
-        viewPager2.adapter = pagerAdapter
-
-        TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
-            tab.text = when (position) {
-                0 -> "아는 가게에요!"
-                1 -> "NEW PLACE"
-                else -> "Unknown" // 안전하게 처리
-            }
-        }.attach()
+        setupTabLayout()
 
         return view
     }
 
-    private inner class SaveTabPagerAdapter(fragmentActivity: FragmentActivity) :
-        FragmentStateAdapter(fragmentActivity) {
-        override fun getItemCount(): Int {
-            return 2 // 탭 개수
+    private fun setupTabLayout() {
+        val tabKnownPlaces = binding.tabKnownPlaces
+        val tabNewPlace = binding.tabNewPlace
+
+        tabKnownPlaces.setOnClickListener {
+            selectTab(0)
         }
 
-        override fun createFragment(position: Int): Fragment {
-            return when (position) {
-                0 -> MapListViewSaveFragment() // 첫 번째 탭
-                1 -> MapListViewNewPlaceFragment() // 두 번째 탭
-                else -> throw IllegalArgumentException("Invalid tab position")
-            }
+        tabNewPlace.setOnClickListener {
+            selectTab(1)
+        }
+
+        // 초기 선택
+        selectTab(0)
+    }
+
+    private fun selectTab(position: Int) {
+        val tabKnownPlaces = binding.tabKnownPlaces
+        val tabNewPlace = binding.tabNewPlace
+
+        if (position == 0) { //아는 가게
+            tabKnownPlaces.setBackgroundResource(R.drawable.tab_selected_left)
+            tabKnownPlaces.setTextColor(resources.getColor(R.color.main_C))
+            tabNewPlace.setBackgroundResource(R.drawable.tab_unselected_right)
+            tabNewPlace.setTextColor(resources.getColor(R.color.gray_3))
+
+            childFragmentManager.beginTransaction()
+                .replace(R.id.tab_content, MapListViewSaveFragment())
+                .commit()
+        } else { //new place
+            tabKnownPlaces.setBackgroundResource(R.drawable.tab_unselected_left)
+            tabKnownPlaces.setTextColor(resources.getColor(R.color.gray_3))
+            tabNewPlace.setBackgroundResource(R.drawable.tab_selected_right)
+            tabNewPlace.setTextColor(resources.getColor(R.color.main_C))
+
+            childFragmentManager.beginTransaction()
+                .replace(R.id.tab_content, MapListViewNewPlaceFragment())
+                .commit()
         }
     }
 }
-

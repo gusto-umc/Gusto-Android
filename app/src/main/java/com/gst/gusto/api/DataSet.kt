@@ -478,3 +478,17 @@ data class RequestMyPublish(
     @SerializedName("publishPin") val publishPin: Boolean,
     @SerializedName("publishRoute") val publishRoute: Boolean,
 )
+
+//저장된 스토어 재조정
+data class VisitedStoresResponse(
+    val pinStores: List<StoreData>,
+    val hasNext: Boolean
+)
+
+data class StoreData(
+    val storeId: Long,
+    val storeName: String,
+    val address: String,
+    val category: String,
+    val reviewImg3: List<String>
+)

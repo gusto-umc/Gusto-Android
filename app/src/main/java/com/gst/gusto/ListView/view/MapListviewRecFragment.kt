@@ -7,25 +7,18 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gst.gusto.ListView.adapter.SavedStoreListAdapter
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
-import com.gst.gusto.api.ResponseSavedStoreData
+import com.gst.gusto.api.StoreData
 import com.gst.gusto.databinding.FragmentMapListviewRecBinding
 
 class MapListviewRecFragment : Fragment() {
 
-    private lateinit var binding : FragmentMapListviewRecBinding
-    private val gustoViewModel : GustoViewModel by activityViewModels()
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private lateinit var binding: FragmentMapListviewRecBinding
+    private val gustoViewModel: GustoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,35 +44,36 @@ class MapListviewRecFragment : Fragment() {
         binding.tvMapRecDong.text = gustoViewModel.dong.value
 
         /**
-         * rv 데이터 넣기
-         * 현재 : 임시로 추천 맛집 데이터 받아옴, 추후 api 연결 필요
+         * rv 데이터 설정
+         * 데이터는 ViewModel에서 가져오고, LiveData를 통해 업데이트합니다.
          */
-        val mRecAdapter = SavedStoreListAdapter("save", view)
-        mRecAdapter.mContext = context
-        mRecAdapter.submitList(gustoViewModel.mapVisitedList)
-        mRecAdapter.setItemClickListener(object : SavedStoreListAdapter.OnItemClickListener{
-            override fun onClick(dataSet: ResponseSavedStoreData) {
-                gustoViewModel.selectStoreId = dataSet.storeId.toLong()
+        val mRecAdapter = SavedStoreListAdapter()
+        mRecAdapter.setItemClickListener(object : SavedStoreListAdapter.OnItemClickListener {
+            override fun onClick(dataSet: StoreData) {
+                gustoViewModel.selectStoreId = dataSet.storeId
                 gustoViewModel.storeIdList.clear()
-                gustoViewModel.storeIdList = gustoViewModel.savedStoreIdList
-                Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_fragment_map_viewpager)
+                gustoViewModel.storeIdList.addAll(gustoViewModel.savedStoreIdList)
+                findNavController().navigate(R.id.action_mapListViewSaveFragment_to_fragment_map_viewpager)
             }
-
         })
-        binding.rvMapRec.adapter = mRecAdapter
-        binding.rvMapRec.layoutManager = LinearLayoutManager(this.requireActivity())
+
+        binding.rvMapRec.apply {
+            adapter = mRecAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+
+        // ViewModel의 storeList와 RecyclerView를 연결
+        gustoViewModel.storeList.observe(viewLifecycleOwner) { stores ->
+            mRecAdapter.submitList(stores)
+        }
 
         /**
          * 지도보기 클릭 리스너
-         * api 로직 변경 예정이라서 추후 보완 예정
+         * 페이지 이동 설정
          */
-        binding.fabMapRecMap.setOnClickListener{
-            //데이터 저장
-            //gustoViewModel.selectStoreId = gustoViewModel.mapKeepStoreIdArray[0]
-            //gustoViewModel.storeIdList = gustoViewModel.mapKeepStoreIdArray
-
-            //페이지 이동
-            Navigation.findNavController(view).navigate(R.id.action_mapListviewRecFragment_to_fragment_map_viewpager)
+        binding.fabMapRecMap.setOnClickListener {
+            // 페이지 이동
+            findNavController().navigate(R.id.action_mapListviewRecFragment_to_fragment_map_viewpager)
         }
     }
 }

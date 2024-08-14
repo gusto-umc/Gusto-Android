@@ -4,6 +4,7 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt") // 추가
     id("com.google.gms.google-services")
 }
 
@@ -119,4 +120,5 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+
 }

@@ -1,78 +1,76 @@
 package com.gst.gusto.ListView.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.gst.gusto.api.ResponseSavedStoreData
-import com.gst.gusto.databinding.ItemListviewStoreCardBinding
+import com.bumptech.glide.Glide
+import com.gst.gusto.R
+import com.gst.gusto.api.StoreData
+import com.gst.gusto.databinding.ItemStoreBinding
 
-class SavedStoreListAdapter(private val flag: String, private val parentView: View) : ListAdapter<ResponseSavedStoreData, SavedStoreListAdapter.ViewHolder>(DiffCallback) {
+class SavedStoreListAdapter :
+    ListAdapter<StoreData, SavedStoreListAdapter.StoreViewHolder>(StoreDiffCallback()) {
 
-    var mContext: Context? = null
+    private var itemClickListener: OnItemClickListener? = null
 
-    private lateinit var itemClickListener: OnItemClickListener
-
-
-    companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<ResponseSavedStoreData>() {
-            override fun areItemsTheSame(oldItem: ResponseSavedStoreData, newItem: ResponseSavedStoreData): Boolean {
-                return oldItem.storeId == newItem.storeId
-            }
-
-            override fun areContentsTheSame(oldItem: ResponseSavedStoreData, newItem: ResponseSavedStoreData): Boolean {
-                return oldItem == newItem
-            }
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoreViewHolder {
+        val binding = ItemStoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return StoreViewHolder(binding)
     }
 
-    inner class ViewHolder(private val binding: ItemListviewStoreCardBinding) : RecyclerView.ViewHolder(binding.root) {
-        private var data: ResponseSavedStoreData? = null
+    override fun onBindViewHolder(holder: StoreViewHolder, position: Int) {
+        val store = getItem(position)
+        holder.bind(store)
+    }
 
-        init {
+    inner class StoreViewHolder(private val binding: ItemStoreBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(store: StoreData) {
+            binding.store = store
+            binding.executePendingBindings()
+            // 이미지 로드
+            loadImage(binding.ivItemStoreImg1, store.reviewImg3.getOrNull(0))
+            loadImage(binding.ivItemStoreImg2, store.reviewImg3.getOrNull(1))
+            loadImage(binding.ivItemStoreImg3, store.reviewImg3.getOrNull(2))
+
+            // 클릭 리스너 설정
             binding.root.setOnClickListener {
-                data?.let { itemClickListener.onClick(it) }
+                itemClickListener?.onClick(store)
             }
         }
 
-        fun bind(store: ResponseSavedStoreData) {
-            data = store
-            // 이미지 설정 예시 (setImage 함수를 구현하여 사용할 것)
-            // setImage(binding.ivItemListviewCardImg, store.reviewImg3, mContext!!)
-            binding.tvItemListviewCardTitle.text = store.storeName
-            binding.tvItemListviewCardLocation.text = store.address
-            binding.tvItemListviewCardCount.text = store.categoryName
-
-            // 플래그에 따른 동작 처리
-            when (flag) {
-                "save" -> {
-                    // '저장' 플래그에 따른 동작 처리
-                }
-                "visited" -> {
-                    // '방문' 플래그에 따른 동작 처리
-                }
-                // 필요에 따라 추가적인 플래그 처리 가능
+        private fun loadImage(imageView: ImageView, imageUrl: String?) {
+            if (imageUrl != null) {
+                Glide.with(imageView.context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.gst_dummypic) // 로딩 중 기본 이미지
+                    .error(R.drawable.gst_dummypic) // 로드 실패 시 기본 이미지
+                    .into(imageView)
+            } else {
+                imageView.setImageResource(R.drawable.gst_dummypic) // 기본 이미지
             }
         }
     }
 
     interface OnItemClickListener {
-        fun onClick(dataSet: ResponseSavedStoreData)
+        fun onClick(dataSet: StoreData)
     }
 
-    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
-        this.itemClickListener = onItemClickListener
+    fun setItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+    }
+}
+
+private class StoreDiffCallback : DiffUtil.ItemCallback<StoreData>() {
+    override fun areItemsTheSame(oldItem: StoreData, newItem: StoreData): Boolean {
+        return oldItem.storeId == newItem.storeId
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemListviewStoreCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun areContentsTheSame(oldItem: StoreData, newItem: StoreData): Boolean {
+        return oldItem == newItem
     }
 }
