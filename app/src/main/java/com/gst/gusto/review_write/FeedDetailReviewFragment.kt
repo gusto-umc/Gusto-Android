@@ -226,13 +226,17 @@ class FeedDetailReviewFragment : Fragment() {
             }
         }
         activity.setTrans(false)
-
     }
     override fun onResume() {
         super.onResume()
         activity = requireActivity() as MainActivity
         activity.hideBottomNavigation(true)
         activity.setTrans(true)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        activity.setTrans(false)
     }
 
 

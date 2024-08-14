@@ -245,7 +245,7 @@ class ReviewDetailFragment : Fragment() {
             }
 
         }
-
+        activity.setTrans(false)
     }
 
     override fun onResume() {
@@ -255,8 +255,8 @@ class ReviewDetailFragment : Fragment() {
         activity.setTrans(true)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
         activity.setTrans(false)
     }
 
