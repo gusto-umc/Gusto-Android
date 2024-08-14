@@ -63,7 +63,7 @@ class ProfileFragment : Fragment() {
             }
         }
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_genderFragment_to_ageFragment)
+            findNavController().navigate(R.id.action_profileFragment_to_genderFragment)
         }
 
         val pickMedia1 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -74,7 +74,7 @@ class ProfileFragment : Fragment() {
                 Log.d("PhotoPicker", "No media selected")
             }
         }
-        binding.ivProfile.setOnClickListener {
+        binding.btnProfileEdit.setOnClickListener {
             pickMedia1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 
 

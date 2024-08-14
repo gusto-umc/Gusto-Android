@@ -41,6 +41,7 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String,
         @Query("routeId") routeId : Long?
     ):Call<ResponseRoutes>
+
     @GET("routes/{nickname}") // 타인의 루트 조회
     fun getOtherRoute(
         @Header("X-AUTH-TOKEN") token : String,
@@ -52,6 +53,13 @@ interface GustoApi {
     fun createRoute(
         @Header("X-AUTH-TOKEN") token : String,
         @Body requestBody : RequestCreateRoute
+    ):Call<ResponseBody>
+
+    @POST("routes/{groupId}") // 루트 생성 or 그룹 내 루트 추가
+    fun createGroupRoute(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Body requestBody : RequestCreateRoute,
+        @Path("groupId") groupId : Long
     ):Call<ResponseBody>
     @GET("routeLists/{routeId}/order") // 내/그룹 루트 거리 조회(공통)
     fun getRouteMap(
@@ -70,7 +78,12 @@ interface GustoApi {
         @Path("routeId") routeId : Long,
         @Body requestEditRoute : RequestEditRoute
     ):Call<ResponseBody>
-
+    @PATCH("routes/{routeId}/publishing/{publishStatus}") // (생성 이후)루트별 공개/비공개 수정
+    fun patchPublish(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("routeId") routeId : Long,
+        @Path("publishStatus") publishStatus : Boolean
+    ):Call<ResponseBody>
     @DELETE("routeLists/{routeListId}") // 루트 내 식당(경로) 삭제
     fun deleteRouteStore(
         @Header("X-AUTH-TOKEN") token : String,
@@ -427,7 +440,7 @@ interface GustoApi {
     fun editReview(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("reviewId") reviewId : Long,
-        @Part image: MultipartBody.Part?,
+        @Part image: List<MultipartBody.Part>?,
         @Part("info") info: RequestMyReview
     ) : Call<Void>
 
@@ -506,17 +519,16 @@ interface GustoApi {
         @Query("latitude") latitude: Double
     ): Call<LocalCategoryResponse>
 
-    //나의 콘텐츠 공개 여부 조회
-    @GET("users/my-info/publishing")
-    fun myPublishGet(
-        @Header("X-AUTH-TOKEN") token: String
-    ): Call<ResponseMyPublishGet>
-
-    //나의 콘텐츠 공개 여부 변경
-    @PATCH("users/my-info/publishing")
-    fun myPublishSet(
-        @Header("X-AUTH-TOKEN") token: String,
-        @Body data: RequestMyPublish
+    // 로그아웃
+    @POST("users/sign-out")
+    fun logout(
+        @Header("X-AUTH-TOKEN") xtoken: String,
+        @Header("refresh-token") rtoken: String
     ): Call<ResponseBody>
 
+    // 회원탈퇴
+    @DELETE("users/my")
+    fun unregister(
+        @Header("X-AUTH-TOKEN") xtoken: String
+    ): Call<ResponseBody>
 }

@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
@@ -53,16 +54,17 @@ class ReviewAdd3Fragment : Fragment() {
             findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
         }
         binding.btnNext.setOnClickListener {
-            if(gustoViewModel.imageFiles.isEmpty()) {
-                for(data in imageList) {
-                    if(data !=null) {
-                        gustoViewModel.imageFiles.add(data)
-                    }
+            var count = 0
+            for(data in imageList) {
+                if(data !=null) {
+                    gustoViewModel.imageFiles.add(data)
+                    count++
                 }
             }
-            Log.d("viewmodel images",gustoViewModel.imageFiles.get(0).toString())
-
-            findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
+            if(count != 0)
+                findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
+            else
+                Toast.makeText(context,"사진은 최소 1장이 필요합니다", Toast.LENGTH_SHORT ).show()
         }
 
 
@@ -132,11 +134,11 @@ class ReviewAdd3Fragment : Fragment() {
                     binding.tvUpload2.text = "이제 리뷰를 작성하러 가볼까요?"
                     binding.btnNext.text = "리뷰 작성하러 가기"
                 }
-                imageList[0] = convertContentToFile(requireContext(),uri[0])
+                if(uri.size>0)
+                    imageList[0] = convertContentToFile(requireContext(),uri[0])
                 for (j in 0 .. uri.size-1) {
-                    Log.e("viewmodel",uri[j].toString())
-                    gustoViewModel.imageFiles?.add(convertContentToFile(requireContext(),uri[j]))
                     setImage(imageViews[j],uri[j].toString(),requireContext())
+                    imageList[j] = convertContentToFile(requireContext(),uri[j])
                 }
                 for (j in uri.size .. 3) {
                     setImage(imageViews[j],"",requireContext())
@@ -147,7 +149,6 @@ class ReviewAdd3Fragment : Fragment() {
         }
         val pickMedia1 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                gustoViewModel.imageFiles.clear()
                 imageList[selectImage] = convertContentToFile(requireContext(),uri)
                 setImage(imageViews[selectImage],uri.toString(),requireContext())
             } else {

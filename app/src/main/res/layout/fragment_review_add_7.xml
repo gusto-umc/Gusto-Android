@@ -66,47 +66,80 @@
                 android:layout_width="120dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
-                android:textAlignment="center"
                 android:layout_marginTop="36dp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/pretendard_bold"
                 android:layout_marginBottom="40dp"
-                android:textSize="16sp"
-                android:text="더 기억하고 싶은 내용이 있나요?" />
+                android:fontFamily="@font/pretendard_bold"
+                android:text="더 기억하고 싶은 내용이 있나요?"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="27dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="6dp"
                 android:layout_weight="1">
+
                 <EditText
                     android:id="@+id/et_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:maxLength="200"
-                    android:gravity="top"
                     android:background="@drawable/background_radius_10_stroke_1"
                     android:backgroundTint="@color/main_C"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:gravity="top"
+                    android:hint="리뷰를 작성해주세요!"
+                    android:maxLength="200"
                     android:paddingHorizontal="13dp"
                     android:paddingVertical="17dp"
-                    android:hint="리뷰를 작성해주세요!"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/pretendard_medium"
+                    android:text=""
                     android:textColorHint="#ECECEC"
-                    android:text="" />
+                    android:textSize="14sp" />
+
                 <TextView
                     android:id="@+id/tv_et_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_margin="8dp"
                     android:fontFamily="@font/pretendard_regular"
+                    android:text="0/200"
                     android:textSize="10sp"
-                    android:text="0/200"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/btn_public"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_marginRight="12dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:textColor="@color/main_C"
+                    android:textSize="13sp"
+                    android:gravity="right"
+                    android:text="• 전체공개" />
+
+                <TextView
+                    android:id="@+id/btn_private"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:textColor="@color/gray_7"
+                    android:textSize="13sp"
+                    android:padding="10dp"
+                    android:gravity="right"
+                    android:text="나만보기" />
+            </LinearLayout>
 
 
         </LinearLayout>
@@ -117,11 +150,10 @@
             android:layout_marginHorizontal="23dp"
             android:layout_marginTop="17dp"
             android:layout_marginBottom="98dp"
-            android:background="@drawable/background_radius_10"
-            android:backgroundTint="@color/main_C"
+            android:background="@drawable/gradient_background_orange_horizontal"
             android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
-            android:text="리뷰작성 마무리하기"
+            android:text="리뷰 작성 마무리하기"
             android:textColor="@color/white"
             android:textSize="15sp" />
 

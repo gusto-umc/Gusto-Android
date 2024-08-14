@@ -85,6 +85,10 @@ class CalendarReviewFragment : Fragment() {
                 observeData()
             }
 
+            calReviewFab.setOnClickListener {
+                
+            }
+
         }
     }
 

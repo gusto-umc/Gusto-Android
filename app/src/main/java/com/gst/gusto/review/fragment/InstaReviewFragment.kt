@@ -12,18 +12,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.R
-import com.gst.gusto.databinding.FragmentGalleryReviewBinding
+import com.gst.gusto.databinding.FragmentInstaReviewBinding
 import com.gst.gusto.review.adapter.InstaReviewAdapter
 import com.gst.gusto.review.adapter.GridItemDecoration
-import com.gst.gusto.review.viewmodel.ReviewViewModel
-import com.gst.gusto.review.viewmodel.ReviewViewModelFactory
+import com.gst.gusto.review.viewmodel.InstaReviewViewModel
+import com.gst.gusto.review.viewmodel.InstaReviewViewModelFactory
+import com.gst.gusto.util.ScrollUtil.addFabOnScrollListener
 import com.gst.gusto.util.ScrollUtil.addGridOnScrollEndListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class InstaReviewFragment : Fragment() {
 
-    lateinit var binding: FragmentGalleryReviewBinding
+    lateinit var binding: FragmentInstaReviewBinding
 
     private val adapter: InstaReviewAdapter by lazy {
         InstaReviewAdapter(context) { reviewId ->
@@ -34,15 +35,17 @@ class InstaReviewFragment : Fragment() {
         }
     }
 
+    var isTop = true
 
-    private val viewModel: ReviewViewModel by viewModels( ownerProducer = { requireParentFragment()}, factoryProducer = { ReviewViewModelFactory() } )
+
+    private val viewModel: InstaReviewViewModel by viewModels( ownerProducer = { requireParentFragment()}, factoryProducer = { InstaReviewViewModelFactory() } )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentGalleryReviewBinding.inflate(inflater, container, false)
+        binding = FragmentInstaReviewBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -53,18 +56,48 @@ class InstaReviewFragment : Fragment() {
         initView()
         setToast()
         pagingRecyclerview()
+        setFab()
+        setReviewWriteBtn()
+    }
+
+    private fun setReviewWriteBtn() {
+        with(binding) {
+            instaReviewWriteButton.setOnClickListener {
+
+            }
+
+            instaReviewFab.setOnClickListener{
+
+            }
+        }
+    }
+
+    private fun setFab(){
+
+        with(binding){
+
+            instaReviewRecyclerView.addFabOnScrollListener(
+                onHide = {
+                    binding.instaReviewFab.visibility = View.GONE
+                },
+                onShow = {
+                    binding.instaReviewFab.visibility = View.VISIBLE
+                }
+            )
+
+        }
     }
 
     fun initView() {
 
         binding.apply {
             // 클릭 리스너 부분
-            recyclerView.adapter = adapter
+            instaReviewRecyclerView.adapter = adapter
             val size = resources.getDimensionPixelSize(R.dimen.one_dp)
             val color = Color.WHITE
             val itemDecoration = GridItemDecoration(size, color)
-            recyclerView.addItemDecoration(itemDecoration)
-            recyclerView.layoutManager = GridLayoutManager(activity, 3)
+            instaReviewRecyclerView.addItemDecoration(itemDecoration)
+            instaReviewRecyclerView.layoutManager = GridLayoutManager(activity, 3)
         }
 
         viewModel.instaReviews.observe(viewLifecycleOwner) {
@@ -75,7 +108,7 @@ class InstaReviewFragment : Fragment() {
 
 
 fun pagingRecyclerview(){
-    binding.recyclerView.addGridOnScrollEndListener {
+    binding.instaReviewRecyclerView.addGridOnScrollEndListener {
         viewModel.onScrolled()
     }
     viewModel.scrollData.observe(viewLifecycleOwner){

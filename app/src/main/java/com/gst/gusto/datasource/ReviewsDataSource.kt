@@ -3,9 +3,7 @@ package com.gst.gusto.datasource
 import com.gst.gusto.api.ApiResponse
 import com.gst.gusto.api.service.ReviewsApi
 import com.gst.gusto.dto.ResponseInstaReviews
-import retrofit2.HttpException
-import retrofit2.Response
-import retrofit2.await
+import com.gst.gusto.dto.ResponseTimeLineReviews
 
 class ReviewsDataSource(
     private val reviewsService: ReviewsApi
@@ -15,7 +13,7 @@ class ReviewsDataSource(
         reviewId: Long?,
         size: Int
     ): ApiResponse<ResponseInstaReviews> {
-        val response = reviewsService.instaView(token, reviewId, size)
+        val response = reviewsService.getInstaView(token, reviewId, size)
         return if (response.isSuccessful) {
             response.body()?.let {
                 ApiResponse.Success(it)
@@ -31,8 +29,23 @@ class ReviewsDataSource(
         reviewId: Long?,
         size: Int
     ): ApiResponse<ResponseInstaReviews> {
-        val response = reviewsService.otherInstaView(token, nickname, reviewId, size)
+        val response = reviewsService.getOtherInstaView(token, nickname, reviewId, size)
         return if (response.isSuccessful) {
+            response.body()?.let {
+                ApiResponse.Success(it)
+            } ?: ApiResponse.Error(response.code(),"Response body is null + ${response.message()}")
+        } else {
+            ApiResponse.Error(response.code(), response.message())
+        }
+    }
+
+    suspend fun getTimeLineReview(
+        token: String,
+        reviewId: Long?,
+        size: Int
+    ): ApiResponse<ResponseTimeLineReviews> {
+        val response = reviewsService.getTimelineView(token, reviewId, size)
+        return if (response.isSuccessful){
             response.body()?.let {
                 ApiResponse.Success(it)
             } ?: ApiResponse.Error(response.code(),"Response body is null + ${response.message()}")

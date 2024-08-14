@@ -1,6 +1,7 @@
 package com.gst.gusto.list.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -89,6 +90,17 @@ class RouteStoresFragment : Fragment() {
                             binding.tvRouteName.isFocusable = false
                             binding.tvRouteName.isFocusableInTouchMode = false
                             binding.btnEdit.visibility = View.VISIBLE
+                            binding.fabMap.visibility = View.VISIBLE
+                            binding.fabEdit.visibility = View.VISIBLE
+                            binding.lyPrivate.visibility = View.GONE
+                        }
+                    }
+                }
+                gustoViewModel.patchPublish(gustoViewModel.currentRouteId, !binding.switchPrivate.isChecked) { result ->
+                    when(result) {
+                        1-> {
+
+                            //Toast.makeText(context,"공개/비공개 설정 완료", Toast.LENGTH_SHORT ).show()
                         }
                     }
                 }
@@ -106,8 +118,17 @@ class RouteStoresFragment : Fragment() {
             binding.tvRouteName.hint = binding.tvRouteName.text
             binding.tvRouteName.setText("")
             binding.btnEdit.visibility = View.GONE
+
+            binding.fabEdit.visibility = View.GONE
+            binding.fabMap.visibility = View.GONE
+            binding.lyPrivate.visibility = View.VISIBLE
         }
 
+        binding.switchPrivate.setOnClickListener {
+            if(binding.switchPrivate.isChecked) binding.ivLock.visibility = View.VISIBLE
+            else binding.ivLock.visibility = View.GONE
+
+        }
         return binding.root
 
     }
@@ -120,6 +141,8 @@ class RouteStoresFragment : Fragment() {
 
         binding.tvRouteName.setText(gustoViewModel.routeName)
         binding.tvRouteName.setHint(gustoViewModel.routeName)
+        if(!gustoViewModel.publishRoute) binding.ivLock.visibility = View.VISIBLE
+        binding.switchPrivate.isChecked = !gustoViewModel.publishRoute
         binding.rvRoutes.adapter = boardAdapter
         binding.rvRoutes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
