@@ -64,7 +64,15 @@ class FeedFragment : Fragment() {
                 gustoViewModel.getFeedReview{ result ->
                     when(result) {
                         1 -> {
-                            findNavController().navigate(R.id.action_feedFragment_to_feedDetailReviewFragment)
+                            if(gustoViewModel.currentFeedData.nickName == gustoViewModel.userNickname){
+                                val bundle = Bundle()
+                                bundle.putLong("reviewId", reviewId)     //리뷰 아이디 넘겨 주면 됨
+                                bundle.putString("page","review")
+                                findNavController().navigate(R.id.action_fragment_feed_to_fragment_review_detail,bundle)
+                            }else{
+                                findNavController().navigate(R.id.action_feedFragment_to_feedDetailReviewFragment)
+                            }
+
                         }
                     }
                 }

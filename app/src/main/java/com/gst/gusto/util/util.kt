@@ -180,6 +180,10 @@ class util {
                 mDialogView.findViewById<TextView>(R.id.btn_dialog_two_no).text = "취소"
                 mDialogView.findViewById<TextView>(R.id.btn_dialog_two_yes).text = "확인"
             }
+            if(option == 2){
+                mDialogView.findViewById<TextView>(R.id.btn_dialog_two_no).text = "아니요"
+                mDialogView.findViewById<TextView>(R.id.btn_dialog_two_yes).text = "삭제하기"
+            }
             mDialogView.findViewById<TextView>(R.id.tv_dialog_two_text).text = title
             if(desc!="") {
                 mDialogView.findViewById<TextView>(R.id.tv_dialog_two_desc).text = desc

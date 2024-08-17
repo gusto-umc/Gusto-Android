@@ -2,23 +2,29 @@ package com.gst.gusto.ListView.adapter
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.ListView.Model.CategoryDetail
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseMapCategory
 import com.gst.gusto.databinding.ItemCategoryBinding
+import com.gst.gusto.util.util
 
 
-
-class CategoryAdapter(private val view: View, val flag : String) : ListAdapter<ResponseMapCategory, CategoryAdapter.ViewHolder>(diffUtil){
+class CategoryAdapter(private val view: View, val flag : String, private val fragmentManager : FragmentManager) : ListAdapter<ResponseMapCategory, CategoryAdapter.ViewHolder>(diffUtil){
     var viewModel : GustoViewModel? = null
     var mContext : Context? = null
+    private val mFragmentManager = fragmentManager
     inner class ViewHolder(private val binding : ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root){
         var data : ResponseMapCategory? = null
         fun bind(item : ResponseMapCategory){
@@ -65,6 +71,66 @@ class CategoryAdapter(private val view: View, val flag : String) : ListAdapter<R
                 bundle1.putString("sign", "map")
                 Navigation.findNavController(view).navigate(R.id.action_categoryFragment_to_storeFragment, bundle1)
             }
+            holder.popup.setOnClickListener {
+                val popup = PopupMenu(mContext, it)
+                popup.menuInflater.inflate(R.menu.category_menu, popup.menu)
+                popup.setOnMenuItemClickListener {
+                    when(it.itemId){
+                        R.id.category_edit -> {
+                            //수정 페이지 등장
+                            var isPublic : Boolean = holder.data!!.publishCategory
+                            var categoryData = CategoryDetail(id = holder.data!!.myCategoryId, categoryName = holder.data!!.categoryName, categoryDesc = holder.data!!.myCategoryScript, categoryIcon = holder.data!!.categoryIcon, isPublic = isPublic)
+                            val categoryBottomSheetDialog = CategoryBottomSheetDialog(data = categoryData){
+                                when(it){
+                                    0 -> {
+                                        //success
+                                        viewModel!!.myAllCategoryList.clear()
+                                        itemchangeListener.onChange(view, "edit")
+                                    }
+                                }
+                            }
+                            categoryBottomSheetDialog.viewModel = viewModel!!
+                            categoryBottomSheetDialog.isAdd = false
+                            Log.d("data check", categoryBottomSheetDialog.categoryEdiBottomSheetData.toString())
+                            categoryBottomSheetDialog.show(mFragmentManager, categoryBottomSheetDialog.tag)
+                        }
+                        R.id.category_delete -> {
+                            //삭제 다이얼로그 등장
+                            util.setPopupTwo(mContext!!, "카테고리 삭제 시, 카테고리에\n포함된 맛집들도 함께 삭제됩니다", desc = "*카테고리 삭제 시 데이터복원은 불가능합니다", 1){
+                                result ->
+                                when(result){
+                                    0 -> {
+                                        //yes : remove
+                                        //카테고리 삭제 진행
+                                        viewModel!!.deleteCateogories(mutableListOf(holder.data!!.myCategoryId)){
+                                                result ->
+                                            when(result){
+                                                0 -> {
+                                                    //카테고리 data update
+                                                    viewModel!!.myAllCategoryList.remove(holder.data)
+                                                    itemchangeListener.onChange(view, "delete")
+                                                }
+                                                1 -> {
+                                                    //fail
+                                                    Toast.makeText(mContext, "삭제 실패", Toast.LENGTH_SHORT).show()
+                                                    itemchangeListener.onChange(view, "delete")
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                    1 -> {
+                                        //no
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    true
+                }
+                popup.show()
+            }
         }
         else if(flag == "my"){
             holder.popup.visibility = View.INVISIBLE
@@ -96,6 +162,18 @@ class CategoryAdapter(private val view: View, val flag : String) : ListAdapter<R
 
 
         }
+
+
+    // (2) 리스너 인터페이스
+    interface OnItemChangeListener {
+        fun onChange(v: View, flag : String)
+    }
+    // (3) 외부에서 클릭 시 이벤트 설정
+    fun setItemChangeListener(onItemChangeListener: OnItemChangeListener) {
+        this.itemchangeListener = onItemChangeListener
+    }
+    // (4) setItemClickListener로 설정한 함수 실행
+    private lateinit var itemchangeListener : OnItemChangeListener
     }
 
 

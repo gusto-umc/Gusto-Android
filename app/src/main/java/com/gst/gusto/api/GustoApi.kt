@@ -404,7 +404,9 @@ interface GustoApi {
     fun ppGetAllMyStores(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("myCategoryId") categoryId : Int,
-        @Query("pinId") pinId : Int?
+        @Query("pinId") pinId : Int?,
+        @Query("sort") sort : String?,
+        @Query("storeName") storeName: String?
     ): Call<PResponseStoreData>
 
     // 9. (paging) 카테고리별 타인 가게 조회
@@ -415,6 +417,9 @@ interface GustoApi {
         @Query("myCategoryId") categoryId : Int,
         @Query("pinId") pinId : Int?
     ): Call<PResponseStoreData>
+
+
+
 
 
 
@@ -435,7 +440,7 @@ interface GustoApi {
     fun editReview(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("reviewId") reviewId : Long,
-        @Part image: MultipartBody.Part?,
+        @Part image: List<MultipartBody.Part>?,
         @Part("info") info: RequestMyReview
     ) : Call<Void>
 
@@ -513,19 +518,6 @@ interface GustoApi {
         @Query("longtitude") longitude: Double,
         @Query("latitude") latitude: Double
     ): Call<LocalCategoryResponse>
-
-    //나의 콘텐츠 공개 여부 조회
-    @GET("users/my-info/publishing")
-    fun myPublishGet(
-        @Header("X-AUTH-TOKEN") token: String
-    ): Call<ResponseMyPublishGet>
-
-    //나의 콘텐츠 공개 여부 변경
-    @PATCH("users/my-info/publishing")
-    fun myPublishSet(
-        @Header("X-AUTH-TOKEN") token: String,
-        @Body data: RequestMyPublish
-    ): Call<ResponseBody>
 
     // 로그아웃
     @POST("users/sign-out")

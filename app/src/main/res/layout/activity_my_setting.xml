@@ -122,7 +122,7 @@
                     android:textSize="12sp" />
 
                 <Switch
-                    android:id="@+id/jimSwitch"
+                    android:id="@+id/pinSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="157dp"

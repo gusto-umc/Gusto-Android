@@ -3,6 +3,7 @@ package com.gst.gusto.ListView.view
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -51,7 +52,35 @@ class CategoryFragment : Fragment() {
 
         gustoViewModel.myAllCategoryList.clear()
 
-        val mCategoryAdapter = CategoryAdapter(view, "map")
+        val mCategoryAdapter = CategoryAdapter(view, "map", requireFragmentManager())
+        mCategoryAdapter.setItemChangeListener(object : CategoryAdapter.OnItemChangeListener{
+            override fun onChange(v: View, flag : String) {
+                if(flag == "delete"){
+                    mCategoryAdapter.notifyDataSetChanged()
+                }
+                else if(flag == "edit"){
+                    gustoViewModel.myAllCategoryList.clear()
+                    var hasNext = false
+                    gustoViewModel.getPPMyCategory(null){
+                            result, getHasNext ->
+                        when(result){
+                            1 -> {
+                                //success
+                                mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
+                                hasNext = getHasNext
+                                mCategoryAdapter.notifyDataSetChanged()
+                            }
+                            else-> {
+                                Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
+        })
         mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
         mCategoryAdapter.viewModel = gustoViewModel
         mCategoryAdapter.mContext = context
@@ -119,11 +148,29 @@ class CategoryFragment : Fragment() {
                     0 -> {
                         //추가 성공
                         //카테고리 새로 받아와서 연결시키기
-                        //getMapCategories()
+                        gustoViewModel.myAllCategoryList.clear()
+                        var hasNext = false
+
+                        gustoViewModel.getPPMyCategory(null){
+                                result, getHasNext ->
+                            when(result){
+                                1 -> {
+                                    //success
+                                    mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
+                                    hasNext = getHasNext
+                                    mCategoryAdapter.notifyDataSetChanged()
+                                }
+                                else-> {
+                                    Toast.makeText(requireContext(), "서버와의 연결 불안정합니다", Toast.LENGTH_SHORT).show()
+                                }
+
+                            }
+                        }
+
                     }
                     1 -> {
                         //추가 실페
-                        Toast.makeText(context, "추가 fail", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "이미 존재하는 카테고리 입니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

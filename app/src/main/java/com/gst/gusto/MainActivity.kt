@@ -3,16 +3,22 @@ package com.gst.gusto
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.ext.SdkExtensions.getExtensionVersion
 import android.util.Base64
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -36,6 +42,8 @@ class MainActivity : AppCompatActivity() {
     val gustoViewModel : GustoViewModel by viewModels()
     private var previousDestinationId: Int = -1
     private val TAG = "SOL_LOG"
+
+    private val imageList = ArrayList<Uri>()
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,8 +145,5 @@ class MainActivity : AppCompatActivity() {
     fun popFragment() {
         supportFragmentManager.popBackStack()
     }
-
-
-
 
 }

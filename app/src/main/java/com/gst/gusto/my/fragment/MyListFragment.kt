@@ -40,11 +40,11 @@ class MyListFragment : Fragment() {
          */
         Log.d("currentFeedNickName", gustoViewModel.currentFeedNickname)
         Log.d("userNickname", gustoViewModel.userNickname)
-        if(gustoViewModel.currentFeedNickname.isBlank()){
+        if(gustoViewModel.profileNickname == ""){
             //my
             gustoViewModel.myAllCategoryList.clear()
 
-            val mCategoryAdapter = CategoryAdapter(view, "my")
+            val mCategoryAdapter = CategoryAdapter(view, "my", requireFragmentManager())
             mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
             mCategoryAdapter.viewModel = gustoViewModel
             mCategoryAdapter.mContext = context
@@ -102,7 +102,7 @@ class MyListFragment : Fragment() {
             //other(feed)
             gustoViewModel.myAllCategoryList.clear()
 
-            val mCategoryAdapter = CategoryAdapter(view, "feed")
+            val mCategoryAdapter = CategoryAdapter(view, "feed", requireFragmentManager())
             mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
             mCategoryAdapter.viewModel = gustoViewModel
             mCategoryAdapter.mContext = context

@@ -4,17 +4,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
-import com.gst.gusto.MainActivity
-import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.ActivityMySettingBinding
+import com.gst.gusto.model.MyPublishData
+import com.gst.gusto.my.viewmodel.MySettingViewModel
+import com.gst.gusto.my.viewmodel.MySettingViewModelFactory
 import com.gst.gusto.start.StartActivity
 import com.gst.gusto.util.GustoApplication
 import com.kakao.sdk.user.UserApiClient
@@ -27,6 +26,8 @@ class MySettingActivity : AppCompatActivity() {
     lateinit var binding: ActivityMySettingBinding
     private val gustoViewModel : GustoViewModel by viewModels()
 
+    private val mySettingViewModel: MySettingViewModel by viewModels { MySettingViewModelFactory() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMySettingBinding.inflate(layoutInflater)
@@ -34,6 +35,7 @@ class MySettingActivity : AppCompatActivity() {
         buttonSetting()
         gustoViewModel.getTokens()
         getPublishData()
+        setToast()
         setContentView(binding.root)
         setReviewButton()
     }
@@ -117,33 +119,30 @@ class MySettingActivity : AppCompatActivity() {
     }
 
     fun getPublishData() {
-        gustoViewModel.myPublishGet { result, response ->
-            if(result == 1) {
-                if(response != null) {
-                    Log.d("publish", response.toString())
-                    gustoViewModel.myPublishData.observe(this, Observer { value ->
-                        binding.reviewSwitch.isChecked = value?.publishReview ?: false
-                        binding.jimSwitch.isChecked = value?.publishPin ?: false
-                    })
-                }
+
+        mySettingViewModel.myPublishData.observe(this){
+            with(binding){
+                reviewSwitch.isChecked = it?.publishReview ?: false
+                pinSwitch.isChecked = it?.publishPin ?: false
+                routeSwitch.isChecked = it?.publishRoute ?: false
             }
         }
     }
 
     fun setPublishData() {
         with(binding) {
-            val reviewSwitch = this.reviewSwitch.isChecked
-            val pinSwitch = this.jimSwitch.isChecked
-            gustoViewModel.myPublishSet(reviewSwitch,pinSwitch) {result, ->
-            when(result) {
-                1 -> {
-                    Log.d("publishSet", result.toString())
-                }
-                else -> Toast.makeText(this@MySettingActivity, "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+            val reviewSwitch = reviewSwitch.isChecked
+            val pinSwitch = pinSwitch.isChecked
+            val routeSwitch = routeSwitch.isChecked
 
+            mySettingViewModel.setMyPublish(
+                MyPublishData(
+                    publishReview = reviewSwitch,
+                    publishPin = pinSwitch,
+                    publishRoute = routeSwitch
+                )
+            )
+        }
     }
 
     fun startNaverDeleteToken(){
@@ -215,6 +214,15 @@ class MySettingActivity : AppCompatActivity() {
             }
             else {
             }
+        }
+    }
+
+    private fun setToast(){
+        mySettingViewModel.tokenToastData.observe(this){
+            Toast.makeText(this, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
+        }
+        mySettingViewModel.errorToastData.observe(this){
+            Toast.makeText(this, "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
         }
     }
 }

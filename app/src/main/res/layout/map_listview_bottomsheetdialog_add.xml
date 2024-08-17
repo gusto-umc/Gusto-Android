@@ -152,6 +152,18 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="앱 설정에서 카테고리를 전체비공개할 경우 모든 카테고리가 자동으로 \n비공개 처리됩니다."
+        android:textColor="#a6a6a6"
+        android:textSize="10sp"
+        android:fontFamily="@font/pretendard_regular"
+        android:paddingStart="28dp"
+        android:paddingEnd="42dp"
+        android:layout_marginTop="20dp"
+        />
+
+    <TextView
         android:id="@+id/tv_category_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

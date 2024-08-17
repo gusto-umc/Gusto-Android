@@ -42,6 +42,7 @@ class ReviewAdd7Fragment : Fragment() {
         binding.btnEnd.setOnClickListener {
             binding.btnEnd.isClickable = false
             gustoViewModel.comment = binding.etContent.text.toString()
+            gustoViewModel.publishCheck = public
             gustoViewModel.createReview() {result ->
                 when(result) {
                     1 -> {

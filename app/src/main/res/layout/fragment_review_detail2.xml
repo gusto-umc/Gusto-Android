@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_review_detail">
+
+    <ImageView
+        android:id="@+id/iv_review_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/review_shadow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_day1"
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/review_shadow2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/tv_day1"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/review_detail_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@color/gray_navi"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        <View
+            android:layout_width="100dp"
+            android:layout_height="4dp"
+            android:background="@color/white"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_day1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:fontFamily="@font/pretendard_bold"
+        android:textSize="20sp"
+        android:text="3월 17일"
+        app:layout_constraintTop_toBottomOf="@id/review_detail_bar_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="31dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/review_detail_text_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/review_detail_setting_layout"
+        android:orientation="vertical"
+        app:layout_constraintHorizontal_weight="75.83"
+        android:layout_marginStart="29dp"
+        android:layout_marginBottom="14dp"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="맛슐랭"
+                android:textSize="12sp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:layout_marginRight="6dp"
+
+                />
+            <ImageView
+                android:id="@+id/review_rate_1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:src="@drawable/group_38457"
+                />
+            <ImageView
+                android:id="@+id/review_rate_2"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:src="@drawable/group_38457"
+                />
+            <ImageView
+                android:id="@+id/review_rate_3"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:src="@drawable/group_38457"
+                />
+            <ImageView
+                android:id="@+id/review_rate_4"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:src="@drawable/group_38457"
+                />
+            <ImageView
+                android:id="@+id/review_rate_5"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:src="@drawable/group_38457"
+                />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/menu_text_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="벵쇼"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/pretendard_bold"
+            android:layout_marginTop="8dp"
+            />
+
+        <TextView
+            android:id="@+id/review_text_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:fontFamily="@font/pretendard_bold"
+            android:layout_marginTop="8dp"
+            android:text="친구따라 안국에 놀러가서 알게 된 카페:)\n\n 테이블이 좁아서 음료를 다 쏟을 뻔 했지만 한옥을 개조한 카페 분위기가 좋다"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/flexbox_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_review_hashtags"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_review_store_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gusto Restaurant"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/pretendard_bold"
+                android:layout_marginRight="13dp"
+                />
+            <TextView
+                android:id="@+id/tv_day2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="2023 12 3 방문"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/review_detail_setting_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/review_detail_text_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintHorizontal_weight="24.16"
+        android:gravity="center_horizontal"
+
+        >
+        <LinearLayout
+            android:id="@+id/btn_heart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            >
+
+            <ImageView
+                android:id="@+id/iv_heart"
+                android:layout_width="17dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:src="@drawable/no_stroke_heart" />
+
+            <TextView
+                android:id="@+id/tv_heart_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="123"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_review_lock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/lock"
+            android:layout_marginTop="9dp"
+            />
+
+        <ImageView
+            android:id="@+id/iv_review_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/edit"
+            android:layout_marginTop="12dp"
+            />
+
+        <ImageView
+            android:id="@+id/iv_review_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/trash"
+            android:layout_marginTop="86dp"
+            android:layout_marginBottom="18dp"
+            />
+
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

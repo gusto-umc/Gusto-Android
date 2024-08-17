@@ -62,7 +62,7 @@ class RouteSearchFragment : Fragment() {
         gustoViewModel.myAllCategoryList.clear()
         val rvSearchCategory = binding.rvRouteCategory
 
-        val mCategoryAdapter = CategoryAdapter(view, "search")
+        val mCategoryAdapter = CategoryAdapter(view, "search", requireFragmentManager())
         mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
         mCategoryAdapter.viewModel = gustoViewModel
         mCategoryAdapter.mContext = context

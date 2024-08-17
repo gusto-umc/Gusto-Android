@@ -99,6 +99,7 @@ class LisAdapter(
                         viewHolder.tv_route.text = "루트 : ${currentItem.numRoutes}개"
                         viewHolder.btn_remove.visibility = View.GONE
                     }
+                    if(option==2) viewHolder.btn_remove.visibility = View.VISIBLE
                     viewHolder.item.setOnTouchListener { view, event ->
                         when (event.action) {
                             MotionEvent.ACTION_DOWN -> {
@@ -217,7 +218,42 @@ class LisAdapter(
                             }
                         }
                     }
+                    holder.btn_remove.setOnClickListener {
+                        var item = itemList[position]
+                        if(item!=null) {
+                            util.setPopupTwo(holder.itemView.context,"${item.groupName}을\n내 루트에서 삭제하시겠습니까?","",1) { yesOrNo ->
+                                when (yesOrNo) {
+                                    0 -> {
+                                        if(option==1) {
+                                            gustoViewModel.deleteRoute(item.groupId) { result ->
+                                                when (result) {
+                                                    1 -> {
+                                                        (fragment as ListRouteFragment)?.checkRoutes()
+                                                    }
+                                                    else -> {
+                                                        Toast.makeText(holder.itemView.context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                                    }
+                                                }
+                                            }
+                                        } else if(option==2) {
+                                            gustoViewModel.removeGroupRoute(item.groupId) { result ->
+                                                when (result) {
+                                                    1 -> {
+                                                        (fragment as GroupRouteRoutesFragment)?.checkRoutes()
+                                                    }
+                                                    else -> {
+                                                        Toast.makeText(holder.itemView.context,"서버와의 연결 불안정",Toast.LENGTH_SHORT ).show()
+                                                    }
+                                                }
+                                            }
+                                        }
 
+                                    }
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
             LisAdapter.TYPE_LOADING -> {

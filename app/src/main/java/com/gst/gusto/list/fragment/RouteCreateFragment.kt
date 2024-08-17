@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -39,15 +40,20 @@ class RouteCreateFragment : Fragment() {
             for((index,data) in itemList.withIndex()) {
                 routeList.add(RouteList(data.storeId,index+1,null,null,null,null,null))
             }
-            gustoViewModel.requestRoutesData = RequestCreateRoute(binding.etRouteName.text.toString(),binding.switchPrivate.isClickable,routeList)
-            gustoViewModel.createRoute {result ->
-                when(result) {
-                    1 -> {
-                        gustoViewModel.requestRoutesData = null
-                        findNavController().popBackStack()
+            if(itemList.size==0) {
+                Toast.makeText(requireContext(),"최소 한개의 루트를 설정해주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                gustoViewModel.requestRoutesData = RequestCreateRoute(binding.etRouteName.text.toString(),!binding.switchPrivate.isChecked,routeList)
+                gustoViewModel.createRoute {result ->
+                    when(result) {
+                        1 -> {
+                            gustoViewModel.requestRoutesData = null
+                            findNavController().popBackStack()
+                        }
                     }
                 }
             }
+
 
         }
         return binding.root

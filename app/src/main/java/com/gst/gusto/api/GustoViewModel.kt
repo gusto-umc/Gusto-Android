@@ -1,6 +1,7 @@
 package com.gst.gusto.api
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -56,6 +57,8 @@ class GustoViewModel: ViewModel() {
 
     // 루트 이름
     var routeName = ""
+    // 루트 공개 여부
+    var publishRoute = false
     // 루트 편집 정보
     var removeRoute = ArrayList<Long>()
     var addRoute = ArrayList<Long>()
@@ -98,6 +101,7 @@ class GustoViewModel: ViewModel() {
     var toilet: Int? = null
     var parking: Int? = null
     var comment: String? = null
+    var publishCheck = false
 
     // 팔로우 리스트
     var followList: List<Member> = listOf()
@@ -138,10 +142,6 @@ class GustoViewModel: ViewModel() {
     val searchFeedData:MutableLiveData<ResponseFeedSearchReviews?> = MutableLiveData<ResponseFeedSearchReviews?>().apply{
         value = null
     }
-    // 나의 콘텐츠 공개 여부 조회
-    private val _myPublishData: MutableLiveData<ResponseMyPublishGet?> = MutableLiveData<ResponseMyPublishGet?>()
-    val myPublishData: LiveData<ResponseMyPublishGet?>
-        get() = _myPublishData
 
     //방문 여부
     var whetherVisit : Int?= null
@@ -385,8 +385,9 @@ class GustoViewModel: ViewModel() {
                             // ordinal 속성을 기준으로 리스트를 정렬
                             list.sortBy { it.ordinal }
                         }
-                        Log.d("viewmodel","route data : ${markerListLiveData.value}")
+                        Log.d("viewmodel","route data : ${responseBody}")
                         routeName = responseBody.routeName
+                        publishRoute = responseBody.publishRoute
                         callback(1)
                     } else callback(2)
 
@@ -1033,7 +1034,7 @@ class GustoViewModel: ViewModel() {
     }
     // 리뷰 작성
     fun createReview(callback: (Int) -> Unit){
-        val data = RequestCreateReview(skipCheck,myStoreDetail?.storeId!!.toLong(),visitedAt,menuName,hashTagId,taste,spiciness,mood,toilet,parking,comment)
+        val data = RequestCreateReview(skipCheck,myStoreDetail?.storeId!!.toLong(),visitedAt,menuName,hashTagId,taste,comment,publishCheck)
         val filesToUpload: MutableList<MultipartBody.Part> = mutableListOf()
 
         // 이미지 파일들을 반복하면서 MultipartBody.Part 리스트에 추가
@@ -1069,7 +1070,7 @@ class GustoViewModel: ViewModel() {
             override fun onResponse(call: Call<ResponseFeedDetail>, response: Response<ResponseFeedDetail>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
-                    if(responseBody!=null) {
+                    if (responseBody != null) {
                         Log.d("getFeedReview", "Successful response: ${response}")
                         currentFeedData = responseBody
                         Log.d("currentFeedData", currentFeedData.toString())
@@ -1078,7 +1079,10 @@ class GustoViewModel: ViewModel() {
                         Log.e("getFeedReview success", "Unsuccessful response: ${response}")
                         callback(3)
                     }
-                } else if(response.code()==403) {
+                } else if(response.code() == 403204){
+                    Log.d("feed private", "해당 리뷰는 private입니다")
+                }
+                else if(response.code()==403) {
                     _tokenToastData.value = Unit
                     refreshToken()
                 } else {
@@ -1236,23 +1240,7 @@ class GustoViewModel: ViewModel() {
     //내 위치 장소보기 카테고리 array
     var myMapCategoryList : ArrayList<ResponseMapCategory>? = null
     var myAllCategoryList : ArrayList<ResponseMapCategory> = arrayListOf()
-    var testList : List<ResponseMapCategory> = listOf(
-        ResponseMapCategory(1, "Category1", 1, "PUBLIC", "desc1", 1),
-        ResponseMapCategory(2, "Category2", 2, "PUBLIC", "desc2", 2),
-        ResponseMapCategory(3, "Category3", 3, "PUBLIC", "desc3", 3),
-        ResponseMapCategory(4, "Category4", 4, "PUBLIC", "desc4", 4),
-        ResponseMapCategory(5, "Category5", 5, "PUBLIC", "desc5", 5),
-        ResponseMapCategory(1, "Category1", 1, "PUBLIC", "desc1", 1),
-        ResponseMapCategory(2, "Category2", 2, "PUBLIC", "desc2", 2),
-        ResponseMapCategory(3, "Category3", 3, "PUBLIC", "desc3", 3),
-        ResponseMapCategory(4, "Category4", 4, "PUBLIC", "desc4", 4),
-        ResponseMapCategory(5, "Category5", 5, "PUBLIC", "desc5", 5),
-        ResponseMapCategory(1, "Category1", 1, "PUBLIC", "desc1", 1),
-        ResponseMapCategory(2, "Category2", 2, "PUBLIC", "desc2", 2),
-        ResponseMapCategory(3, "Category3", 3, "PUBLIC", "desc3", 3),
-        ResponseMapCategory(4, "Category4", 4, "PUBLIC", "desc4", 4),
-        ResponseMapCategory(5, "Category5", 5, "PUBLIC", "desc5", 5)
-    )
+
 
     private val _cateEditFlag = MutableLiveData<Boolean?>(false)
     val cateEditFlag: LiveData<Boolean?>
@@ -1341,8 +1329,9 @@ class GustoViewModel: ViewModel() {
     var selectedCategoryInfo : ResponseMapCategory? = null
 
     // 카테고리 추가 -> 확인 완료
-    fun addCategory(categoryName : String,categoryIcon : Int, public : String, desc : String,  callback: (Int) -> Unit){
-        var categoryRequestData = RequestAddCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = public, myCategoryScript = desc )
+    fun addCategory(categoryName : String,categoryIcon : Int, public : Boolean?, desc : String,  callback: (Int) -> Unit){
+        var publicString = if(public!!){"PUBLIC"}else{"PRIVATE"}
+        var categoryRequestData = RequestAddCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = publicString, myCategoryScript = desc )
         Log.d("checking", categoryRequestData.toString())
         service.addCategory(xAuthToken, data = categoryRequestData).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -1367,7 +1356,7 @@ class GustoViewModel: ViewModel() {
     }
     // 카테고리 수정 -> 확인 완료, comment 일단 제외
     fun editCategory(categoryId: Long, categoryName: String, categoryIcon: Int, public: String, desc: String, callback: (Int) -> Unit){
-        var categoryRequestData = RequestEditCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = "PUBLIC", myCategoryScript = desc)
+        var categoryRequestData = RequestEditCategory(myCategoryName = categoryName, myCategoryIcon = categoryIcon, publishCategory = public, myCategoryScript = desc)
         Log.d("checking edit", categoryRequestData.toString())
         Log.d("checking edit", categoryId.toString())
         service.editCategory(token = xAuthToken, myCategoryId = categoryId, data = categoryRequestData).enqueue(object : Callback<Void>{
@@ -1811,8 +1800,8 @@ class GustoViewModel: ViewModel() {
 
     // paging api
 
-    fun getPPMyStore(categoryId: Int, pinId : Int?, callback: (Int, Boolean) -> Unit){
-        service.ppGetAllMyStores(xAuthToken, categoryId, pinId).enqueue(object : Callback<PResponseStoreData>{
+    fun getPPMyStore(categoryId: Int, pinId : Int?, storeName : String? = null, sort : String? = null,  callback: (Int, Boolean) -> Unit){
+        service.ppGetAllMyStores(xAuthToken, categoryId, pinId, sort, storeName).enqueue(object : Callback<PResponseStoreData>{
             override fun onResponse(
                 call: Call<PResponseStoreData>,
                 response: Response<PResponseStoreData>
@@ -1978,34 +1967,34 @@ class GustoViewModel: ViewModel() {
         })
     }
     //리뷰 수정 -> 확인 완
-    fun editReview(reviewId : Long, img : String?, menuName : String?, taste : Int, spiceness : Int, mood : Int, toilet : Int, parking : Int, comment : String?, callback: (Int) -> Unit){
-        var requestBody = RequestMyReview(menuName = menuName, taste = taste, spiciness = spiceness, mood = mood, toilet = toilet, parking = parking, comment = comment)
+    fun editReview(reviewId : Long, imgFiles : List<File>?, menuName : String?, taste : Int, spiceness : Int, mood : Int, toilet : Int, parking : Int, comment : String?,publish : Boolean, callback: (Int) -> Unit){
+        var requestBody = RequestMyReview(menuName = menuName, taste = taste, spiciness = spiceness, mood = mood, toilet = toilet, parking = parking, comment = comment,publicCheck=publish)
         val filesToUpload: MutableList<MultipartBody.Part> = mutableListOf()
 
         // 이미지 파일들을 반복하면서 MultipartBody.Part 리스트에 추가
-        reviewEditImg?.forEach { imgFile ->
+        imgFiles?.forEach { imgFile ->
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), imgFile)
             val filePart = MultipartBody.Part.createFormData("image", imgFile.name, requestFile)
             filesToUpload.add(filePart)
         }
         Log.d("edit checking", requestBody.toString())
-//        service.editReview(xAuthToken, reviewId, filesToUpload, requestBody).enqueue(object : Callback<Void>{
-//            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-//                if (response.isSuccessful) {
-//                    Log.e("viewmodel", "Successful response: ${response}")
-//                    callback(0)
-//                } else {
-//                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-//                    callback(1)
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<Void>, t: Throwable) {
-//                Log.e("viewmodel", "Failed to make the request", t)
-//                callback(1)
-//            }
-//
-//        })
+        service.editReview(xAuthToken, reviewId, filesToUpload, requestBody).enqueue(object : Callback<Void>{
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.e("viewmodel", "Successful response: ${response}")
+                    callback(0)
+                } else {
+                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    callback(1)
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("viewmodel", "Failed to make the request", t)
+                callback(1)
+            }
+
+        })
     }
     //리뷰 삭제
     fun deleteReview(reviewId: Long, callback: (Int) -> Unit){
@@ -2266,62 +2255,6 @@ class GustoViewModel: ViewModel() {
 //
 //        })
 //    }
-
-    // 나의 콘텐츠 공개 여부 조회
-    fun myPublishGet(callback: (Int, ResponseMyPublishGet?) -> Unit){
-        service.myPublishGet(xAuthToken).enqueue(object : Callback<ResponseMyPublishGet> {
-            override fun onResponse(
-                call: Call<ResponseMyPublishGet>,
-                response: Response<ResponseMyPublishGet>
-            ) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    _myPublishData.value = responseBody
-                    if(responseBody!= null) {
-                        Log.e("viewmodel", "1 Successful response: ${response}")
-                        callback(1, responseBody)
-                    } else {
-                        Log.e("viewmodel", "2 Successful response: ${response}")
-                        callback(2, null)
-                    }
-
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                }
-                else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3, null)
-                }
-            }
-            override fun onFailure(call: Call<ResponseMyPublishGet>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(3, null)
-            }
-        })
-    }
-
-    // 나의 콘텐츠 공개 여부 변경
-    fun myPublishSet(publishReview: Boolean, publishPin: Boolean, callback: (Int) -> Unit){
-        service.myPublishSet(xAuthToken, RequestMyPublish(publishReview, publishPin, true)).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.isSuccessful) {
-                    Log.d("viewmodel", "Successful response: ${response}")
-                    callback(1)
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(2)
-                }
-            }
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(2)
-            }
-        })
-    }
 
     fun logout(callback: (Int) -> Unit) {
         service.logout(xAuthToken,refreshToken).enqueue(object : Callback<ResponseBody> {

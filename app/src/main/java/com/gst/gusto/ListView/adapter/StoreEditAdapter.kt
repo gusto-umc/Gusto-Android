@@ -2,6 +2,7 @@ package com.gst.gusto.ListView.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -15,6 +16,7 @@ import com.gst.gusto.api.PResponseStoreListItem
 import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.ItemStoreBinding
 import com.gst.gusto.databinding.ItemStoreEditBinding
+import com.gst.gusto.util.util
 
 class StoreEditAdapter : ListAdapter<PResponseStoreListItem, StoreEditAdapter.ViewHolder>(diffUtil){
 
@@ -29,10 +31,15 @@ class StoreEditAdapter : ListAdapter<PResponseStoreListItem, StoreEditAdapter.Vi
                 //카테고리 -> 서버 추가 필요
                 //binding.tvItemStoreCategory.text =
                 binding.tvItemStoreEditLocation.text = item.address
-                //리뷰 사진 3개 -> 서버 추가 필요
-                binding.ivItemStoreEditImg1.setImageResource(R.drawable.gst_dummypic)
-                binding.ivItemStoreEditImg2.setImageResource(R.drawable.gst_dummypic)
-                binding.ivItemStoreEditImg3.setImageResource(R.drawable.gst_dummypic)
+                //리뷰 사진 3개
+                if(!item.img1.isNullOrBlank()){
+                    util.setImage(binding.ivItemStoreEditImg1, item.img1, mContext!!)
+                }else{binding.ivItemStoreEditImg1.visibility = View.INVISIBLE}
+                if(!item.img2.isNullOrBlank()){util.setImage(binding.ivItemStoreEditImg2, item.img2, mContext!!)
+                }else{binding.ivItemStoreEditImg2.visibility = View.INVISIBLE}
+                if(!item.img3.isNullOrBlank()){util.setImage(binding.ivItemStoreEditImg3, item.img3, mContext!!)
+                }else{binding.ivItemStoreEditImg3.visibility = View.INVISIBLE}
+
             }
             data = item
         }
