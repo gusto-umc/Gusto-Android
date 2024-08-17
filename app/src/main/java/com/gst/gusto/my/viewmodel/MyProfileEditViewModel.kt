@@ -27,6 +27,9 @@ class MyProfileEditViewModel(
     private val _tokenToastData: MutableLiveData<Unit> = MutableLiveData()
     val tokenToastData: LiveData<Unit> = _tokenToastData
 
+    private val _checkNickNameData: MutableLiveData<Boolean> = MutableLiveData()
+    val checkNickNameData :LiveData<Boolean> = _checkNickNameData
+
     init {
         getMyProfile()
     }
@@ -42,6 +45,25 @@ class MyProfileEditViewModel(
                 if(response.errorCode == 403){
                     _tokenToastData.value = Unit
                     setRefreshToken()
+                } else {
+                    _errorToastData.value = Unit
+                }
+            }
+        }
+    }
+
+    fun getCheckNickname(nickname: String) = viewModelScope.launch {
+        val token = GustoApplication.prefs.getSharedPrefs().first
+        when(val response = usersRepository.getCheckNickname(token, nickname)){
+            is ApiResponse.Success -> {
+                _checkNickNameData.value = true
+            }
+            is ApiResponse.Error -> {
+                if(response.errorCode == 403){
+                    _tokenToastData.value = Unit
+                    setRefreshToken()
+                } else if(response.errorCode == 409) {
+                    _checkNickNameData.value = false
                 } else {
                     _errorToastData.value = Unit
                 }
