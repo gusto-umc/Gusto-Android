@@ -45,7 +45,7 @@ class ListReviewViewModel(
 
     init {
         viewModelScope.launch {
-            getTimeLineReview(2)
+            getTimeLineReview(10)
         }
     }
 
@@ -78,7 +78,7 @@ class ListReviewViewModel(
             val cursorId = _timeLineCursorId.value
             viewModelScope.launch {
                 isFetching = true
-                val newItems = getTimeLineReviewPaging(cursorId, 2)
+                val newItems = getTimeLineReviewPaging(cursorId, 10)
                 _timeLineReviews.value = previousItems + newItems
                 isFetching = false
             }
