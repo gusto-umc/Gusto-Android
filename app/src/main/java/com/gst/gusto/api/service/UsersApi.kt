@@ -10,6 +10,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
+import retrofit2.http.Path
 
 interface UsersApi {
     @GET("users/my-info/publishing")
@@ -27,4 +28,10 @@ interface UsersApi {
     suspend fun getMyProfile(
         @Header("X-AUTH-TOKEN") token: String
     ): Response<ResponseMyProfile>
+
+    @GET("users/check-nickname/{nickname}")
+    suspend fun getCheckNickname(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Path("nickname") nickname: String
+    ): Response<ResponseBody>
 }

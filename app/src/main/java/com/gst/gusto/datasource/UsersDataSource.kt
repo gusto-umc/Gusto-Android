@@ -7,6 +7,7 @@ import com.gst.gusto.dto.ResponseMyProfile
 import com.gst.gusto.dto.ResponseMyPublish
 import okhttp3.ResponseBody
 import retrofit2.http.Header
+import retrofit2.http.Path
 
 class UsersDataSource(
     private val usersService: UsersApi
@@ -46,6 +47,20 @@ class UsersDataSource(
             response.body()?.let{
                 ApiResponse.Success(it)
             } ?: ApiResponse.Error(response.code(), "Response body is null + ${response.message()}" )
+        } else {
+            ApiResponse.Error(response.code(), response.message())
+        }
+    }
+
+    suspend fun getCheckNickname(
+        token: String,
+        nickname: String
+    ): ApiResponse<ResponseBody> {
+        val response = usersService.getCheckNickname(token, nickname)
+        return if(response.isSuccessful){
+            response.body()?.let{
+                ApiResponse.Success(it)
+            } ?: ApiResponse.Error(response.code(), "Response body is null + ${response.message()}")
         } else {
             ApiResponse.Error(response.code(), response.message())
         }

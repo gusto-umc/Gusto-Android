@@ -14,6 +14,8 @@ interface UsersRepository {
 
     suspend fun getMyProfile(token: String): ApiResponse<MyProfileData>
 
+    suspend fun getCheckNickname(token: String, nickname: String): ApiResponse<ResponseBody>
+
     companion object {
         fun create(): UsersRepositoryImpl{
             return UsersRepositoryImpl(
