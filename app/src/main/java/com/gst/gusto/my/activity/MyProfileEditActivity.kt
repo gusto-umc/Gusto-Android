@@ -5,20 +5,52 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.gst.gusto.R
 import com.gst.gusto.databinding.ActivityMyProfileEditBinding
+import com.gst.gusto.my.viewmodel.MyProfileEditViewModel
+import com.gst.gusto.my.viewmodel.MyProfileEditViewModelFactory
+import com.gst.gusto.util.util.Companion.setImage
 
 // MyProfileFragment 참고해서 디자인
 
 class MyProfileEditActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMyProfileEditBinding
+
+    private val viewModel: MyProfileEditViewModel by viewModels{ MyProfileEditViewModelFactory() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyProfileEditBinding.inflate(layoutInflater)
 
         var test = true
+
+        with(binding){
+
+            viewModel.myProfileData.observe(this@MyProfileEditActivity){
+                nicknameEditText.setText(it?.nickname)
+                setImage(profileImageView, it?.profileImg, root.context)
+
+                when(it?.age) {
+                    "TEEN" -> ageBtn.text = "10대"
+                    "TWENTIES" -> ageBtn.text = "20대"
+                    "THIRTIES"-> ageBtn.text = "30대"
+                    "FOURTIES"-> ageBtn.text = "40대"
+                    "FIFTIES"-> ageBtn.text = "50대"
+                    "OLDER"-> ageBtn.text = "60대"
+                    "NONE"-> ageBtn.text = "선택하지 않음"
+                    // else -> ageBtn.text = "선택하지 않음"
+                }
+
+                when(it?.gender) {
+                    "FEMALE" -> genderBtn.text = "여자"
+                    "MALE" -> genderBtn.text = "남자"
+                    "NONE" -> genderBtn.text = "선택하지 않음"
+
+                }
+            }
+        }
 
         binding.apply {
             // 테스트용
