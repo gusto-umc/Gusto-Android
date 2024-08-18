@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.gst.gusto.R
 import com.gst.gusto.databinding.ActivityMyProfileEditBinding
+import com.gst.gusto.my.fragment.MyProfileImageEditBottomSheet
 import com.gst.gusto.my.viewmodel.MyProfileEditViewModel
 import com.gst.gusto.my.viewmodel.MyProfileEditViewModelFactory
 import com.gst.gusto.util.util.Companion.setImage
@@ -30,6 +31,16 @@ class MyProfileEditActivity : AppCompatActivity() {
             }
             saveBtn.setOnClickListener {
                 finish()
+            }
+            changeProfileImageBtn.setOnClickListener {
+                MyProfileImageEditBottomSheet(
+                    onBasicProfileClickListener = {
+                        profileImageView.setImageResource(R.drawable.gst_dummypic)
+                    },
+                    onProfileClickListener = {
+
+                    }
+                ).show(supportFragmentManager, "MyProfileImageEditBottomSheet")
             }
             checkBtn.setOnClickListener {
                 viewModel.getCheckNickname(nicknameEditText.text.toString())
