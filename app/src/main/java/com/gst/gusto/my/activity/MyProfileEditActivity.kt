@@ -4,11 +4,14 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.View
+import android.widget.PopupMenu
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import com.gst.gusto.R
 import com.gst.gusto.databinding.ActivityMyProfileEditBinding
+import com.gst.gusto.my.Age
+import com.gst.gusto.my.Gender
 import com.gst.gusto.my.fragment.MyProfileImageEditBottomSheet
 import com.gst.gusto.my.viewmodel.MyProfileEditViewModel
 import com.gst.gusto.my.viewmodel.MyProfileEditViewModelFactory
@@ -24,6 +27,7 @@ class MyProfileEditActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyProfileEditBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         with(binding) {
             btnBack.setOnClickListener{
@@ -42,6 +46,7 @@ class MyProfileEditActivity : AppCompatActivity() {
                     }
                 ).show(supportFragmentManager, "MyProfileImageEditBottomSheet")
             }
+
             checkBtn.setOnClickListener {
                 viewModel.getCheckNickname(nicknameEditText.text.toString())
             }
@@ -52,8 +57,6 @@ class MyProfileEditActivity : AppCompatActivity() {
 
         getProfileInfo()
         checkNickName()
-
-        setContentView(binding.root)
     }
 
     private fun getProfileInfo() {
@@ -63,21 +66,28 @@ class MyProfileEditActivity : AppCompatActivity() {
                 nicknameEditText.setText(it?.nickname)
                 setImage(profileImageView, it?.profileImg, root.context)
 
-                when(it?.age) {
-                    "TEEN" -> ageBtn.text = "10대"
-                    "TWENTIES" -> ageBtn.text = "20대"
-                    "THIRTIES"-> ageBtn.text = "30대"
-                    "FOURTIES"-> ageBtn.text = "40대"
-                    "FIFTIES"-> ageBtn.text = "50대"
-                    "OLDER"-> ageBtn.text = "60대"
-                    "NONE"-> ageBtn.text = "선택하지 않음"
+                val ageGroup = it?.age?.let { age -> Age.valueOf(age) }
+
+                when (ageGroup) {
+                    Age.TEEN -> ageBtn.text = Age.TEEN.displayName
+                    Age.TWENTIES -> ageBtn.text = Age.TWENTIES.displayName
+                    Age.THIRTIES -> ageBtn.text = Age.THIRTIES.displayName
+                    Age.FOURTIES -> ageBtn.text = Age.FOURTIES.displayName
+                    Age.FIFTIES -> ageBtn.text = Age.FIFTIES.displayName
+                    Age.OLDER -> ageBtn.text = Age.OLDER.displayName
+                    Age.NONE -> ageBtn.text = Age.NONE.displayName
+                    null -> ageBtn.text = "알 수 없음"
                 }
 
-                when(it?.gender) {
-                    "FEMALE" -> genderBtn.text = "여자"
-                    "MALE" -> genderBtn.text = "남자"
-                    "NONE" -> genderBtn.text = "선택하지 않음"
+                val gender = it?.gender?.let { gender -> Gender.valueOf(gender) }
+
+                when (gender) {
+                    Gender.FEMALE -> genderBtn.text = Gender.FEMALE.displayName
+                    Gender.MALE -> genderBtn.text = Gender.MALE.displayName
+                    Gender.NONE -> genderBtn.text = Gender.NONE.displayName
+                    null -> genderBtn.text = "알 수 없음"
                 }
+
             }
         }
     }
@@ -110,3 +120,5 @@ class MyProfileEditActivity : AppCompatActivity() {
         }
     }
 }
+
+
