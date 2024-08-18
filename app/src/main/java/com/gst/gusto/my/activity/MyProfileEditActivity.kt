@@ -87,12 +87,35 @@ class MyProfileEditActivity : AppCompatActivity() {
                     Gender.NONE -> genderBtn.text = Gender.NONE.displayName
                     null -> genderBtn.text = "알 수 없음"
                 }
-
+                setupGenderPopupMenu(it?.gender.toString())
             }
         }
     }
 
-    fun checkNickName(){
+    private fun setupGenderPopupMenu(currentGender: String) {
+        val gender = Gender.valueOf(currentGender)
+
+        binding.genderBtn.setOnClickListener { btn ->
+            val contextThemeWrapper = ContextThemeWrapper(this, R.style.MyProfileEditPopupMenu)
+            val popupMenu = PopupMenu(contextThemeWrapper, btn)
+            popupMenu.menuInflater.inflate(R.menu.profile_edit_gender_menu, popupMenu.menu)
+
+            when (gender) {
+                Gender.FEMALE -> popupMenu.menu.findItem(R.id.menu_female).isEnabled = false
+                Gender.MALE -> popupMenu.menu.findItem(R.id.menu_male).isEnabled = false
+                Gender.NONE -> popupMenu.menu.findItem(R.id.menu_unselected).isEnabled = false
+            }
+
+            popupMenu.setOnMenuItemClickListener { item ->
+                binding.genderBtn.text = item.title.toString()
+                viewModel.setGender(item.title.toString())
+                true
+            }
+            popupMenu.show()
+        }
+    }
+    
+    private fun checkNickName(){
 
         viewModel.checkNickNameData.observe(this@MyProfileEditActivity){
             with(binding){

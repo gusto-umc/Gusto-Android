@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gst.gusto.R
 import com.gst.gusto.api.ApiResponse
 import com.gst.gusto.model.MyProfileData
+import com.gst.gusto.my.Gender
+import com.gst.gusto.my.toGender
 import com.gst.gusto.repository.AuthRepositoryImpl
 import com.gst.gusto.repository.UsersRepositoryImpl
 import com.gst.gusto.util.GustoApplication
@@ -70,6 +73,17 @@ class MyProfileEditViewModel(
             }
         }
     }
+
+    fun setGender(genderText: String) {
+
+        val gender = toGender(genderText)
+
+        _myProfileData.value?.let {
+            val updatedProfileData = it.copy(gender = gender?.name.toString())
+            _myProfileData.value = updatedProfileData
+        }
+    }
+
 
     fun setRefreshToken() = viewModelScope.launch {
         while (true) {
