@@ -8,6 +8,7 @@ import com.gst.gusto.R
 import com.gst.gusto.api.ApiResponse
 import com.gst.gusto.model.MyProfileData
 import com.gst.gusto.my.Gender
+import com.gst.gusto.my.toAge
 import com.gst.gusto.my.toGender
 import com.gst.gusto.repository.AuthRepositoryImpl
 import com.gst.gusto.repository.UsersRepositoryImpl
@@ -80,6 +81,16 @@ class MyProfileEditViewModel(
 
         _myProfileData.value?.let {
             val updatedProfileData = it.copy(gender = gender?.name.toString())
+            _myProfileData.value = updatedProfileData
+        }
+    }
+
+    fun setAge(ageText: String) {
+
+        val age = toAge(ageText)
+
+        _myProfileData.value?.let {
+            val updatedProfileData = it.copy(age = age?.name.toString())
             _myProfileData.value = updatedProfileData
         }
     }

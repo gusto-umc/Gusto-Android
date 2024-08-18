@@ -78,6 +78,7 @@ class MyProfileEditActivity : AppCompatActivity() {
                     Age.NONE -> ageBtn.text = Age.NONE.displayName
                     null -> ageBtn.text = "알 수 없음"
                 }
+                setupAgePopupMenu(it?.age.toString())
 
                 val gender = it?.gender?.let { gender -> Gender.valueOf(gender) }
 
@@ -92,29 +93,62 @@ class MyProfileEditActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupAgePopupMenu(currentAge: String){
+        val age = Age.valueOf(currentAge)
+
+        with(binding){
+            ageBtn.setOnClickListener {
+                val contextThemeWrapper = ContextThemeWrapper(this@MyProfileEditActivity, R.style.MyProfileEditPopupMenu)
+                val popupMenu = PopupMenu(contextThemeWrapper, it)
+                popupMenu.menuInflater.inflate(R.menu.profile_edit_age_menu, popupMenu.menu)
+
+                when(age){
+                    Age.TEEN -> popupMenu.menu.findItem(R.id.menu_teen).isEnabled = false
+                    Age.TWENTIES -> popupMenu.menu.findItem(R.id.menu_twenties).isEnabled = false
+                    Age.THIRTIES -> popupMenu.menu.findItem(R.id.menu_thirties).isEnabled = false
+                    Age.FOURTIES -> popupMenu.menu.findItem(R.id.menu_fourties).isEnabled = false
+                    Age.FIFTIES -> popupMenu.menu.findItem(R.id.menu_fifties).isEnabled = false
+                    Age.OLDER -> popupMenu.menu.findItem(R.id.menu_older).isEnabled = false
+                    Age.NONE -> popupMenu.menu.findItem(R.id.menu_unselected).isEnabled = false
+                }
+
+                popupMenu.setOnMenuItemClickListener { item ->
+                    ageBtn.text = item.title.toString()
+                    viewModel.setAge(item.title.toString())
+                    true
+                }
+
+                popupMenu.show()
+
+            }
+        }
+    }
+
     private fun setupGenderPopupMenu(currentGender: String) {
         val gender = Gender.valueOf(currentGender)
 
-        binding.genderBtn.setOnClickListener { btn ->
-            val contextThemeWrapper = ContextThemeWrapper(this, R.style.MyProfileEditPopupMenu)
-            val popupMenu = PopupMenu(contextThemeWrapper, btn)
-            popupMenu.menuInflater.inflate(R.menu.profile_edit_gender_menu, popupMenu.menu)
+        with(binding){
+            genderBtn.setOnClickListener {
+                val contextThemeWrapper = ContextThemeWrapper(this@MyProfileEditActivity, R.style.MyProfileEditPopupMenu)
+                val popupMenu = PopupMenu(contextThemeWrapper, it)
+                popupMenu.menuInflater.inflate(R.menu.profile_edit_gender_menu, popupMenu.menu)
 
-            when (gender) {
-                Gender.FEMALE -> popupMenu.menu.findItem(R.id.menu_female).isEnabled = false
-                Gender.MALE -> popupMenu.menu.findItem(R.id.menu_male).isEnabled = false
-                Gender.NONE -> popupMenu.menu.findItem(R.id.menu_unselected).isEnabled = false
-            }
+                when (gender) {
+                    Gender.FEMALE -> popupMenu.menu.findItem(R.id.menu_female).isEnabled = false
+                    Gender.MALE -> popupMenu.menu.findItem(R.id.menu_male).isEnabled = false
+                    Gender.NONE -> popupMenu.menu.findItem(R.id.menu_unselected).isEnabled = false
+                }
 
-            popupMenu.setOnMenuItemClickListener { item ->
-                binding.genderBtn.text = item.title.toString()
-                viewModel.setGender(item.title.toString())
-                true
+                popupMenu.setOnMenuItemClickListener { item ->
+                    genderBtn.text = item.title.toString()
+                    viewModel.setGender(item.title.toString())
+                    true
+                }
+                popupMenu.show()
             }
-            popupMenu.show()
         }
     }
-    
+
     private fun checkNickName(){
 
         viewModel.checkNickNameData.observe(this@MyProfileEditActivity){
