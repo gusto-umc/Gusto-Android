@@ -195,12 +195,124 @@ class ReviewDetailFragment : Fragment() {
         /**
          * 서버 데이터 연결
          */
+        var photoPosition = 0
+        fun changePhoto(size : Int, position : Int){
+            if(position == (size -1)){
+                photoPosition = 0
+                setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!!.first(), requireContext())
+                when(size){
+                    2 -> {
+                        binding.viewLayout21.setBackgroundResource(R.color.white)
+                        binding.viewLayout21.setBackgroundResource(R.color.gray_navi)
+                    }
+                    3 -> {
+                        binding.viewLayout30.setBackgroundResource(R.color.white)
+                        binding.viewLayout31.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout32.setBackgroundResource(R.color.gray_navi)
+
+                    }
+                    4 -> {
+                        binding.viewLayout40.setBackgroundResource(R.color.white)
+                        binding.viewLayout41.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout42.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout43.setBackgroundResource(R.color.gray_navi)
+                    }
+                }
+            }else{
+                photoPosition++
+                setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!![photoPosition], requireContext())
+                when(size){
+                    2 -> {
+                        binding.viewLayout21.setBackgroundResource(R.color.white)
+                    }
+                    3 -> {
+                        when(photoPosition){
+                            1 -> {binding.viewLayout31.setBackgroundResource(R.color.white)}
+                            2 -> {binding.viewLayout32.setBackgroundResource(R.color.white)}
+                        }
+                    }
+                    4 -> {
+                        when(photoPosition){
+                            1 -> {binding.viewLayout41.setBackgroundResource(R.color.white)}
+                            2 -> {binding.viewLayout42.setBackgroundResource(R.color.white)}
+                            3 -> {binding.viewLayout43.setBackgroundResource(R.color.white)}
+                        }
+                    }
+                }
+
+            }
+
+        }
         gustoViewModel.successFlg.observe(viewLifecycleOwner, Observer{
             if(it){
-                setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!!.first(), requireContext() )
+                when(gustoViewModel.myReview?.img!!.size){
+                    1 -> {
+                        //visibility 처리
+                        binding.reviewDetailBarLayout1.visibility = View.VISIBLE
+                        binding.reviewDetailBarLayout2.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout3.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout4.visibility = View.INVISIBLE
+
+                        //image 적용
+                        setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!!.first(), requireContext() )
+                        photoPosition = 0
+                    }
+                    2 -> {
+                        //visibility 처리
+                        binding.reviewDetailBarLayout1.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout2.visibility = View.VISIBLE
+                        binding.reviewDetailBarLayout3.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout4.visibility = View.INVISIBLE
+
+                        setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!!.first(), requireContext() )
+                        photoPosition = 0
+
+                        binding.viewLayout21.setBackgroundResource(R.color.white)
+                        binding.viewLayout21.setBackgroundResource(R.color.gray_navi)
+
+                    }
+                    3 -> {
+                        //visibility 처리
+                        binding.reviewDetailBarLayout1.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout2.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout3.visibility = View.VISIBLE
+                        binding.reviewDetailBarLayout4.visibility = View.INVISIBLE
+
+                        setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!!.first(), requireContext() )
+                        photoPosition = 0
+
+                        binding.viewLayout30.setBackgroundResource(R.color.white)
+                        binding.viewLayout31.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout32.setBackgroundResource(R.color.gray_navi)
+                    }
+                    4 -> {
+                        //visibility 처리
+                        binding.reviewDetailBarLayout1.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout2.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout3.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout4.visibility = View.VISIBLE
+
+                        setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!!.first(), requireContext() )
+                        photoPosition = 0
+
+                        binding.viewLayout40.setBackgroundResource(R.color.white)
+                        binding.viewLayout41.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout42.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout43.setBackgroundResource(R.color.gray_navi)
+                    }
+                    else -> findNavController().popBackStack()
+                }
             }
 
         })
+
+        binding.ivReviewImg.setOnClickListener {
+            if(gustoViewModel.myReview?.img!!.size >= 2){
+                changePhoto(gustoViewModel.myReview?.img!!.size, photoPosition)
+            }
+        }
+
+
 
 
 

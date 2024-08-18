@@ -89,6 +89,54 @@ class FeedDetailReviewFragment : Fragment() {
          */
 
         //img 적용
+        var photoPosition = 0
+        fun changePhoto(size : Int, position : Int){
+            if(position == (size -1)){
+                photoPosition = 0
+                setImage(binding.ivFeedImg, feedDetail.images!!.first(), requireContext())
+                when(size){
+                    2 -> {
+                        binding.viewLayout21.setBackgroundResource(R.color.white)
+                        binding.viewLayout21.setBackgroundResource(R.color.gray_navi)
+                    }
+                    3 -> {
+                        binding.viewLayout30.setBackgroundResource(R.color.white)
+                        binding.viewLayout31.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout32.setBackgroundResource(R.color.gray_navi)
+
+                    }
+                    4 -> {
+                        binding.viewLayout40.setBackgroundResource(R.color.white)
+                        binding.viewLayout41.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout42.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout43.setBackgroundResource(R.color.gray_navi)
+                    }
+                }
+            }else{
+                photoPosition++
+                setImage(binding.ivFeedImg, feedDetail.images!![photoPosition], requireContext())
+                when(size){
+                    2 -> {
+                        binding.viewLayout21.setBackgroundResource(R.color.white)
+                    }
+                    3 -> {
+                        when(photoPosition){
+                            1 -> {binding.viewLayout31.setBackgroundResource(R.color.white)}
+                            2 -> {binding.viewLayout32.setBackgroundResource(R.color.white)}
+                        }
+                    }
+                    4 -> {
+                        when(photoPosition){
+                            1 -> {binding.viewLayout41.setBackgroundResource(R.color.white)}
+                            2 -> {binding.viewLayout42.setBackgroundResource(R.color.white)}
+                            3 -> {binding.viewLayout43.setBackgroundResource(R.color.white)}
+                        }
+                    }
+                }
+
+            }
+
+        }
         setImage(binding.ivFeedImg, feedDetail.images!!.first(), requireContext() )
         binding.ivUserImgFeedDetail.setOnClickListener {
             if(gustoViewModel.currentFeedNickname!=""){
@@ -96,6 +144,71 @@ class FeedDetailReviewFragment : Fragment() {
             }
         }
         setImage(binding.ivUserImgFeedDetail, feedDetail.profileImage, requireContext())
+
+        when(feedDetail.images!!.size){
+            1 -> {
+                //visibility 처리
+                binding.feedDetailBarLayout1.visibility = View.VISIBLE
+                binding.feedDetailBarLayout2.visibility = View.INVISIBLE
+                binding.feedDetailBarLayout3.visibility = View.INVISIBLE
+                binding.feedDetailBarLayout4.visibility = View.INVISIBLE
+
+                //image 적용
+                setImage(binding.ivFeedImg, feedDetail.images!!.first(), requireContext() )
+                photoPosition = 0
+            }
+            2 -> {
+                //visibility 처리
+                binding.feedDetailBarLayout1.visibility = View.INVISIBLE
+                binding.feedDetailBarLayout2.visibility = View.VISIBLE
+                binding.feedDetailBarLayout3.visibility = View.INVISIBLE
+                binding.feedDetailBarLayout4.visibility = View.INVISIBLE
+
+                setImage(binding.ivFeedImg, feedDetail.images!!.first(), requireContext() )
+                photoPosition = 0
+
+                binding.viewLayout21.setBackgroundResource(R.color.white)
+                binding.viewLayout21.setBackgroundResource(R.color.gray_navi)
+
+            }
+            3 -> {
+                //visibility 처리
+                binding.feedDetailBarLayout1.visibility = View.INVISIBLE
+                binding.feedDetailBarLayout2.visibility = View.INVISIBLE
+                binding.feedDetailBarLayout3.visibility = View.VISIBLE
+                binding.feedDetailBarLayout4.visibility = View.INVISIBLE
+
+                setImage(binding.ivFeedImg, feedDetail.images!!.first(), requireContext() )
+                photoPosition = 0
+
+                binding.viewLayout30.setBackgroundResource(R.color.white)
+                binding.viewLayout31.setBackgroundResource(R.color.gray_navi)
+                binding.viewLayout32.setBackgroundResource(R.color.gray_navi)
+            }
+            4 -> {
+                //visibility 처리
+                binding.feedDetailBarLayout1.visibility = View.INVISIBLE
+                binding.feedDetailBarLayout2.visibility = View.INVISIBLE
+                binding.feedDetailBarLayout3.visibility = View.INVISIBLE
+                binding.feedDetailBarLayout4.visibility = View.VISIBLE
+
+                setImage(binding.ivFeedImg, feedDetail.images!!.first(), requireContext() )
+                photoPosition = 0
+
+                binding.viewLayout40.setBackgroundResource(R.color.white)
+                binding.viewLayout41.setBackgroundResource(R.color.gray_navi)
+                binding.viewLayout42.setBackgroundResource(R.color.gray_navi)
+                binding.viewLayout43.setBackgroundResource(R.color.gray_navi)
+            }
+            else -> findNavController().popBackStack()
+        }
+        binding.ivFeedImg.setOnClickListener {
+            if(feedDetail.images!!.size >= 2){
+                changePhoto(feedDetail.images!!.size, photoPosition)
+            }
+        }
+
+
 
         //taste 처리
         binding.feedRate1.visibility = View.INVISIBLE
