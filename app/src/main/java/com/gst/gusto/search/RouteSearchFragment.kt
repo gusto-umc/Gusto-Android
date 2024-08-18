@@ -18,10 +18,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.gst.gusto.ListView.Model.CategorySimple
-import com.gst.gusto.ListView.Model.StoreSearch
 import com.gst.gusto.ListView.adapter.CategoryAdapter
-import com.gst.gusto.ListView.adapter.ListViewCategoryAdapter
 import com.gst.gusto.R
 import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel

@@ -301,25 +301,6 @@
             app:destination="@id/fragment_review_detail"/>
     </fragment>
     <fragment
-        android:id="@+id/fragment_review_detail"
-        android:name="com.gst.clock.Fragment.ReviewDetailFragment"
-        android:label="FragmentReviewDetail"
-        tools:layout="@layout/fragment_review_detail">
-        <action
-            android:id="@+id/action_reviewDetail_to_reviewFragment"
-            app:destination="@id/fragment_review"/>
-        <action
-            android:id="@+id/action_reviewDetail_to_myFragment"
-            app:destination="@id/fragment_my"/>
-        <action
-            android:id="@+id/action_reviewDetail_to_reviewDetailEdit"
-            app:destination="@id/fragment_review_detail_edit"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_reviewDetail_to_storeDetailFragment"
-            app:destination="@id/storeDetailFragment"/>
-    </fragment>
-    <fragment
         android:id="@+id/fragment_review_detail_edit"
         android:name="com.gst.clock.Fragment.ReviewDetailEditFragment"
         android:label="FragmentReviewDetailEdit"

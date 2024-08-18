@@ -96,7 +96,6 @@
                         android:id="@+id/iv_store_category"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/category_icon_1"
                         android:layout_margin="8dp"
                         />
                 </androidx.cardview.widget.CardView>
