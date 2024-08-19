@@ -90,7 +90,6 @@
                     <ImageView
                         android:id="@+id/iv_food_img"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/sample_store_2_img"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
                 <ImageView

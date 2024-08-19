@@ -1777,6 +1777,7 @@ class GustoViewModel: ViewModel() {
 
     fun updateSelectFlag(change : String){
         _allFlag.value = change
+        Log.d("select flag check", allFlag.value.toString())
     }
     fun deleteStores(data : MutableList<Int>, callback: (Int) -> Unit){
         service.deleteStores(xAuthToken, data).enqueue(object : Callback<Void>{
