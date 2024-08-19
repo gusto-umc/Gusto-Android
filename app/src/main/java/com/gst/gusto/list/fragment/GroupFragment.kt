@@ -56,15 +56,20 @@ class GroupFragment : Fragment() {
         }
         binding.btnSave.setOnClickListener {
             gustoViewModel.groupRouteCreateFragment.getRequestRoutesData()
-            gustoViewModel.createGroupRoute {result ->
-                when(result) {
-                    1 -> {
-                        gustoViewModel.requestRoutesData = null
-                        gustoViewModel.groupRouteFragment.popBack()
-                        binding.btnSave.visibility =View.GONE
+            if(gustoViewModel.requestRoutesData?.routeList?.size==0) {
+                Toast.makeText(requireContext(),"최소 한개의 루트를 설정해주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                gustoViewModel.createGroupRoute {result ->
+                    when(result) {
+                        1 -> {
+                            gustoViewModel.requestRoutesData = null
+                            gustoViewModel.groupRouteFragment.popBack()
+                            binding.btnSave.visibility =View.GONE
+                        }
                     }
                 }
             }
+
         }
         binding.lyPeople.setOnClickListener {
             gustoViewModel.followListTitleName= "그룹 리스트&루트"

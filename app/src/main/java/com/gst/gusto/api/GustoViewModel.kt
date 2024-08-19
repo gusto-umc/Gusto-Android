@@ -1968,12 +1968,12 @@ class GustoViewModel: ViewModel() {
         })
     }
     //리뷰 수정 -> 확인 완
-    fun editReview(reviewId : Long, img : String?, menuName : String?, taste : Int, spiceness : Int, mood : Int, toilet : Int, parking : Int, comment : String?,publish : Boolean, callback: (Int) -> Unit){
+    fun editReview(reviewId : Long, imgFiles : List<File>?, menuName : String?, taste : Int, spiceness : Int, mood : Int, toilet : Int, parking : Int, comment : String?,publish : Boolean, callback: (Int) -> Unit){
         var requestBody = RequestMyReview(menuName = menuName, taste = taste, spiciness = spiceness, mood = mood, toilet = toilet, parking = parking, comment = comment,publicCheck=publish)
         val filesToUpload: MutableList<MultipartBody.Part> = mutableListOf()
 
         // 이미지 파일들을 반복하면서 MultipartBody.Part 리스트에 추가
-        reviewEditImg?.forEach { imgFile ->
+        imgFiles?.forEach { imgFile ->
             val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), imgFile)
             val filePart = MultipartBody.Part.createFormData("image", imgFile.name, requestFile)
             filesToUpload.add(filePart)
