@@ -3,6 +3,7 @@ package com.gst.gusto.ListView.view
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import com.gst.gusto.ListView.adapter.StoreEditAdapter
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentStoreEditBinding
+import kotlin.concurrent.thread
 
 class StoreEditFragment : Fragment() {
 
@@ -135,44 +137,83 @@ class StoreEditFragment : Fragment() {
         /**
          * 4. 전체 선택
          */
+
         binding.cbStoreEditAll.setOnClickListener {
             binding.cbStoreEditAll.isChecked
             if(binding.cbStoreEditAll.isChecked){
                 gustoViewModel.updateSelectFlag("all")
             }
             else{
-                gustoViewModel!!.updateSelectFlag("all delete")
+                gustoViewModel!!.updateSelectFlag("nothing")
             }
         }
-
+        val handler = Handler(Looper.getMainLooper())
         gustoViewModel.allFlag.observe(viewLifecycleOwner, Observer {
             if(gustoViewModel.allFlag.value == "all"){
-                //전체선택
-                val handler = Handler(Looper.getMainLooper())
-                handler.postDelayed({
-                    binding.cbStoreEditAll.isChecked = true
+                Log.d("select", "1. all")
+
+                thread(start = true){
                     gustoViewModel.selectedStoreIdList.clear()
                     for(i in gustoViewModel.myAllStoreList){
                         gustoViewModel.selectedStoreIdList.add(i.pinId)
                     }
-                    mStoreEditAdapter.notifyDataSetChanged()
-                }, 1000)
-
-
-
+                    handler.post{
+                        Log.d("adapter select list", gustoViewModel!!.selectedStoreIdList.toString())
+                        mStoreEditAdapter.notifyDataSetChanged()
+                    }
+                }
             }
-            else if(gustoViewModel.allFlag.value == "false"){
+            else if(gustoViewModel.allFlag.value == "nothing"){
+                //select all off click
+                Log.d("select", "2. nothing")
+                thread(start = true){
+                    gustoViewModel.selectedStoreIdList.clear()
+                    Log.d("adapter select list", gustoViewModel!!.selectedStoreIdList.toString())
+                    handler.post{
+                        mStoreEditAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
+            else if(gustoViewModel.allFlag.value == "changeOn"){
+                //each cb on
+                Log.d("select", "3. changeOn")
+                binding.cbStoreEditAll.isChecked = true
+            }
+            else if(gustoViewModel.allFlag.value == "changeOff"){
+                //each cb off
+                Log.d("select", "4. changeOff")
                 binding.cbStoreEditAll.isChecked = false
             }
             else{
-                //전체 해제
-                val handler = Handler(Looper.getMainLooper())
-                handler.postDelayed({
-                    binding.cbStoreEditAll.isChecked = false
-                    gustoViewModel.selectedStoreIdList.clear()
-                    mStoreEditAdapter.notifyDataSetChanged()
-                }, 1000)
+
             }
+//            if(gustoViewModel.allFlag.value == "all"){
+//                //전체선택
+//                binding.cbStoreEditAll.isChecked = true
+//                val handler = Handler(Looper.getMainLooper())
+//                handler.postDelayed({
+//                    gustoViewModel.selectedStoreIdList.clear()
+//                    for(i in gustoViewModel.myAllStoreList){
+//                        gustoViewModel.selectedStoreIdList.add(i.pinId)
+//                    }
+//                    mStoreEditAdapter.notifyDataSetChanged()
+//                }, 10)
+//
+//
+//
+//            }
+//            else if(gustoViewModel.allFlag.value == "false"){
+//                binding.cbStoreEditAll.isChecked = false
+//            }
+//            else{
+//                //전체 해제
+//                binding.cbStoreEditAll.isChecked = false
+//                val handler = Handler(Looper.getMainLooper())
+//                handler.postDelayed({
+//                    gustoViewModel.selectedStoreIdList.clear()
+//                    mStoreEditAdapter.notifyDataSetChanged()
+//                }, 10)
+//            }
         })
 
     }
