@@ -16,6 +16,10 @@ interface UsersRepository {
 
     suspend fun getCheckNickname(token: String, nickname: String): ApiResponse<ResponseBody>
 
+    suspend fun setMyProfileImg(token: String, profileImg: String): ApiResponse<ResponseBody>
+
+    suspend fun setMyProfileInfo(token: String, setting: MyProfileData): ApiResponse<ResponseBody>
+
     companion object {
         fun create(): UsersRepositoryImpl{
             return UsersRepositoryImpl(

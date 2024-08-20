@@ -5,7 +5,10 @@ import com.gst.gusto.api.service.UsersApi
 import com.gst.gusto.dto.RequestMyPublish
 import com.gst.gusto.dto.ResponseMyProfile
 import com.gst.gusto.dto.ResponseMyPublish
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.http.Header
 import retrofit2.http.Path
 
@@ -61,6 +64,32 @@ class UsersDataSource(
             response.body()?.let{
                 ApiResponse.Success(it)
             } ?: ApiResponse.Error(response.code(), "Response body is null + ${response.message()}")
+        } else {
+            ApiResponse.Error(response.code(), response.message())
+        }
+    }
+
+    suspend fun setMyProfileImg(
+        token: String,
+        profileImg: MultipartBody.Part
+    ): ApiResponse<ResponseBody> {
+        val response = usersService.setMyProfileImg(token, profileImg)
+        return if(response.isSuccessful){
+            val responseBody = response.body() ?: "".toResponseBody(null)
+            ApiResponse.Success(responseBody)
+        } else {
+            ApiResponse.Error(response.code(), response.message())
+        }
+    }
+
+    suspend fun setMyProfileInfo(
+        token: String,
+        setting: RequestBody
+    ): ApiResponse<ResponseBody> {
+        val response = usersService.setMyProfileInfo(token, setting)
+        return if(response.isSuccessful){
+            val responseBody = response.body() ?: "".toResponseBody(null)
+            ApiResponse.Success(responseBody)
         } else {
             ApiResponse.Error(response.code(), response.message())
         }
