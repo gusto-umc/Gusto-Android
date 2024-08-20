@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
 import com.gst.gusto.util.util.Companion.setImage
 
-class ImageViewPagerAdapter(private val imageList: List<String>) : RecyclerView.Adapter<ImageViewPagerAdapter.ReviewDetailViewHolder>() {
+class ImageViewPagerAdapter(private val imageList: List<String>, private val itemClickListener: () -> Unit) : RecyclerView.Adapter<ImageViewPagerAdapter.ReviewDetailViewHolder>() {
     val imageViewList = ArrayList<ImageView>()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewDetailViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_review_detail_image, parent, false)
@@ -22,6 +23,10 @@ class ImageViewPagerAdapter(private val imageList: List<String>) : RecyclerView.
     override fun onBindViewHolder(holder: ReviewDetailViewHolder, position: Int) {
         val imageResId = imageList[position]
         setImage(holder.imageView,imageList[position],holder.itemView.context)
+
+        holder.imageView.setOnClickListener {
+            itemClickListener.invoke()
+        }
     }
 
     override fun getItemCount(): Int {

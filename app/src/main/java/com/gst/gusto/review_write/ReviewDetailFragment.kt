@@ -33,7 +33,6 @@ import com.gst.gusto.R
 import com.gst.gusto.util.util.Companion.dpToPixels
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewDetail2Binding
-import com.gst.gusto.review_write.adapter.ImageViewPagerAdapter
 import com.gst.gusto.review_write.adapter.ReviewHashTagAdapter
 import com.gst.gusto.util.util
 import com.gst.gusto.util.util.Companion.setImage
