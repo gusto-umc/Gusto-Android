@@ -27,7 +27,10 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
+import com.google.android.gms.ads.VideoController
+import com.google.android.gms.ads.nativead.NativeAd
 import com.gst.gusto.R
+import com.gst.gusto.databinding.NativeAdLayout1Binding
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -268,5 +271,86 @@ class util {
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
         }
 
+        /**
+         * 작업자 : Google
+         * 광고 뷰 설정
+         */
+        fun populateNativeAdView(nativeAd: NativeAd, unifiedAdBinding: NativeAdLayout1Binding) {
+            val nativeAdView = unifiedAdBinding.root
+
+
+            // 미디어 뷰 설정
+            nativeAdView.mediaView = unifiedAdBinding.adMedia
+
+            // 기타 광고 요소 설정
+            nativeAdView.headlineView = unifiedAdBinding.adHeadline
+            nativeAdView.bodyView = unifiedAdBinding.adBody
+            nativeAdView.callToActionView = unifiedAdBinding.adCallToAction
+            nativeAdView.iconView = unifiedAdBinding.adAppIcon
+            nativeAdView.priceView = unifiedAdBinding.adPrice
+            nativeAdView.starRatingView = unifiedAdBinding.adStars
+            nativeAdView.storeView = unifiedAdBinding.adStore
+            nativeAdView.advertiserView = unifiedAdBinding.adAdvertiser
+
+            // 헤드라인과 미디어 콘텐츠는 모든 UnifiedNativeAd에 포함되어 있습니다.
+            unifiedAdBinding.adHeadline.text = nativeAd.headline
+            nativeAd.mediaContent?.let { unifiedAdBinding.adMedia.setMediaContent(it) }
+
+            // 이러한 요소들은 모든 UnifiedNativeAd에 포함되어 있지 않을 수 있으므로
+            // 표시하기 전에 반드시 확인해야 합니다.
+            if (nativeAd.body == null) {
+                unifiedAdBinding.adBody.visibility = View.INVISIBLE
+            } else {
+                unifiedAdBinding.adBody.visibility = View.VISIBLE
+                unifiedAdBinding.adBody.text = nativeAd.body
+            }
+
+            if (nativeAd.callToAction == null) {
+                unifiedAdBinding.adCallToAction.visibility = View.INVISIBLE
+            } else {
+                unifiedAdBinding.adCallToAction.visibility = View.VISIBLE
+                unifiedAdBinding.adCallToAction.text = nativeAd.callToAction
+            }
+
+            if (nativeAd.icon == null) {
+                unifiedAdBinding.adAppIcon.visibility = View.GONE
+            } else {
+                unifiedAdBinding.adAppIcon.setImageDrawable(nativeAd.icon?.drawable)
+                unifiedAdBinding.adAppIcon.visibility = View.VISIBLE
+            }
+
+            if (nativeAd.price == null) {
+                unifiedAdBinding.adPrice.visibility = View.INVISIBLE
+            } else {
+                unifiedAdBinding.adPrice.visibility = View.VISIBLE
+                unifiedAdBinding.adPrice.text = nativeAd.price
+            }
+
+            if (nativeAd.store == null) {
+                unifiedAdBinding.adStore.visibility = View.INVISIBLE
+            } else {
+                unifiedAdBinding.adStore.visibility = View.VISIBLE
+                unifiedAdBinding.adStore.text = nativeAd.store
+            }
+
+            if (nativeAd.starRating == null) {
+                unifiedAdBinding.adStars.visibility = View.INVISIBLE
+            } else {
+                unifiedAdBinding.adStars.rating = nativeAd.starRating!!.toFloat()
+                unifiedAdBinding.adStars.visibility = View.VISIBLE
+            }
+
+            if (nativeAd.advertiser == null) {
+                unifiedAdBinding.adAdvertiser.visibility = View.INVISIBLE
+            } else {
+                unifiedAdBinding.adAdvertiser.text = nativeAd.advertiser
+                unifiedAdBinding.adAdvertiser.visibility = View.VISIBLE
+            }
+
+            // 이 메서드는 Google Mobile Ads SDK에 네이티브 광고 뷰에
+            // 이 네이티브 광고를 채우는 작업이 완료되었음을 알립니다.
+            nativeAdView.setNativeAd(nativeAd)
+
+        }
     }
 }
