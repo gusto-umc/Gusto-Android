@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_teen"
+        app:showAsAction="never"
+        android:title="10대" />
+    <item
+        android:id="@+id/menu_twenties"
+        app:showAsAction="never"
+        android:title="20대" />
+    <item
+        android:id="@+id/menu_thirties"
+        app:showAsAction="never"
+        android:title="30대" />
+    <item
+        android:id="@+id/menu_fourties"
+        app:showAsAction="never"
+        android:title="40대" />
+    <item
+        android:id="@+id/menu_fifties"
+        app:showAsAction="never"
+        android:title="50대" />
+    <item
+        android:id="@+id/menu_older"
+        app:showAsAction="never"
+        android:title="60대 이상" />
+    <item
+        android:id="@+id/menu_unselected"
+        app:showAsAction="never"
+        android:title="선택하지 않음" />
+</menu>
