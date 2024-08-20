@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.R
@@ -63,7 +64,7 @@ class InstaReviewFragment : Fragment() {
     private fun setReviewWriteBtn() {
         with(binding) {
             instaReviewWriteButton.setOnClickListener {
-
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewFragment_to_reviewAddSearch) }
             }
 
             instaReviewFab.setOnClickListener{

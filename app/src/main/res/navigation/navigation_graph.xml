@@ -20,6 +20,9 @@
             android:id="@+id/action_fragment_map_to_searchFragment"
             app:destination="@id/searchFragment" />
         <action
+            android:id="@+id/action_fragment_map_to_reviewAddSearch"
+            app:destination="@id/reviewAddSearchFragment"/>
+        <action
             android:id="@+id/action_fragment_map_to_mapListViewSaveFragment2"
             app:destination="@id/mapListViewSaveFragment" />
         <action
@@ -296,6 +299,9 @@
         <action
             android:id="@+id/action_reviewFragment_to_reviewDetail"
             app:destination="@id/reviewDetailFragment2"/>
+        <action
+            android:id="@+id/action_reviewFragment_to_reviewAddSearch"
+            app:destination="@id/reviewAddSearchFragment"/>
     </fragment>
 
     <fragment
@@ -506,6 +512,9 @@
         <action
             android:id="@+id/action_storeFragment_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_storeFragment_to_fragment_review_add_1"
+            app:destination="@id/fragment_review_add_1"/>
     </fragment>
     <fragment
         android:id="@+id/storeEditFragment"
@@ -521,5 +530,16 @@
         <action
             android:id="@+id/action_reviewDetail_to_reviewDetailEdit"
             app:destination="@id/fragment_review_detail_edit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/reviewAddSearchFragment"
+        android:name="com.gst.gusto.search.ReviewAddSearchFragment"
+        android:label="ReviewAddSearchFragment">
+        <action
+            android:id="@+id/action_reviewAddSearch_to_reviewAdd1"
+            app:destination="@id/fragment_review_add_1"/>
+        <action
+            android:id="@+id/action_reviewAddSearch_to_store"
+            app:destination="@id/storeFragment"/>
     </fragment>
 </navigation>

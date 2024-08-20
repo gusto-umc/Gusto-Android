@@ -66,6 +66,9 @@ class StoreFragment : Fragment() {
         else if(sign == "search"){
             mStoreAdapter = StoreAdapter(view, "search")
         }
+        else if(sign == "reviewAdd"){
+            mStoreAdapter = StoreAdapter(view, "reviewAdd")
+        }
 
         if(sign == "map"){
             binding.tvStoreEdit.visibility = View.VISIBLE
@@ -91,6 +94,21 @@ class StoreFragment : Fragment() {
                     gustoViewModel!!.routeStorTmpData = ResponseStoreListItem(dataSet.storeId.toInt(),dataSet.storeName,dataSet.address,0,"")
                     findNavController().popBackStack()
                     findNavController().popBackStack()
+                }
+                else if(sign == "reviewAdd"){
+                    gustoViewModel.getStoreDetail(dataSet.storeId.toLong()){
+                            result ->
+                        when(result){
+                            0 -> {
+                                //success
+                                Navigation.findNavController(view).navigate(R.id.action_storeFragment_to_fragment_review_add_1)
+                            }
+                            1 -> {
+                                //fail
+                                Toast.makeText(context, "로드에 실패했습니다", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
                 }
             }
 
