@@ -13,7 +13,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.ListView.adapter.CategoryAdapter
-import com.gst.gusto.ListView.adapter.ListViewCategoryAdapter
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMyListBinding
 

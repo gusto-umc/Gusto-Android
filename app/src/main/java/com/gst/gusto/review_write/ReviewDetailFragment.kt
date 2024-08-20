@@ -1,12 +1,15 @@
 package com.gst.clock.Fragment
 
 import android.content.Context
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
@@ -30,8 +33,6 @@ import com.gst.gusto.R
 import com.gst.gusto.util.util.Companion.dpToPixels
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewDetail2Binding
-import com.gst.gusto.databinding.FragmentReviewDetailBinding
-import com.gst.gusto.review_write.adapter.ImageViewPagerAdapter
 import com.gst.gusto.review_write.adapter.ReviewHashTagAdapter
 import com.gst.gusto.util.util
 import com.gst.gusto.util.util.Companion.setImage
@@ -43,6 +44,8 @@ class ReviewDetailFragment : Fragment() {
     private val gustoViewModel : GustoViewModel by activityViewModels()
     lateinit var page : String
     private lateinit var activity : MainActivity
+
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -61,6 +64,7 @@ class ReviewDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
         activity = requireActivity() as MainActivity
         activity.hideBottomNavigation(true)
+
 
     }
     override fun onCreateView(
@@ -189,12 +193,124 @@ class ReviewDetailFragment : Fragment() {
         /**
          * 서버 데이터 연결
          */
+        var photoPosition = 0
+        fun changePhoto(size : Int, position : Int){
+            if(position == (size -1)){
+                photoPosition = 0
+                setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!!.first(), requireContext())
+                when(size){
+                    2 -> {
+                        binding.viewLayout21.setBackgroundResource(R.color.white)
+                        binding.viewLayout21.setBackgroundResource(R.color.gray_navi)
+                    }
+                    3 -> {
+                        binding.viewLayout30.setBackgroundResource(R.color.white)
+                        binding.viewLayout31.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout32.setBackgroundResource(R.color.gray_navi)
+
+                    }
+                    4 -> {
+                        binding.viewLayout40.setBackgroundResource(R.color.white)
+                        binding.viewLayout41.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout42.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout43.setBackgroundResource(R.color.gray_navi)
+                    }
+                }
+            }else{
+                photoPosition++
+                setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!![photoPosition], requireContext())
+                when(size){
+                    2 -> {
+                        binding.viewLayout21.setBackgroundResource(R.color.white)
+                    }
+                    3 -> {
+                        when(photoPosition){
+                            1 -> {binding.viewLayout31.setBackgroundResource(R.color.white)}
+                            2 -> {binding.viewLayout32.setBackgroundResource(R.color.white)}
+                        }
+                    }
+                    4 -> {
+                        when(photoPosition){
+                            1 -> {binding.viewLayout41.setBackgroundResource(R.color.white)}
+                            2 -> {binding.viewLayout42.setBackgroundResource(R.color.white)}
+                            3 -> {binding.viewLayout43.setBackgroundResource(R.color.white)}
+                        }
+                    }
+                }
+
+            }
+
+        }
         gustoViewModel.successFlg.observe(viewLifecycleOwner, Observer{
             if(it){
-                setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!!.first(), requireContext() )
+                when(gustoViewModel.myReview?.img!!.size){
+                    1 -> {
+                        //visibility 처리
+                        binding.reviewDetailBarLayout1.visibility = View.VISIBLE
+                        binding.reviewDetailBarLayout2.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout3.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout4.visibility = View.INVISIBLE
+
+                        //image 적용
+                        setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!!.first(), requireContext() )
+                        photoPosition = 0
+                    }
+                    2 -> {
+                        //visibility 처리
+                        binding.reviewDetailBarLayout1.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout2.visibility = View.VISIBLE
+                        binding.reviewDetailBarLayout3.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout4.visibility = View.INVISIBLE
+
+                        setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!!.first(), requireContext() )
+                        photoPosition = 0
+
+                        binding.viewLayout21.setBackgroundResource(R.color.white)
+                        binding.viewLayout21.setBackgroundResource(R.color.gray_navi)
+
+                    }
+                    3 -> {
+                        //visibility 처리
+                        binding.reviewDetailBarLayout1.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout2.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout3.visibility = View.VISIBLE
+                        binding.reviewDetailBarLayout4.visibility = View.INVISIBLE
+
+                        setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!!.first(), requireContext() )
+                        photoPosition = 0
+
+                        binding.viewLayout30.setBackgroundResource(R.color.white)
+                        binding.viewLayout31.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout32.setBackgroundResource(R.color.gray_navi)
+                    }
+                    4 -> {
+                        //visibility 처리
+                        binding.reviewDetailBarLayout1.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout2.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout3.visibility = View.INVISIBLE
+                        binding.reviewDetailBarLayout4.visibility = View.VISIBLE
+
+                        setImage(binding.ivReviewImg, gustoViewModel.myReview?.img!!.first(), requireContext() )
+                        photoPosition = 0
+
+                        binding.viewLayout40.setBackgroundResource(R.color.white)
+                        binding.viewLayout41.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout42.setBackgroundResource(R.color.gray_navi)
+                        binding.viewLayout43.setBackgroundResource(R.color.gray_navi)
+                    }
+                    else -> findNavController().popBackStack()
+                }
             }
 
         })
+
+        binding.ivReviewImg.setOnClickListener {
+            if(gustoViewModel.myReview?.img!!.size >= 2){
+                changePhoto(gustoViewModel.myReview?.img!!.size, photoPosition)
+            }
+        }
+
+
 
 
 
@@ -239,14 +355,22 @@ class ReviewDetailFragment : Fragment() {
             }
 
         }
-
+        activity.setTrans(false)
     }
 
     override fun onResume() {
         super.onResume()
         activity = requireActivity() as MainActivity
         activity.hideBottomNavigation(true)
+        activity.setTrans(true)
     }
+
+    override fun onStop() {
+        super.onStop()
+        activity.setTrans(false)
+    }
+
+
 
 
 

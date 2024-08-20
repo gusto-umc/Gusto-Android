@@ -2,6 +2,7 @@ package com.gst.gusto.store_detail.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.util.util.Companion.setImage
@@ -18,6 +19,8 @@ class StoreDetailReviewPhotoAdapter (val dataSet : ArrayList<String?>) : Recycle
             //binding.ivItemStoreDetailReviewPhoto.setImageResource(photo)
             if(!photo.isNullOrBlank()){
                 setImage(binding.ivItemStoreDetailReviewPhoto, photo, mContext!!)
+            } else{
+                binding.ivItemStoreDetailReviewPhoto.visibility = View.INVISIBLE
             }
         }
     }

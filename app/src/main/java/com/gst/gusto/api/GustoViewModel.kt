@@ -1777,6 +1777,7 @@ class GustoViewModel: ViewModel() {
 
     fun updateSelectFlag(change : String){
         _allFlag.value = change
+        Log.d("select flag check", allFlag.value.toString())
     }
     fun deleteStores(data : MutableList<Int>, callback: (Int) -> Unit){
         service.deleteStores(xAuthToken, data).enqueue(object : Callback<Void>{
@@ -1929,7 +1930,6 @@ class GustoViewModel: ViewModel() {
 
     var myReview : ResponseMyReview? = null
     var myReviewId : Long? = null
-    var reviewEditImg = ArrayList<File>()
     private var _successFlag = MutableLiveData<Boolean>(false)
     val successFlg : LiveData<Boolean>
         get() = _successFlag

@@ -7,10 +7,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.ResponseReviews
 import com.gst.gusto.databinding.ItemStoreDetailReviewBinding
@@ -20,6 +22,7 @@ class StoreDetailReviewAdapter () : ListAdapter<ResponseReviews, StoreDetailRevi
     DiffCallback) {
 
     var mContext : Context? = null
+    var gustoViewModel :GustoViewModel? = null
 
 
     companion object {
@@ -96,32 +99,48 @@ class StoreDetailReviewAdapter () : ListAdapter<ResponseReviews, StoreDetailRevi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.bind(getItem(position))
-        fun changeHeart(onFlag : Boolean){
-            Log.d("heartFlagCheck", onFlag.toString())
-            if(onFlag){
-                //하트여부 변경 후(하트x) notify + 서버 연결
-                //
-                //notifyDataSetChanged()
-                holder.ivHeart.setImageResource(R.drawable.heart_img)
-                holder.ivHeart.imageTintList = null
-                holder.heartFlag = false
-                holder.tvCount.text = "${holder.tvCount.text.toString().toInt() - 1}"
-            }
-            else{
-                //하트여부 변경 후(하트x) notify + 서버 연결
-                //
-                //notifyDataSetChanged()
-                holder.ivHeart.setImageResource(R.drawable.heart_img)
-                holder.ivHeart.imageTintList = ColorStateList.valueOf(Color.parseColor("#F27781"))
-                holder.heartFlag = true
-                holder.tvCount.text = "${holder.tvCount.text.toString().toInt() + 1}"
-            }
-        }
-
-        //하트 클릭 시 -> flag 확인 후 처리
-        holder.ivHeart.setOnClickListener {
-            changeHeart(holder.heartFlag)
-        }
+//        fun changeHeart(onFlag : Boolean){
+//            Log.d("heartFlagCheck", onFlag.toString())
+//            if(onFlag){
+//                //하트여부 변경 후(하트x) notify + 서버 연결
+//                gustoViewModel!!.currentFeedReviewId = holder.data!!.reviewId
+//                gustoViewModel!!.lickReview{ result ->
+//                    when(result) {
+//                        1 -> {
+//                            holder.ivHeart.setImageResource(R.drawable.heart_img)
+//                            holder.ivHeart.imageTintList = null
+//                            holder.heartFlag = false
+//                            holder.tvCount.text = "${holder.tvCount.text.toString().toInt() - 1}"
+//                        }
+//                    }
+//                }
+//
+//            }
+//            else{
+//                //하트여부 변경 후(하트x) notify + 서버 연결
+//                gustoViewModel!!.currentFeedReviewId = holder.data!!.reviewId
+//                gustoViewModel!!.unlickReview{ result ->
+//                    when(result) {
+//                        1 -> {
+//                            holder.ivHeart.setImageResource(R.drawable.heart_img)
+//                            holder.ivHeart.imageTintList = ColorStateList.valueOf(Color.parseColor("#F27781"))
+//                            holder.heartFlag = true
+//                            holder.tvCount.text = "${holder.tvCount.text.toString().toInt() + 1}"
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        //하트 클릭 시 -> flag 확인 후 처리
+//        holder.ivHeart.setOnClickListener {
+//            if(holder.data!!.nickname == gustoViewModel!!.userNickname){
+//                Toast.makeText(mContext, "본인의 리뷰에는 좋아요를 누를 수 없습니다.", Toast.LENGTH_SHORT).show()
+//            }else{
+//                changeHeart(holder.heartFlag)
+//            }
+//
+//        }
 
         //레이아웃 클릭 시 상세 리뷰 화면으로 이동
         holder.layoutItem.setOnClickListener {

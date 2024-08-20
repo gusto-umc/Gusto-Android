@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -38,14 +39,13 @@ class ReviewDetailEditFragment : Fragment() {
 
     private lateinit var activityResult: ActivityResultLauncher<Intent>
     private val imageList = mutableListOf<Uri>()
+    private val imageListStr = mutableListOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentReviewDetailEditBinding.inflate(inflater, container, false)
-
-        val receivedBundle = arguments
 
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
@@ -55,8 +55,8 @@ class ReviewDetailEditFragment : Fragment() {
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                Log.d("testtest","good")
                 imageList.clear()
+                imageListStr.clear()
                 val data = result.data
                 data?.let {
                     if (it.clipData != null) {
@@ -68,12 +68,14 @@ class ReviewDetailEditFragment : Fragment() {
                         for (index in 0 until count ) {
                             val imageUri = it.clipData!!.getItemAt(index).uri
                             imageList.add(imageUri)
+                            imageListStr.add(imageUri.toString())
                         }
                     } else {
                         val imageUri = it.data
                         imageList.add(imageUri!!)
+                        imageListStr.add(imageUri.toString())
                     }
-                    setImage(binding.ivFoodImg,imageList.get(0).toString(),requireContext())
+                    binding.vpImgSlider.adapter?.notifyDataSetChanged()
                 }
             }
         }
@@ -111,22 +113,28 @@ class ReviewDetailEditFragment : Fragment() {
         }
 
         // 이미지 슬라이드
+        val viewPager = binding.vpImgSlider
         //이미지 처리
         if(!gustoViewModel.myReview!!.img.isNullOrEmpty()){
-            setImage(binding.ivFoodImg,gustoViewModel.myReview!!.img!![0],requireContext())
+            for(img in gustoViewModel.myReview!!.img!!) {
+                imageListStr.add(img)
+                imageList.add(Uri.parse(img))
+            }
         }
-
-        //공개 비공개
-        var publish = false
-
-        //사진 변경
-
-        binding.btnSelectImages.setOnClickListener {
+        val adapter = ImageViewPagerAdapter(imageListStr, itemClickListener = {  ->
+            //사진 변경
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
             activityResult.launch(intent)
-        }
+        })
+        viewPager.adapter = adapter
+        viewPager.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+
+        //공개 비공개
+        var publish = false
+
 
         //저장
         binding.btnSave.setOnClickListener {
@@ -134,6 +142,7 @@ class ReviewDetailEditFragment : Fragment() {
             val imgFiles = ArrayList<File>()
             for(img in imageList) {
                 imgFiles.add(util.convertContentToFile(requireContext(),img))
+                Log.d("viewmodel Test", "1")
             }
             //메뉴
             val menu = binding.edtMenu.text.toString()
@@ -161,6 +170,7 @@ class ReviewDetailEditFragment : Fragment() {
                                 0 -> {
                                     Log.d("img check edit", gustoViewModel.myReview!!.img.toString())
                                     gustoViewModel.changeReviewFlag(true)
+                                    findNavController().popBackStack()
                                 }
                                 1 -> {}
                             }
@@ -169,7 +179,7 @@ class ReviewDetailEditFragment : Fragment() {
                     1 -> {}
                 }
             }
-            findNavController().popBackStack()
+
         }
 
         binding.btnPrivate.setOnClickListener {
