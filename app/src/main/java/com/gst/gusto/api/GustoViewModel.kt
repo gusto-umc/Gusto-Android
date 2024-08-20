@@ -1930,7 +1930,6 @@ class GustoViewModel: ViewModel() {
 
     var myReview : ResponseMyReview? = null
     var myReviewId : Long? = null
-    var reviewEditImg = ArrayList<File>()
     private var _successFlag = MutableLiveData<Boolean>(false)
     val successFlg : LiveData<Boolean>
         get() = _successFlag
