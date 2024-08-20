@@ -188,6 +188,17 @@
                     android:fontFamily="@font/pretendard_semibold"
                     android:textSize="20sp"
                     android:text="개 있어요" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:textSize="12sp"
+                    android:textColor="@color/gray_navi"
+                    android:text="더보기" />
             </LinearLayout>
         </LinearLayout>
 

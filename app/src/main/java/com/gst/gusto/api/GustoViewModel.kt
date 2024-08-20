@@ -5,20 +5,18 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.retrofit.RetrofitInstance
-import com.gst.gusto.dto.ResponseInstaReviews
-import com.gst.gusto.list.adapter.GroupAdapter
-import com.gst.gusto.util.mapUtil
 import com.gst.gusto.list.adapter.GroupItem
-import com.gst.gusto.list.adapter.MapRoutesAdapter
 import com.gst.gusto.list.adapter.RestItem
 import com.gst.gusto.list.fragment.GroupRouteCreateFragment
 import com.gst.gusto.list.fragment.GroupRoutesFragment
 import com.gst.gusto.list.fragment.GroupStoresFragment
-import com.gst.gusto.list.fragment.RouteCreateFragment
 import com.gst.gusto.util.GustoApplication
+import com.gst.gusto.util.mapUtil
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -159,6 +157,22 @@ class GustoViewModel: ViewModel() {
     private val _tokenToastData: MutableLiveData<Unit> = MutableLiveData()
     val tokenToastData: LiveData<Unit>
         get() = _tokenToastData
+
+    //수정된 저장 음식점 api 연결
+
+    private val _storeList = MutableLiveData<List<StoreData>>()
+    val storeList: LiveData<List<StoreData>> get() = _storeList
+    private val _hasNext = MutableLiveData<Boolean>()
+    val hasNext: LiveData<Boolean> get() = _hasNext
+
+    var selectedStoreData: StoreData? = null
+
+    //val storeList = MutableLiveData<MutableList<StoreData>>()  // 전체 가게 데이터 리스트
+    //val hasNext = MutableLiveData<Boolean>()  // 다음 페이지 존재 여부
+    private var lastStoreId: Long? = null  // 마지막 가게 ID 저장
+
+    // GustoApi 인스턴스
+    private val gustoApi = RetrofitInstance.createService(GustoApi::class.java)
 
     fun getTokens() {
         xAuthToken = GustoApplication.prefs.getSharedPrefs().first
@@ -1381,33 +1395,38 @@ class GustoViewModel: ViewModel() {
         })
     }
     // 카테고리 조회(위치 기반, 내 위치 장소보기) -> 확인 완료
-    fun getMapCategory(townName : String, callback: (Int) -> Unit){
-        service.getMapCategory(xAuthToken, townName = townName).enqueue(object :Callback<ArrayList<ResponseMapCategory>>{
+    fun getMapCategory(townName: String, callback: (Int) -> Unit) {
+        service.getMapCategory(xAuthToken, townName).enqueue(object : Callback<ResponsePMyCategory> {
             override fun onResponse(
-                call: Call<ArrayList<ResponseMapCategory>>,
-                response: Response<ArrayList<ResponseMapCategory>>
+                call: Call<ResponsePMyCategory>,
+                response: Response<ResponsePMyCategory>
             ) {
                 if (response.isSuccessful) {
-                    Log.e("viewmodel", response.body()!!.toString())
-                    Log.e("viewmodel", "Successful response: ${response}")
-                    myMapCategoryList = response.body()!!
-                    callback(0)
-                } else if(response.code()==403) {
+                    Log.e("viewmodelchip", response.body()!!.toString())
+                    Log.e("viewmodelchip", "Successful response: ${response}")
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        myMapCategoryList = responseBody.result
+                        callback(0) // 성공을 나타내는 코드
+                    } else {
+                        callback(1) // 데이터가 null일 경우 실패
+                    }
+                } else if (response.code() == 403) {
                     _tokenToastData.value = Unit
                     refreshToken()
                 } else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(1)
+                    Log.e("viewmodelchip", "Unsuccessful response: ${response}")
+                    callback(1) // 실패를 나타내는 코드
                 }
             }
 
-            override fun onFailure(call: Call<ArrayList<ResponseMapCategory>>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(1)
+            override fun onFailure(call: Call<ResponsePMyCategory>, t: Throwable) {
+                Log.e("viewmodelchip", "Failed to make the request", t)
+                callback(1) // 실패를 나타내는 코드
             }
-
         })
     }
+
 
 
     fun deleteCateogories(data : MutableList<Int>, callback: (Int) -> Unit){
@@ -2296,4 +2315,103 @@ class GustoViewModel: ViewModel() {
             }
         })
     }
+
+    //저장된 맛집
+    /*
+    // 첫 페이지 또는 다음 페이지 데이터를 불러오는 함수
+    fun loadVisitedStores(categoryId: Int, townName: String) {
+        viewModelScope.launch {
+            try {
+                // API 요청 (categoryId, townName, lastStoreId에 따라)
+                val response = gustoApi.getVisitedStores(categoryId, townName, lastStoreId)
+                Log.d("GustoApiResponseStore", "Response: ${response.pinStores}")
+
+                // 데이터가 있으면 storeList 업데이트
+                val currentList = storeList.value ?: mutableListOf()
+                currentList.addAll(response.pinStores)
+                storeList.postValue(currentList)
+
+                // hasNext 및 lastStoreId 업데이트
+                hasNext.postValue(response.hasNext)
+                lastStoreId = response.pinStores.lastOrNull()?.storeId  // 마지막 데이터의 storeId 저장
+            } catch (e: Exception) {
+                // 예외 처리
+                Log.e("GustoViewModel", "Error loading visited stores", e)
+            }
+        }
+    }
+
+    // 초기 데이터를 로드하는 함수
+    fun resetData(categoryId: Int, townName: String) {
+        storeList.value = mutableListOf()  // 기존 데이터 초기화
+        lastStoreId = null  // 마지막 ID 초기화
+        loadVisitedStores(categoryId, townName)  // 첫 페이지 데이터 로드
+    }
+     */
+
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> get() = _errorMessage
+// 가게 데이터 초기화
+private fun fetchVisitedStores(categoryId: Int, townName: String, lastStoreId: Long? = null) {
+    gustoApi.getVisitedStores(xAuthToken, categoryId, townName, lastStoreId).enqueue(object : Callback<VisitedStoresResponse> {
+        override fun onResponse(call: Call<VisitedStoresResponse>, response: Response<VisitedStoresResponse>) {
+            if (response.isSuccessful) {
+                val visitedStoresResponse = response.body()
+                val newStores = visitedStoresResponse?.pinStores ?: emptyList()
+
+                // 새로운 데이터를 LiveData에 설정
+                _storeList.postValue(newStores)
+                _hasNext.postValue(visitedStoresResponse?.hasNext ?: false)
+
+                // 새로운 데이터가 있으면 lastStoreId 업데이트
+                /*
+                if (newStores.isNotEmpty()) {
+                    lastStoreId = newStores.last().id // StoreData에 `id` 필드가 있어야 함
+                } else {
+                    lastStoreId = null // 데이터가 없으면 lastStoreId 초기화
+                }
+                */
+
+                Log.d("viewModelStore", "API 호출 성공, hasNext: ${visitedStoresResponse?.hasNext}")
+            } else {
+                // API 호출 실패 시 에러 메시지 설정
+                val errorResponse = response.errorBody()?.string() ?: "알 수 없는 오류"
+                _errorMessage.postValue("API 오류: ${response.code()} - $errorResponse")
+                Log.e("viewModelStore", "API 오류: ${response.code()} - $errorResponse")
+            }
+        }
+
+        override fun onFailure(call: Call<VisitedStoresResponse>, t: Throwable) {
+            // 네트워크 오류 시 에러 메시지 설정
+            _errorMessage.postValue("방문한 상점 가져오기 오류: ${t.message}")
+            Log.e("viewModelStore", "방문한 상점 가져오기 오류", t)
+        }
+    })
+}
+
+    /**
+     * 데이터를 초기화하고 첫 페이지를 로드하는 함수
+     *
+     * @param categoryId 카테고리 ID
+     * @param townName 지역명
+     */
+    fun resetData(categoryId: Int, townName: String) {
+        lastStoreId = null // 첫 페이지를 로드하기 위해 lastStoreId 초기화
+        viewModelScope.launch {
+            fetchVisitedStores(categoryId, townName)
+        }
+    }
+
+    /**
+     * 다음 페이지의 데이터를 로드하는 함수
+     *
+     * @param categoryId 카테고리 ID
+     * @param townName 지역명
+     */
+    fun loadVisitedStores(categoryId: Int, townName: String) {
+        viewModelScope.launch {
+            fetchVisitedStores(categoryId, townName, lastStoreId)
+        }
+    }
+
 }

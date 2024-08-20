@@ -1,6 +1,5 @@
 package com.gst.gusto.api
 
-import com.gst.gusto.dto.ResponseInstaReview
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -14,7 +13,6 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
-import retrofit2.http.QueryMap
 import java.time.LocalDate
 
 
@@ -22,9 +20,9 @@ interface GustoApi {
     // TOKEN
     @POST("auth/reissue-token") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
     fun refreshToken(
-        @Header("X-AUTH-TOKEN") access : String,
-        @Header("refresh-Token") refresh : String
-    ):Call<ResponseBody>
+        @Header("X-AUTH-TOKEN") access: String,
+        @Header("refresh-Token") refresh: String
+    ): Call<ResponseBody>
 
     //MAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAP
     @GET("stores/map") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
@@ -292,9 +290,10 @@ interface GustoApi {
     //3. 카테고리 조회(위치 기반, 내 위치 장소보기) ->  확인 완
     @GET("myCategories")
     fun getMapCategory(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("townName") townName : String
-    ) : Call<ArrayList<ResponseMapCategory>>
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("townName") townName: String
+    ): Call<ResponsePMyCategory>
+            //Call<ArrayList<ResponseMapCategory>>
 
     //4. 카테고리 삭제하기 -> 단 건 삭제 확인 완
 
@@ -420,9 +419,6 @@ interface GustoApi {
 
 
 
-
-
-
     /**
      * 리뷰 - 연결 완
      */
@@ -519,6 +515,19 @@ interface GustoApi {
         @Query("latitude") latitude: Double
     ): Call<LocalCategoryResponse>
 
+    //나의 콘텐츠 공개 여부 조회
+    @GET("users/my-info/publishing")
+    fun myPublishGet(
+        @Header("X-AUTH-TOKEN") token: String
+    ): Call<ResponseMyPublishGet>
+
+    //나의 콘텐츠 공개 여부 변경
+    @PATCH("users/my-info/publishing")
+    fun myPublishSet(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Body data: RequestMyPublish
+    ): Call<ResponseBody>
+
     // 로그아웃
     @POST("users/sign-out")
     fun logout(
@@ -531,4 +540,14 @@ interface GustoApi {
     fun unregister(
         @Header("X-AUTH-TOKEN") xtoken: String
     ): Call<ResponseBody>
+
+    //탭바 저장된 음식점 수정
+    @GET("stores/pins/visited")
+    fun getVisitedStores(
+        @Header("X-AUTH-TOKEN") xtoken: String,
+        @Query("myCategoryId") categoryId: Int,
+        @Query("townName") townName: String,
+        @Query("lastStoreId") lastStoreId: Long? = null
+    ): Call<VisitedStoresResponse>
+
 }

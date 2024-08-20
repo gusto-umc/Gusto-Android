@@ -468,3 +468,30 @@ data class AccessTokenResponse(
     @SerializedName("token_type") val tokenType: String,
     @SerializedName("refresh_token") val refreshToken: String?
 )
+
+// 나의 콘텐츠 공개 여부 조회
+data class ResponseMyPublishGet(
+    @SerializedName("publishReview") val publishReview: Boolean,
+    @SerializedName("publishPin") val publishPin: Boolean,
+    @SerializedName("publishRoute") val publishRoute: Boolean,
+)
+
+// 나의 콘텐츠 공개 여부 변경
+data class RequestMyPublish(
+    @SerializedName("publishReview") val publishReview: Boolean,
+    @SerializedName("publishPin") val publishPin: Boolean,
+    @SerializedName("publishRoute") val publishRoute: Boolean,
+)
+
+//저장된 스토어 재조정
+data class VisitedStoresResponse(
+    @SerializedName("pinStores") val pinStores: List<StoreData>,
+    @SerializedName("hasNext") val hasNext: Boolean
+)
+
+data class StoreData(
+    @SerializedName("storeName") val storeName: String,
+    @SerializedName("address")val address: String,
+    @SerializedName("category") val category: String,
+    @SerializedName("reviewImg3") val reviewImg3: List<String>
+)
