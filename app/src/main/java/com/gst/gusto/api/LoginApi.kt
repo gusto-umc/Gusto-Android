@@ -14,6 +14,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface LoginApi {
@@ -55,4 +56,9 @@ interface LoginApi {
         @Field("client_secret") clientSecret: String,
         @Field("redirect_uri") redirectUri: String
     ): Call<AccessTokenResponse>
+
+    @GET("auth/decoding")
+    fun test(
+        @Query("value") value: String
+    ): Call<ResponseBody>
 }
