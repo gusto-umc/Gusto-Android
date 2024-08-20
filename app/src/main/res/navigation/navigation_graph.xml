@@ -313,8 +313,7 @@
             app:destination="@id/fragment_my"/>
         <action
             android:id="@+id/action_reviewDetail_to_reviewDetailEdit"
-            app:destination="@id/fragment_review_detail_edit"
-            app:popUpToInclusive="true" />
+            app:destination="@id/fragment_review_detail_edit"/>
         <action
             android:id="@+id/action_reviewDetail_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment"/>
@@ -337,6 +336,9 @@
         <action
             android:id="@+id/action_feedFragment_to_feedDetailReviewFragment"
             app:destination="@id/fragment_feed_detail_review" />
+        <action
+            android:id="@+id/action_fragment_feed_to_fragment_review_detail"
+            app:destination="@id/fragment_review_detail" />
     </fragment>
     <fragment
         android:id="@+id/fragment_feed_detail_review"
