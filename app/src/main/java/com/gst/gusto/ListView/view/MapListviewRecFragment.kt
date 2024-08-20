@@ -1,5 +1,6 @@
 package com.gst.gusto.ListView.view
 
+import SavedStoreListAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gst.gusto.ListView.adapter.SavedStoreListAdapter
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.StoreData
@@ -50,7 +50,7 @@ class MapListviewRecFragment : Fragment() {
         val mRecAdapter = SavedStoreListAdapter()
         mRecAdapter.setItemClickListener(object : SavedStoreListAdapter.OnItemClickListener {
             override fun onClick(dataSet: StoreData) {
-                gustoViewModel.selectStoreId = dataSet.storeId
+                //gustoViewModel.selectStoreId = dataSet.storeId
                 gustoViewModel.storeIdList.clear()
                 gustoViewModel.storeIdList.addAll(gustoViewModel.savedStoreIdList)
                 findNavController().navigate(R.id.action_mapListViewSaveFragment_to_fragment_map_viewpager)

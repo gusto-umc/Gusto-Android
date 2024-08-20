@@ -481,14 +481,13 @@ data class RequestMyPublish(
 
 //저장된 스토어 재조정
 data class VisitedStoresResponse(
-    val pinStores: List<StoreData>,
-    val hasNext: Boolean
+    @SerializedName("pinStores") val pinStores: List<StoreData>,
+    @SerializedName("hasNext") val hasNext: Boolean
 )
 
 data class StoreData(
-    val storeId: Long,
-    val storeName: String,
-    val address: String,
-    val category: String,
-    val reviewImg3: List<String>
+    @SerializedName("storeName") val storeName: String,
+    @SerializedName("address")val address: String,
+    @SerializedName("category") val category: String,
+    @SerializedName("reviewImg3") val reviewImg3: List<String>
 )

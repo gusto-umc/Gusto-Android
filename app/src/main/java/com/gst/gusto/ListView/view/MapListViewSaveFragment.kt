@@ -1,5 +1,6 @@
 package com.gst.gusto.ListView.view
 
+import SavedStoreListAdapter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.gst.gusto.ListView.adapter.SavedStoreListAdapter
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.StoreData
@@ -22,6 +22,9 @@ class MapListViewSaveFragment : Fragment() {
     private lateinit var binding: FragmentMapListviewSaveBinding
     private val gustoViewModel: GustoViewModel by activityViewModels()
     private lateinit var adapter: SavedStoreListAdapter
+
+    private var categoryId: Int = 1 // 기본값을 설정하거나 적절한 값을 초기화
+    private var townName: String = "SampleTown" // 기본값을 설정하거나 적절한 값을 초기화
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,58 +37,58 @@ class MapListViewSaveFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("viewModelStore", "프레그먼트 생성")
         setupRecyclerView()
-        Log.d("viewModelStore", "리사이클러뷰")
 
-        // Initialize data loading
-        val categoryId = 1 // or get from arguments or other sources
-        val townName = "SampleTown" // or get from arguments or other sources
+        // 데이터 초기 로딩을 위해 호출
         gustoViewModel.resetData(categoryId, townName)
-        Log.d("viewModelStore", "데이터 받아오기")
 
-        // Observe data changes
+        // 데이터 변경을 관찰하고 어댑터에 새 데이터를 설정
         gustoViewModel.storeList.observe(viewLifecycleOwner, Observer { stores ->
-            Log.d("viewModelStore", "어댑터 전")
-            Log.d("viewModelStore", "받은 데이터: $stores")
             adapter.submitList(stores)
-            Log.d("viewModelStore", "어댑터 후")
+            Log.d("viewModelStore", "어댑터 설정")
         })
 
-        // RecyclerView의 ScrollListener를 onViewCreated에서 설정
+        // RecyclerView의 스크롤 리스너를 설정
         gustoViewModel.hasNext.observe(viewLifecycleOwner, Observer { hasNext ->
-            Log.d("viewModelStore", "hasNext value: $hasNext") // Add this log to see the value
-            binding.rvMapSaveVisited.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    Log.d("viewModelStore", "해쉬넥스트")
-                    super.onScrolled(recyclerView, dx, dy)
-                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    val totalItemCount = layoutManager.itemCount
-                    val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
-                    Log.d("viewModelStore", "if문")
-                    if (hasNext && lastVisibleItem >= totalItemCount - 1) {
-                        Log.d("viewModelStore", "Loading more data")
-                        val categoryId = 1 // 실제 categoryId 사용
-                        val townName = "SampleTown" // 실제 townName 사용
-                        gustoViewModel.loadVisitedStores(categoryId, townName)
-                    }
-                }
-            })
+            Log.d("viewModelStore", "hasNext 값: $hasNext")
+            setupScrollListener()
         })
 
+        // 아이템 클릭 리스너 설정
         adapter.setItemClickListener(object : SavedStoreListAdapter.OnItemClickListener {
             override fun onClick(dataSet: StoreData) {
-                gustoViewModel.selectStoreId = dataSet.storeId
+                Log.d("viewModelStore", "아이템클릭리스너")
+                gustoViewModel.selectedStoreData = dataSet
                 gustoViewModel.storeIdList.clear()
                 gustoViewModel.storeIdList = gustoViewModel.savedStoreIdList
+                // 다른 프래그먼트로 이동
                 Navigation.findNavController(view).navigate(R.id.action_mapListViewSaveFragment_to_fragment_map_viewpager)
             }
         })
     }
 
+    // RecyclerView 설정
     private fun setupRecyclerView() {
         adapter = SavedStoreListAdapter()
-        binding.rvMapSaveVisited.adapter = adapter // 어댑터 연결
-        binding.rvMapSaveVisited.layoutManager = LinearLayoutManager(requireContext()) // 레이아웃 매니저 연결
+        binding.rvMapSaveVisited.adapter = adapter
+        binding.rvMapSaveVisited.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    // 스크롤 리스너 설정
+    private fun setupScrollListener() {
+        binding.rvMapSaveVisited.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val totalItemCount = layoutManager.itemCount
+                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+
+                // 마지막 아이템이 보일 때 추가 데이터 로딩
+                if (gustoViewModel.hasNext.value == true && lastVisibleItem >= totalItemCount - 1) {
+                    gustoViewModel.loadVisitedStores(categoryId, townName)
+                }
+            }
+        })
     }
 }
+

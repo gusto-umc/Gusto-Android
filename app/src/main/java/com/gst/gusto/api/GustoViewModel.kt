@@ -165,7 +165,7 @@ class GustoViewModel: ViewModel() {
     private val _hasNext = MutableLiveData<Boolean>()
     val hasNext: LiveData<Boolean> get() = _hasNext
 
-
+    var selectedStoreData: StoreData? = null
 
     //val storeList = MutableLiveData<MutableList<StoreData>>()  // 전체 가게 데이터 리스트
     //val hasNext = MutableLiveData<Boolean>()  // 다음 페이지 존재 여부
@@ -2415,36 +2415,68 @@ class GustoViewModel: ViewModel() {
         loadVisitedStores(categoryId, townName)  // 첫 페이지 데이터 로드
     }
      */
+
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> get() = _errorMessage
 // 가게 데이터 초기화
-    private fun fetchVisitedStores(categoryId: Int, townName: String, lastStoreId: Long? = null) {
-        gustoApi.getVisitedStores(categoryId, townName, lastStoreId).enqueue(object : Callback<VisitedStoresResponse> {
-            override fun onResponse(call: Call<VisitedStoresResponse>, response: Response<VisitedStoresResponse>) {
-                if (response.isSuccessful) {
-                    val visitedStoresResponse = response.body()
-                    _storeList.postValue(visitedStoresResponse?.pinStores ?: emptyList())
-                    _hasNext.postValue(visitedStoresResponse?.hasNext ?: false)
+private fun fetchVisitedStores(categoryId: Int, townName: String, lastStoreId: Long? = null) {
+    gustoApi.getVisitedStores(xAuthToken, categoryId, townName, lastStoreId).enqueue(object : Callback<VisitedStoresResponse> {
+        override fun onResponse(call: Call<VisitedStoresResponse>, response: Response<VisitedStoresResponse>) {
+            if (response.isSuccessful) {
+                val visitedStoresResponse = response.body()
+                val newStores = visitedStoresResponse?.pinStores ?: emptyList()
+
+                // 새로운 데이터를 LiveData에 설정
+                _storeList.postValue(newStores)
+                _hasNext.postValue(visitedStoresResponse?.hasNext ?: false)
+
+                // 새로운 데이터가 있으면 lastStoreId 업데이트
+                /*
+                if (newStores.isNotEmpty()) {
+                    lastStoreId = newStores.last().id // StoreData에 `id` 필드가 있어야 함
                 } else {
-                    Log.e("viewModelStore", "API error: ${response.code()}")
+                    lastStoreId = null // 데이터가 없으면 lastStoreId 초기화
                 }
+                */
+
+                Log.d("viewModelStore", "API 호출 성공, hasNext: ${visitedStoresResponse?.hasNext}")
+            } else {
+                // API 호출 실패 시 에러 메시지 설정
+                val errorResponse = response.errorBody()?.string() ?: "알 수 없는 오류"
+                _errorMessage.postValue("API 오류: ${response.code()} - $errorResponse")
+                Log.e("viewModelStore", "API 오류: ${response.code()} - $errorResponse")
             }
+        }
 
-            override fun onFailure(call: Call<VisitedStoresResponse>, t: Throwable) {
-                Log.e("viewModelStore", "Error fetching visited stores", t)
-            }
-        })
-    }
+        override fun onFailure(call: Call<VisitedStoresResponse>, t: Throwable) {
+            // 네트워크 오류 시 에러 메시지 설정
+            _errorMessage.postValue("방문한 상점 가져오기 오류: ${t.message}")
+            Log.e("viewModelStore", "방문한 상점 가져오기 오류", t)
+        }
+    })
+}
 
-
-
+    /**
+     * 데이터를 초기화하고 첫 페이지를 로드하는 함수
+     *
+     * @param categoryId 카테고리 ID
+     * @param townName 지역명
+     */
     fun resetData(categoryId: Int, townName: String) {
+        lastStoreId = null // 첫 페이지를 로드하기 위해 lastStoreId 초기화
         viewModelScope.launch {
             fetchVisitedStores(categoryId, townName)
         }
     }
 
+    /**
+     * 다음 페이지의 데이터를 로드하는 함수
+     *
+     * @param categoryId 카테고리 ID
+     * @param townName 지역명
+     */
     fun loadVisitedStores(categoryId: Int, townName: String) {
         viewModelScope.launch {
-            // Assuming `lastStoreId` is managed somewhere in ViewModel
             fetchVisitedStores(categoryId, townName, lastStoreId)
         }
     }

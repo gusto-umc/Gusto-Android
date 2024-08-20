@@ -545,13 +545,12 @@ interface GustoApi {
     ): Call<ResponseBody>
 
     //탭바 저장된 음식점 수정
-    @GET("/stores/pins/visited")
+    @GET("stores/pins/visited")
     fun getVisitedStores(
+        @Header("X-AUTH-TOKEN") xtoken: String,
         @Query("myCategoryId") categoryId: Int,
         @Query("townName") townName: String,
         @Query("lastStoreId") lastStoreId: Long? = null
     ): Call<VisitedStoresResponse>
-
-
 
 }
