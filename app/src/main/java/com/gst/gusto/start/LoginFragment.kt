@@ -11,6 +11,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.ads.nativetemplates.NativeTemplateStyle
+import com.google.android.ads.nativetemplates.TemplateView
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.VideoOptions
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdOptions
+import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -24,8 +35,10 @@ import com.gst.gusto.R
 import com.gst.gusto.api.AccessTokenResponse
 import com.gst.gusto.api.LoginApi
 import com.gst.gusto.api.LoginViewModel
+import com.gst.gusto.databinding.NativeAdLayout1Binding
 import com.gst.gusto.databinding.StartFragmentLoginBinding
 import com.gst.gusto.util.GustoApplication
+import com.gst.gusto.util.util.Companion.populateNativeAdView
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
@@ -124,6 +137,27 @@ class LoginFragment: Fragment() {
             startActivity(intent)
             requireActivity().finish()
         }
+
+        MobileAds.initialize(requireContext())
+        val adLoader = AdLoader.Builder(requireContext(), "ca-app-pub-1668591773614686/1985467959")
+            .forNativeAd { nativeAd ->
+                // Handle the native ad loaded callback
+                val styles = NativeTemplateStyle.Builder()
+                    .build()
+                val template = binding.nativeAdTemplate
+                template.setStyles(styles)
+                template.setNativeAd(nativeAd)
+            }
+            .withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    super.onAdFailedToLoad(adError)
+                    Log.e("AdLoader", "Failed to load ad: ${adError}")
+                }
+            })
+            .build()
+
+        adLoader.loadAd(AdRequest.Builder().build())
+        binding.bannerAd.loadAd(AdRequest.Builder().build())
 
         return binding.root
 

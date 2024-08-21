@@ -69,6 +69,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+    implementation(project(":nativetemplates"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -124,4 +125,7 @@ dependencies {
 
     //flexbox - hashtag rv
     implementation("com.google.android.flexbox:flexbox:3.0.0")
+
+    // Admob
+    implementation("com.google.android.gms:play-services-ads:23.3.0")
 }
