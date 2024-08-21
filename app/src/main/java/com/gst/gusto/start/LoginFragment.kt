@@ -151,7 +151,7 @@ class LoginFragment: Fragment() {
         LoginViewModel.profileUrl = photoUrl
         LoginViewModel.provider = "GOOGLE"
         LoginViewModel.socialAccessToken = socialAccessToken
-        
+
         LoginViewModel.login { resultCode ->
             when (resultCode) {
                 1 -> {

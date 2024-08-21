@@ -68,6 +68,7 @@ class MySettingActivity : AppCompatActivity() {
     fun buttonSetting() {
         binding.apply {
             btnBack.setOnClickListener{
+                setResult(RESULT_OK)
                 finish()
             }
             profileSetting.setOnClickListener {

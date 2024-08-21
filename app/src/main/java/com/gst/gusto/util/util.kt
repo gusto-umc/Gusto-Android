@@ -3,7 +3,9 @@ package com.gst.gusto.util
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ContentUris
 import android.content.Context
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -12,6 +14,8 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Handler
 import android.os.SystemClock
+import android.provider.DocumentsContract
+import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -28,6 +32,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.gst.gusto.R
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -228,6 +235,97 @@ class util {
             }
 
         }
+
+        /**
+         * 작업자 : 옌 (출처 다른 분)
+         * 이미지를 멀티파트 폼데이터로 만들어준다.
+         */
+        fun String.toMultiPartBody(): MultipartBody.Part {
+            val profileImageFile = File(this)
+            val profileImageRequestBody = profileImageFile.asRequestBody("image/png".toMediaTypeOrNull())
+            return MultipartBody.Part.createFormData("profileImg", profileImageFile.name, profileImageRequestBody)
+        }
+
+        /**
+         * 작업자 : 옌 (출처 다른 분)
+         * 이미지를 절대경로로 바꿔준다.
+         */
+        fun Context.toAbsolutePath(uri: Uri): String? {
+            if (DocumentsContract.isDocumentUri(this, uri)) {
+                when {
+                    uri.isExternalStorageDocument() -> {
+                        val docId = DocumentsContract.getDocumentId(uri)
+                        val split = docId.split(":").toTypedArray()
+                        val type = split[0]
+
+                        if ("primary".equals(type, ignoreCase = true)) {
+                            return "${getExternalFilesDir(null)?.absolutePath}/${split[1]}"
+                        }
+                    }
+
+                    uri.isDownloadsDocument() -> {
+                        val id = DocumentsContract.getDocumentId(uri)
+                        val contentUri = ContentUris.withAppendedId(
+                            Uri.parse("content://downloads/public_downloads"), id.toLong()
+                        )
+                        return getDataColumn(contentUri, null, null)
+                    }
+
+                    uri.isMediaDocument() -> {
+                        val docId = DocumentsContract.getDocumentId(uri)
+                        val split = docId.split(":").toTypedArray()
+
+                        val contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+
+                        val selection = "_id=?"
+                        val selectionArgs = arrayOf(split[1])
+
+                        return getDataColumn(contentUri, selection, selectionArgs)
+                    }
+                }
+            }
+            // MediaStore
+            else if ("content".equals(uri.scheme, ignoreCase = true)) {
+                return getDataColumn(uri, null, null)
+            }
+            // File
+            else if ("file".equals(uri.scheme, ignoreCase = true)) {
+                return uri.path
+            }
+
+            return null
+        }
+
+        fun Uri.isExternalStorageDocument(): Boolean {
+            return "com.android.externalstorage.documents" == this.authority
+        }
+
+        fun Uri.isDownloadsDocument(): Boolean {
+            return "com.android.providers.downloads.documents" == this.authority
+        }
+
+        fun Uri.isMediaDocument(): Boolean {
+            return "com.android.providers.media.documents" == this.authority
+        }
+
+        fun Context.getDataColumn(uri: Uri?, selection: String?, selectionArgs: Array<String>?): String? {
+            var cursor: Cursor? = null
+            val column = "_data"
+            val projection = arrayOf(column)
+
+            try {
+                cursor =
+                    uri?.let { this.contentResolver.query(it, projection, selection, selectionArgs, null) }
+                if (cursor != null && cursor.moveToFirst()) {
+                    val index = cursor.getColumnIndexOrThrow(column)
+                    return cursor.getString(index)
+                }
+            } finally {
+                cursor?.close()
+            }
+            return null
+        }
+
 
         /**
          * 작업자 : 버루
