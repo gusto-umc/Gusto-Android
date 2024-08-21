@@ -101,7 +101,7 @@
                     android:layout_gravity="center"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:padding="22dp"
+                    android:padding="28dp"
                     android:src="@drawable/gallery_review_img"
                     app:tint="@color/white" />
 

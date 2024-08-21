@@ -223,7 +223,7 @@ class GroupRouteMapFragment : Fragment() {
             })
         }
 
-        if(gustoViewModel.routeStorTmpData != null) {
+        if(gustoViewModel.routeStorTmpData != null && ::kakaoMap.isInitialized) {
            var data = gustoViewModel.routeStorTmpData
 
            if (data != null) {
