@@ -204,10 +204,12 @@ class GustoViewModel: ViewModel() {
     }
 
     // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
-    fun getCurrentMapStores(cateId : Int?, isVisited : Boolean,callback: (Int,List<RouteList>?) -> Unit){
+    fun getCurrentMapStores(cateIds : MutableList<Int>?, isVisited : Boolean?,callback: (Int,List<RouteList>?) -> Unit){
         Log.e("token",xAuthToken)
         Log.d("viewmodel","view : ${_dong.value}")
-        service.getCurrentMapStores(xAuthToken,_dong.value!!,cateId, isVisited).enqueue(object : Callback<List<RouteList>> {
+        Log.d("cate Ids","view : ${cateIds}")
+
+        service.getCurrentMapStores(xAuthToken,_dong.value!!,cateIds, isVisited).enqueue(object : Callback<List<RouteList>> {
             override fun onResponse(call: Call<List<RouteList>>, response: Response<List<RouteList>>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
