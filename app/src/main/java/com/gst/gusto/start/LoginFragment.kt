@@ -35,10 +35,8 @@ import com.gst.gusto.R
 import com.gst.gusto.api.AccessTokenResponse
 import com.gst.gusto.api.LoginApi
 import com.gst.gusto.api.LoginViewModel
-import com.gst.gusto.databinding.NativeAdLayout1Binding
 import com.gst.gusto.databinding.StartFragmentLoginBinding
 import com.gst.gusto.util.GustoApplication
-import com.gst.gusto.util.util.Companion.populateNativeAdView
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
