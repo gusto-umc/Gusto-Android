@@ -329,7 +329,7 @@ class MapFragment : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_searchFragment)
         }
         binding.reviewAddBtn.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_searchFragment)
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_reviewAddSearch)
         }
 
         /**

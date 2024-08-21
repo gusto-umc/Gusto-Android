@@ -56,15 +56,18 @@ class StoreFragment : Fragment() {
         gustoViewModel.myAllStoreList.clear()
         var sign = arguments?.getString("sign")
         signal = sign!!
+        Log.d("sign", signal)
         var order = "latest"
         var lastStoreName : String? = null
 
-
-        if(sign != "search"){
-            mStoreAdapter = StoreAdapter(view, "map")
-        }
-        else if(sign == "search"){
+        if(sign == "search"){
             mStoreAdapter = StoreAdapter(view, "search")
+        }
+        else if(sign == "reviewAdd"){
+            mStoreAdapter = StoreAdapter(view, "reviewAdd")
+        }
+        else{
+            mStoreAdapter = StoreAdapter(view, "map")
         }
 
         if(sign == "map"){
@@ -83,14 +86,32 @@ class StoreFragment : Fragment() {
          */
         mStoreAdapter.setItemClickListener(object : StoreAdapter.OnItemClickListener{
             override fun onClick(v: View, dataSet: PResponseStoreListItem, sign: String) {
-                if(sign != "search"){
-                    gustoViewModel!!.selectedDetailStoreId = dataSet.storeId!!.toInt()
-                    Navigation.findNavController(view).navigate(R.id.action_storeFragment_to_storeDetailFragment)
-                }
-                else if(sign == "search"){
+                Log.d("sign", sign)
+                if(sign == "search"){
                     gustoViewModel!!.routeStorTmpData = ResponseStoreListItem(dataSet.storeId.toInt(),dataSet.storeName,dataSet.address,0,"")
                     findNavController().popBackStack()
                     findNavController().popBackStack()
+                }
+                else if(sign == "reviewAdd"){
+                    Log.d("reviewAdd", "reviewAdd")
+                    gustoViewModel.getStoreDetail(dataSet.storeId.toLong()){
+                            result ->
+                        when(result){
+                            0 -> {
+                                //success
+                                Navigation.findNavController(view).navigate(R.id.action_storeFragment_to_fragment_review_add_1)
+                            }
+                            1 -> {
+                                //fail
+                                Toast.makeText(context, "로드에 실패했습니다", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                }
+                else{
+                    Log.d("reviewAdd", "no")
+                    gustoViewModel!!.selectedDetailStoreId = dataSet.storeId!!.toInt()
+                    Navigation.findNavController(view).navigate(R.id.action_storeFragment_to_storeDetailFragment)
                 }
             }
 
@@ -201,7 +222,7 @@ class StoreFragment : Fragment() {
                                     }, 1000)
 
                                 }
-                                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정f", Toast.LENGTH_SHORT).show()
+                                else -> Toast.makeText(requireContext(), "서버와의 연결 불안정합니다", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
@@ -267,13 +288,13 @@ class StoreFragment : Fragment() {
                         binding.tvStoreCount.text = "${gustoViewModel.myAllStoreList.size}개"
                     }
                     else-> {
-                        Toast.makeText(requireContext(), "서버와의 연결 불안정r", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "서버와의 연결 불안정합니다", Toast.LENGTH_SHORT).show()
                     }
 
                 }
             }
         }
-        else if(signal == "my" || signal == "search"){
+        else if(signal == "my" || signal == "search" || signal == "reviewAdd"){
             gustoViewModel.myAllStoreList.clear()
             gustoViewModel.getPPMyStore(gustoViewModel. selectedCategoryInfo!!.myCategoryId, null){
                     result, getHasNext ->
@@ -286,7 +307,7 @@ class StoreFragment : Fragment() {
                         binding.tvStoreCount.text = "${gustoViewModel.myAllStoreList.size}개"
                     }
                     else-> {
-                        Toast.makeText(requireContext(), "서버와의 연결 불안정r", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "서버와의 연결 불안정합니다", Toast.LENGTH_SHORT).show()
                     }
 
                 }
@@ -305,7 +326,7 @@ class StoreFragment : Fragment() {
                         binding.tvStoreCount.text = "${gustoViewModel.myAllStoreList.size}개"
                     }
                     else-> {
-                        Toast.makeText(requireContext(), "서버와의 연결 불안정r", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "서버와의 연결 불안정합니다", Toast.LENGTH_SHORT).show()
                     }
 
                 }

@@ -20,6 +20,9 @@
             android:id="@+id/action_fragment_map_to_searchFragment"
             app:destination="@id/searchFragment" />
         <action
+            android:id="@+id/action_fragment_map_to_reviewAddSearch"
+            app:destination="@id/reviewAddSearchFragment"/>
+        <action
             android:id="@+id/action_fragment_map_to_mapListViewSaveFragment2"
             app:destination="@id/mapListViewSaveFragment" />
         <action
@@ -298,25 +301,10 @@
         tools:layout="@layout/fragment_review">
         <action
             android:id="@+id/action_reviewFragment_to_reviewDetail"
-            app:destination="@id/fragment_review_detail"/>
-    </fragment>
-    <fragment
-        android:id="@+id/fragment_review_detail"
-        android:name="com.gst.clock.Fragment.ReviewDetailFragment"
-        android:label="FragmentReviewDetail"
-        tools:layout="@layout/fragment_review_detail">
+            app:destination="@id/reviewDetailFragment2"/>
         <action
-            android:id="@+id/action_reviewDetail_to_reviewFragment"
-            app:destination="@id/fragment_review"/>
-        <action
-            android:id="@+id/action_reviewDetail_to_myFragment"
-            app:destination="@id/fragment_my"/>
-        <action
-            android:id="@+id/action_reviewDetail_to_reviewDetailEdit"
-            app:destination="@id/fragment_review_detail_edit"/>
-        <action
-            android:id="@+id/action_reviewDetail_to_storeDetailFragment"
-            app:destination="@id/storeDetailFragment"/>
+            android:id="@+id/action_reviewFragment_to_reviewAddSearch"
+            app:destination="@id/reviewAddSearchFragment"/>
     </fragment>
     <fragment
         android:id="@+id/fragment_review_detail_edit"
@@ -536,12 +524,37 @@
         <action
             android:id="@+id/action_storeFragment_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
+        <action
+            android:id="@+id/action_storeFragment_to_fragment_review_add_1"
+            app:destination="@id/fragment_review_add_1"/>
     </fragment>
     <fragment
         android:id="@+id/storeEditFragment"
         android:name="com.gst.gusto.ListView.view.StoreEditFragment"
         android:label="StoreEditFragment" />
     <fragment
+        android:id="@+id/reviewDetailFragment2"
+        android:name="com.gst.clock.Fragment.ReviewDetailFragment"
+        android:label="ReviewDetailFragment">
+        <action
+            android:id="@+id/action_reviewDetail_to_storeDetailFragment"
+            app:destination="@id/storeDetailFragment"/>
+        <action
+            android:id="@+id/action_reviewDetail_to_reviewDetailEdit"
+            app:destination="@id/fragment_review_detail_edit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/reviewAddSearchFragment"
+        android:name="com.gst.gusto.search.ReviewAddSearchFragment"
+        android:label="ReviewAddSearchFragment">
+        <action
+            android:id="@+id/action_reviewAddSearch_to_reviewAdd1"
+            app:destination="@id/fragment_review_add_1"/>
+        <action
+            android:id="@+id/action_reviewAddSearch_to_store"
+            app:destination="@id/storeFragment"/>
+    </fragment>
+<fragment
         android:id="@+id/saveTabFragment"
         android:name="com.gst.gusto.ListView.view.SaveTabFragment"
         android:label="SaveTabFragment" />

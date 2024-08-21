@@ -159,6 +159,15 @@ class CategoryAdapter(private val view: View, val flag : String, private val fra
                 Navigation.findNavController(view).navigate(R.id.action_routeSearchFragment_to_storeFragment, bundle4)
             }
         }
+        else if(flag == "reviewAdd"){
+            holder.popup.visibility = View.INVISIBLE
+            holder.categoryLayout.setOnClickListener {
+                viewModel!!.selectedCategoryInfo = holder.data
+                val bundle5 = Bundle()
+                bundle5.putString("sign", "reviewAdd")
+                Navigation.findNavController(view).navigate(R.id.action_reviewAddSearch_to_store, bundle5)
+            }
+        }
 
 
         }
