@@ -139,7 +139,7 @@ class LoginFragment: Fragment() {
         }
 
         MobileAds.initialize(requireContext())
-        val adLoader = AdLoader.Builder(requireContext(), "ca-app-pub-3940256099942544/2247696110")
+        val adLoader = AdLoader.Builder(requireContext(), "ca-app-pub-1668591773614686/1985467959")
             .forNativeAd { nativeAd ->
                 // Handle the native ad loaded callback
                 val styles = NativeTemplateStyle.Builder()
@@ -157,6 +157,7 @@ class LoginFragment: Fragment() {
             .build()
 
         adLoader.loadAd(AdRequest.Builder().build())
+        binding.bannerAd.loadAd(AdRequest.Builder().build())
 
         return binding.root
 
