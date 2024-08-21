@@ -313,7 +313,7 @@
         tools:layout="@layout/fragment_review_detail_edit">
         <action
             android:id="@+id/action_reviewDetailEdit_to_reviewDetailFragment"
-            app:destination="@id/fragment_review_detail"/>
+            app:destination="@id/reviewDetailFragment2"/>
     </fragment>
     <!-- Feed 화면의 프래그먼트들 -->
     <fragment
@@ -326,7 +326,7 @@
             app:destination="@id/fragment_feed_detail_review" />
         <action
             android:id="@+id/action_fragment_feed_to_fragment_review_detail"
-            app:destination="@id/fragment_review_detail" />
+            app:destination="@id/reviewDetailFragment2" />
     </fragment>
     <fragment
         android:id="@+id/fragment_feed_detail_review"
@@ -358,7 +358,7 @@
             app:destination="@id/fragment_feed_detail_review" />
         <action
             android:id="@+id/action_myFragment_to_reviewDetail"
-            app:destination="@id/fragment_review_detail" />
+            app:destination="@id/reviewDetailFragment2" />
         <action
             android:id="@+id/action_myFragment_to_storeDetailFragment"
             app:destination="@id/storeDetailFragment" />
@@ -404,17 +404,6 @@
             app:destination="@id/fragment_other"/>
     </fragment>
     <fragment
-        android:id="@+id/mapListViewFragment"
-        android:name="com.gst.gusto.ListView.view.MapListViewFragment"
-        android:label="MapListViewFragment" >
-        <action
-            android:id="@+id/action_mapListViewFragment_to_fragment_map"
-            app:destination="@id/fragment_map" />
-        <action
-            android:id="@+id/action_mapListViewFragment_to_storeDetailFragment"
-            app:destination="@id/storeDetailFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/storeDetailFragment"
         android:name="com.gst.gusto.store_detail.StoreDetailFragment"
         android:label="StoreDetailFragment" >
@@ -426,7 +415,7 @@
             app:destination="@id/fragment_feed_detail_review" />
         <action
             android:id="@+id/action_storeDetailFragment_to_fragment_review_detail"
-            app:destination="@id/fragment_review_detail" />
+            app:destination="@id/reviewDetailFragment2" />
         <action
             android:id="@+id/action_storeDetailFragment_to_fragment_map_viewpager"
             app:destination="@id/fragment_map_viewpager" />
