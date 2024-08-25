@@ -40,7 +40,7 @@ class MapListViewSaveFragment : Fragment() {
         setupRecyclerView()
 
         // 데이터 초기 로딩을 위해 호출
-        gustoViewModel.resetData(categoryId, townName)
+        //gustoViewModel.resetData(categoryId, townName)
 
         // 데이터 변경을 관찰하고 어댑터에 새 데이터를 설정
         gustoViewModel.storeList.observe(viewLifecycleOwner, Observer { stores ->
@@ -85,7 +85,7 @@ class MapListViewSaveFragment : Fragment() {
 
                 // 마지막 아이템이 보일 때 추가 데이터 로딩
                 if (gustoViewModel.hasNext.value == true && lastVisibleItem >= totalItemCount - 1) {
-                    gustoViewModel.loadVisitedStores(categoryId, townName)
+                    gustoViewModel.tapSavedStores()
                 }
             }
         })
