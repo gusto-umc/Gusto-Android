@@ -490,6 +490,7 @@ data class VisitedStoresResponse(
 )
 
 data class StoreData(
+    @SerializedName("storeId") val storeId: Int,
     @SerializedName("storeName") val storeName: String,
     @SerializedName("address")val address: String,
     @SerializedName("category") val category: String,
