@@ -2330,10 +2330,10 @@ class GustoViewModel: ViewModel() {
     private val _stores = MutableLiveData<List<StoreData>>()
     val stores: LiveData<List<StoreData>> get() = _stores
 
-    private var currentCategoryId: Int = 0
+    private var currentCategoryId: Int ?= null
     private var currentTownName: String = ""
 
-    fun setSaveFilters(categoryId: Int, townName: String) {
+    fun setSaveFilters(categoryId: Int?, townName: String) {
         currentCategoryId = categoryId
         currentTownName = townName
         lastStoreId = null // 필터 변경 시 페이지네이션 초기화
@@ -2352,8 +2352,13 @@ class GustoViewModel: ViewModel() {
                     call: Call<VisitedStoresResponse>,
                     response: Response<VisitedStoresResponse>
                 ) {
+                    Log.d("viewModelStore", "xAuthToken : ${xAuthToken}")
+                    Log.d("viewModelStore", "currentCategoryId : ${currentCategoryId}")
+                    Log.d("viewModelStore", "currentTownName : ${currentTownName}")
+                    Log.d("viewModelStore", "lastStoreId : ${lastStoreId}")
                     if (response.isSuccessful) {
                         val data = response.body()
+                        Log.d("viewModelStore", "API 응답 성공: ${data?.pinStores?.size}개의 식당 데이터")
                         val newStores = data?.pinStores ?: emptyList()
                         _hasNext.value = data?.hasNext ?: false
                         _stores.value = _stores.value.orEmpty() + newStores
@@ -2361,13 +2366,16 @@ class GustoViewModel: ViewModel() {
                             lastStoreId = newStores.last().storeId.toLong()
                         }
                     } else {
+                        Log.e("viewModelStore", "API 응답 실패: ${response.errorBody()?.string()}")
                         _hasNext.value = false
                     }
                 }
-
                 override fun onFailure(call: Call<VisitedStoresResponse>, t: Throwable) {
+                    Log.e("viewModelStore", "API 호출 실패: ${t.message}")
                     _hasNext.value = false
                 }
+
+
             })
         }
     }
@@ -2375,7 +2383,7 @@ class GustoViewModel: ViewModel() {
         currentCategoryId = categoryId
         currentTownName = townName
         lastStoreId = null // 필터 변경 시 페이지네이션 초기화
-        tapSavedStores()
+        tapUnsavedStores()
     }
     // 미방문 식당 viewmodel
     fun tapUnsavedStores() {

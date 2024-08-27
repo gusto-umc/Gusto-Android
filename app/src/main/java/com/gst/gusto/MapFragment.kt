@@ -157,7 +157,6 @@ class MapFragment : Fragment() {
     // ViewModel 또는 Fragment에서 호출
 // Fragment 또는 Activity에서 호출
     private fun loadCategories(townName: String) {
-        val token = "your_auth_token" // 실제 인증 토큰 사용
         gustoViewModel.getMapCategory(townName) { resultCode ->
             when (resultCode) {
                 0 -> {

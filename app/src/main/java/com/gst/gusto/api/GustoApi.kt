@@ -546,7 +546,7 @@ interface GustoApi {
     @GET("stores/pins/visited")
     fun getVisitedStores(
         @Header("X-AUTH-TOKEN") xtoken: String,
-        @Query("myCategoryId") categoryId: Int,
+        @Query("myCategoryId") categoryId: Int?,
         @Query("townName") townName: String,
         @Query("lastStoreId") lastStoreId: Long? = null
     ): Call<VisitedStoresResponse>
@@ -555,7 +555,7 @@ interface GustoApi {
     @GET("stores/pins/unvisited")
     fun getUnvisitedStores(
         @Header("X-AUTH-TOKEN") xtoken: String,
-        @Query("myCategoryId") categoryId: Int,
+        @Query("myCategoryId") categoryId: Int?,
         @Query("townName") townName: String,
         @Query("lastStoreId") lastStoreId: Long? = null
     ): Call<UnVisitedStoresResponse>

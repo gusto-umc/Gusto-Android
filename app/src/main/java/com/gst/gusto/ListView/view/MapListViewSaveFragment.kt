@@ -23,8 +23,13 @@ class MapListViewSaveFragment : Fragment() {
     private val gustoViewModel: GustoViewModel by activityViewModels()
     private lateinit var adapter: SavedStoreListAdapter
 
-    private var categoryId: Int = 1 // 기본값을 설정하거나 적절한 값을 초기화
-    private var townName: String = "SampleTown" // 기본값을 설정하거나 적절한 값을 초기화
+
+    // category Id와 town Name만 제대로 불러오면 성공!!
+
+    private var categoryId: Int? = null // 기본값을 설정하거나 적절한 값을 초기화
+    private var townName: String = "성수1가1동" // 기본값을 설정하거나 적절한 값을 초기화
+    //private var townName: String = gustoViewModel.dong.toString()
+    //private var categoryId: Int? = gustoViewModel.category
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,16 +44,17 @@ class MapListViewSaveFragment : Fragment() {
 
         setupRecyclerView()
 
-        // 데이터 초기 로딩을 위해 호출
-        //gustoViewModel.resetData(categoryId, townName)
+        // 데이터 초기 로딩
+        gustoViewModel.setSaveFilters(categoryId, townName)
+        Log.d("viewModelStore", "categoryId: ${categoryId}")
+        Log.d("viewModelStore", "townName: ${townName}")
 
-        // 데이터 변경을 관찰하고 어댑터에 새 데이터를 설정
-        gustoViewModel.storeList.observe(viewLifecycleOwner, Observer { stores ->
+        gustoViewModel.stores.observe(viewLifecycleOwner, Observer { stores ->
+            Log.d("viewModelStore", "데이터 변경: ${stores.size}개의 식당 데이터")
             adapter.submitList(stores)
-            Log.d("viewModelStore", "어댑터 설정")
         })
 
-        // RecyclerView의 스크롤 리스너를 설정
+        // hasNext 변경을 관찰하여 스크롤 리스너 설정
         gustoViewModel.hasNext.observe(viewLifecycleOwner, Observer { hasNext ->
             Log.d("viewModelStore", "hasNext 값: $hasNext")
             setupScrollListener()
@@ -66,6 +72,7 @@ class MapListViewSaveFragment : Fragment() {
             }
         })
     }
+
 
     // RecyclerView 설정
     private fun setupRecyclerView() {
