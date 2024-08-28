@@ -81,7 +81,7 @@ class FeedViewModel(
 
         _feedReview.value = emptyList()
 
-        when (val response = feedsRepository.getSearchFeed(token, keyWord, hasTag, null, 6)) {
+        when (val response = feedsRepository.getSearchFeed(token, keyWord, hasTag, null, 12)) {
                 is ApiResponse.Success -> {
                 _feedReview.value = response.data.reviews
                 _feedCursorId.value = response.data.cursorId
@@ -108,7 +108,7 @@ class FeedViewModel(
         reviewId: Long?
     ): List<InstaReview> {
         val token = GustoApplication.prefs.getSharedPrefs().first
-        when (val response = feedsRepository.getSearchFeed(token, keyWord, hasTag, reviewId, 6)) {
+        when (val response = feedsRepository.getSearchFeed(token, keyWord, hasTag, reviewId, 12)) {
             is ApiResponse.Success -> {
                 _feedCursorId.value = response.data.cursorId
                 _feedHasNext.value = response.data.hasNext
