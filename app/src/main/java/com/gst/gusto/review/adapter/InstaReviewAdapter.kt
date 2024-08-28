@@ -72,6 +72,16 @@ class InstaReviewAdapter(
 
     fun addLoading(): Boolean {
         if (!items.contains(null) && items.size >= 12) {
+            val count = items.size % 3
+            when (count){
+                1 -> {
+                    items.add(null)
+                    items.add(null)
+                }
+                2 -> {
+                    items.add(null)
+                }
+            }
             items.add(null)
             items.add(null)
             items.add(null)
