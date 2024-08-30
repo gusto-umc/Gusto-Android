@@ -68,7 +68,7 @@ class InstaReviewFragment : Fragment() {
             }
 
             instaReviewFab.setOnClickListener{
-
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewFragment_to_reviewAddSearch) }
             }
         }
     }
