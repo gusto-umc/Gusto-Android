@@ -122,40 +122,6 @@ class FeedFragment : Fragment() {
         }
     }
 
-
-    /*fun getData() {
-
-        val feedList = ArrayList<ResponseFeedReview>()
-
-        gustoViewModel.feed() { result, response ->
-            if (result == 1) {
-                feedList.clear()
-                if(response != null) {
-                    response.forEach {
-                        feedList.add(ResponseFeedReview(it.reviewId, it.images))
-                    }
-                    adapter.feedList = feedList
-                    adapter.notifyDataSetChanged()
-                } else {
-                    Toast.makeText(requireContext(),"네트워크 연결이 불안정합니다.", Toast.LENGTH_SHORT).show()
-                }
-
-            }
-            Log.d("feedResponse", feedList.toString())
-        }
-
-        gustoViewModel.searchFeedData.observe(viewLifecycleOwner, Observer { value ->
-            feedList.clear()
-            gustoViewModel.searchFeedData?.value?.reviews?.forEach {
-                feedList.add(ResponseFeedReview(it.reviewId, it.images))
-            }
-            adapter.feedList = feedList
-            adapter.notifyDataSetChanged()
-            Log.d("feedResponse2", feedList.toString())
-        })
-
-    }*/
-
     fun setToast(){
         viewModel.tokenToastData.observe(viewLifecycleOwner){
             Toast.makeText(requireActivity(), "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
