@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
                         // 현재 프래그먼트가 여러분이 원하는 프래그먼트 타입인 경우에만 해당 함수를 실행합니다.
                         // 여러분이 만든 프래그먼트의 타입에 따라서 YourFragmentType을 적절히 변경해주세요.
                         (currentFragment as FeedFragment).initView()
-                        (currentFragment as FeedFragment).getData()
+                        // (currentFragment as FeedFragment).getData()
                     }
 
                 }

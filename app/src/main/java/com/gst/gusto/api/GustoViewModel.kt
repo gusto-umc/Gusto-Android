@@ -2195,34 +2195,6 @@ class GustoViewModel: ViewModel() {
         })
     }
 
-    // 먹스또 랜덤 피드
-    fun feed(callback: (Int, ArrayList<ResponseFeedReview>?) -> Unit){
-        service.feed(xAuthToken).enqueue(object : Callback<ArrayList<ResponseFeedReview>> {
-            override fun onResponse(call: Call<ArrayList<ResponseFeedReview>>, response: Response<ArrayList<ResponseFeedReview>>) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if(responseBody!=null) {
-                        Log.e("viewmodel", "1 Successful response: ${response}")
-                        callback(1, responseBody)
-                    } else {
-                        Log.e("viewmodel", "2 Successful response: ${response}")
-                        callback(2, null)
-                    }
-                } else if(response.code()==403) {
-                    _tokenToastData.value = Unit
-                    refreshToken()
-                }else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
-                    callback(3, null)
-                }
-            }
-            override fun onFailure(call: Call<ArrayList<ResponseFeedReview>>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
-                callback(3, null)
-            }
-        })
-    }
-
     // 맛집 & 해시태그 검색 엔진
     fun feedSearch(keyword: String, hashTags: List<Long>?, callback: (Int, ResponseFeedSearchReviews?) -> Unit){
         service.feedSearch(xAuthToken, keyword, hashTags).enqueue(object : Callback<ResponseFeedSearchReviews> {

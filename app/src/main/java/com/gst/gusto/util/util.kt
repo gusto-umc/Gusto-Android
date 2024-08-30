@@ -31,17 +31,12 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
-import com.google.android.gms.ads.VideoController
-import com.google.android.gms.ads.nativead.NativeAd
 import com.gst.gusto.R
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
-import java.io.InputStream
-import java.net.HttpURLConnection
-import java.net.URL
 import kotlin.concurrent.thread
 
 class util {

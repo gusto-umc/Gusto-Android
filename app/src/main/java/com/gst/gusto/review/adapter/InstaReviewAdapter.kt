@@ -59,19 +59,23 @@ class InstaReviewAdapter(
     }
 
     fun addItems(newItems: List<InstaReview?>) {
-        val isLoadingRemoved = removeLoading()
-
         items = newItems.toMutableList()
         addLoading()
-
-        if (isLoadingRemoved) {
-            notifyDataSetChanged()
-        }
-
+        notifyDataSetChanged()
     }
 
     fun addLoading(): Boolean {
         if (!items.contains(null) && items.size >= 12) {
+            val count = items.size % 3
+            when (count){
+                1 -> {
+                    items.add(null)
+                    items.add(null)
+                }
+                2 -> {
+                    items.add(null)
+                }
+            }
             items.add(null)
             items.add(null)
             items.add(null)
