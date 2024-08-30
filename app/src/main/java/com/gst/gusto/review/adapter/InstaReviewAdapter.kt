@@ -59,15 +59,9 @@ class InstaReviewAdapter(
     }
 
     fun addItems(newItems: List<InstaReview?>) {
-        val isLoadingRemoved = removeLoading()
-
         items = newItems.toMutableList()
         addLoading()
-
-        if (isLoadingRemoved) {
-            notifyDataSetChanged()
-        }
-
+        notifyDataSetChanged()
     }
 
     fun addLoading(): Boolean {
