@@ -71,7 +71,7 @@
         </service>
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-1668591773614686~2879147185"/>
+            android:value="ca-app-pub-4086521113003670~4093638429"/>
     </application>
 
 </manifest>
