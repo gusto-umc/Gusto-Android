@@ -137,7 +137,7 @@ class LoginFragment: Fragment() {
         }
 
         MobileAds.initialize(requireContext())
-        val adLoader = AdLoader.Builder(requireContext(), "ca-app-pub-1668591773614686/1985467959")
+        val adLoader = AdLoader.Builder(requireContext(),resources.getString(R.string.admob_native))
             .forNativeAd { nativeAd ->
                 // Handle the native ad loaded callback
                 val styles = NativeTemplateStyle.Builder()
