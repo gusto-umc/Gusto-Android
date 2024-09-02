@@ -92,6 +92,7 @@ class RouteCreateFragment : Fragment() {
             if(itemList.size==6) {
                 binding.lyAddRoute.visibility = View.INVISIBLE
             }
+            gustoViewModel.routeStorTmpData=null
         }
     }
 
