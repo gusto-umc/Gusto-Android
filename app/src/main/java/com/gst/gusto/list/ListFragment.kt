@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.ads.AdRequest
 import com.gst.clock.Fragment.ListGroupFragment
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
@@ -67,7 +68,6 @@ class ListFragment : Fragment() {
 
             navHostFragment.navController.navigate(R.id.fragment_list_route)
         }
-
 
         return binding.root
     }

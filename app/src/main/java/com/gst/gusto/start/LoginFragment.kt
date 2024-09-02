@@ -155,6 +155,7 @@ class LoginFragment: Fragment() {
             .build()
 
         adLoader.loadAd(AdRequest.Builder().build())
+
         binding.bannerAd.loadAd(AdRequest.Builder().build())
 
         return binding.root
