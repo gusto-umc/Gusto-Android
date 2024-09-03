@@ -183,7 +183,7 @@ class SearchFragment : Fragment() {
             var handled = false
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
                 // 엔터 눌렀을때 행동
-                val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.edtSearchSearchbox.windowToken, 0)
                 handled = true
                 searchKeyword()

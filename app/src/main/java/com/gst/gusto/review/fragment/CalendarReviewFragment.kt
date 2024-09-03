@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.MainActivity
@@ -54,6 +55,7 @@ class CalendarReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         observeData()
+        setReviewWriteBtn()
     }
 
     fun initView(){
@@ -138,6 +140,18 @@ class CalendarReviewFragment : Fragment() {
 
         adapter.calendarList = calList
         adapter.notifyDataSetChanged()
+    }
+
+    private fun setReviewWriteBtn() {
+        with(binding) {
+            calReviewFab.setOnClickListener {
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewFragment_to_reviewAddSearch) }
+            }
+
+            calReviewFab.setOnClickListener{
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewFragment_to_reviewAddSearch) }
+            }
+        }
     }
 
 }

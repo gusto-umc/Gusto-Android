@@ -147,7 +147,7 @@ class MySettingActivity : AppCompatActivity() {
     }
 
     fun startNaverDeleteToken(){
-        NidOAuthLogin().callDeleteTokenApi(this, object : OAuthLoginCallback {
+        NidOAuthLogin().callDeleteTokenApi(object : OAuthLoginCallback {
             override fun onSuccess() {
                 //서버에서 토큰 삭제에 성공한 상태입니다.
                 val intent = Intent(this@MySettingActivity, StartActivity::class.java)

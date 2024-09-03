@@ -83,6 +83,7 @@ class FeedDetailReviewFragment : Fragment() {
         }
         binding.feedMenuTextTv.text = feedDetail.menuName
         binding.feedReviewTextTv.text = feedDetail.comment
+        binding.tvFeedDetailUser.text = feedDetail.nickName
 
         /**
          *  review img, user img, taste, hashtag
