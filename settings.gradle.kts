@@ -16,4 +16,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Gusto"
 include(":app")
+include(":nativetemplates")
  

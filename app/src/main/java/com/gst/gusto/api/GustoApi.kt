@@ -29,8 +29,8 @@ interface GustoApi {
     fun getCurrentMapStores(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("townName") townName : String,
-        @Query("myCategoryId") myCategoryId : Int?,
-        @Query("visited") visited : Boolean
+        @Query("myCategoryId") myCategoryId : MutableList<Int>?,
+        @Query("visited") visited : Boolean?
     ):Call<List<RouteList>>
 
     //ROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTE
@@ -492,11 +492,6 @@ interface GustoApi {
         @Query("x") longitude: String,
         @Query("y") latitude: String
     ): Call<RegionInfoResponse>
-
-    @GET("feeds") // 먹스또 랜덤 피드
-    fun feed(
-        @Header("X-AUTH-TOKEN") token: String
-    ):Call<ArrayList<ResponseFeedReview>>
 
     @GET("feeds/search") // 맛집 & 해시태그 검색 엔진
     fun feedSearch(

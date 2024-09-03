@@ -56,10 +56,10 @@ class MapFragment : Fragment() {
 
     val markerList = ArrayList<MarkerItem>()
 
-    private var isVisited = false
+    private var isVisited:Boolean? = null
 
     lateinit var chipGroup: ChipGroup
-    private var currentChip:Int?=null
+    private var currentChips = ArrayList<Int>()
 
     // 이전에 활성화된 칩을 저장하는 변수
     private var previousChipId: Int = -1
@@ -91,14 +91,20 @@ class MapFragment : Fragment() {
             val currentText = totalBtn.text.toString()
             //다음 순서로 변경
             val nextText = when (currentText) {
-                "전체" -> "가본 곳 만"
-                "가본 곳 만" -> "가본 곳 제외"
-                else -> "전체"
+                "전체" -> {
+                    isVisited = true
+                    "가본 곳 만"
+                }
+                "가본 곳 만" -> {
+                    isVisited = false
+                    "가본 곳 제외"
+                }
+                else -> {
+                    isVisited = null
+                    "전체"
+                }
             }
 
-            // 지도 설정
-            if(isVisited) isVisited = false
-            else isVisited = true
             reGetMapMarkers()
 
             // 변경된 텍스트 설정
@@ -237,16 +243,16 @@ class MapFragment : Fragment() {
         val clickedChipId = chip.id
 
         // 클릭된 칩이 이미 활성화된 상태인지 확인
-        val isClickedChipActive = previousChipId == clickedChipId
+        val isClickedChipActive = !chip.isChecked
 
         // 다른 칩이 활성화된 상태인 경우 이전 칩을 비활성화
-        if (!isClickedChipActive && previousChipId != -1) {
+        /*if (!isClickedChipActive && previousChipId != -1) {
             Log.d("chip","이전 칩 비활성화 ${previousChipId}")
             val previousChip = chipGroup.findViewById<Chip>(previousChipId)
             previousChip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chip_disabled))
             previousChip.setChipBackgroundColorResource(R.color.white)
             previousChip.setChipIconTintResource(R.color.main_C)
-        }
+        }*/
 
         // 클릭된 칩이 이미 활성화된 상태라면 비활성화
         if (isClickedChipActive) {
@@ -256,8 +262,7 @@ class MapFragment : Fragment() {
             chip.setChipBackgroundColorResource(R.color.white)
             chip.setChipIconTintResource(R.color.main_C)
             // 클릭된 칩의 ID를 초기화하여 비활성화 상태로 설정
-            previousChipId = -1
-            currentChip = null
+            currentChips.remove(clickedChipId)
         } else {
             // 클릭된 칩을 활성화
             Log.d("chip", "활성화 ${chip.id}")
@@ -265,9 +270,11 @@ class MapFragment : Fragment() {
             chip.setChipBackgroundColorResource(R.color.main_C)
             chip.setChipIconTintResource(R.color.white)
             // 클릭된 칩의 ID를 이전 칩의 ID로 저장
-            previousChipId = clickedChipId
-            currentChip = clickedChipId
+            currentChips.add(clickedChipId)
         }
+
+
+        reGetMapMarkers()
     }
 
     // 전체 칩이 비활성화되었는지 여부를 확인하는 함수
@@ -299,7 +306,8 @@ class MapFragment : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_savetabFragment)
         }
 
-
+        // 카테고리 선택 초기화
+        currentChips.clear()
 
         /**
          * 방문 o 클릭 리스너 -> 보완 예정
@@ -707,7 +715,7 @@ class MapFragment : Fragment() {
 
     }
     fun reGetMapMarkers() {
-        gustoViewModel.getCurrentMapStores(currentChip,isVisited) {result, datas ->
+        gustoViewModel.getCurrentMapStores(currentChips.toMutableList(),isVisited) {result, datas ->
             when(result) {
                 1 -> {
                     markerList.clear()
