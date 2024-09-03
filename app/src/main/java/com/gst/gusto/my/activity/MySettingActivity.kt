@@ -75,6 +75,10 @@ class MySettingActivity : AppCompatActivity() {
                 val intent = Intent(this@MySettingActivity, MyProfileEditActivity::class.java)
                 startActivity(intent)
             }
+            changeAccount.setOnClickListener {
+                val intent = Intent(this@MySettingActivity, MyChangeAccountActivity::class.java)
+                startActivity(intent)
+            }
             unregister.setOnClickListener {
                 gustoViewModel.unregister { response ->
                     if(response==1) {
@@ -116,6 +120,7 @@ class MySettingActivity : AppCompatActivity() {
                     }
                 }
             }
+
         }
     }
 

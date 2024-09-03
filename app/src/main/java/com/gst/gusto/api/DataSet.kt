@@ -469,6 +469,13 @@ data class AccessTokenResponse(
     @SerializedName("refresh_token") val refreshToken: String?
 )
 
+// 소셜 리스트
+data class ConnectecSocialListResponse(
+    @SerializedName("NAVER") val NAVER: Boolean,
+    @SerializedName("KAKAO") val KAKAO: Boolean,
+    @SerializedName("GOOGLE") val GOOGLE: Boolean,
+)
+
 // 나의 콘텐츠 공개 여부 조회
 data class ResponseMyPublishGet(
     @SerializedName("publishReview") val publishReview: Boolean,
