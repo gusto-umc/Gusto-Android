@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.MainActivity
@@ -86,7 +87,8 @@ class CalendarReviewFragment : Fragment() {
             }
 
             calReviewFab.setOnClickListener {
-                
+                gustoViewModel.reviewReturnPos = 1
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewCalendarFragment_to_reviewAddSearch) }
             }
 
         }

@@ -82,6 +82,8 @@ class GustoViewModel: ViewModel() {
 
     // 리뷰 작성하기에서 위의 진행도 바
     var progress = 0
+    // 리뷰 작성 위치
+    var reviewReturnPos = 0 // 0은 가게 상세 정보, 1은 리뷰 모아보기
 
     // 리스트 화면에서 돌아온 화면 종류
     var listFragment = "group" // group or route
@@ -1063,18 +1065,18 @@ class GustoViewModel: ViewModel() {
         service.createReview(xAuthToken,filesToUpload,data).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    Log.d("viewmodel", "Successful response: ${response}")
+                    Log.d("viewmodel createReview", "Successful response: ${response}")
                     callback(1)
                 } else if(response.code()==403) {
                     _tokenToastData.value = Unit
                     refreshToken()
                 }else {
-                    Log.e("viewmodel", "Unsuccessful response: ${response}")
+                    Log.e("viewmodel createReview", "Unsuccessful response: ${response}")
                     callback(3)
                 }
             }
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Log.e("viewmodel", "Failed to make the request", t)
+                Log.e("viewmodel createReview", "Failed to make the request", t)
                 callback(3)
             }
         })
