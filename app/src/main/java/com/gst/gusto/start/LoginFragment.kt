@@ -136,27 +136,6 @@ class LoginFragment: Fragment() {
             requireActivity().finish()
         }
 
-        MobileAds.initialize(requireContext())
-        val adLoader = AdLoader.Builder(requireContext(),resources.getString(R.string.admob_native))
-            .forNativeAd { nativeAd ->
-                // Handle the native ad loaded callback
-                val styles = NativeTemplateStyle.Builder()
-                    .build()
-                val template = binding.nativeAdTemplate
-                template.setStyles(styles)
-                template.setNativeAd(nativeAd)
-            }
-            .withAdListener(object : AdListener() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    super.onAdFailedToLoad(adError)
-                    Log.e("AdLoader", "Failed to load ad: ${adError}")
-                }
-            })
-            .build()
-
-        adLoader.loadAd(AdRequest.Builder().build())
-
-        binding.bannerAd.loadAd(AdRequest.Builder().build())
 
         return binding.root
 

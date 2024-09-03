@@ -2290,6 +2290,26 @@ class GustoViewModel: ViewModel() {
         })
     }
 
+    fun getConnectedSocialList(callback: (Int, ConnectecSocialListResponse?) -> Unit) {
+        service.getConnectedSocialList(xAuthToken).enqueue(object : Callback<ConnectecSocialListResponse> {
+            override fun onResponse(call: Call<ConnectecSocialListResponse>, response: Response<ConnectecSocialListResponse>) {
+                if (response.isSuccessful) {
+                    callback(1,response.body()!!)
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                } else {
+                    Log.e("viewmodel ConnectSocial", "Unsuccessful response: ${response}")
+                    Log.e("viewmodel ConnectSocial", "Unsuccessful response: ${xAuthToken}")
+                    callback(2,null)
+                }
+            }
+            override fun onFailure(call: Call<ConnectecSocialListResponse>, t: Throwable) {
+                callback(2,null)
+            }
+        })
+    }
+
     //저장된 맛집
     /*
     // 첫 페이지 또는 다음 페이지 데이터를 불러오는 함수

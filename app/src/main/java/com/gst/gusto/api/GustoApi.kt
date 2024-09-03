@@ -536,6 +536,12 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") xtoken: String
     ): Call<ResponseBody>
 
+    // 연결된 소셜 서버 목록
+    @GET("users/social-accounts")
+    fun getConnectedSocialList(
+        @Header("X-AUTH-TOKEN") token: String
+    ): Call<ConnectecSocialListResponse>
+
     //탭바 저장된 음식점 수정
     @GET("stores/pins/visited")
     fun getVisitedStores(
