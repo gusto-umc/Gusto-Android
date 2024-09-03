@@ -249,6 +249,7 @@ class StoreDetailFragment : Fragment() {
          * 리뷰 추가 버튼 클릭 리스너
          */
         binding.fabStoreDetailAdd.setOnClickListener {
+            gustoViewModel.reviewReturnPos = 0
             Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_fragment_review_add_1)
         }
 

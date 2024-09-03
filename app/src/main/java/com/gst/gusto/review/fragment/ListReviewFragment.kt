@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
@@ -67,7 +68,8 @@ class ListReviewFragment : Fragment() {
             }
 
             listReviewFab.setOnClickListener {
-
+                gustoViewModel.reviewReturnPos = 1
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewListFragment_to_reviewAddSearch) }
             }
         }
     }
