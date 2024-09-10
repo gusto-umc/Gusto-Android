@@ -46,6 +46,7 @@ class ReviewFragment : Fragment() {
             R.id.instaButton -> fragmentMananger.replace(R.id.review_fragment, InstaReviewFragment())
             R.id.calendarButton -> fragmentMananger.replace(R.id.review_fragment, CalendarReviewFragment())
             R.id.listButton -> fragmentMananger.replace(R.id.review_fragment, ListReviewFragment())
+            else -> fragmentMananger.replace(R.id.review_fragment, InstaReviewFragment())
         }
 
         fragmentMananger.commit()

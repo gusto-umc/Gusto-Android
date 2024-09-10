@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentInstaReviewBinding
 import com.gst.gusto.review.adapter.InstaReviewAdapter
 import com.gst.gusto.review.adapter.GridItemDecoration
@@ -26,6 +28,7 @@ import kotlinx.coroutines.launch
 class InstaReviewFragment : Fragment() {
 
     lateinit var binding: FragmentInstaReviewBinding
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     private val adapter: InstaReviewAdapter by lazy {
         InstaReviewAdapter(context) { reviewId ->
@@ -61,14 +64,17 @@ class InstaReviewFragment : Fragment() {
         setReviewWriteBtn()
     }
 
+
     private fun setReviewWriteBtn() {
         with(binding) {
             instaReviewWriteButton.setOnClickListener {
+                gustoViewModel.reviewReturnPos = 1
                 view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewFragment_to_reviewAddSearch) }
             }
 
             instaReviewFab.setOnClickListener{
-
+                gustoViewModel.reviewReturnPos = 1
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewFragment_to_reviewAddSearch) }
             }
         }
     }

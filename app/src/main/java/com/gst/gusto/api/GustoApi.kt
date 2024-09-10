@@ -493,11 +493,6 @@ interface GustoApi {
         @Query("y") latitude: String
     ): Call<RegionInfoResponse>
 
-    @GET("feeds") // 먹스또 랜덤 피드
-    fun feed(
-        @Header("X-AUTH-TOKEN") token: String
-    ):Call<ArrayList<ResponseFeedReview>>
-
     @GET("feeds/search") // 맛집 & 해시태그 검색 엔진
     fun feedSearch(
         @Header("X-AUTH-TOKEN") token: String,
@@ -540,6 +535,12 @@ interface GustoApi {
     fun unregister(
         @Header("X-AUTH-TOKEN") xtoken: String
     ): Call<ResponseBody>
+
+    // 연결된 소셜 서버 목록
+    @GET("users/social-accounts")
+    fun getConnectedSocialList(
+        @Header("X-AUTH-TOKEN") token: String
+    ): Call<ConnectecSocialListResponse>
 
     //탭바 저장된 음식점 수정
     //방문식당 조회

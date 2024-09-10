@@ -307,6 +307,24 @@
             app:destination="@id/reviewAddSearchFragment"/>
     </fragment>
     <fragment
+        android:id="@+id/fragment_review_calendar"
+        android:name="com.gst.gusto.review.fragment.CalendarReviewFragment"
+        android:label="FragmentCalendarReview"
+        tools:layout="@layout/fragment_calendar_review">
+        <action
+            android:id="@+id/action_reviewCalendarFragment_to_reviewAddSearch"
+            app:destination="@id/reviewAddSearchFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_review_List"
+        android:name="com.gst.gusto.review.fragment.ListReviewFragment"
+        android:label="FragmentListReview"
+        tools:layout="@layout/fragment_list_review">
+        <action
+            android:id="@+id/action_reviewListFragment_to_reviewAddSearch"
+            app:destination="@id/reviewAddSearchFragment"/>
+    </fragment>
+    <fragment
         android:id="@+id/fragment_review_detail_edit"
         android:name="com.gst.clock.Fragment.ReviewDetailEditFragment"
         android:label="FragmentReviewDetailEdit"

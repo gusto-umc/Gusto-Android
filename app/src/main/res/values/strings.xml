@@ -7,4 +7,8 @@
 
     <string name="google_login_client_id">943604482928-so75u6rq8o25m2irr6mpcne8h14ake5u.apps.googleusercontent.com</string>
 
+
+    <string name="admob_native">ca-app-pub-4086521113003670/8877364693</string>
+    <string name="admob_banner">ca-app-pub-4086521113003670/9611861863</string>
+
 </resources>

@@ -6,25 +6,6 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <com.google.android.ads.nativetemplates.TemplateView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:gnt_template_type="@layout/gnt_small_template_view"
-        android:id="@+id/nativeAdTemplate"/>
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:id="@+id/bannerAd"
-        ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-1668591773614686/9724658492"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
