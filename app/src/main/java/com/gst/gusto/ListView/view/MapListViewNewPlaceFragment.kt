@@ -2,7 +2,9 @@ package com.gst.gusto.ListView.view
 
 import NewPlaceAdapter
 import android.os.Bundle
-import android.util.Log // 로그 사용을 위해 import 추가
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +26,7 @@ class MapListViewNewPlaceFragment : Fragment() {
     private lateinit var newPlaceAdapter: NewPlaceAdapter
 
     private var categoryId: Int? = null
-    private var townName: String = "성수1가1동" //기본값
+    private var townName: String = "성수1가1동" // 기본값
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +47,6 @@ class MapListViewNewPlaceFragment : Fragment() {
         gustoViewModel.setUnsaveFilters(categoryId, townName)
     }
 
-    // MapListViewNewPlaceFragment
     private fun setupObservers() {
         gustoViewModel.unsavedStores.observe(viewLifecycleOwner, Observer { newStores ->
             Log.d("MapListViewNewPlace", "Unsaved Stores Loaded: ${newStores.size} stores")
@@ -60,6 +61,8 @@ class MapListViewNewPlaceFragment : Fragment() {
 
             // 어댑터에 데이터 전달
             newPlaceAdapter.submitList(currentList)
+            // ProgressBar 숨기기
+            binding.progressBar.visibility = View.GONE
         })
 
         // 추가 로딩 여부 옵저버
@@ -93,13 +96,29 @@ class MapListViewNewPlaceFragment : Fragment() {
                 val totalItemCount = layoutManager.itemCount
                 val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
-                // 마지막 아이템이 보일 때 추가 데이터 로딩
-                if (gustoViewModel.hasNext.value == true && !gustoViewModel.isLoading && lastVisibleItem >= totalItemCount - 1) {
+                // 스크롤이 끝에 도달했을 때 추가 데이터 로드
+                if (gustoViewModel.hasNext.value == true && lastVisibleItem >= totalItemCount - 1 && !gustoViewModel.isLoading) {
                     Log.d("MapListViewNewPlace", "Loading more unsaved stores...")
-                    gustoViewModel.tapUnsavedStores()
+                    showLoadingIndicator() // 로딩 인디케이터를 표시
+
+                    // 데이터 로딩에 딜레이를 주는 부분
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        gustoViewModel.tapUnsavedStores()
+                        hideLoadingIndicator() // 로딩 인디케이터 숨기기
+                    }, 1000) // 500ms의 딜레이
                 }
             }
         })
+    }
+
+    // 로딩 인디케이터 표시
+    private fun showLoadingIndicator() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    // 로딩 인디케이터 숨기기
+    private fun hideLoadingIndicator() {
+        binding.progressBar.visibility = View.GONE
     }
 
     override fun onDestroyView() {

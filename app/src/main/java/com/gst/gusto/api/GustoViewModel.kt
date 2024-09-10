@@ -2350,16 +2350,16 @@ class GustoViewModel: ViewModel() {
     // 필터 설정 메서드 (방문 식당용)
 
     // 필터 설정 후 최초 데이터 로드
+    // 필터 설정 및 데이터 초기화
     fun setSaveFilters(categoryId: Int?, townName: String) {
         currentCategoryId = categoryId
         currentTownName = townName
         lastStoreId = null
-        currentPage = 0
         _savedStores.value = emptyList()
         tapSavedStores()
     }
 
-    // 방문한 식당 데이터 로드
+    // 저장된 식당 데이터 로드
     fun tapSavedStores() {
         if (isLoading) return
         isLoading = true
@@ -2408,6 +2408,7 @@ class GustoViewModel: ViewModel() {
             })
         }
     }
+
 
     // 미방문 식당 필터 설정 및 데이터 로드
     fun setUnsaveFilters(categoryId: Int?, townName: String) {
