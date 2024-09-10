@@ -23,13 +23,9 @@ class MapListViewSaveFragment : Fragment() {
     private val gustoViewModel: GustoViewModel by activityViewModels()
     private lateinit var adapter: SavedStoreListAdapter
 
-
     // category Id와 town Name만 제대로 불러오면 성공!!
-
-    private var categoryId: Int? = null // 기본값을 설정하거나 적절한 값을 초기화
-    private var townName: String = "성수1가1동" // 기본값을 설정하거나 적절한 값을 초기화
-    //private var townName: String = gustoViewModel.dong.toString()
-    //private var categoryId: Int? = gustoViewModel.category
+    private var categoryId: Int? = null
+    private var townName: String = "성수1가1동" // 기본값
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,14 +40,14 @@ class MapListViewSaveFragment : Fragment() {
 
         setupRecyclerView()
 
-        // 데이터 초기 로딩
-        gustoViewModel.setSaveFilters(categoryId, townName)
+        // 데이터 초기 로딩: 방문 식당 필터 설정
+        gustoViewModel.setSaveFilters(categoryId, townName)  // 방문식당 조회를 위한 필터 설정
         Log.d("viewModelStore", "categoryId: ${categoryId}")
         Log.d("viewModelStore", "townName: ${townName}")
 
-        gustoViewModel.stores.observe(viewLifecycleOwner, Observer { stores ->
-            Log.d("viewModelStore", "데이터 변경: ${stores.size}개의 식당 데이터")
-            adapter.submitList(stores)
+        // ViewModel에서 방문 식당 데이터 관찰
+        gustoViewModel.savedStores.observe(viewLifecycleOwner, Observer { stores ->
+            adapter.submitList(stores) // 방문 식당 리스트를 어댑터에 전달
         })
 
         // hasNext 변경을 관찰하여 스크롤 리스너 설정
@@ -73,7 +69,6 @@ class MapListViewSaveFragment : Fragment() {
         })
     }
 
-
     // RecyclerView 설정
     private fun setupRecyclerView() {
         adapter = SavedStoreListAdapter()
@@ -90,12 +85,11 @@ class MapListViewSaveFragment : Fragment() {
                 val totalItemCount = layoutManager.itemCount
                 val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
-                // 마지막 아이템이 보일 때 추가 데이터 로딩
-                if (gustoViewModel.hasNext.value == true && lastVisibleItem >= totalItemCount - 1) {
-                    gustoViewModel.tapSavedStores()
+                // 스크롤이 끝에 도달했을 때 추가 데이터 로드
+                if (gustoViewModel.hasNext.value == true && lastVisibleItem >= totalItemCount - 1 && !gustoViewModel.isLoading) {
+                    gustoViewModel.tapSavedStores() // 다음 페이지 로드
                 }
             }
         })
     }
 }
-

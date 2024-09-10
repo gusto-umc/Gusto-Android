@@ -560,5 +560,4 @@ interface GustoApi {
         @Query("lastStoreId") lastStoreId: Long? = null
     ): Call<UnVisitedStoresResponse>
 
-
 }

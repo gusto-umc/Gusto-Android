@@ -2327,20 +2327,44 @@ class GustoViewModel: ViewModel() {
 
     //방문 식당 조회//
 
-    private val _stores = MutableLiveData<List<StoreData>>()
-    val stores: LiveData<List<StoreData>> get() = _stores
+    var isLoading = false // 로딩 중인지 여부 확인
+    val loading: Boolean
+        get() = isLoading
 
-    private var currentCategoryId: Int ?= null
+    // 방문 식당과 미방문 식당 LiveData 분리
+    private val _savedStores = MutableLiveData<List<StoreData>>() // 방문 식당
+    val savedStores: LiveData<List<StoreData>> get() = _savedStores
+
+    private val _unsavedStores = MutableLiveData<List<StoreData>>() // 미방문 식당
+    val unsavedStores: LiveData<List<StoreData>> get() = _unsavedStores
+
+    private var currentCategoryId: Int? = null
     private var currentTownName: String = ""
 
+
+    private var allStores: MutableList<StoreData> = mutableListOf() // 전체 데이터를 보관
+    private val pageSize = 5 // 클라이언트에서 페이징 처리할 때 페이지당 아이템 수
+    private var currentPage = 0 // 현재 페이지 번호
+
+
+    // 필터 설정 메서드 (방문 식당용)
+
+    // 필터 설정 후 최초 데이터 로드
     fun setSaveFilters(categoryId: Int?, townName: String) {
         currentCategoryId = categoryId
         currentTownName = townName
-        lastStoreId = null // 필터 변경 시 페이지네이션 초기화
+        lastStoreId = null
+        currentPage = 0
+        _savedStores.value = emptyList()
         tapSavedStores()
     }
-    //방문식당 viewmodel
+
+    // 방문한 식당 데이터 로드
     fun tapSavedStores() {
+        if (isLoading) return
+        isLoading = true
+        Log.d("GustoViewModel", "Loading data... lastStoreId: $lastStoreId")
+
         viewModelScope.launch {
             gustoApi.getVisitedStores(
                 xtoken = xAuthToken,
@@ -2352,41 +2376,53 @@ class GustoViewModel: ViewModel() {
                     call: Call<VisitedStoresResponse>,
                     response: Response<VisitedStoresResponse>
                 ) {
-                    Log.d("viewModelStore", "xAuthToken : ${xAuthToken}")
-                    Log.d("viewModelStore", "currentCategoryId : ${currentCategoryId}")
-                    Log.d("viewModelStore", "currentTownName : ${currentTownName}")
-                    Log.d("viewModelStore", "lastStoreId : ${lastStoreId}")
+                    isLoading = false
                     if (response.isSuccessful) {
                         val data = response.body()
-                        Log.d("viewModelStore", "API 응답 성공: ${data?.pinStores?.size}개의 식당 데이터")
                         val newStores = data?.pinStores ?: emptyList()
-                        _hasNext.value = data?.hasNext ?: false
-                        _stores.value = _stores.value.orEmpty() + newStores
+
+                        Log.d("GustoViewModel", "Received ${newStores.size} new stores")
+
+                        val updatedStores = _savedStores.value.orEmpty() + newStores
+                        _savedStores.value = updatedStores
+
+                        // 다음 페이지 여부 확인
+                        _hasNext.value = newStores.size == pageSize
+                        Log.d("GustoViewModel", "Has next page: ${_hasNext.value}")
+
                         if (newStores.isNotEmpty()) {
                             lastStoreId = newStores.last().storeId.toLong()
+                            Log.d("GustoViewModel", "Updated lastStoreId: $lastStoreId")
                         }
                     } else {
-                        Log.e("viewModelStore", "API 응답 실패: ${response.errorBody()?.string()}")
                         _hasNext.value = false
+                        Log.d("GustoViewModel", "Response not successful: ${response.code()}")
                     }
                 }
+
                 override fun onFailure(call: Call<VisitedStoresResponse>, t: Throwable) {
-                    Log.e("viewModelStore", "API 호출 실패: ${t.message}")
+                    isLoading = false
                     _hasNext.value = false
+                    Log.e("GustoViewModel", "API call failed", t)
                 }
-
-
             })
         }
     }
-    fun setUnsaveFilters(categoryId: Int, townName: String) {
+
+    // 미방문 식당 필터 설정 및 데이터 로드
+    fun setUnsaveFilters(categoryId: Int?, townName: String) {
         currentCategoryId = categoryId
         currentTownName = townName
-        lastStoreId = null // 필터 변경 시 페이지네이션 초기화
+        lastStoreId = null
+        _unsavedStores.value = emptyList()
         tapUnsavedStores()
     }
-    // 미방문 식당 viewmodel
+
+    // 미방문 식당 데이터 로드
     fun tapUnsavedStores() {
+        if (isLoading) return
+        isLoading = true
+
         viewModelScope.launch {
             gustoApi.getUnvisitedStores(
                 xtoken = xAuthToken,
@@ -2398,11 +2434,16 @@ class GustoViewModel: ViewModel() {
                     call: Call<UnVisitedStoresResponse>,
                     response: Response<UnVisitedStoresResponse>
                 ) {
+                    isLoading = false
                     if (response.isSuccessful) {
                         val data = response.body()
                         val newStores = data?.pinStores ?: emptyList()
-                        _hasNext.value = data?.hasNext ?: false
-                        _stores.value = _stores.value.orEmpty() + newStores
+
+                        val updatedStores = _unsavedStores.value.orEmpty() + newStores
+                        _unsavedStores.value = updatedStores
+
+                        // 다음 페이지 여부 확인
+                        _hasNext.value = newStores.size == pageSize
                         if (newStores.isNotEmpty()) {
                             lastStoreId = newStores.last().storeId.toLong()
                         }
@@ -2412,10 +2453,10 @@ class GustoViewModel: ViewModel() {
                 }
 
                 override fun onFailure(call: Call<UnVisitedStoresResponse>, t: Throwable) {
+                    isLoading = false
                     _hasNext.value = false
                 }
             })
         }
     }
-
 }

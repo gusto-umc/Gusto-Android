@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gst.gusto.api.StoreData
 import com.gst.gusto.databinding.ItemStoreBinding
-
+// NewPlaceAdapter
 class NewPlaceAdapter : RecyclerView.Adapter<NewPlaceAdapter.StoreViewHolder>() {
 
     private val storeList = mutableListOf<StoreData>()
@@ -19,10 +19,18 @@ class NewPlaceAdapter : RecyclerView.Adapter<NewPlaceAdapter.StoreViewHolder>() 
     }
 
     fun submitList(newList: List<StoreData>) {
+        val currentList = storeList.toMutableList()
+        newList.forEach { store ->
+            if (store !in currentList) {
+                currentList.add(store)
+            }
+        }
         storeList.clear()
-        storeList.addAll(newList)
+        storeList.addAll(currentList)
         notifyDataSetChanged()
     }
+
+    fun getCurrentList(): List<StoreData> = storeList
 
     inner class StoreViewHolder(private val binding: ItemStoreBinding) : RecyclerView.ViewHolder(binding.root) {
 
