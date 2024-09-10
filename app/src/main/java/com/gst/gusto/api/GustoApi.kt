@@ -543,12 +543,22 @@ interface GustoApi {
     ): Call<ConnectecSocialListResponse>
 
     //탭바 저장된 음식점 수정
+    //방문식당 조회
     @GET("stores/pins/visited")
     fun getVisitedStores(
         @Header("X-AUTH-TOKEN") xtoken: String,
-        @Query("myCategoryId") categoryId: Int,
+        @Query("myCategoryId") categoryId: Int?,
         @Query("townName") townName: String,
         @Query("lastStoreId") lastStoreId: Long? = null
     ): Call<VisitedStoresResponse>
+
+    //미방문 식당 조회
+    @GET("stores/pins/unvisited")
+    fun getUnvisitedStores(
+        @Header("X-AUTH-TOKEN") xtoken: String,
+        @Query("myCategoryId") categoryId: Int?,
+        @Query("townName") townName: String,
+        @Query("lastStoreId") lastStoreId: Long? = null
+    ): Call<UnVisitedStoresResponse>
 
 }
