@@ -33,6 +33,7 @@ class MapListViewNewPlaceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMapListViewNewPlaceBinding.inflate(inflater, container, false)
+        townName =  gustoViewModel.dong.value!!
         return binding.root
     }
 

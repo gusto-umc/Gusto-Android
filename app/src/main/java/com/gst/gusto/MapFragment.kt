@@ -429,25 +429,6 @@ class MapFragment : Fragment() {
         super.onResume()
         binding.kakaoMap.resume()
 
-        // 카테고리 조회 및 칩 추가
-        loadCategories("성수1가1동")
-
-        // 데이터 넣어둔 변수 : gustoViewModel.myMapCategoryList
-        gustoViewModel.getMapCategory(gustoViewModel.dong.value!!){
-                result ->
-            when(result){
-                0 -> {
-                    //success
-                }
-                1 -> {
-                    //fail
-                    Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
-        //카테고리 변경 데이터//
-
         //저장 맛집
         var locRestSaveNum = binding.fragmentArea.locRestSaveNum
 
@@ -468,22 +449,6 @@ class MapFragment : Fragment() {
         // 방문o 개수 : gustoViewModel.mapVisitedCnt
         //닉네임 변수 : gustoViewModel.userNickname
 
-        gustoViewModel.dong.observe(viewLifecycleOwner, Observer {
-            gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
-                    result ->
-                when(result){
-                    0 -> {
-                        Log.d("viewmodel : vi",gustoViewModel.mapVisitedList.toString())
-                        Log.d("viewmodel : novi",gustoViewModel.mapUnvisitedList.toString())
-                        //동
-                        refindDong()
-                    }
-                    1 -> {
-                        Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        })
     }
 
 
@@ -667,7 +632,19 @@ class MapFragment : Fragment() {
                                 1 -> {
                                     Log.d(TAG, "gustoViewModel.dong.value")
                                     binding.fragmentArea.userLoc.text = address
-                                    refindDong()
+                                    loadCategories(gustoViewModel.dong.value!!)
+                                    gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
+                                            result ->
+                                        when(result){
+                                            0 -> {
+                                                refindDong()
+                                            }
+                                            1 -> {
+                                                Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    }
+
                                     reGetMapMarkers()
                                 }
                             }

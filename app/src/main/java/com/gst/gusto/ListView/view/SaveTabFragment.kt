@@ -5,12 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentSaveTabBinding
 
 class SaveTabFragment : Fragment() {
 
     private lateinit var binding: FragmentSaveTabBinding
+    private val gustoViewModel: GustoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -18,7 +22,7 @@ class SaveTabFragment : Fragment() {
     ): View? {
         binding = FragmentSaveTabBinding.inflate(inflater, container, false)
         val view = binding.root
-
+        binding.tvMapSaveDong.text = gustoViewModel.dong.value!!
         setupTabLayout()
 
         return view
@@ -34,6 +38,10 @@ class SaveTabFragment : Fragment() {
 
         tabNewPlace.setOnClickListener {
             selectTab(1)
+        }
+
+        binding.ivMapMapBack.setOnClickListener {
+            findNavController().popBackStack()
         }
 
         // 초기 선택
