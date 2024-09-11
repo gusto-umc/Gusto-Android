@@ -6,7 +6,9 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -541,6 +543,20 @@ interface GustoApi {
     fun getConnectedSocialList(
         @Header("X-AUTH-TOKEN") token: String
     ): Call<ConnectecSocialListResponse>
+
+    // 소셜 연동 계정 추가
+    @POST("users/auth/social-account")
+    fun ConnectSocial(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Body body : Login
+    ): Call<ResponseBodyGusto>
+
+    // 소셜 연동 해제
+    @HTTP(method = "DELETE", path = "users/auth/social-account", hasBody = true)
+    fun UnConnectSocial(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Body body : Login
+    ): Call<ResponseBodyGusto>
 
     //탭바 저장된 음식점 수정
     @GET("stores/pins/visited")
