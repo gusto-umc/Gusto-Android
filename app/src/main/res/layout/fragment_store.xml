@@ -75,10 +75,11 @@
         <!--nested scrollview-->
         <androidx.core.widget.NestedScrollView
             app:layout_constraintTop_toBottomOf="@id/toolbar_store"
+            app:layout_constraintBottom_toTopOf="@id/nativeAdTemplate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -177,7 +178,12 @@
                     />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-
+        <com.google.android.ads.nativetemplates.TemplateView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:gnt_template_type="@layout/gnt_small_template_view"
+            android:id="@+id/nativeAdTemplate"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 
