@@ -64,6 +64,12 @@ class InstaReviewFragment : Fragment() {
         setReviewWriteBtn()
     }
 
+    override fun onResume() {
+        super.onResume()
+        adapter.clearItems()
+        viewModel.getInstaReview(15)
+    }
+
 
     private fun setReviewWriteBtn() {
         with(binding) {
