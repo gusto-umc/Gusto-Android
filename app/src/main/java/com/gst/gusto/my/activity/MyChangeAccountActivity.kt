@@ -324,7 +324,7 @@ class MyChangeAccountActivity : AppCompatActivity() {
                 provider = "KAKAO"
                 this.accessToken = accessToken
                 if(remove)
-                    gustoViewModel.unConnectSocial(providerId, provider, this.accessToken) { resultCode ->
+                    gustoViewModel.unConnectSocial(provider, providerId, this.accessToken) { resultCode ->
                         when (resultCode) {
                             1 -> {
                                 Toast.makeText(this@MyChangeAccountActivity, "카카오 연동 해제 성공", Toast.LENGTH_SHORT).show()
