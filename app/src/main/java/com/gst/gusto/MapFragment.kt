@@ -124,6 +124,8 @@ class MapFragment : Fragment() {
         chipGroup = binding.fragmentMapMainScreen.chipGroup
 
 
+
+
         return view
     }
 
@@ -628,6 +630,28 @@ class MapFragment : Fragment() {
                         // 사용자 제스쳐가 아닌 코드에 의해 카메라가 움직이면 GestureType 은 Unknown
                         Log.e(TAG, "cur loc : "+cameraPosition.toString())
                         gustoViewModel.getRegionInfo(cameraPosition.position.longitude, cameraPosition.position.latitude)  {result, address ->
+                            when(result) {
+                                1 -> {
+                                    Log.d(TAG, "gustoViewModel.dong.value")
+                                    binding.fragmentArea.userLoc.text = address
+                                    loadCategories(gustoViewModel.dong.value!!)
+                                    gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
+                                            result ->
+                                        when(result){
+                                            0 -> {
+                                                refindDong()
+                                            }
+                                            1 -> {
+                                                Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    }
+
+                                    reGetMapMarkers()
+                                }
+                            }
+                        }
+                        gustoViewModel.getNewRegionInfo(cameraPosition.position.longitude, cameraPosition.position.latitude,"d4840284be3d4935b496", "3315f8050f824ac9bbaa") { result, drCode, address ->
                             when(result) {
                                 1 -> {
                                     Log.d(TAG, "gustoViewModel.dong.value")

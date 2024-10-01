@@ -493,6 +493,20 @@ interface GustoApi {
         @Query("y") latitude: String
     ): Call<RegionInfoResponse>
 
+    @GET("OpenAPI3/auth/authentication.json")
+    fun authenticate(
+        @Query("consumer_key") consumerKey: String,
+        @Query("consumer_secret") consumerSecret: String
+    ): Call<AuthResponse>
+
+    @GET("OpenAPI3/addr/rgeocodewgs84.json")
+    fun getNewRegionInfo(
+        @Query("accessToken") accessToken: String,
+        @Query("x_coor") longitude: Double,
+        @Query("y_coor") latitude: Double,
+        @Query("addr_type") addrType: Int = 21
+    ): Call<NewRegionInfoResponse>
+
     @GET("feeds/search") // 맛집 & 해시태그 검색 엔진
     fun feedSearch(
         @Header("X-AUTH-TOKEN") token: String,
