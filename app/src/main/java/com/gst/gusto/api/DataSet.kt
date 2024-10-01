@@ -3,6 +3,13 @@ package com.gst.gusto.api
 import com.google.gson.annotations.SerializedName
 import java.util.Date
 
+
+// Response
+data class ResponseBodyGusto(
+    @SerializedName("errorCode") val errorCode : Int,
+    @SerializedName("message") val message : String
+)
+
 // 내 루트 조회
 data class Routes(
     @SerializedName("routeId") val routeId : Long,

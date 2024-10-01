@@ -2291,6 +2291,7 @@ class GustoViewModel: ViewModel() {
         })
     }
 
+    // 연결된 소셜 서버 목록
     fun getConnectedSocialList(callback: (Int, ConnectecSocialListResponse?) -> Unit) {
         service.getConnectedSocialList(xAuthToken).enqueue(object : Callback<ConnectecSocialListResponse> {
             override fun onResponse(call: Call<ConnectecSocialListResponse>, response: Response<ConnectecSocialListResponse>) {
@@ -2307,6 +2308,51 @@ class GustoViewModel: ViewModel() {
             }
             override fun onFailure(call: Call<ConnectecSocialListResponse>, t: Throwable) {
                 callback(2,null)
+            }
+        })
+    }
+
+    // 소셜 연동 계정 추가
+    fun addConnectSocial(provider : String, providerId: String, socialAccessToken: String,callback: (Int) -> Unit) {
+        Log.d("viewmodel data",Login(provider,providerId,socialAccessToken).toString())
+        service.ConnectSocial(xAuthToken,Login(provider,providerId,socialAccessToken)).enqueue(object : Callback<ResponseBodyGusto> {
+            override fun onResponse(call: Call<ResponseBodyGusto>, response: Response<ResponseBodyGusto>) {
+                if (response.isSuccessful) {
+                    callback(1)
+                    Log.e("viewmodel addConnectSocial", "Successful response: ${response}")
+                } else if(response.code()==403) {
+                    _tokenToastData.value = Unit
+                    refreshToken()
+                } else {
+                    Log.e("viewmodel addConnectSocial", "Unsuccessful response: ${response}")
+                    callback(2)
+                }
+            }
+            override fun onFailure(call: Call<ResponseBodyGusto>, t: Throwable) {
+                Log.e("viewmodel addConnectSocial", "Unsuccessful response: ${t}")
+                callback(2)
+            }
+        })
+    }
+    // 소셜 연동 계정 추가
+    fun unConnectSocial(provider : String, providerId: String, socialAccessToken: String,callback: (Int) -> Unit) {
+        Log.d("viewmodel data",Login(provider,providerId,socialAccessToken).toString())
+        service.UnConnectSocial(xAuthToken,Login(provider,providerId,socialAccessToken)).enqueue(object : Callback<ResponseBodyGusto> {
+            override fun onResponse(call: Call<ResponseBodyGusto>, response: Response<ResponseBodyGusto>) {
+                if (response.isSuccessful) {
+                    callback(1)
+                } else if(response.code()==403) {
+                    Log.e("viewmodel unConnectSocial", "Successful response: ${provider}, ${providerId}, ${socialAccessToken}")
+                    Log.e("viewmodel unConnectSocial", "Unsuccessful2 response: ${response}")
+                    callback(2)
+                } else {
+                    Log.e("viewmodel unConnectSocial", "Unsuccessful3 response: ${response}")
+                    callback(2)
+                }
+            }
+            override fun onFailure(call: Call<ResponseBodyGusto>, t: Throwable) {
+                Log.e("viewmodel addConnectSocial", "Unsuccessful response: ${t}")
+                callback(2)
             }
         })
     }
