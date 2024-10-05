@@ -2341,9 +2341,9 @@ class GustoViewModel: ViewModel() {
         service.UnConnectSocial(xAuthToken,Login(provider,providerId,socialAccessToken)).enqueue(object : Callback<ResponseBodyGusto> {
             override fun onResponse(call: Call<ResponseBodyGusto>, response: Response<ResponseBodyGusto>) {
                 if (response.isSuccessful) {
+                    Log.d("viewmodel unConnectSocial", "Successful response: ${provider}, ${providerId}, ${socialAccessToken}")
                     callback(1)
                 } else if(response.code()==403) {
-                    Log.e("viewmodel unConnectSocial", "Successful response: ${provider}, ${providerId}, ${socialAccessToken}")
                     Log.e("viewmodel unConnectSocial", "Unsuccessful2 response: ${response}")
                     callback(2)
                 } else {
