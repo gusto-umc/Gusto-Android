@@ -30,7 +30,7 @@ interface GustoApi {
     @GET("stores/map") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
     fun getCurrentMapStores(
         @Header("X-AUTH-TOKEN") token : String,
-        @Query("townName") townName : String,
+        @Query("townCode") townName : String,
         @Query("myCategoryId") myCategoryId : MutableList<Int>?,
         @Query("visited") visited : Boolean?
     ):Call<List<RouteList>>
@@ -293,7 +293,7 @@ interface GustoApi {
     @GET("myCategories")
     fun getMapCategory(
         @Header("X-AUTH-TOKEN") token: String,
-        @Query("townName") townName: String
+        @Query("townCode") townName: String
     ): Call<ResponsePMyCategory>
             //Call<ArrayList<ResponseMapCategory>>
 
@@ -373,7 +373,7 @@ interface GustoApi {
     fun getMapStores(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("myCategoryId") categoryId : Int,
-        @Query("townName") townName : String
+        @Query("townCode") townName : String
     ) : Call<List<ResponseStoreListItem>>
 
     //5. 카테고리 별 가게 조회 - 전체 -> 확인 완
@@ -396,7 +396,7 @@ interface GustoApi {
     fun getSavedStores(
         @Header("X-AUTH-TOKEN") token: String,
         @Query("myCategoryId") categoryId: Int?,
-        @Query("townName") townName: String
+        @Query("townCode") townName: String
     ) : Call<List<ResponseSavedStore>>
 
 
@@ -495,6 +495,20 @@ interface GustoApi {
         @Query("y") latitude: String
     ): Call<RegionInfoResponse>
 
+    @GET("OpenAPI3/auth/authentication.json")
+    fun authenticate(
+        @Query("consumer_key") consumerKey: String,
+        @Query("consumer_secret") consumerSecret: String
+    ): Call<AuthResponse>
+
+    @GET("OpenAPI3/addr/rgeocodewgs84.json")
+    fun getNewRegionInfo(
+        @Query("accessToken") accessToken: String,
+        @Query("x_coor") longitude: Double,
+        @Query("y_coor") latitude: Double,
+        @Query("addr_type") addrType: Int = 21
+    ): Call<NewRegionInfoResponse>
+
     @GET("feeds/search") // 맛집 & 해시태그 검색 엔진
     fun feedSearch(
         @Header("X-AUTH-TOKEN") token: String,
@@ -504,7 +518,7 @@ interface GustoApi {
 
 
     // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
-    @GET("stores/map?townName={townName}&myCategoryId={myCategoryId}&visit={visitedStatus}")
+    @GET("stores/map?townCode={townName}&myCategoryId={myCategoryId}&visit={visitedStatus}")
     fun LocalCategory(
         @Query("storeId") storeId: Int,
         @Query("storeName") storeName: String,
@@ -564,7 +578,7 @@ interface GustoApi {
     fun getVisitedStores(
         @Header("X-AUTH-TOKEN") xtoken: String,
         @Query("myCategoryId") categoryId: Int?,
-        @Query("townName") townName: String,
+        @Query("townCode") townName: String,
         @Query("lastStoreId") lastStoreId: Long? = null
     ): Call<VisitedStoresResponse>
 
@@ -573,7 +587,7 @@ interface GustoApi {
     fun getUnvisitedStores(
         @Header("X-AUTH-TOKEN") xtoken: String,
         @Query("myCategoryId") categoryId: Int?,
-        @Query("townName") townName: String,
+        @Query("townCode") townName: String,
         @Query("lastStoreId") lastStoreId: Long? = null
     ): Call<UnVisitedStoresResponse>
 

@@ -25,6 +25,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
@@ -122,6 +123,8 @@ class MapFragment : Fragment() {
 
         // 칩 그룹 초기화
         chipGroup = binding.fragmentMapMainScreen.chipGroup
+
+
 
 
         return view
@@ -627,7 +630,8 @@ class MapFragment : Fragment() {
                         // 카메라 움직임 종료 시 이벤트 호출
                         // 사용자 제스쳐가 아닌 코드에 의해 카메라가 움직이면 GestureType 은 Unknown
                         Log.e(TAG, "cur loc : "+cameraPosition.toString())
-                        gustoViewModel.getRegionInfo(cameraPosition.position.longitude, cameraPosition.position.latitude)  {result, address ->
+                        gustoViewModel.getNewRegionInfo(cameraPosition.position.longitude, cameraPosition.position.latitude,
+                            BuildConfig.SGIS_CONSUMER_KEY,  BuildConfig.SGIS_CONSUMER_SECRET) { result, address ->
                             when(result) {
                                 1 -> {
                                     Log.d(TAG, "gustoViewModel.dong.value")

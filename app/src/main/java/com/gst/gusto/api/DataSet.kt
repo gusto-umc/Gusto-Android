@@ -384,6 +384,41 @@ data class RegionInfoResponse(
     @SerializedName("documents") val documents: List<RegionDocument>
 )
 
+data class AuthResponse(
+    @SerializedName("id") val id: String,
+    @SerializedName("result") val result: AuthResult,
+    @SerializedName("errMsg") val errMsg: String,
+    @SerializedName("errCd") val errCd: Int,
+    @SerializedName("trId") val trId: String
+)
+data class NewRegionInfoResponse(
+    @SerializedName("id") val id: String,
+    @SerializedName("result") val result: List<RegionInfo>,
+    @SerializedName("errMsg") val errMsg: String,
+    @SerializedName("errCd") val errCd: Int,
+    @SerializedName("trId") val trId: String
+)
+
+data class RegionInfo(
+    @SerializedName("sgg_cd") val sggCode: String,
+    @SerializedName("adm_dr_cd") val admDrCode: String,
+    @SerializedName("emdong_cd") val emdongCode: String,
+    @SerializedName("sub_no") val subNo: String,
+    @SerializedName("full_addr") val fullAddress: String,
+    @SerializedName("sido_nm") val sidoName: String,
+    @SerializedName("main_no") val mainNo: String,
+    @SerializedName("sgg_nm") val sggName: String,
+    @SerializedName("emdong_nm") val emdongName: String,
+    @SerializedName("sido_cd") val sidoCode: String
+)
+
+
+data class AuthResult(
+    @SerializedName("accessTimeout") val accessTimeout: String,
+    @SerializedName("accessToken") val accessToken: String
+)
+
+
 data class Meta(
     @SerializedName("total_count") val totalCount: Int
 )

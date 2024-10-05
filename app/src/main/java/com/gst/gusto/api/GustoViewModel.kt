@@ -2088,51 +2088,52 @@ class GustoViewModel: ViewModel() {
     }
 
 
-    // 행정 구역
-    companion object {
-        private const val BASE_URL = "https://dapi.kakao.com/"
-        private const val REST_API_KEY = "70da0c4f2b9dfd637641a4dd22039969"
-    }
-    fun getRegionInfo(x: Double,y : Double, callback: (Int,String) -> Unit) {
+
+    fun getNewRegionInfo(x: Double,y : Double, consumer_key: String,consumer_secret : String, callback: (Int,String) -> Unit) {
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl("https://sgisapi.kostat.go.kr/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val tmpService = retrofit.create(GustoApi::class.java)
-        tmpService.getRegionInfo("KakaoAK ${REST_API_KEY}", x.toString(), y.toString())
-            .enqueue(object : Callback<RegionInfoResponse> {
-                override fun onResponse(
-                    call: Call<RegionInfoResponse>,
-                    response: Response<RegionInfoResponse>
-                ) {
+        tmpService.authenticate(consumer_key, consumer_secret)
+            .enqueue(object : Callback<AuthResponse> { override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
                         if (responseBody != null) {
-                            Log.d("viewmodel", "Successful response: ${response}")
-                            if(responseBody.documents.get(1).region3DepthName == _dong.value) {
-                                callback(2,responseBody.documents.get(1).addressName)
-                            } else {
-                                _dong.value = responseBody.documents.get(1).region3DepthName
-                                callback(1,responseBody.documents.get(1).addressName)
+                            tmpService.getNewRegionInfo(responseBody.result.accessToken,x,y).enqueue(object : Callback<NewRegionInfoResponse> { override fun onResponse(call: Call<NewRegionInfoResponse>, response2: Response<NewRegionInfoResponse>) {
+                                if (response2.isSuccessful) {
+                                    Log.d("getNewRegionInfo", "${x}, ${y}: ${response2.body()}")
+                                    val responseBody2 = response2.body()
+                                    if(responseBody2 !=null) {
+                                        val region = responseBody2.result
+                                        if(region!=null) {
+                                            val address = "${region.get(0).sidoName} ${region.get(0).sggName} ${region.get(0).emdongName}"
+                                            _dong.value = region.get(0).admDrCode
+                                            callback(1,address)
+                                        }
+                                        else callback(3,"에러 발생")
+                                    }
+
+                                } else {
+                                    Log.e("getNewRegionInfo", "Unsuccessful response: ${response}")
+                                    callback(3,"알수 없음")
+                                }
                             }
-
-                        } else {
-                            Log.e("viewmodel", "Unsuccessful response: ${response}")
-                            callback(3,"위치를 알 수 없음")
+                                override fun onFailure(call: Call<NewRegionInfoResponse>, t: Throwable) {
+                                    Log.e("getNewRegionInfo", "Failed to make the request", t)
+                                    callback(3,"알수 없음")
+                                }
+                            })
                         }
-
-                    } else if(response.code()==403) {
-                        _tokenToastData.value = Unit
-                        refreshToken()
-                    } else {
-                        Log.e("viewmodel", "Unsuccessful response: ${response}")
-                        callback(3,"위치를 알 수 없음")
+                    }
+                    else {
+                        Log.e("authenticate", "Unsuccessful response: ${response}")
+                        callback(3,"알수 없음")
                     }
                 }
-
-                override fun onFailure(call: Call<RegionInfoResponse>, t: Throwable) {
-                    Log.e("viewmodel", "Failed to make the request", t)
-                    callback(3,"알 수 없음")
+                override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                    Log.e("authenticate", "Failed to make the request", t)
+                    callback(3,"알수 없음")
                 }
             })
     }
