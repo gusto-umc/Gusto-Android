@@ -53,7 +53,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:src="@drawable/google_img"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
         </LinearLayout>
 

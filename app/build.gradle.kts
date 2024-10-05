@@ -30,6 +30,8 @@ android {
         buildConfigField("String", "GOOGLE_REDIRECT", localProperties.getProperty("GOOGLE_REDIRECT"))
         buildConfigField("String", "NAVER_CLIENT_ID", localProperties.getProperty("NAVER_CLIENT_ID"))
         buildConfigField("String", "NAVER_CLIENT_SECRET", localProperties.getProperty("NAVER_CLIENT_SECRET"))
+        buildConfigField("String", "SGIS_CONSUMER_KEY", localProperties.getProperty("SGIS_CONSUMER_KEY"))
+        buildConfigField("String", "SGIS_CONSUMER_SECRET", localProperties.getProperty("SGIS_CONSUMER_SECRET"))
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = properties["KAKAO_NATIVE_APP_KEY"] as? String ?: ""
 
     }
