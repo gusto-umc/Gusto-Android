@@ -16,7 +16,6 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.ads.nativetemplates.NativeTemplateStyle
@@ -29,7 +28,6 @@ import com.gst.gusto.ListView.adapter.CategoryAdapter
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseSearch
-import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.FragmentReviewAddSearchBinding
 import com.gst.gusto.search.adapter.SearchStoreAdapter
 import com.gst.gusto.util.util

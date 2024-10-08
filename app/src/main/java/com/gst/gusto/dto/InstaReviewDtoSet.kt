@@ -7,7 +7,7 @@ import com.gst.gusto.model.InstaReviews
 // insta (gallery) review 조회- reviews & MyReviewFragment와 OtherReviewFragment
 data class ResponseInstaReview(
     @SerializedName("reviewId") val reviewId: Long,
-    @SerializedName("images") val image: String,
+    @SerializedName("images") val image: String?,
 ) {
     fun toDomainModel(): InstaReview {
         return InstaReview(

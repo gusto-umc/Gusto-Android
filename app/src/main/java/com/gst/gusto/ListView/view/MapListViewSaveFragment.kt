@@ -2,6 +2,8 @@ package com.gst.gusto.ListView.view
 
 import SavedStoreListAdapter
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,14 +25,16 @@ class MapListViewSaveFragment : Fragment() {
     private val gustoViewModel: GustoViewModel by activityViewModels()
     private lateinit var adapter: SavedStoreListAdapter
 
-    private var categoryId: Int = 1 // 기본값을 설정하거나 적절한 값을 초기화
-    private var townName: String = "SampleTown" // 기본값을 설정하거나 적절한 값을 초기화
+    // category Id와 town Name 초기화
+    private var categoryId: Int? = null
+    private var townName: String = "성수1가1동" // 기본값
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapListviewSaveBinding.inflate(inflater, container, false)
+        townName=gustoViewModel.dong.value!!
         return binding.root
     }
 
@@ -38,19 +42,22 @@ class MapListViewSaveFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
+        setupScrollListener()
 
-        // 데이터 초기 로딩을 위해 호출
-        gustoViewModel.resetData(categoryId, townName)
+        // 데이터 초기 로딩: 방문 식당 필터 설정
+        gustoViewModel.setSaveFilters(categoryId, townName)  // 방문식당 조회를 위한 필터 설정
+        Log.d("viewModelStore", "categoryId: $categoryId")
+        Log.d("viewModelStore", "townName: $townName")
 
-        // 데이터 변경을 관찰하고 어댑터에 새 데이터를 설정
-        gustoViewModel.storeList.observe(viewLifecycleOwner, Observer { stores ->
-            adapter.submitList(stores)
-            Log.d("viewModelStore", "어댑터 설정")
+        // ViewModel에서 방문 식당 데이터 관찰
+        gustoViewModel.savedStores.observe(viewLifecycleOwner, Observer { stores ->
+            adapter.submitList(stores) // 방문 식당 리스트를 어댑터에 전달
         })
 
-        // RecyclerView의 스크롤 리스너를 설정
+        // hasNext 값 변경을 통해 추가 데이터 로드 여부 결정
         gustoViewModel.hasNext.observe(viewLifecycleOwner, Observer { hasNext ->
             Log.d("viewModelStore", "hasNext 값: $hasNext")
+            // hasNext 값이 변경될 때 스크롤 리스너가 올바르게 작동하도록 설정
             setupScrollListener()
         })
 
@@ -83,12 +90,26 @@ class MapListViewSaveFragment : Fragment() {
                 val totalItemCount = layoutManager.itemCount
                 val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
-                // 마지막 아이템이 보일 때 추가 데이터 로딩
-                if (gustoViewModel.hasNext.value == true && lastVisibleItem >= totalItemCount - 1) {
-                    gustoViewModel.loadVisitedStores(categoryId, townName)
+                // 스크롤이 끝에 도달했을 때 추가 데이터 로드
+                if (gustoViewModel.hasNext.value == true && lastVisibleItem >= totalItemCount - 1 && !gustoViewModel.isLoading) {
+                    showLoadingIndicator() // 로딩 인디케이터를 표시
+                    // 1초 지연 후 다음 페이지 로드
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        gustoViewModel.tapSavedStores() // 다음 페이지 로드
+                        hideLoadingIndicator() // 로딩 인디케이터 숨기기
+                    }, 1000) // 1000 밀리초 = 1초
                 }
             }
         })
     }
-}
 
+    // 로딩 인디케이터 표시
+    private fun showLoadingIndicator() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    // 로딩 인디케이터 숨기기
+    private fun hideLoadingIndicator() {
+        binding.progressBar.visibility = View.GONE
+    }
+}

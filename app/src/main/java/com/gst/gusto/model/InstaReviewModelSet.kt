@@ -2,7 +2,7 @@ package com.gst.gusto.model
 
 data class InstaReview(
     val reviewId: Long,
-    val image: String
+    val image: String?
 )
 
 data class InstaReviews(

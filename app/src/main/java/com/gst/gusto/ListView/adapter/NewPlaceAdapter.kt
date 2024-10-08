@@ -1,65 +1,71 @@
-package com.gst.gusto.ListView.adapter
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.gst.gusto.api.ResponseSavedStoreData
+import com.bumptech.glide.Glide
+import com.gst.gusto.api.StoreData
 import com.gst.gusto.databinding.ItemStoreBinding
+// NewPlaceAdapter
+class NewPlaceAdapter : RecyclerView.Adapter<NewPlaceAdapter.StoreViewHolder>() {
 
-class NewPlaceAdapter(
-    private val itemClickListener: (ResponseSavedStoreData) -> Unit
-) : ListAdapter<ResponseSavedStoreData, NewPlaceAdapter.ViewHolder>(diffUtil) {
+    private val storeList = mutableListOf<StoreData>()
+    private var itemClickListener: OnItemClickListener? = null
 
-    inner class ViewHolder(private val binding: ItemStoreBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ResponseSavedStoreData) {
-            binding.tvItemStoreTitle.text = item.storeName
-            binding.tvItemStoreCategory.text = item.categoryName
-            binding.tvItemStoreLocation.text = item.address
+    interface OnItemClickListener {
+        fun onClick(dataSet: StoreData)
+    }
 
-            /*
-            // 이미지 로드 (Glide 사용)
+    fun setItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+    }
+
+    fun submitList(newList: List<StoreData>) {
+        val currentList = storeList.toMutableList()
+        newList.forEach { store ->
+            if (store !in currentList) {
+                currentList.add(store)
+            }
+        }
+        storeList.clear()
+        storeList.addAll(currentList)
+        notifyDataSetChanged()
+    }
+
+    fun getCurrentList(): List<StoreData> = storeList
+
+    inner class StoreViewHolder(private val binding: ItemStoreBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(storeData: StoreData) {
+            binding.tvItemStoreTitle.text = storeData.storeName
+            binding.tvItemStoreCategory.text = storeData.category
+            binding.tvItemStoreLocation.text = storeData.address
+
+            // 이미지 로딩 (Glide 사용)
             Glide.with(binding.root.context)
-                .load(item.imageUrl1 ?: R.drawable.gst_dummypic)
-                .centerCrop()
+                .load(storeData.reviewImg3.getOrNull(0))
                 .into(binding.ivItemStoreImg1)
 
             Glide.with(binding.root.context)
-                .load(item.imageUrl2 ?: R.drawable.gst_dummypic)
-                .centerCrop()
+                .load(storeData.reviewImg3.getOrNull(1))
                 .into(binding.ivItemStoreImg2)
 
             Glide.with(binding.root.context)
-                .load(item.imageUrl3 ?: R.drawable.gst_dummypic)
-                .centerCrop()
+                .load(storeData.reviewImg3.getOrNull(2))
                 .into(binding.ivItemStoreImg3)
 
             binding.root.setOnClickListener {
-                itemClickListener(item)
-            }
-             */
-        }
-    }
-
-    companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<ResponseSavedStoreData>() {
-            override fun areItemsTheSame(oldItem: ResponseSavedStoreData, newItem: ResponseSavedStoreData): Boolean {
-                return oldItem.storeId == newItem.storeId
-            }
-
-            override fun areContentsTheSame(oldItem: ResponseSavedStoreData, newItem: ResponseSavedStoreData): Boolean {
-                return oldItem == newItem
+                itemClickListener?.onClick(storeData)
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoreViewHolder {
         val binding = ItemStoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
+        return StoreViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: StoreViewHolder, position: Int) {
+        holder.bind(storeList[position])
     }
+
+    override fun getItemCount(): Int = storeList.size
 }
