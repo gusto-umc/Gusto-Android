@@ -83,6 +83,7 @@ class FeedDetailReviewFragment : Fragment() {
         }
         binding.feedMenuTextTv.text = feedDetail.menuName
         binding.feedReviewTextTv.text = feedDetail.comment
+        binding.tvFeedDetailUser.text = feedDetail.nickName
 
         /**
          *  review img, user img, taste, hashtag
@@ -138,7 +139,7 @@ class FeedDetailReviewFragment : Fragment() {
 
         }
         setImage(binding.ivFeedImg, feedDetail.images!!.first(), requireContext() )
-        binding.ivUserImgFeedDetail.setOnClickListener {
+        binding.layoutOtherUser.setOnClickListener {
             if(gustoViewModel.currentFeedNickname!=""){
                 findNavController().navigate(R.id.action_feedDetailReview_to_otherFragment)
             }

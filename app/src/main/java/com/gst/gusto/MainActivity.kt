@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }else{
-            //상태창 투명
+            //상태창 투명 해제
             if(Build.VERSION.SDK_INT >= 19) {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                 if(Build.VERSION.SDK_INT < 21) {

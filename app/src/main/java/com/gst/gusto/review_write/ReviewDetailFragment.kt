@@ -325,7 +325,6 @@ class ReviewDetailFragment : Fragment() {
         }
         //리뷰 삭제
         binding.ivReviewDelete.setOnClickListener {
-            //util.setPopupTwo(context, "${gustoViewModel.myReview.storeName}의 리뷰를 정말로 삭제하시겠습니까?")
             util.setPopupTwo(requireContext(), "${gustoViewModel.myReview!!.storeName}의 리뷰를 정말로 삭제하시겠습니까?", "", 2){
                     result ->
                 when(result){
@@ -355,7 +354,7 @@ class ReviewDetailFragment : Fragment() {
             }
 
         }
-        activity.setTrans(false)
+
     }
 
     override fun onResume() {
@@ -368,8 +367,14 @@ class ReviewDetailFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         activity.setTrans(false)
+        activity.hideBottomNavigation(false)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        activity.setTrans(false)
+        activity.hideBottomNavigation(false)
+    }
 
 
 
