@@ -2316,8 +2316,8 @@ class GustoViewModel: ViewModel() {
     // 소셜 연동 계정 추가
     fun addConnectSocial(provider : String, providerId: String, socialAccessToken: String,callback: (Int) -> Unit) {
         Log.d("viewmodel data",Login(provider,providerId,socialAccessToken).toString())
-        service.ConnectSocial(xAuthToken,Login(provider,providerId,socialAccessToken)).enqueue(object : Callback<ResponseBodyGusto> {
-            override fun onResponse(call: Call<ResponseBodyGusto>, response: Response<ResponseBodyGusto>) {
+        service.ConnectSocial(xAuthToken,Login(provider,providerId,socialAccessToken)).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     callback(1)
                     Log.e("viewmodel addConnectSocial", "Successful response: ${response}")
@@ -2329,7 +2329,7 @@ class GustoViewModel: ViewModel() {
                     callback(2)
                 }
             }
-            override fun onFailure(call: Call<ResponseBodyGusto>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e("viewmodel addConnectSocial", "Unsuccessful response: ${t}")
                 callback(2)
             }

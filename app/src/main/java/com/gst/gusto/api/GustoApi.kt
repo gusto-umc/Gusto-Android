@@ -563,7 +563,7 @@ interface GustoApi {
     fun ConnectSocial(
         @Header("X-AUTH-TOKEN") token: String,
         @Body body : Login
-    ): Call<ResponseBodyGusto>
+    ): Call<ResponseBody>
 
     // 소셜 연동 해제
     @HTTP(method = "DELETE", path = "users/auth/social-account", hasBody = true)
