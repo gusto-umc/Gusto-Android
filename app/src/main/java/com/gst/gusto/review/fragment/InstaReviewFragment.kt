@@ -2,7 +2,6 @@ package com.gst.gusto.review.fragment
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +20,10 @@ import com.gst.gusto.review.adapter.InstaReviewAdapter
 import com.gst.gusto.review.adapter.GridItemDecoration
 import com.gst.gusto.review.viewmodel.InstaReviewViewModel
 import com.gst.gusto.review.viewmodel.InstaReviewViewModelFactory
-import com.gst.gusto.util.ScrollUtil.addFabOnScrollListener
 import com.gst.gusto.util.ScrollUtil.addGridOnScrollEndListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 class InstaReviewFragment : Fragment() {
 
@@ -87,20 +86,18 @@ class InstaReviewFragment : Fragment() {
     }
 
     private fun setFab(){
-
         with(binding){
-
-            instaReviewRecyclerView.addFabOnScrollListener(
-                onHide = {
-                    binding.instaReviewFab.visibility = View.GONE
-                },
-                onShow = {
-                    binding.instaReviewFab.visibility = View.VISIBLE
+            instaReviewAppBar.addOnOffsetChangedListener { _, verticalOffset ->
+                val isCollapsed = abs(verticalOffset) >= instaReviewAppBar.totalScrollRange
+                if (isCollapsed) {
+                    instaReviewFab.show()
+                } else {
+                    instaReviewFab.hide()
                 }
-            )
-
+            }
         }
     }
+
 
     fun initView() {
 
