@@ -23,6 +23,12 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.ads.nativetemplates.NativeTemplateStyle
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.gst.gusto.search.adapter.SearchStoreAdapter
 import com.gst.gusto.R
 import com.gst.gusto.util.util
@@ -296,6 +302,26 @@ class SearchFragment : Fragment() {
                           }
                       }
                   })
+
+        MobileAds.initialize(requireContext())
+        val adLoader = AdLoader.Builder(requireContext(),resources.getString(R.string.admob_native))
+            .forNativeAd { nativeAd ->
+                // Handle the native ad loaded callback
+                val styles = NativeTemplateStyle.Builder()
+                    .build()
+                val template = binding.nativeAdTemplate
+                template.setStyles(styles)
+                template.setNativeAd(nativeAd)
+            }
+            .withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    super.onAdFailedToLoad(adError)
+                    Log.e("AdLoader", "Failed to load ad: ${adError}")
+                }
+            })
+            .build()
+
+        adLoader.loadAd(AdRequest.Builder().build())
     }
 
     override fun onResume() {

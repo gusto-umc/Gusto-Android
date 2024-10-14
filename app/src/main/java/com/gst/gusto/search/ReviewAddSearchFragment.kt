@@ -55,6 +55,8 @@ class ReviewAddSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         /**
          * category server 연결
          */
