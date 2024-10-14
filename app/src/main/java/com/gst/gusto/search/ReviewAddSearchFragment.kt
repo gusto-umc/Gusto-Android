@@ -29,6 +29,7 @@ import com.gst.gusto.ListView.adapter.CategoryAdapter
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseSearch
+import com.gst.gusto.api.ResponseSearch3
 import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.FragmentReviewAddSearchBinding
 import com.gst.gusto.search.adapter.SearchStoreAdapter
@@ -151,11 +152,11 @@ class ReviewAddSearchFragment : Fragment() {
                         0 -> {
                             //success
                             //데이터셋 저장 후 연결(공백일 때 동작 확인)
-                            mRouteResultAdapter.submitList(gustoViewModel.mapSearchArray)
+                            mRouteResultAdapter.submitList(gustoViewModel.mapSearchArray2)
                             mRouteResultAdapter.mContext = context
                             mRouteResultAdapter.setItemClickListener(object :
                                 SearchStoreAdapter.OnItemClickListener {
-                                override fun onClick(v: View, dataSet: ResponseSearch) {
+                                override fun onClick(v: View, dataSet: ResponseSearch3) {
                                     //페이지 이동 -> 루트 추가, 수정 화면으로 이동
                                     //가게 상세 조회 -> viewModel 저장 -> 페이지 이동
                                     gustoViewModel.getStoreDetail(dataSet.storeId.toLong()){
