@@ -33,11 +33,14 @@ class OtherReviewFragment : Fragment() {
 
     private val adapter: InstaReviewAdapter by lazy {
         InstaReviewAdapter(context) { reviewId ->
-            val bundle = Bundle()
-            bundle.putLong("reviewId", reviewId)
-            bundle.putString("page", "review")
             gustoViewModel.currentFeedReviewId = reviewId
-            findNavController().navigate(R.id.action_otherFragment_to_feedDetail, bundle)
+            gustoViewModel.getFeedReview{ result ->
+                when(result) {
+                    1 -> {
+                        findNavController().navigate(R.id.action_otherFragment_to_feedDetail)
+                    }
+                }
+            }
         }
     }
 

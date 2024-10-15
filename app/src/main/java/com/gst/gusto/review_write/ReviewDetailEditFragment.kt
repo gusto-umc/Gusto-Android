@@ -1,17 +1,23 @@
 package com.gst.clock.Fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -23,6 +29,7 @@ import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewDetailEditBinding
 import com.gst.gusto.review_write.adapter.ImageViewPagerAdapter
 import com.gst.gusto.util.util.Companion.setImage
+import java.io.File
 import java.time.LocalDate
 
 class ReviewDetailEditFragment : Fragment() {
@@ -30,18 +37,48 @@ class ReviewDetailEditFragment : Fragment() {
     lateinit var binding: FragmentReviewDetailEditBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
 
+    private lateinit var activityResult: ActivityResultLauncher<Intent>
+    private val imageList = mutableListOf<Uri>()
+    private val imageListStr = mutableListOf<String>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentReviewDetailEditBinding.inflate(inflater, container, false)
 
-        val receivedBundle = arguments
-
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
 
+        activityResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                imageList.clear()
+                imageListStr.clear()
+                val data = result.data
+                data?.let {
+                    if (it.clipData != null) {
+                        var count = it.clipData!!.itemCount
+                        if(count>4) {
+                            Toast.makeText(requireContext(),"사진은 4장까지만 가능합니다",Toast.LENGTH_SHORT).show()
+                            count = 4
+                        }
+                        for (index in 0 until count ) {
+                            val imageUri = it.clipData!!.getItemAt(index).uri
+                            imageList.add(imageUri)
+                            imageListStr.add(imageUri.toString())
+                        }
+                    } else {
+                        val imageUri = it.data
+                        imageList.add(imageUri!!)
+                        imageListStr.add(imageUri.toString())
+                    }
+                    binding.vpImgSlider.adapter?.notifyDataSetChanged()
+                }
+            }
+        }
 
         return binding.root
     }
@@ -55,6 +92,7 @@ class ReviewDetailEditFragment : Fragment() {
         val reviewDate = LocalDate.parse(gustoViewModel.myReview!!.visitedAt)
         binding.tvDay.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
         binding.tvReviewStoreNameEdit.text = editReview!!.storeName
+
 
 
         //ratingbar 적용
@@ -75,43 +113,37 @@ class ReviewDetailEditFragment : Fragment() {
         }
 
         // 이미지 슬라이드
-        val imageList = mutableListOf<String>()
-        imageList.clear()
-        gustoViewModel.reviewEditImg.clear()
+        val viewPager = binding.vpImgSlider
         //이미지 처리
         if(!gustoViewModel.myReview!!.img.isNullOrEmpty()){
-            imageList.add(gustoViewModel.myReview!!.img!![0])
-            setImage(binding.ivFoodImg,gustoViewModel.myReview!!.img!![0],requireContext())
+            for(img in gustoViewModel.myReview!!.img!!) {
+                imageListStr.add(img)
+                imageList.add(Uri.parse(img))
+            }
         }
+        val adapter = ImageViewPagerAdapter(imageListStr, itemClickListener = {  ->
+            //사진 변경
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
+            activityResult.launch(intent)
+        })
+        viewPager.adapter = adapter
+        viewPager.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
 
         //공개 비공개
         var publish = false
 
-        //사진 변경
-        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // Callback is invoked after th user selects a media item or closes the photo picker.
-            if (uri != null) {
-                gustoViewModel.reviewEditImg.clear()
-                gustoViewModel.reviewEditImg.add(
-                    util.convertContentToFile(
-                        requireContext(),
-                        uri
-                    )
-                )
-                setImage(binding.ivFoodImg,uri.toString(),requireContext())
-            } else {
-                Log.d("PhotoPicker", "No media selected")
-            }
-        }
-
-        binding.btnSelectImages.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
 
         //저장
         binding.btnSave.setOnClickListener {
-            //img -> 추후 수정 예정
-            var img : String? = null
+            //사진
+            val imgFiles = ArrayList<File>()
+            for(img in imageList) {
+                imgFiles.add(util.convertContentToFile(requireContext(),img))
+                Log.d("viewmodel Test", "1")
+            }
             //메뉴
             val menu = binding.edtMenu.text.toString()
             //taste
@@ -127,7 +159,8 @@ class ReviewDetailEditFragment : Fragment() {
             //comment
             val comment = binding.edtMemo.text.toString()
 
-            gustoViewModel.editReview(gustoViewModel.myReviewId!!, taste = taste, spiceness = 0, mood = 0, toilet = 0, parking = 0, menuName = menu, comment = comment, img = img,publish = publish){
+
+            gustoViewModel.editReview(gustoViewModel.myReviewId!!, taste = taste, spiceness = 0, mood = 0, toilet = 0, parking = 0, menuName = menu, comment = comment, imgFiles = imgFiles,publish = publish){
                 result ->
                 when(result){
                     0 -> {
@@ -137,6 +170,7 @@ class ReviewDetailEditFragment : Fragment() {
                                 0 -> {
                                     Log.d("img check edit", gustoViewModel.myReview!!.img.toString())
                                     gustoViewModel.changeReviewFlag(true)
+                                    findNavController().popBackStack()
                                 }
                                 1 -> {}
                             }
@@ -145,7 +179,7 @@ class ReviewDetailEditFragment : Fragment() {
                     1 -> {}
                 }
             }
-            findNavController().popBackStack()
+
         }
 
         binding.btnPrivate.setOnClickListener {
@@ -163,6 +197,9 @@ class ReviewDetailEditFragment : Fragment() {
             binding.btnPrivate.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.gray_3)
         }
 
+        // 공개 비공개 적용
+        if(gustoViewModel.myReview!!.publicCheck) binding.btnPublic.callOnClick()
+        else binding.btnPrivate.callOnClick()
     }
     private fun addChip(text:String) {
         val chip = Chip(requireContext())

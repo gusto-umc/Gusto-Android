@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
@@ -56,6 +57,7 @@ class ListReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         pagingRecyclerview()
+        setReviewWriteBtn()
     }
 
     fun initView(){
@@ -67,7 +69,8 @@ class ListReviewFragment : Fragment() {
             }
 
             listReviewFab.setOnClickListener {
-
+                gustoViewModel.reviewReturnPos = 1
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewListFragment_to_reviewAddSearch) }
             }
         }
     }
@@ -89,6 +92,18 @@ class ListReviewFragment : Fragment() {
         }
         listReviewViewModel.errorToastData.observe(viewLifecycleOwner){
             Toast.makeText(requireActivity(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setReviewWriteBtn() {
+        with(binding) {
+            listReviewFab.setOnClickListener {
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewFragment_to_reviewAddSearch) }
+            }
+
+            listReviewFab.setOnClickListener{
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewFragment_to_reviewAddSearch) }
+            }
         }
     }
 

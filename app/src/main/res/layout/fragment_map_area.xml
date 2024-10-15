@@ -173,6 +173,7 @@
                     android:textSize="20sp"
                     android:text="개 있어요" />
             </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -220,18 +221,7 @@
                     android:fontFamily="@font/pretendard_semibold"
                     android:textSize="16sp"
                     android:text="개 있습니다." />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:id="@+id/btn_view_more1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/gray_3"
-                    android:fontFamily="@font/pretendard_medium"
-                    android:text="더보기"
-                    />
+
             </LinearLayout>
 
             <HorizontalScrollView
@@ -302,14 +292,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
-                <TextView
-                    android:id="@+id/btn_view_more2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/gray_3"
-                    android:fontFamily="@font/pretendard_medium"
-                    android:text="더보기"
-                    />
             </LinearLayout>
             <HorizontalScrollView
                 android:layout_width="match_parent"

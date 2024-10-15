@@ -41,12 +41,14 @@ class ProfileFragment : Fragment() {
         binding = StartFragmentProfileBinding.inflate(inflater, container, false)
 
         binding.btnNext.setOnClickListener {
+            binding.btnNext.isEnabled = false
             val bitmap = (binding.ivProfile.drawable as BitmapDrawable).bitmap
 
             val profileFile = saveBitmapToFile(requireContext(),bitmap,"profileImage.png")
             LoginViewModel.profileImg = profileFile
 
             LoginViewModel.signUp { resultCode ->
+                binding.btnNext.isEnabled = true
                 when (resultCode) {
                     1 -> {
                         findNavController().navigate(R.id.action_profileFragment_to_completeFragment)
@@ -87,7 +89,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvTitle.text = LoginViewModel.nickName + "님의\n성별을 선택해주세요."
+        binding.tvTitle.text = LoginViewModel.nickName + "님의\n프로필 사진이에요."
 
         setImage(binding.ivProfile,LoginViewModel.profileUrl,requireContext())
     }

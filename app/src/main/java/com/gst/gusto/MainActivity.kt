@@ -3,16 +3,27 @@ package com.gst.gusto
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.ext.SdkExtensions.getExtensionVersion
 import android.util.Base64
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -36,6 +47,8 @@ class MainActivity : AppCompatActivity() {
     val gustoViewModel : GustoViewModel by viewModels()
     private var previousDestinationId: Int = -1
     private val TAG = "SOL_LOG"
+
+    private val imageList = ArrayList<Uri>()
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +86,7 @@ class MainActivity : AppCompatActivity() {
                         // 현재 프래그먼트가 여러분이 원하는 프래그먼트 타입인 경우에만 해당 함수를 실행합니다.
                         // 여러분이 만든 프래그먼트의 타입에 따라서 YourFragmentType을 적절히 변경해주세요.
                         (currentFragment as FeedFragment).initView()
-                        (currentFragment as FeedFragment).getData()
+                        // (currentFragment as FeedFragment).getData()
                     }
 
                 }
@@ -89,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
         // 카카오 해쉬키 얻기
-        try {
+        /*try {
             val information = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
             val signatures = information.signingInfo.apkContentsSigners
             for (signature in signatures) {
@@ -98,22 +111,55 @@ class MainActivity : AppCompatActivity() {
                 }
                 val HASH_CODE = String(Base64.encode(md.digest(), 0))
 
-                /*val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                *//*val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
                 val clipData = ClipData.newPlainText("viewmodel_data", " $HASH_CODE")
 
-                clipboardManager.setPrimaryClip(clipData)*/
+                clipboardManager.setPrimaryClip(clipData)*//*
                 Log.d(TAG, "HASH_CODE -> $HASH_CODE")
             }
         } catch (e: Exception) {
             Log.d(TAG, "Exception -> $e")
-        }
+        }*/
         gustoViewModel.getTokens()
         gustoViewModel.mainActivity = this
 
         gustoViewModel.tokenToastData.observe(this, Observer {
             Toast.makeText(this, "토큰을 재 발급 중입니다", Toast.LENGTH_SHORT).show()
         })
+
+
+    }
+
+    fun setTrans(flag : Boolean){
+        if(flag){
+            //상태창 투명
+            if(Build.VERSION.SDK_INT >= 19) {
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                if(Build.VERSION.SDK_INT < 21) {
+                    setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true)
+                } else {
+                    setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
+                    window.statusBarColor = Color.TRANSPARENT
+                }
+            }
+        }else{
+            //상태창 투명 해제
+            if(Build.VERSION.SDK_INT >= 19) {
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                if(Build.VERSION.SDK_INT < 21) {
+                    setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
+                } else {
+                    setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
+                }
+            }
+        }
+    }
+
+    private fun setWindowFlag(bits: Int, on: Boolean) {
+        val winAttr = window.attributes
+        winAttr.flags = if(on) winAttr.flags or bits else winAttr.flags and bits.inv()
+        window.attributes = winAttr
     }
 
     fun getCon(): NavController {
@@ -137,8 +183,5 @@ class MainActivity : AppCompatActivity() {
     fun popFragment() {
         supportFragmentManager.popBackStack()
     }
-
-
-
 
 }

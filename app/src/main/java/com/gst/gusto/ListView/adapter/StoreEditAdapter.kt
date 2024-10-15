@@ -1,7 +1,9 @@
 package com.gst.gusto.ListView.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -15,6 +17,7 @@ import com.gst.gusto.api.PResponseStoreListItem
 import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.ItemStoreBinding
 import com.gst.gusto.databinding.ItemStoreEditBinding
+import com.gst.gusto.util.util
 
 class StoreEditAdapter : ListAdapter<PResponseStoreListItem, StoreEditAdapter.ViewHolder>(diffUtil){
 
@@ -26,13 +29,16 @@ class StoreEditAdapter : ListAdapter<PResponseStoreListItem, StoreEditAdapter.Vi
         fun bind(item : PResponseStoreListItem){
             binding.apply {
                 binding.tvItemStoreEditTitle.text = item.storeName
-                //카테고리 -> 서버 추가 필요
-                //binding.tvItemStoreCategory.text =
                 binding.tvItemStoreEditLocation.text = item.address
-                //리뷰 사진 3개 -> 서버 추가 필요
-                binding.ivItemStoreEditImg1.setImageResource(R.drawable.gst_dummypic)
-                binding.ivItemStoreEditImg2.setImageResource(R.drawable.gst_dummypic)
-                binding.ivItemStoreEditImg3.setImageResource(R.drawable.gst_dummypic)
+                //리뷰 사진 3개
+                if(!item.img1.isNullOrBlank()){
+                    util.setImage(binding.ivItemStoreEditImg1, item.img1, mContext!!)
+                }else{binding.ivItemStoreEditImg1.visibility = View.INVISIBLE}
+                if(!item.img2.isNullOrBlank()){util.setImage(binding.ivItemStoreEditImg2, item.img2, mContext!!)
+                }else{binding.ivItemStoreEditImg2.visibility = View.INVISIBLE}
+                if(!item.img3.isNullOrBlank()){util.setImage(binding.ivItemStoreEditImg3, item.img3, mContext!!)
+                }else{binding.ivItemStoreEditImg3.visibility = View.INVISIBLE}
+
             }
             data = item
         }
@@ -66,36 +72,52 @@ class StoreEditAdapter : ListAdapter<PResponseStoreListItem, StoreEditAdapter.Vi
 
         holder.itemLayout.setOnClickListener {
             if(holder.cb.isChecked){
-                gustoViewModel!!.selectedStoreIdList.remove(holder.data!!.pinId)
+                gustoViewModel!!.updateSelectFlag("change")
                 holder.cb.isChecked = false
-                if(gustoViewModel!!.selectedStoreIdList.size != gustoViewModel!!.myAllStoreList.size){
-                    gustoViewModel!!.updateSelectFlag("false")
-                }
+
             }
             else{
-                gustoViewModel!!.selectedStoreIdList.add(holder.data!!.pinId)
+                gustoViewModel!!.updateSelectFlag("change")
                 holder.cb.isChecked = true
-                if(gustoViewModel!!.selectedStoreIdList.size == gustoViewModel!!.myAllStoreList.size){
-                    gustoViewModel!!.updateSelectFlag("all")
-                }
+            }
+        }
+
+        holder.cb.setOnClickListener {
+            if(holder.cb.isChecked){
+                gustoViewModel!!.updateSelectFlag("change")
+                holder.cb.isChecked = true
+
+            }
+            else{
+                gustoViewModel!!.updateSelectFlag("change")
+                holder.cb.isChecked = false
             }
         }
 
         holder.cb.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked){
-                gustoViewModel!!.selectedStoreIdList.add(holder.data!!.pinId)
-                holder.cb.isChecked = isChecked
-                if(gustoViewModel!!.selectedStoreIdList.size == gustoViewModel!!.myAllStoreList.size){
-                    gustoViewModel!!.updateSelectFlag("all")
-                }
+            Log.d("select adapter check", gustoViewModel!!.allFlag.value.toString())
+            if((gustoViewModel!!.allFlag.value == "all" && isChecked) || (gustoViewModel!!.allFlag.value == "nothing" && !isChecked)){
+                Log.d("select adapter", "all or nothing")
             }
             else{
-                gustoViewModel!!.selectedStoreIdList.remove(holder.data!!.pinId)
-                holder.cb.isChecked = isChecked
-                if(gustoViewModel!!.selectedStoreIdList.size != gustoViewModel!!.myAllStoreList.size){
-                    gustoViewModel!!.updateSelectFlag("false")
+                if(isChecked){
+                    gustoViewModel!!.selectedStoreIdList.add(holder.data!!.pinId)
+                    holder.cb.isChecked = isChecked
+                    Log.d("adapter select list on", gustoViewModel!!.selectedStoreIdList.toString())
+                    if(gustoViewModel!!.selectedStoreIdList.size == gustoViewModel!!.myAllStoreList.size){
+                        gustoViewModel!!.updateSelectFlag("changeOn")
+                    }
+                }
+                else{
+                    gustoViewModel!!.selectedStoreIdList.remove(holder.data!!.pinId)
+                    holder.cb.isChecked = isChecked
+                    Log.d("adapter select list off", gustoViewModel!!.selectedStoreIdList.toString())
+                    if(gustoViewModel!!.selectedStoreIdList.size != gustoViewModel!!.myAllStoreList.size){
+                        gustoViewModel!!.updateSelectFlag("changeOff")
+                    }
                 }
             }
+
         }
     }
 

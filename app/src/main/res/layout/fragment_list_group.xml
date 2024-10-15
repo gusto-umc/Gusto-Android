@@ -11,5 +11,15 @@
         android:id="@+id/rv_list_gourp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         tools:listitem="@layout/item_list_group_view" />
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:id="@+id/bannerAd"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/admob_banner"/>
 </LinearLayout>

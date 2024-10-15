@@ -1,20 +1,20 @@
 package com.gst.gusto.api
 
-import com.gst.gusto.dto.ResponseInstaReview
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
-import retrofit2.http.QueryMap
 import java.time.LocalDate
 
 
@@ -22,17 +22,17 @@ interface GustoApi {
     // TOKEN
     @POST("auth/reissue-token") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
     fun refreshToken(
-        @Header("X-AUTH-TOKEN") access : String,
-        @Header("refresh-Token") refresh : String
-    ):Call<ResponseBody>
+        @Header("X-AUTH-TOKEN") access: String,
+        @Header("refresh-Token") refresh: String
+    ): Call<ResponseBody>
 
     //MAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAPMAP
     @GET("stores/map") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
     fun getCurrentMapStores(
         @Header("X-AUTH-TOKEN") token : String,
-        @Query("townName") townName : String,
-        @Query("myCategoryId") myCategoryId : Int?,
-        @Query("visited") visited : Boolean
+        @Query("townCode") townName : String,
+        @Query("myCategoryId") myCategoryId : MutableList<Int>?,
+        @Query("visited") visited : Boolean?
     ):Call<List<RouteList>>
 
     //ROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTEROUTE
@@ -292,9 +292,10 @@ interface GustoApi {
     //3. 카테고리 조회(위치 기반, 내 위치 장소보기) ->  확인 완
     @GET("myCategories")
     fun getMapCategory(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("townName") townName : String
-    ) : Call<ArrayList<ResponseMapCategory>>
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("townCode") townName: String
+    ): Call<ResponsePMyCategory>
+            //Call<ArrayList<ResponseMapCategory>>
 
     //4. 카테고리 삭제하기 -> 단 건 삭제 확인 완
 
@@ -372,7 +373,7 @@ interface GustoApi {
     fun getMapStores(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("myCategoryId") categoryId : Int,
-        @Query("townName") townName : String
+        @Query("townCode") townName : String
     ) : Call<List<ResponseStoreListItem>>
 
     //5. 카테고리 별 가게 조회 - 전체 -> 확인 완
@@ -395,7 +396,7 @@ interface GustoApi {
     fun getSavedStores(
         @Header("X-AUTH-TOKEN") token: String,
         @Query("myCategoryId") categoryId: Int?,
-        @Query("townName") townName: String
+        @Query("townCode") townName: String
     ) : Call<List<ResponseSavedStore>>
 
 
@@ -404,7 +405,9 @@ interface GustoApi {
     fun ppGetAllMyStores(
         @Header("X-AUTH-TOKEN") token : String,
         @Query("myCategoryId") categoryId : Int,
-        @Query("pinId") pinId : Int?
+        @Query("pinId") pinId : Int?,
+        @Query("sort") sort : String?,
+        @Query("storeName") storeName: String?
     ): Call<PResponseStoreData>
 
     // 9. (paging) 카테고리별 타인 가게 조회
@@ -457,6 +460,13 @@ interface GustoApi {
         @Query("keyword") keyword : String
     ) : Call<ArrayList<ResponseSearch>>
 
+    @GET("stores/search")
+    fun getPSearch(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("keyword") keyword : String,
+        @Query("cursorId") cursorId : Long?
+    ) : Call<ResponseSearch2>
+
     @GET("users/follower") // 팔로워 조회
     fun getFollower(
         @Header("X-AUTH-TOKEN") token : String,
@@ -492,10 +502,19 @@ interface GustoApi {
         @Query("y") latitude: String
     ): Call<RegionInfoResponse>
 
-    @GET("feeds") // 먹스또 랜덤 피드
-    fun feed(
-        @Header("X-AUTH-TOKEN") token: String
-    ):Call<ArrayList<ResponseFeedReview>>
+    @GET("OpenAPI3/auth/authentication.json")
+    fun authenticate(
+        @Query("consumer_key") consumerKey: String,
+        @Query("consumer_secret") consumerSecret: String
+    ): Call<AuthResponse>
+
+    @GET("OpenAPI3/addr/rgeocodewgs84.json")
+    fun getNewRegionInfo(
+        @Query("accessToken") accessToken: String,
+        @Query("x_coor") longitude: Double,
+        @Query("y_coor") latitude: Double,
+        @Query("addr_type") addrType: Int = 21
+    ): Call<NewRegionInfoResponse>
 
     @GET("feeds/search") // 맛집 & 해시태그 검색 엔진
     fun feedSearch(
@@ -506,13 +525,26 @@ interface GustoApi {
 
 
     // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
-    @GET("stores/map?townName={townName}&myCategoryId={myCategoryId}&visit={visitedStatus}")
+    @GET("stores/map?townCode={townName}&myCategoryId={myCategoryId}&visit={visitedStatus}")
     fun LocalCategory(
         @Query("storeId") storeId: Int,
         @Query("storeName") storeName: String,
         @Query("longtitude") longitude: Double,
         @Query("latitude") latitude: Double
     ): Call<LocalCategoryResponse>
+
+    //나의 콘텐츠 공개 여부 조회
+    @GET("users/my-info/publishing")
+    fun myPublishGet(
+        @Header("X-AUTH-TOKEN") token: String
+    ): Call<ResponseMyPublishGet>
+
+    //나의 콘텐츠 공개 여부 변경
+    @PATCH("users/my-info/publishing")
+    fun myPublishSet(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Body data: RequestMyPublish
+    ): Call<ResponseBody>
 
     // 로그아웃
     @POST("users/sign-out")
@@ -526,4 +558,44 @@ interface GustoApi {
     fun unregister(
         @Header("X-AUTH-TOKEN") xtoken: String
     ): Call<ResponseBody>
+
+    // 연결된 소셜 서버 목록
+    @GET("users/social-accounts")
+    fun getConnectedSocialList(
+        @Header("X-AUTH-TOKEN") token: String
+    ): Call<ConnectecSocialListResponse>
+
+    // 소셜 연동 계정 추가
+    @POST("users/auth/social-account")
+    fun ConnectSocial(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Body body : Login
+    ): Call<ResponseBody>
+
+    // 소셜 연동 해제
+    @HTTP(method = "DELETE", path = "users/auth/social-account", hasBody = true)
+    fun UnConnectSocial(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Body body : Login
+    ): Call<ResponseBodyGusto>
+
+    //탭바 저장된 음식점 수정
+    //방문식당 조회
+    @GET("stores/pins/visited")
+    fun getVisitedStores(
+        @Header("X-AUTH-TOKEN") xtoken: String,
+        @Query("myCategoryId") categoryId: Int?,
+        @Query("townCode") townName: String,
+        @Query("lastStoreId") lastStoreId: Long? = null
+    ): Call<VisitedStoresResponse>
+
+    //미방문 식당 조회
+    @GET("stores/pins/unvisited")
+    fun getUnvisitedStores(
+        @Header("X-AUTH-TOKEN") xtoken: String,
+        @Query("myCategoryId") categoryId: Int?,
+        @Query("townCode") townName: String,
+        @Query("lastStoreId") lastStoreId: Long? = null
+    ): Call<UnVisitedStoresResponse>
+
 }

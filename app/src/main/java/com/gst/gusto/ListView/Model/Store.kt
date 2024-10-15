@@ -1,8 +1,5 @@
 package com.gst.gusto.ListView.Model
 
-import android.app.appsearch.StorageInfo
-import android.health.connect.datatypes.StepsCadenceRecord
-
 data class Store(
     var id : Int,
     var storeName : String,
@@ -45,3 +42,4 @@ data class StoreSearch(
     val categoryName : String,
     val reviewImg : Int
 )
+

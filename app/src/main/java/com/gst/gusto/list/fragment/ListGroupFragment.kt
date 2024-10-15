@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdRequest
 import com.gst.gusto.MainActivity
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentListGroupBinding
@@ -32,6 +33,9 @@ class ListGroupFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentListGroupBinding.inflate(inflater, container, false)
+
+
+        binding.bannerAd.loadAd(AdRequest.Builder().build())
 
         return binding.root
 

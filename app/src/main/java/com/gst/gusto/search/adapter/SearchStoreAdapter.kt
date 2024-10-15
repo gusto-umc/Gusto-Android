@@ -9,19 +9,20 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.util.util.Companion.setImage
 import com.gst.gusto.api.ResponseSearch
+import com.gst.gusto.api.ResponseSearch3
 import com.gst.gusto.databinding.ItemStoreSearchBinding
 
-class SearchStoreAdapter() : ListAdapter<ResponseSearch, SearchStoreAdapter.ViewHolder>(DiffCallback){
+class SearchStoreAdapter() : ListAdapter<ResponseSearch3, SearchStoreAdapter.ViewHolder>(DiffCallback){
 
     var mContext : Context? = null
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<ResponseSearch>(){
-            override fun areItemsTheSame(oldItem: ResponseSearch, newItem: ResponseSearch): Boolean {
+        private val DiffCallback = object : DiffUtil.ItemCallback<ResponseSearch3>(){
+            override fun areItemsTheSame(oldItem: ResponseSearch3, newItem: ResponseSearch3): Boolean {
                 //아이템  id 가 같은지 확인
                 return oldItem.storeId == newItem.storeId
             }
 
-            override fun areContentsTheSame(oldItem: ResponseSearch, newItem: ResponseSearch): Boolean {
+            override fun areContentsTheSame(oldItem: ResponseSearch3, newItem: ResponseSearch3): Boolean {
                 //아이템 내용이 같은 지 확인
                 return oldItem == newItem
             }
@@ -30,15 +31,15 @@ class SearchStoreAdapter() : ListAdapter<ResponseSearch, SearchStoreAdapter.View
     }
 
     inner class ViewHolder(private val binding : ItemStoreSearchBinding) : RecyclerView.ViewHolder(binding.root){
-        var data : ResponseSearch? = null
+        var data : ResponseSearch3? = null
 
-        fun bind(result : ResponseSearch){
+        fun bind(result : ResponseSearch3){
             data = result
             //데이터 적용(가게명, 카테고리, 위치, 사진)
             binding.tvItemStoreSearchTitle.text = result.storeName
-            if(result.categoryName != null){
+            if(result.categoryString != null){
                 binding.tvItemStoreSearchCategory.visibility = View.VISIBLE
-                binding.tvItemStoreSearchCategory.text = result.categoryName
+                binding.tvItemStoreSearchCategory.text = result.categoryString
             }
             else{
                 binding.tvItemStoreSearchCategory.visibility = View.INVISIBLE
@@ -65,7 +66,7 @@ class SearchStoreAdapter() : ListAdapter<ResponseSearch, SearchStoreAdapter.View
 
     }
     interface OnItemClickListener {
-        fun onClick(v: View, dataSet: ResponseSearch)
+        fun onClick(v: View, dataSet: ResponseSearch3)
     }
     // (3) 외부에서 클릭 시 이벤트 설정
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {

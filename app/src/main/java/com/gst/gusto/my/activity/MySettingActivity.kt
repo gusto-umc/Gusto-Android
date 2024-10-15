@@ -68,10 +68,15 @@ class MySettingActivity : AppCompatActivity() {
     fun buttonSetting() {
         binding.apply {
             btnBack.setOnClickListener{
+                setResult(RESULT_OK)
                 finish()
             }
             profileSetting.setOnClickListener {
                 val intent = Intent(this@MySettingActivity, MyProfileEditActivity::class.java)
+                startActivity(intent)
+            }
+            changeAccount.setOnClickListener {
+                val intent = Intent(this@MySettingActivity, MyChangeAccountActivity::class.java)
                 startActivity(intent)
             }
             unregister.setOnClickListener {
@@ -115,6 +120,7 @@ class MySettingActivity : AppCompatActivity() {
                     }
                 }
             }
+
         }
     }
 
@@ -146,7 +152,7 @@ class MySettingActivity : AppCompatActivity() {
     }
 
     fun startNaverDeleteToken(){
-        NidOAuthLogin().callDeleteTokenApi(this, object : OAuthLoginCallback {
+        NidOAuthLogin().callDeleteTokenApi(object : OAuthLoginCallback {
             override fun onSuccess() {
                 //서버에서 토큰 삭제에 성공한 상태입니다.
                 val intent = Intent(this@MySettingActivity, StartActivity::class.java)

@@ -1,7 +1,15 @@
 package com.gst.gusto.api
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serial
 import java.util.Date
+
+
+// Response
+data class ResponseBodyGusto(
+    @SerializedName("errorCode") val errorCode : Int,
+    @SerializedName("message") val message : String
+)
 
 // 내 루트 조회
 data class Routes(
@@ -179,7 +187,7 @@ data class RequestAddCategory(
 data class RequestEditCategory(
     @SerializedName("myCategoryName") var myCategoryName : String,
     @SerializedName("myCategoryIcon") var myCategoryIcon : Int,
-    @SerializedName("publishCategory") var publishCategory : String,
+    @SerializedName("publishCategory") var publishCategory : String?,
     @SerializedName("myCategoryScript") var myCategoryScript : String
 )
 
@@ -190,7 +198,8 @@ data class ResponseMapCategory(
     @SerializedName("myCategoryId") val myCategoryId : Int,
     @SerializedName("myCategoryName") var categoryName : String,
     @SerializedName("myCategoryIcon") var categoryIcon : Int,
-    @SerializedName("publishCategory") var publishCategory : String,
+    @SerializedName("publishCategory") var publishCategory : Boolean,
+    @SerializedName("userPublishCategory") val userPublishCategory : Boolean,
     @SerializedName("myCategoryScript") var myCategoryScript : String?,
     @SerializedName("pinCnt") var pinCnt : Int
 )
@@ -262,7 +271,9 @@ data class PResponseStoreListItem(
     @SerializedName("storeName") val storeName  :String,
     @SerializedName("address") val address : String,
     @SerializedName("reviewCnt") var reviewCnt : Int,
-    @SerializedName("reviewImg") val reviewImg : String?
+    @SerializedName("img1") val img1 : String?,
+    @SerializedName("img2") val img2 : String?,
+    @SerializedName("img3") val img3 : String?
 )
 
 // 저장된 가게 response
@@ -302,12 +313,8 @@ data class ResponseMyReview(
     @SerializedName("visitedAt") var visitedAt : String?,
     @SerializedName("images") val img : List<String>?,
     @SerializedName("menuName") val menuName : String?,
-//    @SerializedName("hashTags") val hashTags : String?,
+    @SerializedName("hashTags") val hashTags : List<Int>?,
     @SerializedName("taste") val taste : Int,
-    @SerializedName("spiciness") val spiciness : Int?,
-    @SerializedName("mood") val mood : Int?,
-    @SerializedName("toilet") val toilet : Int?,
-    @SerializedName("parking") val parking : Int?,
     @SerializedName("comment") val comment : String?,
     @SerializedName("likeCnt") val likeCnt : Int,
     @SerializedName("publicCheck") val publicCheck : Boolean
@@ -354,6 +361,21 @@ data class ResponseSearch(
     @SerializedName("address") val address : String
 )
 
+data class ResponseSearch2(
+    @SerializedName("stores") var stores : ArrayList<ResponseSearch3>,
+    @SerializedName("hasNext") val hasNext: Boolean,
+    @SerializedName("cursorId") val cursorId : Long?
+)
+data class ResponseSearch3(
+    @SerializedName("storeId") val storeId : Long,
+    @SerializedName("storeName") val storeName : String,
+    @SerializedName("categoryString") val categoryString : String?,
+    @SerializedName("reviewImg") val reviewImg : String?,
+    @SerializedName("address") val address : String
+)
+
+
+
 // 가게 정보 조회(짧은 화면)
 data class ResponseStoreDetailQuick(
     @SerializedName("pinId") var pinId : Long,
@@ -377,6 +399,41 @@ data class RegionInfoResponse(
     @SerializedName("meta") val meta: Meta,
     @SerializedName("documents") val documents: List<RegionDocument>
 )
+
+data class AuthResponse(
+    @SerializedName("id") val id: String,
+    @SerializedName("result") val result: AuthResult,
+    @SerializedName("errMsg") val errMsg: String,
+    @SerializedName("errCd") val errCd: Int,
+    @SerializedName("trId") val trId: String
+)
+data class NewRegionInfoResponse(
+    @SerializedName("id") val id: String,
+    @SerializedName("result") val result: List<RegionInfo>,
+    @SerializedName("errMsg") val errMsg: String,
+    @SerializedName("errCd") val errCd: Int,
+    @SerializedName("trId") val trId: String
+)
+
+data class RegionInfo(
+    @SerializedName("sgg_cd") val sggCode: String,
+    @SerializedName("adm_dr_cd") val admDrCode: String,
+    @SerializedName("emdong_cd") val emdongCode: String,
+    @SerializedName("sub_no") val subNo: String,
+    @SerializedName("full_addr") val fullAddress: String,
+    @SerializedName("sido_nm") val sidoName: String,
+    @SerializedName("main_no") val mainNo: String,
+    @SerializedName("sgg_nm") val sggName: String,
+    @SerializedName("emdong_nm") val emdongName: String,
+    @SerializedName("sido_cd") val sidoCode: String
+)
+
+
+data class AuthResult(
+    @SerializedName("accessTimeout") val accessTimeout: String,
+    @SerializedName("accessToken") val accessToken: String
+)
+
 
 data class Meta(
     @SerializedName("total_count") val totalCount: Int
@@ -404,7 +461,7 @@ data class ResponseFeedDetail(
     @SerializedName("likeCheck") val likeCheck: Boolean,
     @SerializedName("images") val images: List<String>,
     @SerializedName("menuName") val menuName: String,
-    @SerializedName("hashTags") val hashTags: List<Long>?,
+    @SerializedName("hashTags") val hashTags: List<Int>?,
     @SerializedName("taste") val taste: Int,
     @SerializedName("spiciness") val spiciness: Int,
     @SerializedName("mood") val mood: Int,
@@ -468,4 +525,46 @@ data class AccessTokenResponse(
     @SerializedName("expires_in") val expiresIn: Long,
     @SerializedName("token_type") val tokenType: String,
     @SerializedName("refresh_token") val refreshToken: String?
+)
+
+// 소셜 리스트
+data class ConnectecSocialListResponse(
+    @SerializedName("NAVER") val NAVER: Boolean,
+    @SerializedName("KAKAO") val KAKAO: Boolean,
+    @SerializedName("GOOGLE") val GOOGLE: Boolean,
+)
+
+// 나의 콘텐츠 공개 여부 조회
+data class ResponseMyPublishGet(
+    @SerializedName("publishReview") val publishReview: Boolean,
+    @SerializedName("publishPin") val publishPin: Boolean,
+    @SerializedName("publishRoute") val publishRoute: Boolean,
+)
+
+// 나의 콘텐츠 공개 여부 변경
+data class RequestMyPublish(
+    @SerializedName("publishReview") val publishReview: Boolean,
+    @SerializedName("publishPin") val publishPin: Boolean,
+    @SerializedName("publishRoute") val publishRoute: Boolean,
+)
+
+//방문 식당
+data class VisitedStoresResponse(
+    @SerializedName("pinStores") val pinStores: List<StoreData>,
+    @SerializedName("hasNext") val hasNext: Boolean
+)
+
+//미방문 식당
+data class UnVisitedStoresResponse(
+    @SerializedName("pinStores") val pinStores: List<StoreData>,
+    @SerializedName("hasNext") val hasNext: Boolean
+)
+
+
+data class StoreData(
+    @SerializedName("storeId") val storeId: Int,
+    @SerializedName("storeName") val storeName: String,
+    @SerializedName("address")val address: String,
+    @SerializedName("category") val category: String,
+    @SerializedName("reviewImg3") val reviewImg3: List<String>
 )

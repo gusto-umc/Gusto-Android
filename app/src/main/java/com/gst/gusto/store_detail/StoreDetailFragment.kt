@@ -103,6 +103,7 @@ class StoreDetailFragment : Fragment() {
             }
             //리뷰 리사이클러뷰 연결
             mReviewAdapter.mContext = context
+            mReviewAdapter.gustoViewModel = gustoViewModel
             mReviewAdapter.setItemClickListener(object : StoreDetailReviewAdapter.OnItemClickListener{
                 override fun onClick(v: View, dataSet: ResponseReviews) {
                     //데이터 넣기
@@ -248,6 +249,7 @@ class StoreDetailFragment : Fragment() {
          * 리뷰 추가 버튼 클릭 리스너
          */
         binding.fabStoreDetailAdd.setOnClickListener {
+            gustoViewModel.reviewReturnPos = 0
             Navigation.findNavController(view).navigate(R.id.action_storeDetailFragment_to_fragment_review_add_1)
         }
 

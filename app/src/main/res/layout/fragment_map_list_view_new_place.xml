@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="22dp">
+
+        <TextView
+            android:id="@+id/tv_map_save_unvisited"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="저장만 해뒀으니 이젠 가볼 차례!"
+            android:textSize="10sp"
+            android:textColor="@color/gray_3"
+            android:fontFamily="@font/pretendard_medium"
+            android:layout_marginLeft="26dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="처음 도전하는 가게 모음"
+            android:textSize="10sp"
+            android:textColor="@color/main_C"
+            android:fontFamily="@font/pretendard_extrabold"
+            android:layout_marginLeft="3dp"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMapSaveUnvisited"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginStart="19dp"
+        android:layout_marginEnd="21dp"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"/>
+</LinearLayout>

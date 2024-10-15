@@ -11,6 +11,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.ads.nativetemplates.NativeTemplateStyle
+import com.google.android.ads.nativetemplates.TemplateView
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.VideoOptions
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdOptions
+import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -125,6 +136,7 @@ class LoginFragment: Fragment() {
             requireActivity().finish()
         }
 
+
         return binding.root
 
     }
@@ -151,7 +163,7 @@ class LoginFragment: Fragment() {
         LoginViewModel.profileUrl = photoUrl
         LoginViewModel.provider = "GOOGLE"
         LoginViewModel.socialAccessToken = socialAccessToken
-        
+
         LoginViewModel.login { resultCode ->
             when (resultCode) {
                 1 -> {

@@ -16,8 +16,11 @@ import com.gst.gusto.databinding.FragmentFeedSearchBinding
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.feed.viewmodel.FeedViewModel
+import com.gst.gusto.feed.viewmodel.FeedViewModelFactory
 
 class FeedSearchFragment() : Fragment() {
 
@@ -27,6 +30,8 @@ class FeedSearchFragment() : Fragment() {
     var hashSearchList: ArrayList<Long>? = ArrayList()
 
     private val gustoViewModel : GustoViewModel by activityViewModels()
+
+    private val viewModel: FeedViewModel by viewModels( ownerProducer = { requireParentFragment() }, factoryProducer = { FeedViewModelFactory() })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +47,7 @@ class FeedSearchFragment() : Fragment() {
 
     // 해시태그 버튼 클릭리스너
     fun hashTagClick(hashTag: TextView, index: Int) {
-        hashTag.apply {
+        with(hashTag){
             setOnClickListener {
                 if (hashClickList[index]) {
                     background = ContextCompat.getDrawable(context, R.drawable.background_radius_feed_search_on)
@@ -56,15 +61,13 @@ class FeedSearchFragment() : Fragment() {
 
     // FeedFragment로 이동
     fun moveFeed(){
-        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-
-
+        parentFragmentManager.beginTransaction().remove(this).commit()
     }
 
     fun cancel(){
         binding.apply {
 
-            util.showSoftInputFragment(feedSearch, activity)
+            util.showSoftInputFragment(feedSearch, parentFragment?.activity)
 
             // 바깥 부분 클릭
             linearLayout.setOnClickListener {
@@ -82,7 +85,7 @@ class FeedSearchFragment() : Fragment() {
     }
 
     fun hashClick(){
-        binding.apply{
+        with(binding){
             // 해시태그 버튼들 클릭
             hashTagClick(warm, 0)
             hashTagClick(restroom, 1)
@@ -104,20 +107,22 @@ class FeedSearchFragment() : Fragment() {
 
         with(binding) {
 
+            feedSearch.requestFocus()
+
             feedSearch.setOnEditorActionListener{ textView, action, event ->
                 var handled = false
 
                 if (action == EditorInfo.IME_ACTION_SEARCH) {
                     hashSearchList?.clear()
                     for(hashClick in 1.. hashClickList.size ){
-                        Log.d("Search", "${hashClick}은 ${hashClickList[hashClick - 1]}")
                         if(!hashClickList[hashClick - 1]){
                             hashSearchList?.add(hashClick.toLong())
                         }
                     }
 
                     val tags = hashSearchList?.toList() ?: emptyList()
-                    getData(feedSearch.text.toString(), tags)
+                    //getData(feedSearch.text.toString(), tags)
+                    viewModel.getFeedSearch(feedSearch.text.toString(), tags)
                     moveFeed()
                     handled = true
                 }
@@ -152,7 +157,8 @@ class FeedSearchFragment() : Fragment() {
                         val tags = hashSearchList?.toList() ?: emptyList()
 
                         // 검색을 실행합니다.
-                        getData(feedSearch.text.toString(), tags)
+                        // getData(feedSearch.text.toString(), tags)
+                        viewModel.getFeedSearch(feedSearch.text.toString(), tags)
                         moveFeed()
                         return@setOnTouchListener true
                     }

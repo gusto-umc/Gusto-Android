@@ -25,9 +25,11 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
+import com.gst.gusto.api.ResponseMapCategory
 import com.gst.gusto.databinding.FragmentMapBinding
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter
 import com.gst.gusto.util.mapUtil
@@ -55,10 +57,10 @@ class MapFragment : Fragment() {
 
     val markerList = ArrayList<MarkerItem>()
 
-    private var isVisited = false
+    private var isVisited:Boolean? = null
 
     lateinit var chipGroup: ChipGroup
-    private var currentChip:Int?=null
+    private var currentChips = ArrayList<Int>()
 
     // 이전에 활성화된 칩을 저장하는 변수
     private var previousChipId: Int = -1
@@ -90,14 +92,20 @@ class MapFragment : Fragment() {
             val currentText = totalBtn.text.toString()
             //다음 순서로 변경
             val nextText = when (currentText) {
-                "전체" -> "가본 곳 만"
-                "가본 곳 만" -> "가본 곳 제외"
-                else -> "전체"
+                "전체" -> {
+                    isVisited = true
+                    "가본 곳 만"
+                }
+                "가본 곳 만" -> {
+                    isVisited = false
+                    "가본 곳 제외"
+                }
+                else -> {
+                    isVisited = null
+                    "전체"
+                }
             }
 
-            // 지도 설정
-            if(isVisited) isVisited = false
-            else isVisited = true
             reGetMapMarkers()
 
             // 변경된 텍스트 설정
@@ -117,30 +125,88 @@ class MapFragment : Fragment() {
         chipGroup = binding.fragmentMapMainScreen.chipGroup
 
 
+
+
         return view
     }
 
 
 // 카테고리 조회 및 칩 추가
+
+    /*
     fun getMapCategoryAndAddChips(townName: String) {
         gustoViewModel.getMapCategory(townName) { result ->
             if (result == 0) {
                 // 카테고리 목록을 성공적으로 가져왔을 때
                 val categoryList = gustoViewModel.myMapCategoryList
-                if (categoryList != null) {
+                Log.d("chip", "Category list: $categoryList")
+
+                if (categoryList != null && categoryList.isNotEmpty()) {
                     for ((index, category) in categoryList.withIndex()) {
-                        addChip(category.categoryName, category.myCategoryId, index,category.categoryIcon)
-                        Log.d("chip","칩 불러오기")
+                        addChip(category.categoryName, category.myCategoryId, index, category.categoryIcon)
+                        Log.d("chip", "칩 불러오기")
                     }
                 } else {
-                    Log.e("getMapCategoryAndAddChips", "Category list is null")
+                    Log.d("chip", "Category list is empty or null")
+                    Log.e("getMapCategoryAndAddChips", "Category list is empty or null")
                 }
             } else {
-                // 카테고리 목록을 가져오지 못했을 때
+                Log.d("chip", "Failed to get category list")
                 Log.e("getMapCategoryAndAddChips", "Failed to get category list")
             }
         }
     }
+     */
+    // ViewModel 또는 Fragment에서 호출
+// Fragment 또는 Activity에서 호출
+    private fun loadCategories(townName: String) {
+        gustoViewModel.getMapCategory(townName) { resultCode ->
+            when (resultCode) {
+                0 -> {
+                    // 성공적으로 데이터를 가져왔을 때
+                    val categories = gustoViewModel.myMapCategoryList
+                    populateChips(categories)
+                }
+                1 -> {
+                    // 에러 처리
+                    Log.e("LoadCategories", "Error loading categories")
+                    // 사용자에게 오류를 알리거나 UI 업데이트
+                }
+            }
+        }
+    }
+
+
+
+    /*
+    private fun populateChips(categories: List<ResponseMapCategory>) {
+        chipGroup.removeAllViews() // 기존 칩 제거 (재로드하는 경우 필요)
+        for ((index, category) in categories.withIndex()) {
+            addChip(
+                text = category.categoryName,
+                chipId = category.myCategoryId,
+                chipIndex = index,
+                categoryIcon = category.categoryIcon
+            )
+        }
+    }
+       */
+
+    private fun populateChips(categories: ArrayList<ResponseMapCategory>?) {
+        val nonNullCategories = categories ?: return // null일 경우 함수 종료
+        chipGroup.removeAllViews() // 기존 칩 제거 (재로드하는 경우 필요)
+        for ((index, category) in nonNullCategories.withIndex()) {
+            addChip(
+                text = category.categoryName,
+                chipId = category.myCategoryId,
+                chipIndex = index,
+                categoryIcon = category.categoryIcon
+            )
+        }
+    }
+
+
+
 
     // 칩 추가
     private fun addChip(text: String, chipId: Int, chipIndex: Int, categoryIcon: Int) {
@@ -179,16 +245,16 @@ class MapFragment : Fragment() {
         val clickedChipId = chip.id
 
         // 클릭된 칩이 이미 활성화된 상태인지 확인
-        val isClickedChipActive = previousChipId == clickedChipId
+        val isClickedChipActive = !chip.isChecked
 
         // 다른 칩이 활성화된 상태인 경우 이전 칩을 비활성화
-        if (!isClickedChipActive && previousChipId != -1) {
+        /*if (!isClickedChipActive && previousChipId != -1) {
             Log.d("chip","이전 칩 비활성화 ${previousChipId}")
             val previousChip = chipGroup.findViewById<Chip>(previousChipId)
             previousChip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chip_disabled))
             previousChip.setChipBackgroundColorResource(R.color.white)
             previousChip.setChipIconTintResource(R.color.main_C)
-        }
+        }*/
 
         // 클릭된 칩이 이미 활성화된 상태라면 비활성화
         if (isClickedChipActive) {
@@ -198,8 +264,7 @@ class MapFragment : Fragment() {
             chip.setChipBackgroundColorResource(R.color.white)
             chip.setChipIconTintResource(R.color.main_C)
             // 클릭된 칩의 ID를 초기화하여 비활성화 상태로 설정
-            previousChipId = -1
-            currentChip = null
+            currentChips.remove(clickedChipId)
         } else {
             // 클릭된 칩을 활성화
             Log.d("chip", "활성화 ${chip.id}")
@@ -207,9 +272,11 @@ class MapFragment : Fragment() {
             chip.setChipBackgroundColorResource(R.color.main_C)
             chip.setChipIconTintResource(R.color.white)
             // 클릭된 칩의 ID를 이전 칩의 ID로 저장
-            previousChipId = clickedChipId
-            currentChip = clickedChipId
+            currentChips.add(clickedChipId)
         }
+
+
+        reGetMapMarkers()
     }
 
     // 전체 칩이 비활성화되었는지 여부를 확인하는 함수
@@ -233,10 +300,20 @@ class MapFragment : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_categoryFragment)
         }
 
+        /*Tabbar로 전체 수정
+        *더보기 페이지로 이동 후 5개씩 페이징 처리
+         */
+
+        binding.fragmentArea.firstVisit.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_savetabFragment)
+        }
+
+        // 카테고리 선택 초기화
+        currentChips.clear()
 
         /**
          * 방문 o 클릭 리스너 -> 보완 예정
-         */
+
         binding.fragmentArea.firstVisit.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
         }
@@ -246,6 +323,8 @@ class MapFragment : Fragment() {
         binding.fragmentArea.prevVisited.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
         }
+        */
+
 
         /**
          * 검색화면 클릭 리스너 - mindy
@@ -258,6 +337,9 @@ class MapFragment : Fragment() {
         }
         binding.fragmentMapMainScreen.tvMapSearch.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_searchFragment)
+        }
+        binding.reviewAddBtn.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_reviewAddSearch)
         }
 
         /**
@@ -320,6 +402,7 @@ class MapFragment : Fragment() {
                 when (newState) {
                     BottomSheetBehavior.STATE_COLLAPSED -> {
                         binding.listViewBtn.visibility = View.VISIBLE
+                        binding.reviewAddBtn.visibility = View.VISIBLE
                         // 바텀 시트가 축소된 상태입니다.
                         // 원하는 동작을 수행하세요.
                     }
@@ -329,6 +412,7 @@ class MapFragment : Fragment() {
                     }
                     BottomSheetBehavior.STATE_DRAGGING -> {
                         binding.listViewBtn.visibility = View.GONE
+                        binding.reviewAddBtn.visibility = View.GONE
                         // 바텀 시트가 드래그 중인 상태입니다.
                         // 원하는 동작을 수행하세요.
                     }
@@ -347,25 +431,6 @@ class MapFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.kakaoMap.resume()
-
-        // 카테고리 조회 및 칩 추가
-        getMapCategoryAndAddChips("성수1가1동")
-
-        // 데이터 넣어둔 변수 : gustoViewModel.myMapCategoryList
-        gustoViewModel.getMapCategory(gustoViewModel.dong.value!!){
-                result ->
-            when(result){
-                0 -> {
-                    //success
-                }
-                1 -> {
-                    //fail
-                    Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
-        //카테고리 변경 데이터//
 
         //저장 맛집
         var locRestSaveNum = binding.fragmentArea.locRestSaveNum
@@ -387,22 +452,6 @@ class MapFragment : Fragment() {
         // 방문o 개수 : gustoViewModel.mapVisitedCnt
         //닉네임 변수 : gustoViewModel.userNickname
 
-        gustoViewModel.dong.observe(viewLifecycleOwner, Observer {
-            gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
-                    result ->
-                when(result){
-                    0 -> {
-                        Log.d("viewmodel : vi",gustoViewModel.mapVisitedList.toString())
-                        Log.d("viewmodel : novi",gustoViewModel.mapUnvisitedList.toString())
-                        //동
-                        refindDong()
-                    }
-                    1 -> {
-                        Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        })
     }
 
 
@@ -581,12 +630,25 @@ class MapFragment : Fragment() {
                         // 카메라 움직임 종료 시 이벤트 호출
                         // 사용자 제스쳐가 아닌 코드에 의해 카메라가 움직이면 GestureType 은 Unknown
                         Log.e(TAG, "cur loc : "+cameraPosition.toString())
-                        gustoViewModel.getRegionInfo(cameraPosition.position.longitude, cameraPosition.position.latitude)  {result, address ->
+                        gustoViewModel.getNewRegionInfo(cameraPosition.position.longitude, cameraPosition.position.latitude,
+                            BuildConfig.SGIS_CONSUMER_KEY,  BuildConfig.SGIS_CONSUMER_SECRET) { result, address ->
                             when(result) {
                                 1 -> {
                                     Log.d(TAG, "gustoViewModel.dong.value")
                                     binding.fragmentArea.userLoc.text = address
-                                    refindDong()
+                                    loadCategories(gustoViewModel.dong.value!!)
+                                    gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
+                                            result ->
+                                        when(result){
+                                            0 -> {
+                                                refindDong()
+                                            }
+                                            1 -> {
+                                                Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    }
+
                                     reGetMapMarkers()
                                 }
                             }
@@ -633,7 +695,7 @@ class MapFragment : Fragment() {
 
     }
     fun reGetMapMarkers() {
-        gustoViewModel.getCurrentMapStores(currentChip,isVisited) {result, datas ->
+        gustoViewModel.getCurrentMapStores(currentChips.toMutableList(),isVisited) {result, datas ->
             when(result) {
                 1 -> {
                     markerList.clear()

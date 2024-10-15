@@ -1,6 +1,7 @@
 package com.gst.gusto.ListView.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import com.gst.gusto.api.ResponseStoreListItem
 import com.gst.gusto.databinding.CardWxampleBinding
 import com.gst.gusto.databinding.ItemCategoryBinding
 import com.gst.gusto.databinding.ItemStoreBinding
+import com.gst.gusto.util.util
 
 class StoreAdapter(private val parentView : View, private var sign : String) : ListAdapter<PResponseStoreListItem, StoreAdapter.ViewHolder>(diffUtil){
 
@@ -30,13 +32,17 @@ class StoreAdapter(private val parentView : View, private var sign : String) : L
         fun bind(item : PResponseStoreListItem){
             binding.apply {
                 binding.tvItemStoreTitle.text = item.storeName
-                //카테고리 -> 서버 추가 필요
-                //binding.tvItemStoreCategory.text =
+                //카테고리
                 binding.tvItemStoreLocation.text = item.address
-                //리뷰 사진 3개 -> 서버 추가 필요
-                binding.ivItemStoreImg1.setImageResource(R.drawable.gst_dummypic)
-                binding.ivItemStoreImg2.setImageResource(R.drawable.gst_dummypic)
-                binding.ivItemStoreImg3.setImageResource(R.drawable.gst_dummypic)
+                //리뷰 사진 3개
+                if(!item.img1.isNullOrBlank()){
+                    util.setImage(binding.ivItemStoreImg1, item.img1, mContext!!)
+                }else{binding.ivItemStoreImg1.visibility = View.INVISIBLE}
+                if(!item.img2.isNullOrBlank()){util.setImage(binding.ivItemStoreImg2, item.img2, mContext!!)
+                }else{binding.ivItemStoreImg2.visibility = View.INVISIBLE}
+                if(!item.img3.isNullOrBlank()){util.setImage(binding.ivItemStoreImg3, item.img3, mContext!!)
+                }else{binding.ivItemStoreImg3.visibility = View.INVISIBLE}
+
             }
             data = item
         }

@@ -7,24 +7,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.gst.gusto.R
+import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentInstaReviewBinding
 import com.gst.gusto.review.adapter.InstaReviewAdapter
 import com.gst.gusto.review.adapter.GridItemDecoration
 import com.gst.gusto.review.viewmodel.InstaReviewViewModel
 import com.gst.gusto.review.viewmodel.InstaReviewViewModelFactory
-import com.gst.gusto.util.ScrollUtil.addFabOnScrollListener
 import com.gst.gusto.util.ScrollUtil.addGridOnScrollEndListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 class InstaReviewFragment : Fragment() {
 
     lateinit var binding: FragmentInstaReviewBinding
+    private val gustoViewModel : GustoViewModel by activityViewModels()
 
     private val adapter: InstaReviewAdapter by lazy {
         InstaReviewAdapter(context) { reviewId ->
@@ -60,33 +64,40 @@ class InstaReviewFragment : Fragment() {
         setReviewWriteBtn()
     }
 
+    override fun onResume() {
+        super.onResume()
+        adapter.clearItems()
+        viewModel.getInstaReview(15)
+    }
+
+
     private fun setReviewWriteBtn() {
         with(binding) {
             instaReviewWriteButton.setOnClickListener {
-
+                gustoViewModel.reviewReturnPos = 1
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewFragment_to_reviewAddSearch) }
             }
 
             instaReviewFab.setOnClickListener{
-
+                gustoViewModel.reviewReturnPos = 1
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewFragment_to_reviewAddSearch) }
             }
         }
     }
 
     private fun setFab(){
-
         with(binding){
-
-            instaReviewRecyclerView.addFabOnScrollListener(
-                onHide = {
-                    binding.instaReviewFab.visibility = View.GONE
-                },
-                onShow = {
-                    binding.instaReviewFab.visibility = View.VISIBLE
+            instaReviewAppBar.addOnOffsetChangedListener { _, verticalOffset ->
+                val isCollapsed = abs(verticalOffset) >= instaReviewAppBar.totalScrollRange
+                if (isCollapsed) {
+                    instaReviewFab.show()
+                } else {
+                    instaReviewFab.hide()
                 }
-            )
-
+            }
         }
     }
+
 
     fun initView() {
 

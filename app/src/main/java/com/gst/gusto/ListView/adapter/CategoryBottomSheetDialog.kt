@@ -23,11 +23,11 @@ import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.RequestAddCategory
 import org.w3c.dom.Text
 
-class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDialogFragment() {
+class CategoryBottomSheetDialog(var data : CategoryDetail? = null, val itemClick : (Int) -> Unit) : BottomSheetDialogFragment() {
 
 
     var isAdd = false
-    var categoryEdiBottomSheetData : CategoryDetail? = null
+    var categoryEdiBottomSheetData = data
     var viewModel : GustoViewModel? = null
 
     var selectedIconInt : Int = 1
@@ -58,6 +58,9 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        Log.d("dialog data", categoryEdiBottomSheetData.toString())
+
         view?.findViewById<ImageView>(R.id.iv_bottomsheet_category_x)?.setOnClickListener {
             dialog?.dismiss()
         }
@@ -74,6 +77,7 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
                 }
             }
             view?.findViewById<Switch>(R.id.switch_category_public)?.isEnabled = true
+            view?.findViewById<Switch>(R.id.switch_category_public)?.isChecked = true
             view?.findViewById<TextView>(R.id.tv_category_save)?.setOnClickListener {
                 val title = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)!!.text.toString()
                 val desc = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)!!.text.toString()
@@ -90,7 +94,7 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
                         descData = desc
                     }
                     //2. 서버 연결
-                    viewModel!!.addCategory(categoryName = title, desc = descData, categoryIcon = selectedIconInt, public = "PUBLIC"){
+                    viewModel!!.addCategory(categoryName = title, desc = descData, categoryIcon = selectedIconInt, public = view?.findViewById<Switch>(R.id.switch_category_public)?.isChecked){
                             result ->
                         when(result){
                             0 -> {
@@ -104,16 +108,13 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
                         }
                     }
                     dialog?.dismiss()
-
                 }
-
             }
-
         }
         else{
-
             // 수정 상황
             view?.findViewById<ImageView>(R.id.iv_bottomsheet_category_x)?.visibility = View.GONE
+            view?.findViewById<TextView>(R.id.tv_category_save)?.visibility = View.INVISIBLE
             view?.findViewById<TextView>(R.id.tv_category_edit)?.visibility = View.VISIBLE
             view?.findViewById<TextView>(R.id.tv_category_bottomsheet_banner)?.text = "카테고리 수정하기"
             view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)?.setText(categoryEdiBottomSheetData?.categoryName)
@@ -126,6 +127,7 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
 
             view?.findViewById<TextView>(R.id.tv_category_edit)?.setOnClickListener {
                 view?.findViewById<ImageView>(R.id.iv_bottomsheet_category_x)?.visibility = View.VISIBLE
+                view?.findViewById<TextView>(R.id.tv_category_save)?.visibility = View.VISIBLE
                 view?.findViewById<TextView>(R.id.tv_category_edit)?.visibility = View.GONE
                 view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)?.isEnabled = true
                 view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_desc)?.isEnabled = true
@@ -146,7 +148,6 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
             //스위치 변경 불가
             view?.findViewById<Switch>(R.id.switch_category_public)?.isChecked =
                 categoryEdiBottomSheetData!!.isPublic
-            view?.findViewById<Switch>(R.id.switch_category_public)?.isEnabled = false
 
             view?.findViewById<TextView>(R.id.tv_category_save)?.setOnClickListener {
                 val title = view?.findViewById<EditText>(R.id.edt_category_add_bottomsheet_title)!!.text.toString()
@@ -163,8 +164,14 @@ class CategoryBottomSheetDialog(val itemClick : (Int) -> Unit) : BottomSheetDial
                     else{
                         descData = desc
                     }
+                    var isPublic : String = "PUBLIC"
+                    if(view?.findViewById<Switch>(R.id.switch_category_public)?.isChecked == true){
+                        isPublic = "PUBLIC"
+                    } else{
+                        isPublic = "PRIVATE"
+                    }
                     //2. 서버 연결
-                    viewModel!!.editCategory(categoryName = title, desc = descData, categoryIcon = selectedIconInt, public = "PUBLIC", categoryId = categoryEdiBottomSheetData!!.id.toLong()){
+                    viewModel!!.editCategory(categoryName = title, desc = descData, categoryIcon = selectedIconInt, public = isPublic, categoryId = categoryEdiBottomSheetData!!.id.toLong()){
                             result ->
                         when(result){
                             0 -> {

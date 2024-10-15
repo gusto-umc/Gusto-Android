@@ -1,6 +1,8 @@
 package com.gst.clock.Fragment
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
@@ -10,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
@@ -35,6 +38,7 @@ class ReviewAdd3Fragment : Fragment() {
     private val gustoViewModel : GustoViewModel by activityViewModels()
     private val imageList: MutableList<File?> = MutableList(4) { null }
 
+    private lateinit var activityResult: ActivityResultLauncher<Intent>
     companion object {
         private const val REQUEST_CODE_STORAGE_PERMISSION = 1001
     }
@@ -55,6 +59,7 @@ class ReviewAdd3Fragment : Fragment() {
         }
         binding.btnNext.setOnClickListener {
             var count = 0
+            gustoViewModel.imageFiles.clear()
             for(data in imageList) {
                 if(data !=null) {
                     gustoViewModel.imageFiles.add(data)
@@ -65,21 +70,6 @@ class ReviewAdd3Fragment : Fragment() {
                 findNavController().navigate(R.id.action_reviewAdd3Fragment_to_reviewAdd4Fragment)
             else
                 Toast.makeText(context,"사진은 최소 1장이 필요합니다", Toast.LENGTH_SHORT ).show()
-        }
-
-
-        return binding.root
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val permission = Manifest.permission.READ_EXTERNAL_STORAGE
-        if (checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(permission), REQUEST_CODE_STORAGE_PERMISSION)
-        } else {
-            // 권한이 이미 승인되었을 때 수행할 작업
         }
 
         val imageViews = listOf(
@@ -94,79 +84,92 @@ class ReviewAdd3Fragment : Fragment() {
             binding.cvImgae3,
             binding.cvImgae4
         )
-        gustoViewModel.imageFiles.clear()
 
-        var imagesOn = false
+        activityResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                imageList.clear()
 
-        var selectImage = 0
-        val pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(4)) { uri ->
-            // Callback is invoked after th user selects a media item or closes the photo picker.
-            if (uri != null) {
-                gustoViewModel.imageFiles.clear()
-                if(!imagesOn) {
-                    imagesOn= true
-                    binding.lyImgaes.visibility = View.VISIBLE
-                    binding.ivImage.visibility = View.GONE
+                binding.lyImgaes.visibility = View.VISIBLE
+                binding.ivImage.visibility = View.GONE
 
-                    val Images = binding.lyImgaes
+                val Images = binding.lyImgaes
+                binding.lyImgaes.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                    override fun onPreDraw(): Boolean {
+                        // 뷰의 크기가 측정되면 호출되는 부분
+                        // 가로 너비와 세로 너비 얻기
+                        val width: Int = Images.width
+                        val height: Int = Images.height
+                        val marginInPixels = dpToPixels(10f,resources.displayMetrics)
 
-                    binding.lyImgaes.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                        override fun onPreDraw(): Boolean {
-                            // 뷰의 크기가 측정되면 호출되는 부분
-                            // 가로 너비와 세로 너비 얻기
-                            val width: Int = Images.width
-                            val height: Int = Images.height
-                            val marginInPixels = dpToPixels(10f,resources.displayMetrics)
+                        // 리스너를 한 번 호출한 후 제거
+                        Images.viewTreeObserver.removeOnPreDrawListener(this)
 
-                            // 리스너를 한 번 호출한 후 제거
-                            Images.viewTreeObserver.removeOnPreDrawListener(this)
+                        val length = if(width > height)  (height/2 - marginInPixels).toInt() else (width/2 - marginInPixels).toInt()
 
-                            val length = if(width > height)  (height/2 - marginInPixels).toInt() else (width/2 - marginInPixels).toInt()
-
-                            for(i in 0..3) {
-                                setImageViewSize(imageCards[i], length)
-                            }
-
-                            return true
+                        for(i in 0..3) {
+                            setImageViewSize(imageCards[i], length)
                         }
-                    })
-                    binding.tvUpload1.text = "업로드 완료!"
-                    binding.tvUpload2.text = "이제 리뷰를 작성하러 가볼까요?"
-                    binding.btnNext.text = "리뷰 작성하러 가기"
-                }
-                if(uri.size>0)
-                    imageList[0] = convertContentToFile(requireContext(),uri[0])
-                for (j in 0 .. uri.size-1) {
-                    setImage(imageViews[j],uri[j].toString(),requireContext())
-                    imageList[j] = convertContentToFile(requireContext(),uri[j])
-                }
-                for (j in uri.size .. 3) {
-                    setImage(imageViews[j],"",requireContext())
-                }
-            } else {
-                Log.d("PhotoPicker", "No media selected")
-            }
-        }
-        val pickMedia1 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                imageList[selectImage] = convertContentToFile(requireContext(),uri)
-                setImage(imageViews[selectImage],uri.toString(),requireContext())
-            } else {
-                Log.d("PhotoPicker", "No media selected")
-            }
-        }
 
+                        return true
+                    }
+                })
+                binding.tvUpload1.text = "업로드 완료!"
+                binding.tvUpload2.text = "이제 리뷰를 작성하러 가볼까요?"
+                binding.btnNext.text = "리뷰 작성하러 가기"
+
+                val data = result.data
+                data?.let {
+                    if (it.clipData != null) {
+                        var count = it.clipData!!.itemCount
+                        if(count>4) {
+                            Toast.makeText(requireContext(),"사진은 4장까지만 가능합니다",Toast.LENGTH_SHORT).show()
+                            count = 4
+                        }
+                        for (index in 0 until count ) {
+                            val imageUri = it.clipData!!.getItemAt(index).uri
+                            imageList.add(convertContentToFile(requireContext(),imageUri))
+                            setImage(imageViews[index],imageList.get(index).toString(),requireContext())
+                        }
+                        for(index in count until 4) {
+                            setImage(imageViews[index],"",requireContext())
+                        }
+                    } else {
+                        val imageUri = it.data
+                        imageList.add(imageUri?.let { it1 ->
+                            convertContentToFile(requireContext(),
+                                it1
+                            )
+                        })
+                        setImage(imageViews[0],imageList.get(0).toString(),requireContext())
+                        for(index in 1 until 4) {
+                            setImage(imageViews[index],"",requireContext())
+                        }
+                    }
+
+                }
+            }
+        }
         binding.ivImage.setOnClickListener {
             binding.btnSkip.visibility = View.GONE
             binding.btnNext.visibility = View.VISIBLE
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
+            activityResult.launch(intent)
         }
         for(i in 0..3) {
             imageCards[i].setOnClickListener {
-                selectImage = i
-                pickMedia1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.type = "image/*"
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
+                activityResult.launch(intent)
             }
         }
+
+        return binding.root
     }
 
     override fun onPause() {
