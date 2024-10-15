@@ -91,7 +91,6 @@
         app:tint="@color/white"
         android:visibility="gone"
         app:backgroundTint="@color/sub_m"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         app:shapeAppearance="@style/reviewFabstyle"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

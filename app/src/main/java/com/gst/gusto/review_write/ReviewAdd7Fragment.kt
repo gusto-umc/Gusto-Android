@@ -47,7 +47,10 @@ class ReviewAdd7Fragment : Fragment() {
                 when(result) {
                     1 -> {
                         activity.hideBottomNavigation(false)
-                        findNavController().popBackStack(R.id.storeDetailFragment,false)
+                        if(gustoViewModel.reviewReturnPos == 0)
+                            findNavController().popBackStack(R.id.storeDetailFragment,false)
+                        else
+                            findNavController().popBackStack(R.id.review_fragment,false)
                     }
                     else -> binding.btnEnd.isClickable = true
                 }

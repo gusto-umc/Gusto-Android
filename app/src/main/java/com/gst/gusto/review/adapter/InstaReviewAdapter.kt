@@ -97,4 +97,10 @@ class InstaReviewAdapter(
         }
         return removedCount > 0
     }
+
+    fun clearItems() {
+        items.clear()
+        notifyDataSetChanged()
+    }
+
 }

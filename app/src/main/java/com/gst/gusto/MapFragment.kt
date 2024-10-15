@@ -25,6 +25,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.gst.gusto.BuildConfig
 import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
@@ -124,6 +125,8 @@ class MapFragment : Fragment() {
         chipGroup = binding.fragmentMapMainScreen.chipGroup
 
 
+
+
         return view
     }
 
@@ -157,7 +160,6 @@ class MapFragment : Fragment() {
     // ViewModel 또는 Fragment에서 호출
 // Fragment 또는 Activity에서 호출
     private fun loadCategories(townName: String) {
-        val token = "your_auth_token" // 실제 인증 토큰 사용
         gustoViewModel.getMapCategory(townName) { resultCode ->
             when (resultCode) {
                 0 -> {
@@ -430,25 +432,6 @@ class MapFragment : Fragment() {
         super.onResume()
         binding.kakaoMap.resume()
 
-        // 카테고리 조회 및 칩 추가
-        loadCategories("성수1가1동")
-
-        // 데이터 넣어둔 변수 : gustoViewModel.myMapCategoryList
-        gustoViewModel.getMapCategory(gustoViewModel.dong.value!!){
-                result ->
-            when(result){
-                0 -> {
-                    //success
-                }
-                1 -> {
-                    //fail
-                    Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
-        //카테고리 변경 데이터//
-
         //저장 맛집
         var locRestSaveNum = binding.fragmentArea.locRestSaveNum
 
@@ -469,22 +452,6 @@ class MapFragment : Fragment() {
         // 방문o 개수 : gustoViewModel.mapVisitedCnt
         //닉네임 변수 : gustoViewModel.userNickname
 
-        gustoViewModel.dong.observe(viewLifecycleOwner, Observer {
-            gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
-                    result ->
-                when(result){
-                    0 -> {
-                        Log.d("viewmodel : vi",gustoViewModel.mapVisitedList.toString())
-                        Log.d("viewmodel : novi",gustoViewModel.mapUnvisitedList.toString())
-                        //동
-                        refindDong()
-                    }
-                    1 -> {
-                        Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        })
     }
 
 
@@ -663,12 +630,25 @@ class MapFragment : Fragment() {
                         // 카메라 움직임 종료 시 이벤트 호출
                         // 사용자 제스쳐가 아닌 코드에 의해 카메라가 움직이면 GestureType 은 Unknown
                         Log.e(TAG, "cur loc : "+cameraPosition.toString())
-                        gustoViewModel.getRegionInfo(cameraPosition.position.longitude, cameraPosition.position.latitude)  {result, address ->
+                        gustoViewModel.getNewRegionInfo(cameraPosition.position.longitude, cameraPosition.position.latitude,
+                            BuildConfig.SGIS_CONSUMER_KEY,  BuildConfig.SGIS_CONSUMER_SECRET) { result, address ->
                             when(result) {
                                 1 -> {
                                     Log.d(TAG, "gustoViewModel.dong.value")
                                     binding.fragmentArea.userLoc.text = address
-                                    refindDong()
+                                    loadCategories(gustoViewModel.dong.value!!)
+                                    gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
+                                            result ->
+                                        when(result){
+                                            0 -> {
+                                                refindDong()
+                                            }
+                                            1 -> {
+                                                Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    }
+
                                     reGetMapMarkers()
                                 }
                             }

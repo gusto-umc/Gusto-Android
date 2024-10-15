@@ -69,7 +69,8 @@ class ListReviewFragment : Fragment() {
             }
 
             listReviewFab.setOnClickListener {
-
+                gustoViewModel.reviewReturnPos = 1
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewListFragment_to_reviewAddSearch) }
             }
         }
     }

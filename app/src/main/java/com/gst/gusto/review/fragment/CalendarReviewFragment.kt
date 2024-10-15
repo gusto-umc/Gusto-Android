@@ -88,7 +88,8 @@ class CalendarReviewFragment : Fragment() {
             }
 
             calReviewFab.setOnClickListener {
-                
+                gustoViewModel.reviewReturnPos = 1
+                view?.let { it1 -> Navigation.findNavController(it1).navigate(R.id.action_reviewCalendarFragment_to_reviewAddSearch) }
             }
 
         }

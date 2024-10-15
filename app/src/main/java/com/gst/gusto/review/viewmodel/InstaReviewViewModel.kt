@@ -59,7 +59,7 @@ class InstaReviewViewModel(
 
     }
 
-    suspend fun getInstaReview(size: Int) {
+    fun getInstaReview(size: Int) = viewModelScope.launch {
         val token = GustoApplication.prefs.getSharedPrefs().first
         when (val response = reviewsRepository.getInstaReview(token, null, size)) {
             is ApiResponse.Success -> {

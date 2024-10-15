@@ -13,20 +13,21 @@ object ScrollUtil {
         onShow: () -> Unit
     ) {
         addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            var isTop = true
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(-1) && newState == SCROLL_STATE_IDLE) {
+                if (!recyclerView.canScrollVertically(-1)) {
                     onHide()
-                    isTop = true
-                } else if (isTop) {
-                    onShow()
-                    isTop = false
+                } else {
+                    onShow() 
                 }
             }
         })
     }
+
+
+
+
 
     fun RecyclerView.addGridOnScrollEndListener(
         threshold: Int = 1,
