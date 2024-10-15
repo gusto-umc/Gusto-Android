@@ -1,6 +1,7 @@
 package com.gst.gusto.api
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serial
 import java.util.Date
 
 
@@ -359,6 +360,21 @@ data class ResponseSearch(
     @SerializedName("reviewImg") val reviewImg : String?,
     @SerializedName("address") val address : String
 )
+
+data class ResponseSearch2(
+    @SerializedName("stores") var stores : ArrayList<ResponseSearch3>,
+    @SerializedName("hasNext") val hasNext: Boolean,
+    @SerializedName("cursorId") val cursorId : Long?
+)
+data class ResponseSearch3(
+    @SerializedName("storeId") val storeId : Long,
+    @SerializedName("storeName") val storeName : String,
+    @SerializedName("categoryString") val categoryString : String?,
+    @SerializedName("reviewImg") val reviewImg : String?,
+    @SerializedName("address") val address : String
+)
+
+
 
 // 가게 정보 조회(짧은 화면)
 data class ResponseStoreDetailQuick(

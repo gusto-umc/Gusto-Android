@@ -2048,6 +2048,12 @@ class GustoViewModel: ViewModel() {
     var mapSearchArray = ArrayList<ResponseSearch>()
     var mapSearchStoreIdArray = ArrayList<Long>()
 
+    var mapSearchArray2 = ArrayList<ResponseSearch3>()
+    var mapSearchStoreIdArray2 = ArrayList<Long>()
+    var mapKeepArray2 = ArrayList<ResponseSearch3>()
+    var mapKeepStoreIdArray2 = ArrayList<Long>()
+
+
     var keepFlag = false
     var mapKeepArray = ArrayList<ResponseSearch>()
     var mapKeepStoreIdArray = ArrayList<Long>()
@@ -2087,6 +2093,47 @@ class GustoViewModel: ViewModel() {
         })
     }
 
+    var searchCursorId : Long? = null
+
+    fun getPSearchResult(keyword : String, cursorId : Long? ,callback: (Int, Boolean) -> Unit){
+        service.getPSearch(xAuthToken, keyword, cursorId).enqueue(object : Callback<ResponseSearch2>{
+            override fun onResponse(call: Call<ResponseSearch2>, response: Response<ResponseSearch2>) {
+                if(response.isSuccessful){
+                    val body = response.body()
+                    Log.d("search", body.toString())
+                    if(body!=null){
+                        searchCursorId = response.body()!!.cursorId
+                        Log.d("getPSearch", "Successful response: ${response}")
+                        if (!response.body()!!.stores.isNullOrEmpty()){
+                            mapSearchArray2.addAll(response.body()!!.stores)
+                            mapKeepArray2.addAll(response.body()!!.stores)
+                            for(i in response.body()!!.stores){
+                                mapSearchStoreIdArray.add(i.storeId)
+                            }
+                            mapKeepStoreIdArray = mapSearchStoreIdArray}
+                        callback(1, body.hasNext)
+                    }
+                    else{
+                        callback(2, false)
+                    }
+                }
+                else if(response.code() == 403){
+                    //추가 예정
+                    callback(2, false)
+                }
+                else if(response.code() == 404){
+                    Log.e("getPSearch", "Unsuccessful response: ${response}")
+                    callback(2, false)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseSearch2>, t: Throwable) {
+                Log.e("getPSearch", "Failed to make the request", t)
+                callback(3, false)
+            }
+
+        })
+    }
 
 
     fun getNewRegionInfo(x: Double,y : Double, consumer_key: String,consumer_secret : String, callback: (Int,String) -> Unit) {

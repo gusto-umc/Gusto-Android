@@ -460,6 +460,13 @@ interface GustoApi {
         @Query("keyword") keyword : String
     ) : Call<ArrayList<ResponseSearch>>
 
+    @GET("stores/search")
+    fun getPSearch(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("keyword") keyword : String,
+        @Query("cursorId") cursorId : Long?
+    ) : Call<ResponseSearch2>
+
     @GET("users/follower") // 팔로워 조회
     fun getFollower(
         @Header("X-AUTH-TOKEN") token : String,

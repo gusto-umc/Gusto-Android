@@ -2,6 +2,8 @@ package com.gst.gusto.search
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_ENTER
@@ -12,6 +14,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
@@ -19,17 +22,28 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.ads.nativetemplates.NativeTemplateStyle
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.gst.gusto.search.adapter.SearchStoreAdapter
 import com.gst.gusto.R
 import com.gst.gusto.util.util
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseSearch
+import com.gst.gusto.api.ResponseSearch3
 import com.gst.gusto.databinding.FragmentSearchBinding
 
 class SearchFragment : Fragment() {
 
     private lateinit var binding : FragmentSearchBinding
     private val gustoViewModel : GustoViewModel by activityViewModels()
+    private lateinit var mKeepStoreAdpater : SearchStoreAdapter
+    private lateinit var mSearchStoreAdapter: SearchStoreAdapter
+    private var hasNext = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +68,6 @@ class SearchFragment : Fragment() {
         mSearshResultAdapter.mContext = context
         mKeepStoreAdpater.mContext = context
 
-
         if(!gustoViewModel.keepFlag){
             // 첫 진임 시
             //binding.edtSearchSearchbox.requestFocus()
@@ -64,7 +77,6 @@ class SearchFragment : Fragment() {
             binding.tvNoResult.visibility = View.GONE
             binding.fabSearchMap.visibility = View.GONE
             binding.edtSearchSearchbox.text.clear()
-
         }
         else{
             //목록보기에서 이동 시
@@ -83,19 +95,22 @@ class SearchFragment : Fragment() {
             binding.fabSearchMap.visibility = View.VISIBLE
 
             //저장 rv 연결
-            mKeepStoreAdpater.submitList(gustoViewModel.mapKeepArray)
+            mKeepStoreAdpater.submitList(gustoViewModel.mapKeepArray2)
             mKeepStoreAdpater.setItemClickListener(object :
                 SearchStoreAdapter.OnItemClickListener {
-                override fun onClick(v: View, dataSet: ResponseSearch) {
+                override fun onClick(v: View, dataSet: ResponseSearch3) {
                     //데이터 넣기
                     gustoViewModel.selectStoreId = dataSet.storeId
                     gustoViewModel.storeIdList = gustoViewModel.mapKeepStoreIdArray
                     //페이지 이동
-                    Navigation.findNavController(view)
-                        .navigate(R.id.action_searchFragment_to_fragment_map_viewpager3)
+                    view?.let {
+                        Navigation.findNavController(it)
+                            .navigate(R.id.action_searchFragment_to_fragment_map_viewpager3)
+                    }
                 }
 
             })
+
             //visibility 설정, 어댑터 연결
             binding.rvSearchKeep.visibility = View.VISIBLE
             binding.rvSearchKeep.adapter = mKeepStoreAdpater
@@ -105,6 +120,7 @@ class SearchFragment : Fragment() {
             gustoViewModel.keepFlag = false
 
         }
+
 
 
 
@@ -132,11 +148,18 @@ class SearchFragment : Fragment() {
             } else {
                 // 서버 연결 후 검샥 결과 response
                 util.hideKeyboard(this.requireActivity())
-                gustoViewModel.getSearchResult(binding.edtSearchSearchbox.text.toString()){
-                        result ->
+                gustoViewModel.mapSearchArray2.clear()
+                gustoViewModel.mapKeepArray2.clear()
+                gustoViewModel.mapSearchStoreIdArray.clear()
+                gustoViewModel.mapKeepStoreIdArray2.clear()
+                gustoViewModel.searchKeepKeyword = binding.edtSearchSearchbox.text.toString()
+                gustoViewModel.getPSearchResult(binding.edtSearchSearchbox.text.toString(), null){
+                        result, getHasNext->
                     when(result){
-                        0 -> {
-                            if(gustoViewModel.mapSearchArray.isNullOrEmpty()){
+                        1 -> {
+                            hasNext = getHasNext
+                            Log.d("search rv", hasNext.toString())
+                            if(gustoViewModel.mapSearchArray2.isNullOrEmpty()){
                                 binding.rvSearchResult.visibility = View.GONE
                                 binding.tvNoResult.visibility = View.VISIBLE
                             }
@@ -148,10 +171,10 @@ class SearchFragment : Fragment() {
                             }
                             //success
                             //데이터셋 저장 후 연결(공백일 때 동작 확인)
-                            mSearshResultAdapter.submitList(gustoViewModel.mapSearchArray)
+                            mSearshResultAdapter.submitList(gustoViewModel.mapSearchArray2)
                             mSearshResultAdapter.setItemClickListener(object :
                                 SearchStoreAdapter.OnItemClickListener {
-                                override fun onClick(v: View, dataSet: ResponseSearch) {
+                                override fun onClick(v: View, dataSet: ResponseSearch3) {
                                     //데이터 넣기
                                     gustoViewModel.selectStoreId = dataSet.storeId
                                     gustoViewModel.storeIdList = gustoViewModel.mapKeepStoreIdArray
@@ -165,10 +188,12 @@ class SearchFragment : Fragment() {
                             binding.rvSearchResult.visibility = View.VISIBLE
                             binding.rvSearchResult.adapter = mSearshResultAdapter
                             binding.rvSearchResult.layoutManager = LinearLayoutManager(this.requireActivity())
+                            mSearshResultAdapter.notifyDataSetChanged()
+
                             //키보드 내리기
                             util.hideKeyboard(this.requireActivity())
                         }
-                        1 -> {
+                        else -> {
                             //fail
                             Log.d("search result", "fail")
                         }
@@ -191,6 +216,7 @@ class SearchFragment : Fragment() {
             else if(keyCode === KeyEvent.KEYCODE_BACK){
                 Log.d("KEYCODE_BACK", "KEYCODE_BACK")
                 //Navigation.findNavController(view).
+                binding.edtSearchSearchbox.clearFocus()
         }
 
             true
@@ -218,6 +244,81 @@ class SearchFragment : Fragment() {
             //페이지 이동
            Navigation.findNavController(view).navigate(R.id.action_searchFragment_to_fragment_map_viewpager3)
         }
+
+          binding.rvSearchResult.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                      override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                          super.onScrolled(recyclerView, dx, dy)
+
+                          val rvPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                          // 리사이클러뷰 아이템 총개수 (index 접근 이기 때문에 -1)
+                          val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+                          Log.d("search scroll", "rv search, rvPosition : ${rvPosition}, totalCount : $totalCount, hasNext : ${hasNext} ")
+                          // 페이징 처리
+                          if(rvPosition == totalCount && hasNext) {
+                              gustoViewModel.getPSearchResult(gustoViewModel.searchKeepKeyword, gustoViewModel.searchCursorId) { result, getHasNext ->
+                                  hasNext = getHasNext
+                                  when(result) {
+                                      1 -> {
+                                          val handler = Handler(Looper.getMainLooper())
+                                          handler.postDelayed({
+                                              mSearshResultAdapter?.submitList(gustoViewModel.mapSearchArray2)
+                                              mSearshResultAdapter?.notifyDataSetChanged()
+                                          }, 3000)
+
+                                      }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정m", Toast.LENGTH_SHORT).show()
+                                  }
+                              }
+                          }
+                      }
+                  })
+
+                  binding.rvSearchKeep.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                      override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                          super.onScrolled(recyclerView, dx, dy)
+                          Log.d("search scroll", "rv keep")
+                          val rvPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                          // 리사이클러뷰 아이템 총개수 (index 접근 이기 때문에 -1)
+                          val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+
+                          // 페이징 처리
+                          if(rvPosition == totalCount && hasNext) {
+                              gustoViewModel.getPSearchResult(gustoViewModel.searchKeepKeyword, gustoViewModel.searchCursorId) { result, getHasNext ->
+                                  hasNext = getHasNext
+                                  when(result) {
+                                      1 -> {
+                                          val handler = Handler(Looper.getMainLooper())
+                                          handler.postDelayed({
+                                              mKeepStoreAdpater?.submitList(gustoViewModel.mapSearchArray2)
+                                              mKeepStoreAdpater?.notifyDataSetChanged()
+                                          }, 3000)
+
+                                      }
+                                      else -> Toast.makeText(requireContext(), "서버와의 연결 불안정m", Toast.LENGTH_SHORT).show()
+                                  }
+                              }
+                          }
+                      }
+                  })
+
+        MobileAds.initialize(requireContext())
+        val adLoader = AdLoader.Builder(requireContext(),resources.getString(R.string.admob_native))
+            .forNativeAd { nativeAd ->
+                // Handle the native ad loaded callback
+                val styles = NativeTemplateStyle.Builder()
+                    .build()
+                val template = binding.nativeAdTemplate
+                template.setStyles(styles)
+                template.setNativeAd(nativeAd)
+            }
+            .withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    super.onAdFailedToLoad(adError)
+                    Log.e("AdLoader", "Failed to load ad: ${adError}")
+                }
+            })
+            .build()
+
+        adLoader.loadAd(AdRequest.Builder().build())
     }
 
     override fun onResume() {
@@ -225,6 +326,7 @@ class SearchFragment : Fragment() {
         if(!gustoViewModel.keepFlag){
             binding.edtSearchSearchbox.text.clear()
         }
+
     }
 
 
