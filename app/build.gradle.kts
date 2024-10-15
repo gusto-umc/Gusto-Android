@@ -20,8 +20,8 @@ android {
         applicationId = "com.gst.gusto"
         minSdk = 27
         targetSdk = 34
-        versionCode = 1
-        versionName = "Gusto:0.0"
+        versionCode = 4
+        versionName = "Gusto:0.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "API_BASE", localProperties.getProperty("api_base"))
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", localProperties.getProperty("KAKAO_NATIVE_APP_KEY"))
@@ -130,4 +130,7 @@ dependencies {
 
     // Admob
     implementation("com.google.android.gms:play-services-ads:23.3.0")
+
+    // android version updare
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
 }
