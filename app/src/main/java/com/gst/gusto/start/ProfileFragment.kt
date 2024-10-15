@@ -89,7 +89,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvTitle.text = LoginViewModel.nickName + "님의\n성별을 선택해주세요."
+        binding.tvTitle.text = LoginViewModel.nickName + "님의\n프로필 사진이에요."
 
         setImage(binding.ivProfile,LoginViewModel.profileUrl,requireContext())
     }

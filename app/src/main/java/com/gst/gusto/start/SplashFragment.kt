@@ -90,25 +90,16 @@ class SplashFragment : Fragment() {
                 }
             }
         }.addOnFailureListener {
-            val mDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_one_button, null)
-            val mBuilder = AlertDialog.Builder(requireContext())
-                .setView(mDialogView)
-                .setCancelable(false)
-                .create()
-
-            mBuilder?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            mBuilder?.window?.requestFeature(Window.FEATURE_NO_TITLE)
-            mBuilder.show()
-
-            mDialogView.findViewById<TextView>(R.id.tv_dialog_one_text).text = "새로운 업데이트가 있습니다"
-            mDialogView.findViewById<TextView>(R.id.tv_dialog_one_desc).visibility = View.GONE
-            //팝업 타이틀 설정, 버튼 작용 시스템
-            mDialogView.findViewById<TextView>(R.id.btn_dialog_one).setOnClickListener( {
-                val intent = Intent(Intent.ACTION_VIEW)
-                val packageName = requireActivity().packageName
-                intent.data = Uri.parse("market://details?id=${packageName}")
-                startActivity(intent)
-            })
+            if(!GustoApplication.prefs.getSharedPrefsBoolean("logout")) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    delay(1000) // 2000 밀리초(2초) 동안 지연
+                    // 여기에 지연 후 수행할 코드 작성
+                    findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+                }
+                GustoApplication.prefs.setSharedPrefsBoolean("logout",false)
+            }else {
+                findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+            }
         }
 
     }
