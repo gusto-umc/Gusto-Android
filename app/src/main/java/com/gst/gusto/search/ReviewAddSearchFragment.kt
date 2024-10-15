@@ -74,6 +74,7 @@ class ReviewAddSearchFragment : Fragment() {
         rvSearchCategory.layoutManager = LinearLayoutManager(this.requireActivity())
 
         var hasNext = false
+        var hasNextS = false
 
         gustoViewModel.getPPMyCategory(null){
                 result, getHasNext ->
@@ -148,12 +149,15 @@ class ReviewAddSearchFragment : Fragment() {
             } else {
                 // 서버 연결 후 검샥 결과 response
                 util.hideKeyboard(this.requireActivity())
-                gustoViewModel.getSearchResult(binding.edtReviewAddSearchbox.text.toString()){
-                        result ->
+                gustoViewModel.getPSearchResult(binding.edtReviewAddSearchbox.text.toString(), null){
+                        result, getHasNext->
                     when(result){
-                        0 -> {
+                        1 -> {
                             //success
                             //데이터셋 저장 후 연결(공백일 때 동작 확인)
+                            hasNextS = getHasNext
+                            Log.d("search rv", hasNext.toString())
+
                             mRouteResultAdapter.submitList(gustoViewModel.mapSearchArray2)
                             mRouteResultAdapter.mContext = context
                             mRouteResultAdapter.setItemClickListener(object :
@@ -184,7 +188,7 @@ class ReviewAddSearchFragment : Fragment() {
                             binding.rvReviewAddSearchResult.adapter = mRouteResultAdapter
                             binding.rvReviewAddSearchResult.layoutManager = LinearLayoutManager(this.requireActivity())
                             //키보드 내리기
-                            if(gustoViewModel.mapSearchArray.isNullOrEmpty()){
+                            if(gustoViewModel.mapSearchArray2.isNullOrEmpty()){
                                 binding.rvReviewAddSearchCategory.visibility = View.GONE
                                 binding.rvReviewAddSearchResult.visibility = View.GONE
                                 binding.tvReviewAddSearchNoResult.visibility = View.VISIBLE
@@ -195,7 +199,7 @@ class ReviewAddSearchFragment : Fragment() {
                                 binding.tvReviewAddSearchNoResult.visibility = View.GONE
                             }
                         }
-                        1 -> {
+                        else -> {
                             //fail
                             Log.d("search result", "fail")
                         }
@@ -250,5 +254,40 @@ class ReviewAddSearchFragment : Fragment() {
             .build()
 
         adLoader.loadAd(AdRequest.Builder().build())
+
+        binding.rvReviewAddSearchResult.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                // 리사이클러뷰 아이템 총개수 (index 접근 이기 때문에 -1)
+                val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+                Log.d("search scroll", "rv search, rvPosition : ${rvPosition}, totalCount : $totalCount, hasNext : ${hasNext} ")
+                // 페이징 처리
+                if(rvPosition == totalCount && hasNext) {
+                    gustoViewModel.getPSearchResult(gustoViewModel.searchKeepKeyword, gustoViewModel.searchCursorId) { result, getHasNext ->
+                        hasNext = getHasNext
+                        when(result) {
+                            1 -> {
+                                val handler = Handler(Looper.getMainLooper())
+                                handler.postDelayed({
+                                    mRouteResultAdapter?.submitList(gustoViewModel.mapSearchArray2)
+                                    mRouteResultAdapter?.notifyDataSetChanged()
+                                }, 3000)
+
+                            }else -> Toast.makeText(requireContext(), "서버와의 연결 불안정m", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        gustoViewModel.mapSearchArray2.clear()
+        gustoViewModel.mapKeepStoreIdArray2.clear()
+        gustoViewModel.mapKeepArray2.clear()
+        gustoViewModel.mapKeepStoreIdArray2.clear()
     }
 }
