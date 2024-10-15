@@ -255,7 +255,7 @@ class SearchFragment : Fragment() {
                           val rvPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
                           // 리사이클러뷰 아이템 총개수 (index 접근 이기 때문에 -1)
                           val totalCount = recyclerView.adapter?.itemCount?.minus(1)
-                          Log.d("search scroll", "rv search, rvPosition : ${rvPosition}, totalCount : $totalCount, hasNext : ")
+                          Log.d("search scroll", "rv search, rvPosition : ${rvPosition}, totalCount : $totalCount, hasNext : ${hasNext} ")
                           // 페이징 처리
                           if(rvPosition == totalCount && hasNext) {
                               gustoViewModel.getPSearchResult(gustoViewModel.searchKeepKeyword, gustoViewModel.searchCursorId) { result, getHasNext ->

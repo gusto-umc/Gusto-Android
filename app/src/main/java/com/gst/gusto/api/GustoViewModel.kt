@@ -2101,7 +2101,7 @@ class GustoViewModel: ViewModel() {
                     val body = response.body()
                     Log.d("search", body.toString())
                     if(body!=null){
-                        searchCursorId = cursorId
+                        searchCursorId = response.body()!!.cursorId
                         Log.d("getPSearch", "Successful response: ${response}")
                         if (!response.body()!!.stores.isNullOrEmpty()){
                             mapSearchArray2.addAll(response.body()!!.stores)
