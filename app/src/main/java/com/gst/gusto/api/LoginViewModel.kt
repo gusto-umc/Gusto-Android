@@ -1,5 +1,6 @@
 package com.gst.gusto.api
 
+import android.util.Base64
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.gst.gusto.BuildConfig
@@ -16,6 +17,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.net.URI
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 
 class LoginViewModel: ViewModel() {
     val retrofit = Retrofit.Builder().baseUrl(BuildConfig.API_BASE)
@@ -88,7 +92,14 @@ class LoginViewModel: ViewModel() {
             })
     }
     fun login(callback: (Int) -> Unit){
-        Log.d("SOCIAL LOGIN INFO", "${provider}, ${providerId}, ${socialAccessToken}")
+        Log.d("SOCIAL LOGIN INFO123", "${provider}, ${providerId}, ${socialAccessToken}")
+        var tmp = encryptAES256(socialAccessToken)
+        var tmp2 = decryptAES256(tmp)
+        Log.d("AES1Test", "${socialAccessToken}")
+        Log.d("AES1", "${tmp}")
+        Log.d("AES2", "${tmp2}")
+        test(tmp)
+
         service.login( Login(provider,providerId,socialAccessToken))
             .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -109,6 +120,7 @@ class LoginViewModel: ViewModel() {
                     callback(3)
                 }
             })
+        
     }
     fun randomNickname(callback: (Int, String) -> Unit){
         service.randomNickname()
@@ -171,6 +183,65 @@ class LoginViewModel: ViewModel() {
                 callback(3)
             }
         })
+    }
+
+    fun test(str : String) {
+        service.test(str).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                Log.d("code",response.code().toString())
+                if (response.isSuccessful) {
+                    Log.e("AES3", "Successful response: ${response}")
+                } else {
+                    Log.e("AES3", "Unsuccessful response: ${response}")
+
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("AES3", "Failed to make the request", t)
+
+            }
+        })
+    }
+
+    var secretStr = "Z8BQ41_PRIVATE_KEY_GUSTO_5F573EA"
+    var ivBytes = "dccmCIrBNboegEJ1".toByteArray(Charsets.UTF_8)
+    fun encryptAES256(input: String): String {
+        // Convert the secret key string to a byte array
+        val keyBytes = secretStr.toByteArray(Charsets.UTF_8)
+        val secretKeySpec = SecretKeySpec(keyBytes, "AES")
+
+        // Convert the fixed IV string to a byte array
+        val ivParameterSpec = IvParameterSpec(ivBytes)
+
+        // Initialize the cipher for encryption
+        val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec)
+
+        // Encrypt the input string
+        val encryptedBytes = cipher.doFinal(input.toByteArray(Charsets.UTF_8))
+
+        // Encode the result to Base64 to make it easier to handle
+        return Base64.encodeToString(encryptedBytes, Base64.NO_WRAP)
+    }
+
+    fun decryptAES256(input: String): String {
+        // Convert the secret key string to a byte array
+        val keyBytes = secretStr.toByteArray(Charsets.UTF_8)
+        val secretKeySpec = SecretKeySpec(keyBytes, "AES")
+
+        // Convert the fixed IV string to a byte array
+        val ivParameterSpec = IvParameterSpec(ivBytes)
+
+        // Decode the Base64 encoded input
+        val encryptedBytes = Base64.decode(input, Base64.DEFAULT)
+
+        // Initialize the cipher for decryption
+        val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec)
+
+        // Decrypt the bytes and convert to a string
+        val decryptedBytes = cipher.doFinal(encryptedBytes)
+        return String(decryptedBytes, Charsets.UTF_8)
     }
 
 }
