@@ -65,6 +65,7 @@
             android:layout_marginTop="71dp"
             android:fontFamily="@font/pretendard_bold"
             android:gravity="center"
+            android:visibility="gone"
             android:text="로그인 없이 시작하기"
             android:textColor="@color/main_C"
             android:textSize="12sp" />
