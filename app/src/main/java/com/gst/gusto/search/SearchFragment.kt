@@ -204,10 +204,6 @@ class SearchFragment : Fragment() {
             }
         }
 
-        binding.rvSearchResult
-
-        binding.rvSearchKeep
-
         binding.edtSearchSearchbox.setOnKeyListener { v, keyCode, event ->
             var handled = false
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
@@ -220,6 +216,7 @@ class SearchFragment : Fragment() {
             else if(keyCode === KeyEvent.KEYCODE_BACK){
                 Log.d("KEYCODE_BACK", "KEYCODE_BACK")
                 //Navigation.findNavController(view).
+                binding.edtSearchSearchbox.clearFocus()
         }
 
             true

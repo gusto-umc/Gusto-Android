@@ -226,6 +226,11 @@ class ReviewAddSearchFragment : Fragment() {
                 handled = true
                 searchRouteKeyword()
             }
+            else if(keyCode === KeyEvent.KEYCODE_BACK){
+                Log.d("KEYCODE_BACK", "KEYCODE_BACK")
+                //Navigation.findNavController(view).
+                binding.edtReviewAddSearchbox.clearFocus()
+            }
             handled
             false
         }
