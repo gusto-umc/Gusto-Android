@@ -20,8 +20,8 @@ android {
         applicationId = "com.gst.gusto"
         minSdk = 27
         targetSdk = 34
-        versionCode = 4
-        versionName = "Gusto:0.3"
+        versionCode = 5
+        versionName = "Gusto:0.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "API_BASE", localProperties.getProperty("api_base"))
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", localProperties.getProperty("KAKAO_NATIVE_APP_KEY"))
