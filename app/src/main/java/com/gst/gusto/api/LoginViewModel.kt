@@ -63,7 +63,9 @@ class LoginViewModel: ViewModel() {
         return refreshToken
     }
     fun signUp(callback: (Int) -> Unit){
-        val info = Singup(provider,providerId,socialAccessToken,nickName,age,gender)
+        var encryptAccessToken = encryptAES256(socialAccessToken)
+        var encryptProviderId = encryptAES256(providerId)
+        val info = Singup(provider,encryptProviderId,encryptAccessToken,nickName,age,gender)
         Log.d("SOCIAL LOGIN INFO2", "${provider}, ${providerId}, ${socialAccessToken}")
         var profileMutipart : MultipartBody.Part?=null
         if(profileImg!=null) {
@@ -92,15 +94,11 @@ class LoginViewModel: ViewModel() {
             })
     }
     fun login(callback: (Int) -> Unit){
-        Log.d("SOCIAL LOGIN INFO123", "${provider}, ${providerId}, ${socialAccessToken}")
-        var tmp = encryptAES256(socialAccessToken)
-        var tmp2 = decryptAES256(tmp)
-        Log.d("AES1Test", "${socialAccessToken}")
-        Log.d("AES1", "${tmp}")
-        Log.d("AES2", "${tmp2}")
-        test(tmp)
+        var encryptAccessToken = encryptAES256(socialAccessToken)
+        var encryptProviderId = encryptAES256(providerId)
+        //Log.d("SOCIAL LOGIN INFO123", "${provider}, ${providerId}, ${tmp} , ${socialAccessToken}")
 
-        service.login( Login(provider,providerId,socialAccessToken))
+        service.login(Login(provider,encryptProviderId,encryptAccessToken))
             .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     if (response.isSuccessful) {
