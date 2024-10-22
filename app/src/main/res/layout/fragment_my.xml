@@ -44,12 +44,15 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="93dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="40">
+        </View>
 
         <androidx.cardview.widget.CardView
-            android:layout_marginLeft="38dp"
-            android:layout_marginRight="41dp"
             android:layout_width="93dp"
             android:layout_height="93dp"
             android:layout_gravity="center"
@@ -62,11 +65,15 @@
                 android:scaleType="centerCrop"
                 android:src="@color/white"/>
         </androidx.cardview.widget.CardView>
-
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="40">
+        </View>
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="47dp"
+            android:layout_width="0dp"
+            android:layout_weight="140"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -175,15 +182,12 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
 
             <TextView
+                android:layout_marginTop="10dp"
                 android:id="@+id/btn_profile_edit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:background="@drawable/background_radius_5"
                 android:backgroundTint="@color/gray_6"
                 android:fontFamily="@font/pretendard_semibold"
@@ -194,7 +198,11 @@
                 android:textSize="10sp" />
 
         </LinearLayout>
-
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="40">
+        </View>
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
