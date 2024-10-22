@@ -119,6 +119,7 @@ class GustoViewModel: ViewModel() {
 
     // 현재 동
     private var _dong = MutableLiveData<String>("")
+    var _dongName ="어딘가"
     val dong : LiveData<String>
         get() = _dong
 
@@ -2156,6 +2157,7 @@ class GustoViewModel: ViewModel() {
                                         if(region!=null) {
                                             val address = "${region.get(0).sidoName} ${region.get(0).sggName} ${region.get(0).emdongName}"
                                             _dong.value = region.get(0).admDrCode
+                                            _dongName = region.get(0).emdongName
                                             callback(1,address)
                                         }
                                         else callback(3,"에러 발생")

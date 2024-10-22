@@ -480,7 +480,7 @@ class MapFragment : Fragment() {
 
         //출력//
         Log.d("dong", "${dong}")
-        dong.text = gustoViewModel.dong.value// 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
+        dong.text = gustoViewModel._dongName// 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
         areaPick.text = gustoViewModel.dong.value // 사용자의 현재 동 정보를 가져와서 없 텍스트뷰에 설정
 
         noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적는 맛집 수
