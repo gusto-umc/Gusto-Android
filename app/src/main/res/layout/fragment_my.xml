@@ -187,7 +187,7 @@
                 android:layout_marginTop="10dp"
                 android:id="@+id/btn_profile_edit"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/background_radius_5"
                 android:backgroundTint="@color/gray_6"
                 android:fontFamily="@font/pretendard_semibold"
