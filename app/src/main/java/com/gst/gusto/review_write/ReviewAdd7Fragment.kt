@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,11 +47,12 @@ class ReviewAdd7Fragment : Fragment() {
             gustoViewModel.createReview() {result ->
                 when(result) {
                     1 -> {
+                        Log.d("hello1123", gustoViewModel.reviewReturnPos.toString())
                         activity.hideBottomNavigation(false)
                         if(gustoViewModel.reviewReturnPos == 0)
                             findNavController().popBackStack(R.id.storeDetailFragment,false)
                         else
-                            findNavController().popBackStack(R.id.review_fragment,false)
+                            findNavController().popBackStack(R.id.fragment_review,false)
                     }
                     else -> binding.btnEnd.isClickable = true
                 }
