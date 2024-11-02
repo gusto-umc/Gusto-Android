@@ -15,6 +15,7 @@ import androidx.activity.viewModels
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
+import com.gst.gusto.BuildConfig
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.ActivityMySettingBinding
 import com.gst.gusto.model.MyPublishData
@@ -68,6 +69,12 @@ class MySettingActivity : AppCompatActivity() {
             serviceButton.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://separate-shear-5ad.notion.site/12e7bd48282180c48533de000699973d?pvs=4"))
                 startActivity(intent)
+            }
+
+            instaWebBtn.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/gusto_app.official/"))
+                startActivity(intent)
+
             }
         }
     }
@@ -149,7 +156,9 @@ class MySettingActivity : AppCompatActivity() {
                     }
                 }
             }
-
+            version.setOnClickListener {
+                Toast.makeText(this@MySettingActivity, BuildConfig.VERSION_NAME, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
