@@ -1,9 +1,15 @@
 package com.gst.gusto.my.activity
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -38,12 +44,35 @@ class MySettingActivity : AppCompatActivity() {
         setToast()
         setContentView(binding.root)
         setReviewButton()
+        webViewClick()
     }
 
     override fun onPause() {
         setPublishData()
         super.onPause()
     }
+
+    private fun webViewClick() {
+        with(binding) {
+
+            noticeButton.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://separate-shear-5ad.notion.site/ff17744e8dec4d2795908c5af0cd4952"))
+                startActivity(intent)
+            }
+
+            FAQButton.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://separate-shear-5ad.notion.site/FAQ-12e7bd48282180238025c0f29d8c9ae8?pvs=4"))
+                startActivity(intent)
+            }
+
+            serviceButton.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://separate-shear-5ad.notion.site/12e7bd48282180c48533de000699973d?pvs=4"))
+                startActivity(intent)
+            }
+        }
+    }
+
+
 
     fun setReviewButton(){
         with(binding){
