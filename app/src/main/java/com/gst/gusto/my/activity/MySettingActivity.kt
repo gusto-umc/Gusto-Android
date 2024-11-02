@@ -70,6 +70,12 @@ class MySettingActivity : AppCompatActivity() {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://separate-shear-5ad.notion.site/12e7bd48282180c48533de000699973d?pvs=4"))
                 startActivity(intent)
             }
+
+            instaWebBtn.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/gusto_app.official/"))
+                startActivity(intent)
+
+            }
         }
     }
 
