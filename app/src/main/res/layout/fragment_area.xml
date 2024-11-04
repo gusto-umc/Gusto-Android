@@ -164,13 +164,6 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/main"
-                    android:fontFamily="@font/pretendard_semibold"
-                    android:textSize="20sp"
-                    android:text="저장한 맛집이 " />
 
                 <TextView
                     android:id="@+id/loc_rest_save_num"
@@ -178,27 +171,10 @@
                     android:layout_height="match_parent"
                     android:textColor="@color/main"
                     android:fontFamily="@font/pretendard_semibold"
-                    android:textSize="20sp"
-                    android:text="N" />
+                    android:textSize="20sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/main"
-                    android:fontFamily="@font/pretendard_semibold"
-                    android:textSize="20sp"
-                    android:text="개 있어요" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard_medium"
-                    android:textSize="12sp"
-                    android:textColor="@color/gray_navi"
-                    android:text="더보기" />
+
+
             </LinearLayout>
         </LinearLayout>
 
