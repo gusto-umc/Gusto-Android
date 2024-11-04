@@ -21,7 +21,7 @@ android {
         minSdk = 27
         targetSdk = 34
         versionCode = 8
-        versionName = "Gusto:1.0"
+        versionName = "Gusto:0.8"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "API_BASE", localProperties.getProperty("api_base"))
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", localProperties.getProperty("KAKAO_NATIVE_APP_KEY"))
