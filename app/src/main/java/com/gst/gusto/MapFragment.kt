@@ -492,7 +492,7 @@ class MapFragment : Fragment() {
 
         var save_rest = gustoViewModel.mapVisitedCnt + gustoViewModel.mapUnvisitedCnt //저장한 맛집 수
 
-        locRestSaveNum.text = save_rest.toString()
+        locRestSaveNum.text = "저장한 맛집이 ${save_rest}개 있어요"
 
         /*
         // 저장된 맛집의 수를 locRestSaveNum 텍스트뷰에 연결
