@@ -485,10 +485,10 @@ class MapFragment : Fragment() {
         areaPick.text = gustoViewModel.dong.value // 사용자의 현재 동 정보를 가져와서 없 텍스트뷰에 설정
 
         //noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적는 맛집 수
-        noVisNum.text = "${gustoViewModel.mapUnvisitedCnt}"
+        noVisNum.text = "방문해 본적 없는 맛집들이 ${gustoViewModel.mapUnvisitedCnt}개 있어요"
 
         //visNum.text = gustoViewModel.mapVisitedCnt.toString() //방문해본 적 있는 맛집 수
-        visNum.text = "${gustoViewModel.mapVisitedCnt}"
+        visNum.text = "방문해봤던 맛집들이 ${gustoViewModel.mapVisitedCnt}개 있어요"
 
         var save_rest = gustoViewModel.mapVisitedCnt + gustoViewModel.mapUnvisitedCnt //저장한 맛집 수
 

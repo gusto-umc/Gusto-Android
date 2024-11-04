@@ -223,13 +223,6 @@
                 android:layout_marginTop="4dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/gray_1"
-                    android:fontFamily="@font/pretendard_semibold"
-                    android:textSize="16sp"
-                    android:text="방문해 본적 없는 맛집들이 " />
 
                 <TextView
                     android:id="@+id/no_vis_num"
@@ -237,16 +230,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray_1"
                     android:fontFamily="@font/pretendard_semibold"
-                    android:textSize="16sp"
-                    android:text="N" />
+                    android:textSize="16sp"></TextView>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/gray_1"
-                    android:fontFamily="@font/pretendard_semibold"
-                    android:textSize="16sp"
-                    android:text="개 있습니다." />
             </LinearLayout>
 
             <HorizontalScrollView
@@ -289,29 +274,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/gray_1"
-                    android:fontFamily="@font/pretendard_semibold"
-                    android:textSize="16sp"
-                    android:text="방문해봤던 맛집들이 " />
-
-                <TextView
                     android:id="@+id/vis_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray_1"
                     android:fontFamily="@font/pretendard_semibold"
-                    android:textSize="16sp"
-                    android:text="N" />
+                    android:textSize="16sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/gray_1"
-                    android:fontFamily="@font/pretendard_semibold"
-                    android:textSize="16sp"
-                    android:text="개 있어요" />
+
             </LinearLayout>
             <HorizontalScrollView
                 android:layout_width="match_parent"
