@@ -293,4 +293,15 @@ class ReviewAddSearchFragment : Fragment() {
         gustoViewModel.mapKeepArray2.clear()
         gustoViewModel.mapKeepStoreIdArray2.clear()
     }
+
+    override fun onResume() {
+        super.onResume()
+        binding.apply {
+            edtReviewAddSearchbox.postDelayed({
+                edtReviewAddSearchbox.requestFocus()
+                val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.showSoftInput(edtReviewAddSearchbox, InputMethodManager.SHOW_IMPLICIT)
+            }, 300)
+        }
+    }
 }

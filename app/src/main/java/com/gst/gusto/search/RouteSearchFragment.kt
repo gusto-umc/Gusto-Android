@@ -281,6 +281,17 @@ class RouteSearchFragment : Fragment() {
         gustoViewModel.mapKeepStoreIdArray2.clear()
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.apply {
+            edtRouteSearchbox.postDelayed({
+                edtRouteSearchbox.requestFocus()
+                val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.showSoftInput(edtRouteSearchbox, InputMethodManager.SHOW_IMPLICIT)
+            }, 300)
+        }
+    }
+
 
 
 }

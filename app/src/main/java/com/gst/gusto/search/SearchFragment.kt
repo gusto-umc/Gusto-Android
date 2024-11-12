@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -60,6 +61,7 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         //변수
         val mKeepStoreAdpater = SearchStoreAdapter()
@@ -326,7 +328,13 @@ class SearchFragment : Fragment() {
         if(!gustoViewModel.keepFlag){
             binding.edtSearchSearchbox.text.clear()
         }
-
+        binding.apply {
+            edtSearchSearchbox.postDelayed({
+                edtSearchSearchbox.requestFocus()
+                val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.showSoftInput(edtSearchSearchbox, InputMethodManager.SHOW_IMPLICIT)
+            }, 300)
+        }
     }
 
 
