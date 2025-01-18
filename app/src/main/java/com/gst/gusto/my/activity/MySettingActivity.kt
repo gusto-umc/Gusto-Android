@@ -119,6 +119,7 @@ class MySettingActivity : AppCompatActivity() {
                 gustoViewModel.unregister { response ->
                     if(response==1) {
                         GustoApplication.prefs.setSharedPrefsBoolean("logout",true)
+                        GustoApplication.prefs.getSocialLogin().equals("")
                         val social = GustoApplication.prefs.getSharedPrefsString("social")
                         if(social=="naver"){
                             startNaverDeleteToken()
@@ -144,15 +145,12 @@ class MySettingActivity : AppCompatActivity() {
                 } else if(social=="kakao") {
                     logoutKakao()
                 }
+                GustoApplication.prefs.getSocialLogin().equals("")
                 gustoViewModel.logout { response ->
                     if(response==1) {
                         val intent = Intent(this@MySettingActivity, StartActivity::class.java)
                         startActivity(intent)
                         finish()
-
-                        Toast.makeText(this@MySettingActivity, "로그아웃 성공", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this@MySettingActivity, "로그아웃 실패", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

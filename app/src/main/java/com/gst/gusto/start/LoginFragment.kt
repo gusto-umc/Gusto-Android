@@ -136,6 +136,12 @@ class LoginFragment: Fragment() {
             requireActivity().finish()
         }
 
+        if(GustoApplication.prefs.getSocialLogin().equals("NAVER")) {
+            binding.btnNaver.callOnClick()
+        } else if(GustoApplication.prefs.getSocialLogin().equals("KAKAO")) {
+            binding.btnKakao.callOnClick()
+        }
+
 
         return binding.root
 
@@ -220,6 +226,8 @@ class LoginFragment: Fragment() {
             if (error != null) {
             } else if (user != null) {
                 Log.e("KAKAO", "사용자 정보 요청 성공 : $user")
+
+                GustoApplication.prefs.setSocialLogin("KAKAO")
                 LoginViewModel.providerId = user.id.toString()
                 LoginViewModel.provider = "KAKAO"
                 LoginViewModel.profileUrl = user.kakaoAccount?.profile?.profileImageUrl
@@ -250,13 +258,14 @@ class LoginFragment: Fragment() {
 
         val profileCallback = object : NidProfileCallback<NidProfileResponse> {
             override fun onSuccess(response: NidProfileResponse) {
-                Log.d("hellogogogo",response.toString())
                 val tmpId = response.profile?.id
                 val tmpPI:String? = response.profile?.profileImage
 
                 LoginViewModel.providerId = tmpId ?: ""
                 LoginViewModel.provider = "NAVER"
                 LoginViewModel.profileUrl = tmpPI
+
+                GustoApplication.prefs.setSocialLogin("NAVER")
 
                 LoginViewModel.login { resultCode ->
                     when (resultCode) {
