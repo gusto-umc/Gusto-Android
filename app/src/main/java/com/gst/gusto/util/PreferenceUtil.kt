@@ -51,4 +51,15 @@ class PreferenceUtil(context: Context) {
         val returnValue = prefs.getString(key, "")?:""
         return returnValue
     }
+
+    fun getSocialLogin() : String{
+        val returnValue = prefs.getString("SOCIAL_LOGIN_STATUS", "")?: ""
+        return returnValue
+    }
+    fun setSocialLogin(value : String) {
+        val editor = prefs.edit()
+        editor.putString("SOCIAL_LOGIN_STATUS", value)
+
+        editor.apply()
+    }
 }
