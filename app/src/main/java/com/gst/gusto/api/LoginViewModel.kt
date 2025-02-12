@@ -4,6 +4,8 @@ import android.util.Base64
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.gst.gusto.BuildConfig
+import com.gst.gusto.dto.ResponseRefreshToken
+import com.gst.gusto.util.GustoApplication
 import com.gst.gusto.util.util
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -240,6 +242,27 @@ class LoginViewModel: ViewModel() {
         // Decrypt the bytes and convert to a string
         val decryptedBytes = cipher.doFinal(encryptedBytes)
         return String(decryptedBytes, Charsets.UTF_8)
+    }
+
+    fun refreshToken(xToken : String, rToken: String,callback: (Boolean) -> Unit){
+        service.refreshToken(xToken, rToken)
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    //Log.d("thisistoken",xAuthToken+", "+refreshToken)
+                    if (response.isSuccessful) {
+                        accessToken = response.headers().get("X-Auth-Token") ?: ""
+                        refreshToken = response.headers().get("refresh-Token") ?: ""
+                        GustoApplication.prefs.setSharedPrefs(accessToken, refreshToken)
+                        callback(true)
+                    }
+                    else callback(false)
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e("LoginViewModel", "Failed to make the request", t)
+                    callback(false)
+                }
+            })
     }
 
 }

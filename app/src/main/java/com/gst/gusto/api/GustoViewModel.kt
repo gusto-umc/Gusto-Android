@@ -190,10 +190,9 @@ class GustoViewModel: ViewModel() {
                         xAuthToken = response.headers().get("X-Auth-Token")?:""
                         refreshToken = response.headers().get("refresh-Token")?:""
                         GustoApplication.prefs.setSharedPrefs(xAuthToken, refreshToken)
-                        Log.d("thisistoken2",xAuthToken)
                     } else if(response.code()==403) {
                         _tokenToastData.value = Unit
-                        refreshToken()
+                        //refreshToken()
                     }  else {
                         Log.e("LoginViewModel", "Unsuccessful response: ${response}")
                     }
