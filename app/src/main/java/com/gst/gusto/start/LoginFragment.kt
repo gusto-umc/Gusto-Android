@@ -136,12 +136,20 @@ class LoginFragment: Fragment() {
             requireActivity().finish()
         }
 
-        if(GustoApplication.prefs.getSocialLogin().equals("NAVER")) {
-            binding.btnNaver.callOnClick()
-        } else if(GustoApplication.prefs.getSocialLogin().equals("KAKAO")) {
-            binding.btnKakao.callOnClick()
-        }
 
+        val xAuthToken = GustoApplication.prefs.getSharedPrefs().first
+        val refreshToken = GustoApplication.prefs.getSharedPrefs().second
+
+        if(!xAuthToken.equals("")) {
+            LoginViewModel.refreshToken(xAuthToken, refreshToken) { result ->
+                if(result) {
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+            }
+
+        }
 
         return binding.root
 

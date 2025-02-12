@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +30,7 @@ import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentReviewDetailEditBinding
 import com.gst.gusto.review_write.adapter.ImageViewPagerAdapter
 import com.gst.gusto.util.util.Companion.setImage
+import kotlinx.coroutines.launch
 import java.io.File
 import java.time.LocalDate
 
@@ -141,7 +143,11 @@ class ReviewDetailEditFragment : Fragment() {
             //사진
             val imgFiles = ArrayList<File>()
             for(img in imageList) {
-                imgFiles.add(util.convertContentToFile(requireContext(),img))
+                lifecycleScope.launch {
+                    val downloadFile =util.downloadImageToFile(requireContext(), img.toString())
+                    if(downloadFile!=null)
+                        imgFiles.add(downloadFile)
+                }
                 Log.d("viewmodel Test", "1")
             }
             //메뉴
