@@ -7,6 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -57,5 +58,11 @@ interface LoginApi {
     @GET("auth/decoding")
     fun test(
         @Query("value") value: String
+    ): Call<ResponseBody>
+
+    @POST("auth/reissue-token") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+    fun refreshToken(
+        @Header("X-AUTH-TOKEN") access: String,
+        @Header("refresh-Token") refresh: String
     ): Call<ResponseBody>
 }

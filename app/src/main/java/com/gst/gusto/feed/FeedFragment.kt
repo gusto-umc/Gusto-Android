@@ -2,6 +2,7 @@ package com.gst.gusto.feed
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -110,8 +111,10 @@ class FeedFragment : Fragment() {
 
     fun pagingRecyclerview(){
         binding.recyclerView.addGridOnScrollEndListener {
+            adapter.clearItems()
+
             viewModel.onFeedScrolled()
-            viewModel.onFeedSearchScrolled()
+            //viewModel.onFeedSearchScrolled()
         }
         viewModel.scrollData.observe(viewLifecycleOwner){
             viewLifecycleOwner.lifecycleScope.launch {

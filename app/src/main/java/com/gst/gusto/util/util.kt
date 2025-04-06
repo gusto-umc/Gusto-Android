@@ -32,11 +32,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.gst.gusto.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
 import kotlin.concurrent.thread
 
 class util {
@@ -347,6 +353,30 @@ class util {
             outputStream.close()
 
             return outputFile
+        }
+        suspend fun downloadImageToFile(context: Context, imageUrl: String): File?{
+            return withContext(Dispatchers.IO) { // 네트워크 작업을 IO 스레드에서 실행
+                val client = OkHttpClient()
+                val request = Request.Builder().url(imageUrl).build()
+
+                try {
+                    val response = client.newCall(request).execute()
+                    if (!response.isSuccessful) throw IOException("HTTP error code: ${response.code}")
+
+                    val inputStream: InputStream? = response.body?.byteStream()
+                    val file = File(context.cacheDir, "downloaded_image.jpg")
+
+                    inputStream?.use { input ->
+                        FileOutputStream(file).use { output ->
+                            input.copyTo(output)
+                        }
+                    }
+                    file
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+            }
         }
 
         /**

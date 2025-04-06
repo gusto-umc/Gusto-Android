@@ -130,6 +130,8 @@ class FeedViewModel(
 
     fun onFeedSearchScrolled(
     ) {
+
+        Log.d("GadsssssssN", "Search")
         if (isFetching) return
         val previousItems: List<InstaReview> = _feedReview.value ?: emptyList()
 
@@ -150,6 +152,7 @@ class FeedViewModel(
     }
 
     fun onFeedScrolled() {
+        Log.d("GadsssssssN", "Scrolled")
         if (isFetching) return
         val previousItems: List<InstaReview> = _feedReview.value ?: emptyList()
 
@@ -157,7 +160,8 @@ class FeedViewModel(
             viewModelScope.launch {
                 isFetching = true
                 val newItems = getFeed()
-                _feedReview.value = previousItems + newItems
+                //_feedReview.value = previousItems + newItems       기존 Yein 코드
+                _feedReview.value = newItems                // Beoru 코드
                 isFetching = false
 
                 _scrollData.value = Unit
