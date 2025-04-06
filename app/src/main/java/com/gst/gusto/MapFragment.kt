@@ -129,35 +129,6 @@ class MapFragment : Fragment() {
         return view
     }
 
-
-// 카테고리 조회 및 칩 추가
-
-    /*
-    fun getMapCategoryAndAddChips(townName: String) {
-        gustoViewModel.getMapCategory(townName) { result ->
-            if (result == 0) {
-                // 카테고리 목록을 성공적으로 가져왔을 때
-                val categoryList = gustoViewModel.myMapCategoryList
-                Log.d("chip", "Category list: $categoryList")
-
-                if (categoryList != null && categoryList.isNotEmpty()) {
-                    for ((index, category) in categoryList.withIndex()) {
-                        addChip(category.categoryName, category.myCategoryId, index, category.categoryIcon)
-                        Log.d("chip", "칩 불러오기")
-                    }
-                } else {
-                    Log.d("chip", "Category list is empty or null")
-                    Log.e("getMapCategoryAndAddChips", "Category list is empty or null")
-                }
-            } else {
-                Log.d("chip", "Failed to get category list")
-                Log.e("getMapCategoryAndAddChips", "Failed to get category list")
-            }
-        }
-    }
-     */
-    // ViewModel 또는 Fragment에서 호출
-// Fragment 또는 Activity에서 호출
     private fun loadCategories(townName: String) {
         gustoViewModel.getMapCategory(townName) { resultCode ->
             when (resultCode) {
@@ -175,21 +146,6 @@ class MapFragment : Fragment() {
         }
     }
 
-
-
-    /*
-    private fun populateChips(categories: List<ResponseMapCategory>) {
-        chipGroup.removeAllViews() // 기존 칩 제거 (재로드하는 경우 필요)
-        for ((index, category) in categories.withIndex()) {
-            addChip(
-                text = category.categoryName,
-                chipId = category.myCategoryId,
-                chipIndex = index,
-                categoryIcon = category.categoryIcon
-            )
-        }
-    }
-       */
 
     private fun populateChips(categories: ArrayList<ResponseMapCategory>?) {
         val nonNullCategories = categories ?: return // null일 경우 함수 종료
@@ -634,6 +590,7 @@ class MapFragment : Fragment() {
                         // 카메라 움직임 종료 시 이벤트 호출
                         // 사용자 제스쳐가 아닌 코드에 의해 카메라가 움직이면 GestureType 은 Unknown
                         Log.e(TAG, "cur loc : "+cameraPosition.toString())
+                        kakaoMap.zoomLevel
                         gustoViewModel.getNewRegionInfo(cameraPosition.position.longitude, cameraPosition.position.latitude,
                             BuildConfig.SGIS_CONSUMER_KEY,  BuildConfig.SGIS_CONSUMER_SECRET) { result, address ->
                             when(result) {

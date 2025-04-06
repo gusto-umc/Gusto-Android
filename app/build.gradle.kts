@@ -20,8 +20,8 @@ android {
         applicationId = "com.gst.gusto"
         minSdk = 27
         targetSdk = 34
-        versionCode = 11
-        versionName = "Gusto:1.1"
+        versionCode = 12
+        versionName = "Gusto:1.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "API_BASE", localProperties.getProperty("api_base"))
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", localProperties.getProperty("KAKAO_NATIVE_APP_KEY"))
@@ -133,4 +133,7 @@ dependencies {
 
     // android version updare
     implementation("com.google.android.play:app-update-ktx:2.1.0")
+
+    //Flexboxlayout 추가
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
 }
