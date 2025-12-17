@@ -183,6 +183,8 @@ class GroupRouteMapFragment : Fragment() {
                     }
                     kakaoMap.setOnLabelClickListener { kakaoMap, layer, label ->
                         binding.vpSlider.visibility = View.VISIBLE
+                        binding.fabList.visibility = View.INVISIBLE
+                        binding.fabEdit.visibility = View.INVISIBLE
                         if (label != null) {
                             Log.d(TAG, label.tag.toString())
                             binding.vpSlider.currentItem = (label.tag as Int) - 1
@@ -190,6 +192,8 @@ class GroupRouteMapFragment : Fragment() {
                     }
                     kakaoMap.setOnMapClickListener { kakaoMap, position, screenPoint, poi ->
                         binding.vpSlider.visibility = View.GONE
+                        binding.fabList.visibility = View.VISIBLE
+                        binding.fabEdit.visibility = View.VISIBLE
                     }
 
                     viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -241,6 +245,7 @@ class GroupRouteMapFragment : Fragment() {
                                        store.longitude,
                                        data.storeName,
                                        data.address,
+                                       store.contact,
                                        false
                                    ))
                                }
@@ -281,6 +286,7 @@ class GroupRouteMapFragment : Fragment() {
                 data.longitude,
                 data.storeName,
                 data.address,
+                data.call,
                 data.bookMark
             ))
         }

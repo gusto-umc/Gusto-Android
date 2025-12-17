@@ -62,4 +62,9 @@ class PreferenceUtil(context: Context) {
 
         editor.apply()
     }
+    fun clearToken(tokenName : String) {
+        val editor = prefs.edit()
+        editor.remove(tokenName)
+        editor.apply()
+    }
 }

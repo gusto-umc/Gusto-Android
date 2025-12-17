@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
@@ -33,16 +34,16 @@ class StoreEditAdapter : ListAdapter<PResponseStoreListItem, StoreEditAdapter.Vi
                 //리뷰 사진 3개
                 if(!item.img1.isNullOrBlank()){
                     util.setImage(binding.ivItemStoreEditImg1, item.img1, mContext!!)
-                }else{binding.ivItemStoreEditImg1.visibility = View.INVISIBLE}
+                }/*else{binding.ivItemStoreEditImg1.visibility = View.INVISIBLE}
                 if(!item.img2.isNullOrBlank()){util.setImage(binding.ivItemStoreEditImg2, item.img2, mContext!!)
                 }else{binding.ivItemStoreEditImg2.visibility = View.INVISIBLE}
                 if(!item.img3.isNullOrBlank()){util.setImage(binding.ivItemStoreEditImg3, item.img3, mContext!!)
-                }else{binding.ivItemStoreEditImg3.visibility = View.INVISIBLE}
+                }else{binding.ivItemStoreEditImg3.visibility = View.INVISIBLE}*/
 
             }
             data = item
         }
-        val itemLayout : ConstraintLayout = binding.layoutItemStoreEdit
+        val itemLayout : LinearLayout = binding.layoutItemStoreEdit
         val cb : CheckBox = binding.cbStoreEdit
 
 

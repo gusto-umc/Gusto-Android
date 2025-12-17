@@ -1,7 +1,6 @@
 package com.gst.gusto.api
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serial
 import java.util.Date
 
 
@@ -42,7 +41,9 @@ data class RouteList(
     @SerializedName("address") val address : String?,
     // 루트 지도 조회
     @SerializedName("longitude") val longitude : Double?,
-    @SerializedName("latitude") val latitude : Double?
+    @SerializedName("latitude") val latitude : Double?,
+
+    @SerializedName("contact") val contact : String?="",
 )
 
 // 루트 상세 조회
@@ -219,6 +220,11 @@ data class ResponseAllCategory(
     @SerializedName("pinCnt") var pinCnt : Int
 )
 
+// 찜 수정 - store
+data class categoryId(
+    @SerializedName("myCategoryId") val myCategoryId : Int
+)
+
 //가게 찜 추가
 data class RequestPin(
     @SerializedName("storeId") val storeId : Long
@@ -304,7 +310,9 @@ data class ResponseSavedStoreData(
     @SerializedName("categoryName") val categoryName : String?,
     @SerializedName("storeName") val storeName : String,
     @SerializedName("address") val address : String,
-    @SerializedName("reviewImg") val reviewImg : String?
+    @SerializedName("reviewImg") val reviewImg : String?,
+    @SerializedName("distance") val distance : String?
+
 )
 //리뷰 상세
 data class ResponseMyReview(
@@ -327,12 +335,13 @@ data class ResponseMyReview2(
 //리뷰 수정완 -> 확인 완
 data class RequestMyReview(
     @SerializedName("menuName") val menuName : String?,
-    @SerializedName("taste") val taste : Int,
+    @SerializedName("taste") val taste : Int,/*
     @SerializedName("spiciness") val spiciness : Int?,
     @SerializedName("mood") val mood : Int?,
     @SerializedName("toilet") val toilet : Int?,
-    @SerializedName("parking") val parking : Int?,
+    @SerializedName("parking") val parking : Int?,*/
     @SerializedName("comment") val comment : String?,
+    @SerializedName("hashTagId") val hashTagId : List<Long>?,
     @SerializedName("publicCheck") val publicCheck : Boolean
 )
 
@@ -371,7 +380,10 @@ data class ResponseSearch3(
     @SerializedName("storeName") val storeName : String,
     @SerializedName("categoryString") val categoryString : String?,
     @SerializedName("reviewImg") val reviewImg : String?,
-    @SerializedName("address") val address : String
+    @SerializedName("address") val address : String,
+    @SerializedName("longitude") val longitude : Double,
+    @SerializedName("latitude") val latitude : Double,
+    @SerializedName("distance") var distance : Int,
 )
 
 
@@ -568,3 +580,4 @@ data class StoreData(
     @SerializedName("category") val category: String,
     @SerializedName("reviewImg3") val reviewImg3: List<String>
 )
+

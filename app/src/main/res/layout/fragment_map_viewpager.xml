@@ -8,7 +8,43 @@
     <com.kakao.vectormap.MapView
         android:id="@+id/kakao_map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/list_view_btn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="bottom|right"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="18dp"
+                android:background="@drawable/background_radius_15"
+                android:elevation="4dp"
+                android:padding="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/fab_list_img" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="26dp"
+                android:paddingHorizontal="10dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
+    </com.kakao.vectormap.MapView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,39 +101,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
-            <ImageButton
-                android:id="@+id/list_view_btn"
-                android:layout_marginBottom="18dp"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="bottom|right"
-                android:layout_marginRight="30dp"
-                android:background="@drawable/background_radius_15"
-                android:elevation="4dp"
-                android:padding="12dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/fab_list_img" />
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/vp_slider"
-                android:visibility="visible"
-                android:layout_marginBottom="26dp"
-                android:layout_width="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp" />
-        </LinearLayout>
     </LinearLayout>
 
 

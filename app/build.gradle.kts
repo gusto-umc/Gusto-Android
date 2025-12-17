@@ -136,4 +136,7 @@ dependencies {
 
     //Flexboxlayout 추가
     implementation("com.google.android.flexbox:flexbox:3.0.0")
+
+    // Dots Indicator
+    implementation("com.tbuonomo:dotsindicator:4.3")
 }

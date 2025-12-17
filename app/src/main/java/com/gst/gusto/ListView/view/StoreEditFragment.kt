@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gst.gusto.ListView.adapter.CategorySelectBottomSheetDialog
 import com.gst.gusto.ListView.adapter.StoreEditAdapter
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
@@ -53,6 +54,13 @@ class StoreEditFragment : Fragment() {
         binding.tvStoreEditCategory.text = gustoViewModel.selectedCategoryInfo!!.categoryName
 
 
+        /**
+         * 2. 카테고리 데이터 연결
+         * viewmodel의 selectedCategoryInfo 변수에서 가져오기
+         */
+        binding.ivStoreCategory.setImageResource(gustoViewModel.findIconResource(gustoViewModel.selectedCategoryInfo!!.categoryIcon))
+        binding.tvStoreCategoryName.text = gustoViewModel.selectedCategoryInfo!!.categoryName
+        binding.tvStoreCount.text = "${gustoViewModel.selectedCategoryInfo!!.pinCnt}개"
 
 
         /**
@@ -66,6 +74,9 @@ class StoreEditFragment : Fragment() {
         binding.rvStoreEdit.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         var hasNext = false
+
+        var order = "latest"
+        var lastStoreName : String? = null
 
         gustoViewModel.getPPMyStore(gustoViewModel. selectedCategoryInfo!!.myCategoryId, null){
                 result, getHasNext ->
@@ -92,7 +103,7 @@ class StoreEditFragment : Fragment() {
 
                 // 페이징 처리
                 if(rvPosition == totalCount && hasNext) {
-                    gustoViewModel.getPPMyStore(gustoViewModel.selectedCategoryInfo!!.myCategoryId, gustoViewModel.myAllStoreList.last().pinId) { result, getHasNext ->
+                    gustoViewModel.getPPMyStore(gustoViewModel.selectedCategoryInfo!!.myCategoryId, gustoViewModel.myAllStoreList.last().pinId, sort = order, storeName = lastStoreName) { result, getHasNext ->
                         hasNext = getHasNext
                         when(result) {
                             1 -> {
@@ -133,7 +144,10 @@ class StoreEditFragment : Fragment() {
                 findNavController().popBackStack()
             }
         }
-
+        binding.fabStoreEditMove.setOnClickListener{
+            val bottomSheet = CategorySelectBottomSheetDialog(gustoViewModel,requireView())
+            bottomSheet.show(parentFragmentManager, bottomSheet.tag)
+        }
         /**
          * 4. 전체 선택
          */
@@ -187,34 +201,59 @@ class StoreEditFragment : Fragment() {
             else{
 
             }
-//            if(gustoViewModel.allFlag.value == "all"){
-//                //전체선택
-//                binding.cbStoreEditAll.isChecked = true
-//                val handler = Handler(Looper.getMainLooper())
-//                handler.postDelayed({
-//                    gustoViewModel.selectedStoreIdList.clear()
-//                    for(i in gustoViewModel.myAllStoreList){
-//                        gustoViewModel.selectedStoreIdList.add(i.pinId)
-//                    }
-//                    mStoreEditAdapter.notifyDataSetChanged()
-//                }, 10)
-//
-//
-//
-//            }
-//            else if(gustoViewModel.allFlag.value == "false"){
-//                binding.cbStoreEditAll.isChecked = false
-//            }
-//            else{
-//                //전체 해제
-//                binding.cbStoreEditAll.isChecked = false
-//                val handler = Handler(Looper.getMainLooper())
-//                handler.postDelayed({
-//                    gustoViewModel.selectedStoreIdList.clear()
-//                    mStoreEditAdapter.notifyDataSetChanged()
-//                }, 10)
-//            }
+
         })
+
+        fun loadStore(){
+            gustoViewModel.myAllStoreList.clear()
+            gustoViewModel.getPPMyStore(gustoViewModel. selectedCategoryInfo!!.myCategoryId, null, sort = order){
+                    result, getHasNext ->
+                when(result){
+                    1 -> {
+                        //success
+                        mStoreEditAdapter?.submitList(gustoViewModel.myAllStoreList)
+                        hasNext = getHasNext
+                        mStoreEditAdapter?.notifyDataSetChanged()
+                        binding.tvStoreCount.text = "${gustoViewModel.myAllStoreList.size}개"
+
+                        if(order =="storeName_desc" || order == "storeName_asc"){
+                            lastStoreName = gustoViewModel.myAllStoreList.last().storeName
+                        }
+                        else if(order == "latest" || order == "oldest"){
+                            lastStoreName = null
+                        }
+                    }
+                    else-> {
+                        Toast.makeText(requireContext(), "서버와의 연결 불안정r", Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+            }
+        }
+
+        binding.layoutStoreOrder.setOnClickListener {
+            when(binding.tvListviewOrder.text){
+                "ㄱ 부터" -> {
+                    binding.tvListviewOrder.text = "ㅎ 부터"
+                    order = "storeName_desc"
+
+                }
+                "ㅎ 부터" -> {
+                    binding.tvListviewOrder.text = "최신순"
+                    order = "latest"
+
+                }
+                "최신순" -> {
+                    binding.tvListviewOrder.text = "오래된순"
+                    order = "oldest"
+                }
+                else -> {
+                    binding.tvListviewOrder.text = "ㄱ 부터"
+                    order = "storeName_asc"
+                }
+            }
+            loadStore()
+        }
 
     }
 

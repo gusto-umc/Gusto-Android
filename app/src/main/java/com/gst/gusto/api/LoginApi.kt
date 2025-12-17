@@ -60,7 +60,7 @@ interface LoginApi {
         @Query("value") value: String
     ): Call<ResponseBody>
 
-    @POST("auth/reissue-token") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
+    @POST("auth/reissue-token")
     fun refreshToken(
         @Header("X-AUTH-TOKEN") access: String,
         @Header("refresh-Token") refresh: String

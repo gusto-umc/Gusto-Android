@@ -29,6 +29,7 @@ import com.gst.gusto.MainActivity
 import com.gst.gusto.R
 import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.api.ResponseMapCategory
+import com.gst.gusto.api.ResponseSavedStoreData
 import com.gst.gusto.databinding.FragmentMapBinding
 import com.gst.gusto.list.adapter.RouteViewPagerAdapter
 import com.gst.gusto.util.mapUtil
@@ -48,28 +49,18 @@ class MapFragment : Fragment() {
 
 
     lateinit var binding: FragmentMapBinding
-
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-
-    private val TAG = "SOL_LOG"
     private val gustoViewModel : GustoViewModel by activityViewModels()
-
     val markerList = ArrayList<MarkerItem>()
-
     private var isVisited:Boolean? = null
-
     lateinit var chipGroup: ChipGroup
     private var currentChips = ArrayList<Int>()
-
     // 이전에 활성화된 칩을 저장하는 변수
     private var previousChipId: Int = -1
-
     lateinit var kakaoMap: KakaoMap
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private var curLatitude = 0.0
+    private var curLongitude = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,13 +69,9 @@ class MapFragment : Fragment() {
         binding = FragmentMapBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        // BottomSheet 설정
         val bottomSheet = view.findViewById<LinearLayout>(R.id.bottomSheet)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
-        ////    카테고리    ////
-
-        // 버튼 클릭 리스너 설정
         val totalBtn = view.findViewById<Chip>(R.id.total_btn)
         totalBtn.setOnClickListener {
             // 현재 버튼의 텍스트를 가져옴
@@ -106,8 +93,6 @@ class MapFragment : Fragment() {
             }
 
             reGetMapMarkers()
-
-            // 변경된 텍스트 설정
             totalBtn.text = nextText
         }
 
@@ -117,19 +102,17 @@ class MapFragment : Fragment() {
                 mapUtil.MAPPERMISSIONS,
                 mapUtil.LOCATION_PERMISSION_REQUEST_CODE
             )
-        } else initMap()
+        } else {
+            initMap()
+        }
 
-
-        // 칩 그룹 초기화
         chipGroup = binding.fragmentMapMainScreen.chipGroup
-
-
-
 
         return view
     }
 
     private fun loadCategories(townName: String) {
+        Log.d("dsadsasda", townName)
         gustoViewModel.getMapCategory(townName) { resultCode ->
             when (resultCode) {
                 0 -> {
@@ -137,16 +120,9 @@ class MapFragment : Fragment() {
                     val categories = gustoViewModel.myMapCategoryList
                     populateChips(categories)
                 }
-                1 -> {
-                    // 에러 처리
-                    Log.e("LoadCategories", "Error loading categories")
-                    // 사용자에게 오류를 알리거나 UI 업데이트
-                }
             }
         }
     }
-
-
     private fun populateChips(categories: ArrayList<ResponseMapCategory>?) {
         val nonNullCategories = categories ?: return // null일 경우 함수 종료
         chipGroup.removeAllViews() // 기존 칩 제거 (재로드하는 경우 필요)
@@ -160,10 +136,6 @@ class MapFragment : Fragment() {
         }
     }
 
-
-
-
-    // 칩 추가
     private fun addChip(text: String, chipId: Int, chipIndex: Int, categoryIcon: Int) {
         val chip = Chip(requireContext())
 
@@ -182,103 +154,45 @@ class MapFragment : Fragment() {
         chip.setChipIconTintResource(R.color.main_C)
         chip.setChipIconResource(gustoViewModel.findIconResource(categoryIcon))
 
-        Log.d("chip","칩 생성")
-
         //칩그룹에 대한 클릭리스너
         chip.setOnClickListener {
             handleChipClick(chip)
-            Log.d("chip", "$chipId")
         }
         chipGroup.addView(chip, chipIndex)
     }
 
     // 클릭된 칩의 처리를 담당하는 함수
     private fun handleChipClick(chip: Chip) {
-        Log.d("chip", "칩 클릭 이벤트 발생")
-
-        // 클릭된 칩의 ID
         val clickedChipId = chip.id
 
-        // 클릭된 칩이 이미 활성화된 상태인지 확인
         val isClickedChipActive = !chip.isChecked
 
-        // 다른 칩이 활성화된 상태인 경우 이전 칩을 비활성화
-        /*if (!isClickedChipActive && previousChipId != -1) {
-            Log.d("chip","이전 칩 비활성화 ${previousChipId}")
-            val previousChip = chipGroup.findViewById<Chip>(previousChipId)
-            previousChip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chip_disabled))
-            previousChip.setChipBackgroundColorResource(R.color.white)
-            previousChip.setChipIconTintResource(R.color.main_C)
-        }*/
-
-        // 클릭된 칩이 이미 활성화된 상태라면 비활성화
         if (isClickedChipActive) {
-            // 클릭된 칩의 색상 변경 (비활성화 상태로 변경)
-            Log.d("chip", "클릭된 칩 비활성화 ${chip.id}")
             chip.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.chip_disabled))
             chip.setChipBackgroundColorResource(R.color.white)
             chip.setChipIconTintResource(R.color.main_C)
-            // 클릭된 칩의 ID를 초기화하여 비활성화 상태로 설정
             currentChips.remove(clickedChipId)
         } else {
-            // 클릭된 칩을 활성화
-            Log.d("chip", "활성화 ${chip.id}")
             chip.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
             chip.setChipBackgroundColorResource(R.color.main_C)
             chip.setChipIconTintResource(R.color.white)
-            // 클릭된 칩의 ID를 이전 칩의 ID로 저장
             currentChips.add(clickedChipId)
         }
-
 
         reGetMapMarkers()
     }
 
-    // 전체 칩이 비활성화되었는지 여부를 확인하는 함수
-    private fun isAllChipsDisabled(): Boolean {
-        // 모든 칩을 확인하여 비활성화된 칩이 있는지 검사
-        for (i in 0 until chipGroup.childCount) {
-            val chip = chipGroup.getChildAt(i) as Chip
-            if (chip.isEnabled) {
-                return false
-            }
-        }
-        return true
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         gustoViewModel.changeDong("")
         //목록 보기 클릭 리스너 - 민디
         binding.listViewBtn.setOnClickListener {
-            //Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewFragment)
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_categoryFragment)
-        }
-
-        /*Tabbar로 전체 수정
-        *더보기 페이지로 이동 후 5개씩 페이징 처리
-         */
-
-        binding.fragmentArea.firstVisit.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_savetabFragment)
         }
 
         // 카테고리 선택 초기화
         currentChips.clear()
-
-        /**
-         * 방문 o 클릭 리스너 -> 보완 예정
-
-        binding.fragmentArea.firstVisit.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
-        }
-        /**
-         * 방문 x 클릭 리스너 -> 보완 예정
-         */
-        binding.fragmentArea.prevVisited.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_mapListViewSaveFragment2)
-        }
-        */
 
 
         /**
@@ -297,57 +211,27 @@ class MapFragment : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_fragment_map_to_reviewAddSearch)
         }
 
-        /**
-         * 카테고리 전체 조회 - mindy
-         */
+        val knownStore = binding.fragmentArea.knownStore
+        val newStore = binding.fragmentArea.newStore
 
+        knownStore.isSelected = true
+        updateButtonStyle()
 
-        // 나이대로 표현하기
-        fun getAgeGroupFromAge(ageText: String): String {
-            val age = ageText.toIntOrNull() ?: return "나이 정보가 올바르지 않습니다"
-
-            return when (age) {
-                in 10..19 -> "10"
-                in 20..29 -> "20"
-                in 30..39 -> "30"
-                in 40..49 -> "40"
-                in 50..59 -> "50"
-                in 60..69 -> "60"
-                in 70..79 -> "70"
-                in 80..89 -> "80"
-                in 90..99 -> "90"
-                else -> "기타 연령" // 특정 범위에 속하지 않는 경우
+        knownStore.setOnClickListener {
+            if (!it.isSelected) {
+                knownStore.isSelected = true
+                newStore.isSelected = false
+                updateButtonStyle()
             }
         }
 
-        binding.fragmentArea.apply {
-
-            //사용자에 대한 정보 //
-
-            val user_age = binding.root.findViewById<TextView>(R.id.user_age) //화면에 출력되는 나이값
-            val age = binding.root.findViewById<TextView>(R.id.ageBtn) //아직 없길래 임의 값.. 불러오기
-            //val ageGroup = getAgeGroupFromAge(age) //나이대로 변환
-            //user_age.text = ageGroup
-
-            //성별에 대한 정보 불러오기 //
-
-        // 사용자에 대한 정보 가져오기
-            gustoViewModel.getUserProfile("my") { result, data ->
-                when (result) {
-                    1 -> {
-                        if (data != null) {
-                            // 사용자 정보가 성공적으로 가져온 경우
-                            userName1.text = data.nickname
-                            userName2.text = data.nickname
-                            userName3.text = data.nickname
-
-                        }
-                    }
-                }
+        newStore.setOnClickListener {
+            if (!it.isSelected) {
+                newStore.isSelected = true
+                knownStore.isSelected = false
+                updateButtonStyle()
             }
-
         }
-
       
 
         // 드래그 리스너 설정
@@ -379,40 +263,49 @@ class MapFragment : Fragment() {
                 // 드래그 중일 때 호출됩니다.
                 // slideOffset은 -1(바텀 시트 완전히 닫힘)부터 1(바텀 시트 완전히 열림)까지의 값입니다.
                 // 원하는 동작을 수행하세요.
+                binding.vpSlider.visibility = View.GONE
             }
         })
 
     }
+    private fun updateButtonStyle() {
+        // "아는 가게에요!" 버튼 스타일
+        binding.fragmentArea.knownStore.apply {
+            if (isSelected) {
+                setTextColor(ContextCompat.getColor(context, R.color.main_C))
+                background = ContextCompat.getDrawable(context, R.drawable.background_radius_20_stroke_2_fill_white)
+                binding.fragmentArea.recyclerViewVisitedRest.visibility = View.VISIBLE
+                binding.fragmentArea.recyclerViewNoVisitedRest.visibility = View.GONE
+            } else {
+                setTextColor(ContextCompat.getColor(context, R.color.gray_3))
+                background.alpha = 0
+            }
+        }
+
+        // "NEW PLACE" 버튼 스타일
+        binding.fragmentArea.newStore.apply {
+            if (isSelected) {
+                setTextColor(ContextCompat.getColor(context, R.color.main_C))
+                background = ContextCompat.getDrawable(context, R.drawable.background_radius_20_stroke_2_fill_white)
+                binding.fragmentArea.recyclerViewVisitedRest.visibility = View.GONE
+                binding.fragmentArea.recyclerViewNoVisitedRest.visibility = View.VISIBLE
+            } else {
+                setTextColor(ContextCompat.getColor(context, R.color.gray_3))
+                background = ContextCompat.getDrawable(context, R.drawable.background_radius_20)
+                background.alpha = 0
+            }
+        }
+    }
     override fun onResume() {
         super.onResume()
         binding.kakaoMap.resume()
-
-        //저장 맛집
-        var locRestSaveNum = binding.fragmentArea.locRestSaveNum
-
-        //방문 맛집
-        var noVisNum = binding.fragmentArea.noVisNum
-        var visNum = binding.fragmentArea.visNum
-
-
-        /**
-         * 저장된 맛집 조회 - mindy
-         * 현재 카테고리 선택이 구현 보류로 categoryId에 null 넣고 추후 보완 예정
-         * live data observe
-         */
-        //리스트 별로 저장
-        // 방문X 리스트 저장 변수 : gustoViewModel.mapUnvisitedList
-        // 방문X 개수 : gustoViewModel.mapUnvisitedCnt
-        // 방문 O 리스트 저장 변수 : gustoViewModel.mapVisitedList
-        // 방문o 개수 : gustoViewModel.mapVisitedCnt
-        //닉네임 변수 : gustoViewModel.userNickname
 
     }
 
 
 
     override fun onPause() {
-        //binding.kakaoMap.removeAllViews()
+        binding.kakaoMap.removeAllViews()
         super.onPause()
         binding.kakaoMap.pause()
     }
@@ -420,128 +313,45 @@ class MapFragment : Fragment() {
     //현재 동을 불러오기//
     //현재 동에 대한 작업 불러오기//
     fun refindDong(){
-
-        //동
-        var dong = binding.fragmentArea.dong
-        var areaPick = binding.fragmentArea.areaPick
-
-        //저장 맛집
-        var locRestSaveNum = binding.fragmentArea.locRestSaveNum
-
-        //방문 맛집
-        var noVisNum = binding.fragmentArea.noVisNum
-        var visNum = binding.fragmentArea.visNum
-
-
-
-
-        //출력//
-        Log.d("dong", "${dong}")
-        dong.text = gustoViewModel._dongName// 사용자의 현재 동 정보를 가져와서 텍스트뷰에 설정
-        areaPick.text = gustoViewModel.dong.value // 사용자의 현재 동 정보를 가져와서 없 텍스트뷰에 설정
-
-        //noVisNum.text = gustoViewModel.mapUnvisitedCnt.toString() //방문해본 적는 맛집 수
-        noVisNum.text = "방문해 본적 없는 맛집들이 ${gustoViewModel.mapUnvisitedCnt}개 있어요"
-
-        //visNum.text = gustoViewModel.mapVisitedCnt.toString() //방문해본 적 있는 맛집 수
-        visNum.text = "방문해봤던 맛집들이 ${gustoViewModel.mapVisitedCnt}개 있어요"
-
-        var save_rest = gustoViewModel.mapVisitedCnt + gustoViewModel.mapUnvisitedCnt //저장한 맛집 수
-
-        locRestSaveNum.text = "저장한 맛집이 ${save_rest}개 있어요"
-
-        /*
-        // 저장된 맛집의 수를 locRestSaveNum 텍스트뷰에 연결
-        gustoViewModel.getSavedStores("${dong}", null) { result ->
-            when (result) {
-                0 -> {
-                    // 성공적으로 저장된 맛집 정보를 가져온 경우
-                    val savedStoresCount = gustoViewModel.savedStoreIdList.size
-                    Log.d("save_rest","${savedStoresCount}")
-                    locRestSaveNum.text = savedStoresCount.toString()
-                }
-                else -> {
-                    // 저장된 맛집 정보를 가져오지 못한 경우
-                    locRestSaveNum.text = "0"
-                    Toast.makeText(context, "저장된 맛집 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-         */
-
-
-
         //사진 불러와서 리사이클러뷰와 연결해 담기//
-        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        val layoutManager2 = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        val layoutManager3 = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        val layoutManager2 = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         val recyclerView: RecyclerView = binding.fragmentArea.recyclerViewNoVisitedRest
         val recyclerView2: RecyclerView = binding.fragmentArea.recyclerViewVisitedRest
-        val recyclerView3: RecyclerView = binding.fragmentArea.recyclerViewAgeNoVisitedRest
 
         // 아이템 담기
-        val itemList_unvisit = ArrayList<String>()
-        val itemList_visit = ArrayList<String>()
-        val itemList_unvisit_age = ArrayList<String>() //나이대 별로 pick
-
-        val itemList = ArrayList<String>()
-
-
-        val unvisitedStores = gustoViewModel.mapUnvisitedList
-        val visitedStores = gustoViewModel.mapVisitedList
-        //val unvisitedStores_age = gustoViewModel.mapVisitedList
+        val itemList_unvisit = ArrayList<ResponseSavedStoreData>()
+        val itemList_visit = ArrayList<ResponseSavedStoreData>()
 
         // 방문 X - 각 가게에 대한 정보
         gustoViewModel.mapUnvisitedList?.let { unvisitedStores ->
-            Log.d("log_img","방문 안 한 가게 이미지")
             for (store in unvisitedStores) {
-                val reviewImg = store.reviewImg
-                Log.d("log_img","방문 X 가게 이미지 ${reviewImg}")
-                reviewImg?.let { itemList_unvisit.add(it) } // null이 아닌 경우에만 itemList_unvisit에 추가
+                Log.d("log_img",store.toString())
+                itemList_unvisit.add(store)
             }
         }
 
         // 방문 O - 각 가게에 대한 정보
         gustoViewModel.mapVisitedList?.let { visitedStores ->
-            Log.d("log_img","방문 가게 이미지")
             for (store in visitedStores) {
-                val reviewImg = store.reviewImg
-                Log.d("img","${reviewImg}")
-                reviewImg?.let { itemList_visit.add(it) } // null이 아닌 경우에만 itemList에 추가
+                Log.d("log_img",store.toString())
+                itemList_visit.add(store)
             }
         }
 
-        // 이미지 리소스 URL
-        val imageResource = "https://www.urbanbrush.net/web/wp-content/uploads/edd/2023/02/urban-20230228092421948485.jpg"
-        itemList.add(imageResource)
-        itemList.add(imageResource)
-        itemList.add(imageResource)
-        itemList.add(imageResource)
-        itemList.add(imageResource)
-        itemList.add(imageResource)
-        itemList.add(imageResource)
-        itemList.add(imageResource)
-
-
-        val adapter = MapRecyclerAdapter(itemList_unvisit)
-        val adapter2 = MapRecyclerAdapter(itemList_visit)
-        val adapter3 = MapRecyclerAdapter(itemList)
-        //val adapter3 = MapRecyclerAdapter(itemList_unvisit_age)
-
+        val adapter = MapRecyclerAdapter(itemList_unvisit,requireActivity() as MainActivity)
+        val adapter2 = MapRecyclerAdapter(itemList_visit, requireActivity() as MainActivity)
         recyclerView.adapter = adapter
         recyclerView2.adapter = adapter2
-        recyclerView3.adapter = adapter3
 
         // 레이아웃 매니저 설정
         recyclerView.layoutManager = layoutManager
         recyclerView2.layoutManager = layoutManager2
-        recyclerView3.layoutManager = layoutManager3
 
         // 스크롤바 숨기기
         recyclerView.isVerticalScrollBarEnabled = false
         recyclerView2.isVerticalScrollBarEnabled = false
-        recyclerView3.isVerticalScrollBarEnabled = false
 
 
     }
@@ -575,28 +385,33 @@ class MapFragment : Fragment() {
             Log.d("CurrentLocation", "Latitude: ${location.latitude}, Longitude: ${location.longitude}")
             binding.kakaoMap.start(object : MapLifeCycleCallback() {
                 override fun onMapDestroy() {
-                    Log.e(TAG, "onMapDestroy")
                 }
 
                 override fun onMapError(error: Exception?) {
-                    Log.e(TAG, "onMApError", error)
+
+                }
+
+                override fun onMapResumed() {
+                    super.onMapResumed()
 
                 }
 
             }, object : KakaoMapReadyCallback() {
                 override fun onMapReady(getKakaoMap: KakaoMap) {
                     kakaoMap = getKakaoMap
+
                     kakaoMap.setOnCameraMoveEndListener { kakaoMap, cameraPosition, gestureType ->
                         // 카메라 움직임 종료 시 이벤트 호출
                         // 사용자 제스쳐가 아닌 코드에 의해 카메라가 움직이면 GestureType 은 Unknown
-                        Log.e(TAG, "cur loc : "+cameraPosition.toString())
-                        kakaoMap.zoomLevel
+                        Log.e("ERR", "cur loc : "+cameraPosition.toString())
                         gustoViewModel.getNewRegionInfo(cameraPosition.position.longitude, cameraPosition.position.latitude,
                             BuildConfig.SGIS_CONSUMER_KEY,  BuildConfig.SGIS_CONSUMER_SECRET) { result, address ->
                             when(result) {
                                 1 -> {
-                                    Log.d(TAG, "gustoViewModel.dong.value")
-                                    binding.fragmentArea.userLoc.text = address
+                                    curLatitude = cameraPosition.position.latitude
+                                    curLongitude = cameraPosition.position.longitude
+
+                                    binding.fragmentArea.userLocation.text = address
                                     loadCategories(gustoViewModel.dong.value!!)
                                     gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
                                             result ->
@@ -624,10 +439,13 @@ class MapFragment : Fragment() {
                     }
                     kakaoMap.setOnLabelClickListener { kakaoMap, layer, label ->
                         binding.vpSlider.visibility = View.VISIBLE
+
                         if (label != null) {
-                            Log.d(TAG,label.tag.toString())
-                            binding.vpSlider.currentItem = (label.tag as Int) -1
+                            binding.vpSlider.postDelayed({
+                                binding.vpSlider.currentItem = (label.tag as Int) - 1
+                            }, 100) // 0.1초 = 100ms
                         }
+
                     }
 
                     viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -642,7 +460,36 @@ class MapFragment : Fragment() {
                             }
                         }
                     })
-                    Log.e(TAG, "onMapReady")
+
+                    gustoViewModel.getNewRegionInfo(position.longitude, position.latitude,
+                        BuildConfig.SGIS_CONSUMER_KEY,  BuildConfig.SGIS_CONSUMER_SECRET) { result, address ->
+                        when(result) {
+                            1 -> {
+                                curLatitude = position.latitude
+                                curLongitude = position.longitude
+
+                                gustoViewModel.userLongtitude = position.longitude
+                                gustoViewModel.userLatitude = position.latitude
+
+
+                                binding.fragmentArea.userLocation.text = address
+                                loadCategories(gustoViewModel.dong.value!!)
+                                gustoViewModel.getSavedStores(gustoViewModel.dong.value!!, null){
+                                        result ->
+                                    when(result){
+                                        0 -> {
+                                            refindDong()
+                                        }
+                                        1 -> {
+                                            Toast.makeText(context, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                }
+
+                                reGetMapMarkers()
+                            }
+                        }
+                    }
                 }
                 override fun getZoomLevel(): Int {
                     // 지도 시작 시 확대/축소 줌 레벨 설정
@@ -656,14 +503,13 @@ class MapFragment : Fragment() {
 
     }
     fun reGetMapMarkers() {
-        gustoViewModel.getCurrentMapStores(currentChips.toMutableList(),isVisited) {result, datas ->
+        gustoViewModel.getCurrentMapStores(curLongitude,curLatitude,currentChips.toMutableList(),isVisited) {result, datas ->
             when(result) {
                 1 -> {
                     markerList.clear()
-                    Log.d("SOL_LOG22",datas.toString())
                     if(datas!=null) {
                         for((index,data) in datas.withIndex()) {
-                            markerList.add(MarkerItem(data.storeId, index+1,0, data.latitude!!, data.longitude!!, data.storeName!!, "", true))
+                            markerList.add(MarkerItem(data.storeId, index+1,0, data.latitude!!, data.longitude!!, data.storeName!!, "", "",true))
                         }
                     }
                     binding.vpSlider.adapter?.notifyDataSetChanged()

@@ -17,6 +17,7 @@ import com.gst.gusto.api.GustoViewModel
 import com.gst.gusto.databinding.FragmentMyRouteRoutesBinding
 import com.gst.gusto.list.adapter.GroupItem
 import com.gst.gusto.list.adapter.LisAdapter
+import com.gst.gusto.my.adapter.myRouteAdapter
 
 class MyRouteRoutesFragment : Fragment() {
 
@@ -40,94 +41,89 @@ class MyRouteRoutesFragment : Fragment() {
         var itemList:List<GroupItem> = listOf()
         val rv_board = binding.recyclerView
 
-        if(nickname!="") {
-            gustoViewModel.getOtherRoute(null,nickname) {result,getHasNext ->
-                when(result) {
-                    1 -> {
-                        val boardAdapter = LisAdapter(itemList.toMutableList(), null, 3, gustoViewModel,null)
-                        boardAdapter.notifyDataSetChanged()
-                        rv_board.adapter = boardAdapter
-                        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (nickname != "") {
+                gustoViewModel.getOtherRoute(null, nickname) { result, getHasNext ->
+                    when (result) {
+                        1 -> {
+                            activity?.let { act ->
+                                val boardAdapter = myRouteAdapter(itemList.toMutableList(), gustoViewModel, act)
+                                boardAdapter.notifyDataSetChanged()
+                                rv_board.adapter = boardAdapter
+                                rv_board.layoutManager = LinearLayoutManager(act, LinearLayoutManager.VERTICAL, false)
 
-                        boardAdapter.addItems(gustoViewModel.otherRouteList)
-                        hasNext = getHasNext
-                        if(!hasNext) boardAdapter.removeLastItem()
-                        rv_board.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                                super.onScrolled(recyclerView, dx, dy)
-                                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
-                                // 리사이클러뷰 아이템 총개수 (index 접근 이기 때문에 -1)
-                                val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+                                boardAdapter.addItems(gustoViewModel.otherRouteList)
+                                hasNext = getHasNext
+                                if (!hasNext) boardAdapter.removeLastItem()
 
-                                // 페이징 처리
-                                if(rvPosition == totalCount&&hasNext) {
-                                    gustoViewModel.getOtherRoute(gustoViewModel.otherRouteList.last().groupId,nickname) {result, getHasNext ->
-                                        hasNext = getHasNext
-                                        when(result) {
-                                            1 -> {
-                                                val handler = Handler(Looper.getMainLooper())
-                                                handler.postDelayed({
-                                                    boardAdapter.addItems(gustoViewModel.otherRouteList)
-                                                    if(!hasNext) boardAdapter.removeLastItem()
-                                                }, 1000)
+                                rv_board.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                                        super.onScrolled(recyclerView, dx, dy)
+                                        val rvPosition =
+                                            (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                                        val totalCount = recyclerView.adapter?.itemCount?.minus(1)
 
+                                        if (rvPosition == totalCount && hasNext) {
+                                            gustoViewModel.getOtherRoute(
+                                                gustoViewModel.otherRouteList.last().groupId,
+                                                nickname
+                                            ) { result, getHasNext ->
+                                                hasNext = getHasNext
+                                                if (result == 1) {
+                                                    Handler(Looper.getMainLooper()).postDelayed({
+                                                        boardAdapter.addItems(gustoViewModel.otherRouteList)
+                                                        if (!hasNext) boardAdapter.removeLastItem()
+                                                    }, 1000)
+                                                }
                                             }
-                                            else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
                                         }
                                     }
-                                }
+                                })
                             }
-                        })
-                    } else -> {
-                        Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            } else {
+                gustoViewModel.getMyRoute(null) { result, getHasNext ->
+                    when (result) {
+                        1 -> {
+                            activity?.let { act ->
+                                val boardAdapter = myRouteAdapter(itemList.toMutableList(), gustoViewModel, act)
+                                boardAdapter.notifyDataSetChanged()
+                                rv_board.adapter = boardAdapter
+                                rv_board.layoutManager = LinearLayoutManager(act, LinearLayoutManager.VERTICAL, false)
+
+                                boardAdapter.addItems(gustoViewModel.myRouteList)
+                                hasNext = getHasNext
+                                if (!hasNext) boardAdapter.removeLastItem()
+
+                                rv_board.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                                        super.onScrolled(recyclerView, dx, dy)
+                                        val rvPosition =
+                                            (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                                        val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+
+                                        if (rvPosition == totalCount && hasNext) {
+                                            gustoViewModel.getMyRoute(gustoViewModel.myRouteList.last().groupId) { result, getHasNext ->
+                                                hasNext = getHasNext
+                                                if (result == 1) {
+                                                    Handler(Looper.getMainLooper()).postDelayed({
+                                                        boardAdapter.addItems(gustoViewModel.myRouteList)
+                                                        if (!hasNext) boardAdapter.removeLastItem()
+                                                    }, 1000)
+                                                }
+                                            }
+                                        }
+                                    }
+                                })
+                            }
+                        }
                     }
                 }
             }
-        } else {
-            gustoViewModel.getMyRoute(null) {result, getHasNext ->
-                when(result) {
-                    1 -> {
-                        val boardAdapter = LisAdapter(itemList.toMutableList(), null, 3, gustoViewModel,null)
-                        boardAdapter.notifyDataSetChanged()
-                        rv_board.adapter = boardAdapter
-                        rv_board.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        }, 100) // 🔥 0.1초(100ms) 뒤에 실행
 
-                        boardAdapter.addItems(gustoViewModel.myRouteList)
-                        hasNext = getHasNext
-                        if(!hasNext) boardAdapter.removeLastItem()
-
-                        rv_board.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                                super.onScrolled(recyclerView, dx, dy)
-                                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
-                                // 리사이클러뷰 아이템 총개수 (index 접근 이기 때문에 -1)
-                                val totalCount = recyclerView.adapter?.itemCount?.minus(1)
-
-                                // 페이징 처리
-                                if(rvPosition == totalCount&&hasNext) {
-                                    gustoViewModel.getMyRoute(gustoViewModel.myRouteList.last().groupId) {result, getHasNext ->
-                                        hasNext = getHasNext
-                                        when(result) {
-                                            1 -> {
-                                                val handler = Handler(Looper.getMainLooper())
-                                                handler.postDelayed({
-                                                    boardAdapter.addItems(gustoViewModel.myRouteList)
-                                                    if(!hasNext) boardAdapter.removeLastItem()
-                                                }, 1000)
-
-                                            }
-                                            else -> Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                                        }
-                                    }
-                                }
-                            }
-                        })
-                    } else -> {
-                        Toast.makeText(requireContext(), "서버와의 연결 불안정", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
     }
 
     override fun onResume() {

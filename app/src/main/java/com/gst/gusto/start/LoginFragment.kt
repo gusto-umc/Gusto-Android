@@ -276,6 +276,7 @@ class LoginFragment: Fragment() {
                 GustoApplication.prefs.setSocialLogin("NAVER")
 
                 LoginViewModel.login { resultCode ->
+                    Log.d("ewaeasd", resultCode.toString())
                     when (resultCode) {
                         1 -> {
                             val intent = Intent(requireContext(), MainActivity::class.java)

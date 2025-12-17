@@ -19,7 +19,7 @@
             android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="26dp"
+                android:layout_marginTop="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -27,7 +27,7 @@
                     android:id="@+id/tv_rest_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="sadsda"
+                    android:text="구스또 레스토랑"
                     android:maxWidth="250dp"
                     android:singleLine="true"
                     android:ellipsize="end"
@@ -36,9 +36,9 @@
                     android:fontFamily="@font/pretendard_extrabold"/>
                 <ImageView
                     android:id="@+id/btn_detail"
-                    android:layout_marginLeft="20dp"
-                    android:layout_width="wrap_content"
-                    android:paddingHorizontal="10dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_width="24dp"
+                    android:paddingHorizontal="8dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:src="@drawable/arrow_right_bold"/>
@@ -67,45 +67,70 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginHorizontal="15dp"
-                android:orientation="horizontal">
-                <androidx.cardview.widget.CardView
-                    android:layout_width="96dp"
-                    android:layout_height="52dp"
-                    app:cardCornerRadius="8dp">
-                    <ImageView
-                        android:id="@+id/iv_1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/gst_dummypic"/>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="96dp"
-                    android:layout_height="52dp"
-                    android:layout_marginHorizontal="12dp"
-                    app:cardCornerRadius="8dp">
-                    <ImageView
-                        android:id="@+id/iv_2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/gst_dummypic"/>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="96dp"
-                    android:layout_height="52dp"
-                    app:cardCornerRadius="8dp">
-                    <ImageView
-                        android:id="@+id/iv_3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/gst_dummypic"/>
-                </androidx.cardview.widget.CardView>
+                android:orientation="vertical">
 
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/clock_img"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="영업시간"
+                        android:textColor="@color/sub_m"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:textSize="11sp"
+                        android:layout_margin="4dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:layout_marginLeft="24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:textSize="11sp"
+                        android:textColor="@color/gray_1"
+                        android:text="매주 월요일 휴무, 08:00~15:00"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/phone_img"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="전화번호"
+                        android:textColor="@color/sub_m"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:textSize="11sp"
+                        android:layout_margin="4dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_call"
+                        android:layout_marginLeft="24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:textSize="11sp"
+                        android:textColor="@color/gray_1"
+                        android:text="02-555-4452"/>
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

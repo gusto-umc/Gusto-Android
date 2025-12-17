@@ -121,6 +121,7 @@
                 app:tint="@color/white" />
 
             <TextView
+                android:id="@+id/tv_back_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -288,7 +289,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:background="@drawable/gradient_background_orange"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/black"
                 android:elevation="4dp"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -316,6 +317,8 @@
 
     </LinearLayout>
 
+
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp_group"
         android:layout_width="match_parent"
@@ -326,4 +329,16 @@
         android:layout_marginTop="190dp"
         android:orientation="horizontal"/>
 
+    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+        android:id="@+id/dots_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:dotsColor="@color/gray_9"
+        app:selectedDotColor="@color/gray_8"
+        app:dotsSize="8dp"
+        app:dotsSpacing="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="205dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
+import android.location.Location
 import android.net.Uri
 import android.os.Handler
 import android.os.SystemClock
@@ -44,6 +45,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import kotlin.concurrent.thread
+import kotlin.math.floor
 
 class util {
 
@@ -58,6 +60,21 @@ class util {
          */
         fun dpToPixels(dp: Float, metrics : DisplayMetrics): Float {
             return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics)
+        }
+
+        fun calculateDistanceMeter(
+            myLat: Double,
+            myLng: Double,
+            storeLat: Double,
+            storeLng: Double
+        ): Int {
+            val result = FloatArray(1)
+            Location.distanceBetween(
+                myLat, myLng,
+                storeLat, storeLng,
+                result
+            )
+            return floor(result[0].toDouble()).toInt() // 소수점 버림
         }
 
 

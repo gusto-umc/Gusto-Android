@@ -167,6 +167,14 @@ class CategoryAdapter(private val view: View, val flag : String, private val fra
                 bundle5.putString("sign", "reviewAdd")
                 Navigation.findNavController(view).navigate(R.id.action_reviewAddSearch_to_store, bundle5)
             }
+        } else if(flag=="cateMove") {
+            holder.popup.visibility = View.INVISIBLE
+            holder.categoryLayout.setOnClickListener {
+                viewModel!!.selectedCategoryInfo = holder.data
+
+                // 여기에 해당 카테고리로 이동 api 들어가야함
+                itemchangeListener.onChange(view, "cateMove")
+            }
         }
 
 

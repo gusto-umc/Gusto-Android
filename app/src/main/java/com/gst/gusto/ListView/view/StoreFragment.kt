@@ -87,13 +87,13 @@ class StoreFragment : Fragment() {
         var lastStoreName : String? = null
 
         if(sign == "search"){
-            mStoreAdapter = StoreAdapter(view, "search")
+            mStoreAdapter = StoreAdapter("search")
         }
         else if(sign == "reviewAdd"){
-            mStoreAdapter = StoreAdapter(view, "reviewAdd")
+            mStoreAdapter = StoreAdapter("reviewAdd")
         }
         else{
-            mStoreAdapter = StoreAdapter(view, "map")
+            mStoreAdapter = StoreAdapter("map")
         }
 
         if(sign == "map"){

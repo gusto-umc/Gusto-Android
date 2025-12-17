@@ -1,103 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_item_store"
-    android:background="@color/white"
-    android:layout_marginTop="20dp">
-    <TextView
-        android:id="@+id/tv_item_store_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="8dp"
-        android:text="구스또 레스토랑"
-        android:textSize="16sp"
-        android:fontFamily="@font/pretendard_bold"
-        android:textColor="@color/black"
-        />
-    <TextView
-        android:id="@+id/tv_item_store_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/tv_item_store_title"
-        app:layout_constraintBottom_toBottomOf="@id/tv_item_store_title"
-        app:layout_constraintStart_toEndOf="@id/tv_item_store_title"
-        android:layout_marginStart="3dp"
-        android:text="음식점"
-        android:textSize="13sp"
-        android:fontFamily="@font/pretendard_medium"
-        android:textColor="@color/gray_3"
-        />
-    <TextView
-        android:id="@+id/tv_item_store_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_item_store_title"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="7dp"
-        android:text="메롱시 메로나동 바밤바 24-6 1"
-        android:textSize="13sp"
-        android:fontFamily="@font/pretendard_medium"
-        android:textColor="@color/gray_1"
-        />
+    android:orientation="vertical">
+
     <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="4dp"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:id="@+id/layout_item_store_photo"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/tv_item_store_location"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="12dp"
-        android:weightSum="38">
+        android:layout_height="24dp">
+
+        <TextView
+            android:id="@+id/tv_item_store_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/pretendard_semibold"
+            android:text="가게이름"/>
+        <TextView
+            android:id="@+id/tv_item_store_location"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:layout_marginLeft="8dp"
+            android:textColor="#9D9D9D"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="메롱시(구) 메로나동"/>
+        <TextView
+            android:id="@+id/btnMore"
+            android:layout_width="52dp"
+            android:layout_height="match_parent"
+            android:textSize="12sp"
+            android:layout_marginRight="4dp"
+            android:textColor="#A6A6A6"
+            android:gravity="center"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="더보기"/>
+    </LinearLayout>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="145dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginHorizontal="7dp"
+        android:layout_marginBottom="20dp"
+        app:cardCornerRadius="12dp">
         <ImageView
             android:id="@+id/iv_item_store_img1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="12"
             android:scaleType="centerCrop"
-            />
-        <View
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            />
-        <ImageView
-            android:id="@+id/iv_item_store_img2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="12"
-            android:scaleType="centerCrop"
-            />
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            />
-        <ImageView
-            android:id="@+id/iv_item_store_img3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="12"
-            android:scaleType="centerCrop"
-            />
-    </LinearLayout>
-
-    <View
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_item_store_photo"
-        android:layout_marginTop="12dp"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/sub_m"
-        />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:src="@drawable/visit" />
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

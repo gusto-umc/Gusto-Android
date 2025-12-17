@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gst.gusto.util.util.Companion.setImage
-import com.gst.gusto.api.ResponseSearch
 import com.gst.gusto.api.ResponseSearch3
-import com.gst.gusto.databinding.ItemStoreSearchBinding
+import com.gst.gusto.databinding.MapRecyclerViewListBinding
+import com.gst.gusto.util.util
 
 class SearchStoreAdapter() : ListAdapter<ResponseSearch3, SearchStoreAdapter.ViewHolder>(DiffCallback){
 
@@ -30,35 +30,29 @@ class SearchStoreAdapter() : ListAdapter<ResponseSearch3, SearchStoreAdapter.Vie
         }
     }
 
-    inner class ViewHolder(private val binding : ItemStoreSearchBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(private val binding: MapRecyclerViewListBinding) : RecyclerView.ViewHolder(binding.root){
         var data : ResponseSearch3? = null
 
         fun bind(result : ResponseSearch3){
             data = result
             //데이터 적용(가게명, 카테고리, 위치, 사진)
-            binding.tvItemStoreSearchTitle.text = result.storeName
-            if(result.categoryString != null){
-                binding.tvItemStoreSearchCategory.visibility = View.VISIBLE
-                binding.tvItemStoreSearchCategory.text = result.categoryString
-            }
-            else{
-                binding.tvItemStoreSearchCategory.visibility = View.INVISIBLE
-            }
-            binding.tvItemStoreSearchAddress.text = result.address
-            setImage(binding.ivItemStoreSearchImg, result.reviewImg, mContext!!)
+            binding.storeName.text = result.storeName
+
+            binding.storeDistance.text = "${result.distance}m"
+
+            binding.storeLocation.text = result.address
+            setImage(binding.picture, result.reviewImg, mContext!!)
         }
         val cvItem = binding.root
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val viewHolder = ViewHolder(ItemStoreSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        val viewHolder = ViewHolder(MapRecyclerViewListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         return viewHolder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
-
-
 
         holder.cvItem.setOnClickListener {
             itemClickListener.onClick(it, holder.data!!)

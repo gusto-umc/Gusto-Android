@@ -4,6 +4,7 @@
     <color name="white">#FFFFFF</color>
     <color name="main">#FD6907</color>
     <color name="sub_m">#FEB520</color>
+    <color name="sub3">#FFECC4</color>
     <color name="sub1">#AAE1F5</color>
     <color name="sub2">#FFD704</color>
     <color name="gray_navi">#999999</color>
@@ -12,6 +13,8 @@
     <color name="gray_3">#A6A6A6</color>
     <color name="gray_6">#ECECEC</color>
     <color name="gray_7">#CBCBCB</color>
+    <color name="gray_8">#969696</color>
+    <color name="gray_9">#96969699</color>
     <color name="main_C">#F27781</color>
     <color name="chip_disabled">#515151</color>
     <color name="trans">#FFFFFFFF</color>

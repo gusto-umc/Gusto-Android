@@ -165,8 +165,15 @@ class ReviewDetailEditFragment : Fragment() {
             //comment
             val comment = binding.edtMemo.text.toString()
 
+            val hashTagId = ArrayList<Long>()
+            for (i in 0 until binding.chipGroup.childCount) {
+                val chip = binding.chipGroup.getChildAt(i) as Chip
+                if (chip.isChecked) {
+                    hashTagId.add(i.toLong()+1)
+                }
+            }
 
-            gustoViewModel.editReview(gustoViewModel.myReviewId!!, taste = taste, spiceness = 0, mood = 0, toilet = 0, parking = 0, menuName = menu, comment = comment, imgFiles = imgFiles,publish = publish){
+            gustoViewModel.editReview(gustoViewModel.myReviewId!!, taste = taste, hashTagId2 = hashTagId, menuName = menu, comment = comment, imgFiles = imgFiles,publish = publish){
                 result ->
                 when(result){
                     0 -> {

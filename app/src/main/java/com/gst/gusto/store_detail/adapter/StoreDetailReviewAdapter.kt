@@ -68,26 +68,12 @@ class StoreDetailReviewAdapter () : ListAdapter<ResponseReviews, StoreDetailRevi
             //방문일자
             val reviewDate = LocalDate.parse(review.visitedAt)
             binding.tvStoreReviewDate.text = "${reviewDate.year}. ${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
-            //리뷰 사진들
-            if(review.img1 != null){
-                photoArray.add(review.img1)
-            }
-            if(review.img2 != null){
-                photoArray.add(review.img2)
-            }
-            if(review.img3 != null){
-                photoArray.add(review.img3)
-            }
-            if(review.img4 != null){
-                photoArray.add(review.img4)
-            }
-
+            setImage(binding.ivStoreDetailReviewImg1,review.img1,mContext!!)
+            setImage(binding.ivStoreDetailReviewImg2,review.img2,mContext!!)
         }
         val layoutItem = binding.layoutReviewItemAll
         val ivHeart = binding.ivStoreDetailHeartOff
         val tvCount = binding.tvStoreDetailHeartCount
-        val rvReviewPhoto = binding.rvStoreDetailReviewPhoto
-        val ivSwipe = binding.ivStoreDetailReviewSwipe
 
     }
 
@@ -97,7 +83,6 @@ class StoreDetailReviewAdapter () : ListAdapter<ResponseReviews, StoreDetailRevi
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         holder.bind(getItem(position))
 //        fun changeHeart(onFlag : Boolean){
 //            Log.d("heartFlagCheck", onFlag.toString())
@@ -145,20 +130,6 @@ class StoreDetailReviewAdapter () : ListAdapter<ResponseReviews, StoreDetailRevi
         //레이아웃 클릭 시 상세 리뷰 화면으로 이동
         holder.layoutItem.setOnClickListener {
             itemClickListener.onClick(it, holder.data!!)
-        }
-
-        //photoRv 연결하기
-        if(!holder.photoArray.isNullOrEmpty()){
-            Log.d("reviewPhoto", "exist")
-            holder.rvReviewPhoto.visibility = View.VISIBLE
-            holder.ivSwipe.visibility = View.VISIBLE
-            val mReviewPhotoAdapter = StoreDetailReviewPhotoAdapter(holder.photoArray!!)
-            mReviewPhotoAdapter.mContext = mContext
-            holder.rvReviewPhoto.adapter = mReviewPhotoAdapter
-        }
-        else{
-            holder.rvReviewPhoto.visibility = View.GONE
-            holder.ivSwipe.visibility = View.GONE
         }
 
     }

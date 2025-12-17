@@ -191,6 +191,8 @@ class MySettingActivity : AppCompatActivity() {
         NidOAuthLogin().callDeleteTokenApi(object : OAuthLoginCallback {
             override fun onSuccess() {
                 //서버에서 토큰 삭제에 성공한 상태입니다.
+                GustoApplication.prefs.clearToken("accessToken")
+                GustoApplication.prefs.clearToken("refreshToken")
                 val intent = Intent(this@MySettingActivity, StartActivity::class.java)
                 startActivity(intent)
                 finish()

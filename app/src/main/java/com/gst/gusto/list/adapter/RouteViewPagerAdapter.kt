@@ -26,9 +26,9 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
 
     override fun onBindViewHolder(holder: ReviewDetailViewHolder, position: Int) {
         val item = itemList[position]
+        Log.d("dsadsasad",item.toString())
         holder.tv_route_order.text = "${position+1}"
         holder.tv_rest_name.text = item.storeName
-        holder.tv_rest_loc.text = item.address
         if(option == 1||option == 2) holder.cv_parent.visibility = View.GONE // 0(루트), 1(검색 지도), 2(메인 지도)
 
         activity.gustoViewModel.getStoreDetailQuick(listOf(item.storeId)) { result,stores ->
@@ -36,11 +36,9 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
                 1 -> {
                     if(stores!=null) {
                         val data = stores.get(0)
-                        if(data.reviewImg3!=null) {
-                            if(data.reviewImg3.size>0) setImage(holder.iv_1,data.reviewImg3[0],holder.itemView.context)
-                            if(data.reviewImg3.size>1) setImage(holder.iv_2,data.reviewImg3[1],holder.itemView.context)
-                            if(data.reviewImg3.size>2) setImage(holder.iv_3,data.reviewImg3[2],holder.itemView.context)
-                        }
+                        // 영업시간 , 전화번호 추가 하기
+                        holder.tv_rest_loc.text = data.address
+                        holder.tv_call.text = data.contact
                         if(data.pin) holder.btn_bookmark.setImageResource(R.drawable.vector_black)
                         holder.btn_bookmark.setOnClickListener {
                             if(data.pin){
@@ -104,12 +102,11 @@ class RouteViewPagerAdapter(private val itemList: List<mapUtil.Companion.MarkerI
     inner class ReviewDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tv_route_order: TextView = itemView.findViewById(R.id.tv_route_order)
         val tv_rest_name: TextView = itemView.findViewById(R.id.tv_rest_name)
+        val tv_call: TextView = itemView.findViewById(R.id.tv_call)
+        val tv_time: TextView = itemView.findViewById(R.id.tv_time)
         val btn_detail: ImageView = itemView.findViewById(R.id.btn_detail)
         val btn_bookmark: ImageView = itemView.findViewById(R.id.btn_bookmark)
         val tv_rest_loc: TextView = itemView.findViewById(R.id.tv_rest_loc)
-        val iv_1: ImageView = itemView.findViewById(R.id.iv_1)
-        val iv_2: ImageView = itemView.findViewById(R.id.iv_2)
-        val iv_3: ImageView = itemView.findViewById(R.id.iv_3)
         val cv_parent: CardView = itemView.findViewById(R.id.cv_parent)
 
     }

@@ -39,6 +39,7 @@ class mapUtil {
             var longitude: Double,
             val storeName: String,
             var address: String,
+            var call : String,
             var bookMark: Boolean
         )
 

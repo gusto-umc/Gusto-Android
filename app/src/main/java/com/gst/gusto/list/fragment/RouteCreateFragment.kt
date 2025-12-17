@@ -86,7 +86,7 @@ class RouteCreateFragment : Fragment() {
         if(gustoViewModel.routeStorTmpData!=null) {
             var data = gustoViewModel.routeStorTmpData
             if (data != null) {
-                itemList.add(MarkerItem(data.storeId.toLong(), 0, 0,1.1, 1.1, data.storeName, "", false))
+                itemList.add(MarkerItem(data.storeId.toLong(), 0, 0,1.1, 1.1, data.storeName, "", "",false))
             }
             binding.rvRoutes.adapter?.notifyItemInserted(itemList.size-1)
             if(itemList.size==6) {

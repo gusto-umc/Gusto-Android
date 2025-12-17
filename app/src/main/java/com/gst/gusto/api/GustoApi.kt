@@ -8,7 +8,6 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.Header
-import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -30,7 +29,9 @@ interface GustoApi {
     @GET("stores/map") // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
     fun getCurrentMapStores(
         @Header("X-AUTH-TOKEN") token : String,
-        @Query("townCode") townName : String,
+        @Query("longitude") longitude: Double,
+        @Query("latitude") latitude: Double,
+        @Query("radius") radius: Int,
         @Query("myCategoryId") myCategoryId : MutableList<Int>?,
         @Query("visited") visited : Boolean?
     ):Call<List<RouteList>>
@@ -274,20 +275,90 @@ interface GustoApi {
      * 리스트 - 카테고리
      */
 
-    //1. 카테고리 생성 -> 확인 완
+    // 내 카테고리 생성
     @POST("myCategories")
     fun addCategory(
         @Header("X-AUTH-TOKEN") token : String,
         @Body data : RequestAddCategory
     ) : Call<Void>
 
-    //2. 카테고리 수정 -> 확인 완
+    // 타인의 카테고리 전체 조회
+    @GET("myCategories")
+    fun pGetOtherCategory(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("nickname") nickname : String?,
+        @Query("myCategoryId") myCategoryId : Int?
+    ) : Call<ResponsePMyCategory>
+
+
+    // 내 카테고리 삭제(중복 처리 가능)
+    @DELETE("myCategories")
+    fun deleteCategory2(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("myCategoryId") myCategoryId : MutableList<Int>
+    ) : Call<Void>
+
+
+    // 내 카테고리 수정
     @PATCH("myCategories/{myCategoryId}")
     fun editCategory(
         @Header("X-AUTH-TOKEN") token : String,
         @Path("myCategoryId") myCategoryId : Long,
         @Body data : RequestEditCategory
     ) : Call<Void>
+
+
+    //찜하기
+    @POST("myCategories/{myCategoryId}/pin")
+    fun addPin(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Path("myCategoryId") myCategoryId : Long,
+        @Body body: RequestPin
+    ) : Call<ResponseAddPin>
+
+    // 찜 삭제
+    @DELETE("myCategories/pins")
+    fun deletePin(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("pinId") pinId : Int
+    ): Call<Void>
+
+    // 찜 삭제(중복 처리 가능)
+    @DELETE("myCategories/pins")
+    fun deleteStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("pinId") pinId : MutableList<Int>
+    ) : Call<Void>
+
+    // 타인의 카테고리 별 가게 목록 조회(최신순, 오래된순, 가게명 내림/오름차순)
+    @GET("myCategories/pins")
+    fun ppGetAllOtherStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("nickname") nickname : String?,
+        @Query("myCategoryId") categoryId : Int,
+        @Query("pinId") pinId : Int?
+    ): Call<PResponseStoreData>
+
+    // 내 카테고리 별 가게 목록 조회(최신순, 오래된순, 가게명 내림/오름차순)
+    @GET("myCategories/pins")
+    fun ppGetAllMyStores(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("myCategoryId") categoryId : Int,
+        @Query("pinId") pinId : Int?,
+        @Query("sort") sort : String?,
+        @Query("storeName") storeName: String?
+    ): Call<PResponseStoreData>
+
+
+    // 내 카테고리 전체 조회
+    @GET("myCategories")
+    fun pGetMyCategory(
+        @Header("X-AUTH-TOKEN") token : String,
+        @Query("myCategoryId") myCategoryId : Int?
+    ) : Call<ResponsePMyCategory>
+
+
+
 
     //3. 카테고리 조회(위치 기반, 내 위치 장소보기) ->  확인 완
     @GET("myCategories")
@@ -297,13 +368,7 @@ interface GustoApi {
     ): Call<ResponsePMyCategory>
             //Call<ArrayList<ResponseMapCategory>>
 
-    //4. 카테고리 삭제하기 -> 단 건 삭제 확인 완
 
-    @DELETE("myCategories")
-    fun deleteCategory2(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("myCategoryId") myCategoryId : MutableList<Int>
-    ) : Call<Void>
 
     //5.카테고리 전체 조회 - 피드-> 서버 배포 후 다시 확인하기
     @GET("myCategories")
@@ -318,47 +383,19 @@ interface GustoApi {
         @Header("X-AUTH-TOKEN") token : String
     ) : Call<ArrayList<ResponseMapCategory>>
 
-    //8. 카테고리 전체 조회(paging)
-    @GET("myCategories")
-    fun pGetMyCategory(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("myCategoryId") myCategoryId : Int?
-    ) : Call<ResponsePMyCategory>
 
-    //9. 카테고리 전체조회(타유저)
-    @GET("myCategories")
-    fun pGetOtherCategory(
+    // 찜 수정
+    @PATCH("myCategories/pins")
+    fun moveStores(
         @Header("X-AUTH-TOKEN") token : String,
-        @Query("nickname") nickname : String?,
-        @Query("myCategoryId") myCategoryId : Int?
-    ) : Call<ResponsePMyCategory>
+        @Query("pinId") pinId : MutableList<Int>,
+        @Body myCategoryId: categoryId
+    ) : Call<Void>
+
 
     /**
      * 가게
      */
-
-    //1. 가게 카테고리 추가 -> 확인 완, 보완 필(pinInd)
-    @POST("myCategories/{myCategoryId}/pin")
-    fun addPin(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Path("myCategoryId") myCategoryId : Long,
-        @Body body: RequestPin
-    ) : Call<ResponseAddPin>
-
-    //2. 가게 카테고리 삭제(찜 취소) -> 확인 완
-    @DELETE("myCategories/pins")
-    fun deletePin(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("pinId") pinId : Int
-    ): Call<Void>
-
-    //가게 다중 삭제
-    @DELETE("myCategories/pins")
-    fun deleteStores(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("pinId") pinId : MutableList<Int>
-    ) : Call<Void>
-
     //3. 가게 상세 조회
     @GET("stores/{storeId}/detail")
     fun getStoreDetail(
@@ -368,28 +405,6 @@ interface GustoApi {
         @Query("reviewId") reviewId : Long?
     ) : Call<ResponseStoreDetail>
 
-    //4. 카테고리 별 가게 조회 - 위치기반 -> 확인 완, 보완 필(pinInd)
-    @GET("myCategories/pins")
-    fun getMapStores(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("myCategoryId") categoryId : Int,
-        @Query("townCode") townName : String
-    ) : Call<List<ResponseStoreListItem>>
-
-    //5. 카테고리 별 가게 조회 - 전체 -> 확인 완
-    @GET("myCategories/pins")
-    fun getAllStores(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("nickname") nickname : String?,
-        @Query("myCategoryId") categoryId : Int
-    ): Call<List<ResponseStoreListItem>>
-
-    //5. 카테고리 별 가게 조회 - 전체 -> 확인 완
-    @GET("myCategories/pins")
-    fun getAllUserStores(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("myCategoryId") categoryId : Int
-    ): Call<List<ResponseStoreListItem>>
 
     //7. 저장된 맛집 리스트 -> cateogry 적용 X
     @GET("stores/pins")
@@ -400,24 +415,10 @@ interface GustoApi {
     ) : Call<List<ResponseSavedStore>>
 
 
-    // 8. (paging) 카테고리별 내 가게 조회
-    @GET("myCategories/pins")
-    fun ppGetAllMyStores(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("myCategoryId") categoryId : Int,
-        @Query("pinId") pinId : Int?,
-        @Query("sort") sort : String?,
-        @Query("storeName") storeName: String?
-    ): Call<PResponseStoreData>
 
-    // 9. (paging) 카테고리별 타인 가게 조회
-    @GET("myCategories/pins")
-    fun ppGetAllOtherStores(
-        @Header("X-AUTH-TOKEN") token : String,
-        @Query("nickname") nickname : String?,
-        @Query("myCategoryId") categoryId : Int,
-        @Query("pinId") pinId : Int?
-    ): Call<PResponseStoreData>
+
+
+
 
 
 
@@ -524,14 +525,6 @@ interface GustoApi {
     ):Call<ResponseFeedSearchReviews>
 
 
-    // 현재 지역의 카테고리 별 찜한 가게 목록(필터링)
-    @GET("stores/map?townCode={townName}&myCategoryId={myCategoryId}&visit={visitedStatus}")
-    fun LocalCategory(
-        @Query("storeId") storeId: Int,
-        @Query("storeName") storeName: String,
-        @Query("longtitude") longitude: Double,
-        @Query("latitude") latitude: Double
-    ): Call<LocalCategoryResponse>
 
     //나의 콘텐츠 공개 여부 조회
     @GET("users/my-info/publishing")

@@ -253,6 +253,7 @@ class LoginViewModel: ViewModel() {
                         accessToken = response.headers().get("X-Auth-Token") ?: ""
                         refreshToken = response.headers().get("refresh-Token") ?: ""
                         GustoApplication.prefs.setSharedPrefs(accessToken, refreshToken)
+                        Log.e("LoginViewModel", response.headers().toString())
                         callback(true)
                     }
                     else callback(false)

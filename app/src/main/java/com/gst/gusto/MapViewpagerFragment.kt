@@ -84,6 +84,7 @@ class MapViewpagerFragment : Fragment(){
                                 data.longitude,
                                 data.storeName,
                                 data.address,
+                                data.contact,
                                 data.pin
                             )
                             if(data.storeId == gustoViewModel.selectStoreId) {

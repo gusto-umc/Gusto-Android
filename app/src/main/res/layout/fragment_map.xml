@@ -22,7 +22,6 @@
         app:layout_anchorGravity="center" />
 
 
-
     <LinearLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"

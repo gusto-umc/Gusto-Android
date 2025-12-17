@@ -199,7 +199,7 @@ class GroupFragment : Fragment() {
                     var alpha = 1 - abs(positionOffset*1.3)
                     if(alpha>1) alpha = 1.0
                     else if (alpha<0) alpha = 0.0
-                    val mainColor = ContextCompat.getColor(requireContext(), R.color.sub_m)
+                    val mainColor = ContextCompat.getColor(requireContext(), R.color.sub3)
 
                     val backgroundColor = Color.argb(
                         ((alpha) * 255).toInt(),
@@ -208,12 +208,31 @@ class GroupFragment : Fragment() {
                         Color.blue(mainColor)
                     )
                     binding.lyGroup.setBackgroundColor(backgroundColor)
+
+                    val blackColor = ContextCompat.getColor(requireContext(), R.color.black)
+                    val whiteColor = ContextCompat.getColor(requireContext(), R.color.white)
+
+                    // 알파값에 따라 검정과 흰색 사이를 보간
+                    val textColor = Color.argb(
+                        255, // 알파는 항상 불투명
+                        (Color.red(blackColor) * alpha + Color.red(whiteColor) * (1 - alpha)).toInt(),
+                        (Color.green(blackColor) * alpha + Color.green(whiteColor) * (1 - alpha)).toInt(),
+                        (Color.blue(blackColor) * alpha + Color.blue(whiteColor) * (1 - alpha)).toInt()
+                    )
+
+                    binding.tvComment.setTextColor(textColor)
+                    binding.tvName.setTextColor(textColor)
+                    binding.tvPeople.setTextColor(textColor)
+                    binding.tvBackTitle.setTextColor(textColor)
                 }
             }
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
             }
         })
+
+
+
         gustoViewModel.getGroup {result, data ->
             when(result) {
                 1 -> {
@@ -244,6 +263,8 @@ class GroupFragment : Fragment() {
             }
         }
         mPager.adapter = GroupViewpagerAdapter(requireActivity(),GroupRoutesFragment(gustoViewModel.groupFragment),mPager,2)
+
+        binding.dotsIndicator.attachTo(mPager)
 
         if(gustoViewModel.routeStorTmpData != null) {
             var data = gustoViewModel.routeStorTmpData

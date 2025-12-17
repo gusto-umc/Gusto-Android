@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet.Constraint
 import androidx.navigation.Navigation
@@ -22,13 +24,14 @@ import com.gst.gusto.databinding.ItemCategoryBinding
 import com.gst.gusto.databinding.ItemStoreBinding
 import com.gst.gusto.util.util
 
-class StoreAdapter(private val parentView : View, private var sign : String) : ListAdapter<PResponseStoreListItem, StoreAdapter.ViewHolder>(diffUtil){
+class  StoreAdapter(private var sign : String) : ListAdapter<PResponseStoreListItem, StoreAdapter.ViewHolder>(diffUtil){
 
     var gustoViewModel : GustoViewModel? = null
     var mContext : Context? = null
 
     inner class ViewHolder(private val binding : ItemStoreBinding) : RecyclerView.ViewHolder(binding.root){
         var data : PResponseStoreListItem? = null
+        var itemLayout : View = binding.btnMore
         fun bind(item : PResponseStoreListItem){
             binding.apply {
                 binding.tvItemStoreTitle.text = item.storeName
@@ -37,16 +40,20 @@ class StoreAdapter(private val parentView : View, private var sign : String) : L
                 //리뷰 사진 3개
                 if(!item.img1.isNullOrBlank()){
                     util.setImage(binding.ivItemStoreImg1, item.img1, mContext!!)
-                }else{binding.ivItemStoreImg1.visibility = View.INVISIBLE}
+                }/*else{binding.ivItemStoreImg1.visibility = View.INVISIBLE}
                 if(!item.img2.isNullOrBlank()){util.setImage(binding.ivItemStoreImg2, item.img2, mContext!!)
                 }else{binding.ivItemStoreImg2.visibility = View.INVISIBLE}
                 if(!item.img3.isNullOrBlank()){util.setImage(binding.ivItemStoreImg3, item.img3, mContext!!)
-                }else{binding.ivItemStoreImg3.visibility = View.INVISIBLE}
+                }else{binding.ivItemStoreImg3.visibility = View.INVISIBLE}*/
 
+                if(sign == "reviewAdd" || sign == "search") {
+                    itemLayout  = binding.layoutItemStore
+                    binding.btnMore.visibility = View.GONE
+                }
             }
             data = item
         }
-        val itemLayout : ConstraintLayout = binding.layoutItemStore
+
 
 
     }

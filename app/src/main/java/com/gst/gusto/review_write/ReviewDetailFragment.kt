@@ -4,12 +4,17 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
@@ -63,7 +68,7 @@ class ReviewDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = requireActivity() as MainActivity
-        activity.hideBottomNavigation(true)
+        //activity.hideBottomNavigation(true)
 
 
     }
@@ -88,8 +93,8 @@ class ReviewDetailFragment : Fragment() {
                     //success
                     //데이터 적용 - 날짜
                     val reviewDate = LocalDate.parse(gustoViewModel.myReview!!.visitedAt)
-                    binding.tvDay1.text = "${reviewDate.monthValue}월 ${reviewDate.dayOfMonth}일"
-                    binding.tvDay2.text = "${reviewDate.year} ${reviewDate.monthValue} ${reviewDate.dayOfMonth} 방문"
+                    gustoViewModel.myReview!!.menuName
+                    binding.tvDay1.text = "${reviewDate.year}.${reviewDate.monthValue}. ${reviewDate.dayOfMonth}"
                     //데이터 적용 - 가게명
                     binding.tvReviewStoreName.text = gustoViewModel.myReview!!.storeName
                     binding.tvReviewStoreName.setOnClickListener {
@@ -166,6 +171,9 @@ class ReviewDetailFragment : Fragment() {
                     } else{
                         gustoViewModel.myReview!!.comment
                     }
+
+                    makeExpandableTextView(binding.reviewTextTv, binding.reviewTextTv.text.toString(), 40)
+
                     gustoViewModel.changeReviewFlag(true)
 
                 }
@@ -356,6 +364,53 @@ class ReviewDetailFragment : Fragment() {
         }
 
     }
+    fun makeExpandableTextView(textView: TextView, fullText: String, maxLength: Int = 60) {
+        fun setCollapsed() {
+            val shortText = fullText.substring(0, maxLength) + " ...더보기"
+            val spannable = SpannableString(shortText)
+
+            val clickableSpan = object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    val expandedText = fullText + " 접기"
+                    val spannable = SpannableString(expandedText)
+
+                    val clickableSpan = object : ClickableSpan() {
+                        override fun onClick(widget: View) {
+                            setCollapsed()
+                        }
+                    }
+
+                    spannable.setSpan(
+                        clickableSpan,
+                        expandedText.indexOf(" 접기"),
+                        expandedText.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+
+                    textView.text = spannable
+                    textView.movementMethod = LinkMovementMethod.getInstance()
+                }
+            }
+
+            spannable.setSpan(
+                clickableSpan,
+                shortText.indexOf(" ...더보기"),
+                shortText.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            textView.text = spannable
+            textView.movementMethod = LinkMovementMethod.getInstance()
+        }
+
+
+        if (fullText.length > maxLength) {
+            setCollapsed()
+        } else {
+            textView.text = fullText
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()
