@@ -33,7 +33,13 @@ class MapRecyclerAdapter(val list: List<ResponseSavedStoreData>,val activity: Ma
 
         // 텍스트 설정
         holder.storeName.text = item.storeName
-        holder.storeDistance.text = "100m 임시"
+        holder.storeDistance.text =
+            if (item.distance < 1000) {
+                "${item.distance}m"
+            } else {
+                "${item.distance / 1000}km"
+            }
+
         holder.storeLocation.text = item.address
 
         // 이미지 설정 (setImage 유틸 사용)

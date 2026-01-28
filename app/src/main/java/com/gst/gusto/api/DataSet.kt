@@ -207,6 +207,7 @@ data class ResponseMapCategory(
 
 // paging 내 카테고리 전체 조회
 data class ResponsePMyCategory(
+    @SerializedName("allPinCnt") val allPinCnt : Int,
     @SerializedName("hasNext") val hasNext : Boolean,
     @SerializedName("result") val result : ArrayList<ResponseMapCategory>
 )
@@ -311,7 +312,9 @@ data class ResponseSavedStoreData(
     @SerializedName("storeName") val storeName : String,
     @SerializedName("address") val address : String,
     @SerializedName("reviewImg") val reviewImg : String?,
-    @SerializedName("distance") val distance : String?
+    @SerializedName("longitude") val longitude : Double,
+    @SerializedName("latitude") val latitude : Double,
+    @SerializedName("distance") var distance : Int
 
 )
 //리뷰 상세

@@ -38,7 +38,13 @@ class SearchStoreAdapter() : ListAdapter<ResponseSearch3, SearchStoreAdapter.Vie
             //데이터 적용(가게명, 카테고리, 위치, 사진)
             binding.storeName.text = result.storeName
 
-            binding.storeDistance.text = "${result.distance}m"
+            binding.storeDistance.text =
+                if (result.distance < 1000) {
+                    "${result.distance}m"
+                } else {
+                    "${result.distance / 1000}km"
+                }
+
 
             binding.storeLocation.text = result.address
             setImage(binding.picture, result.reviewImg, mContext!!)

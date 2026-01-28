@@ -415,13 +415,6 @@ interface GustoApi {
     ) : Call<List<ResponseSavedStore>>
 
 
-
-
-
-
-
-
-
     /**
      * 리뷰 - 연결 완
      */

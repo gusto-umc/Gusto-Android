@@ -1519,6 +1519,7 @@ class GustoViewModel: ViewModel() {
         })
     }
 
+    var myAllPinCnt = 0
 
     fun getPPMyCategory(categoryId : Int?, callback: (Int, Boolean) -> Unit){
             service.pGetMyCategory(xAuthToken, categoryId).enqueue(object : Callback<ResponsePMyCategory>{
@@ -1529,7 +1530,8 @@ class GustoViewModel: ViewModel() {
                     if(response.isSuccessful){
                         val body = response.body()
                         if(body!=null){
-                            Log.e("getPPMyCategory", "Successful response: ${response}")
+                            Log.e("getPPMyCategory", "Successful response: ${body}")
+                            myAllPinCnt = body.allPinCnt
                             myAllCategoryList.addAll(body.result)
                             Log.e("getPPMyCategory", myAllCategoryList.toString())
                             callback(1, body.hasNext)
@@ -1568,6 +1570,7 @@ class GustoViewModel: ViewModel() {
                     if(body!=null){
                         Log.e("getPPOtherCategory", "Successful response: ${response}")
                         myAllCategoryList.addAll(body.result)
+                        myAllPinCnt = body.allPinCnt
                         Log.e("getPPOtherCategory", myAllCategoryList.toString())
                         callback(1, body.hasNext)
                     }
@@ -1864,6 +1867,7 @@ class GustoViewModel: ViewModel() {
                     if(!mapUnvisitedList.isNullOrEmpty()){
                         for(i in mapUnvisitedList!!){
                             unsavedStoreIdList.add(i.storeId.toLong())
+                            i.distance = util.calculateDistanceMeter(userLatitude,userLongtitude,i.latitude,i.longitude)
                         }
                     }
 

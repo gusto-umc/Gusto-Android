@@ -4,55 +4,80 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <LinearLayout
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="4dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="24dp">
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="4dp">
+
+        <!-- 식당 이름 -->
         <TextView
             android:id="@+id/storeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:textSize="20sp"
             android:textColor="@color/black"
             android:fontFamily="@font/pretendard_semibold"
-            android:text="가게이름"/>
+
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:maxWidth="160dp"
+        
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <!-- 거리 -->
         <TextView
             android:id="@+id/storeDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+
             android:textSize="12sp"
-            android:layout_marginLeft="8dp"
             android:textColor="@color/main_C"
-            android:layout_gravity="center_vertical"
             android:fontFamily="@font/pretendard_semibold"
-            android:text="820m"/>
+
+            app:layout_constraintStart_toEndOf="@id/storeName"
+            app:layout_constraintBottom_toBottomOf="@id/storeName"/>
+
+        <!-- 위치 -->
         <TextView
             android:id="@+id/storeLocation"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+
             android:textSize="10sp"
-            android:layout_marginLeft="8dp"
             android:textColor="#9D9D9D"
-            android:layout_gravity="center_vertical"
             android:fontFamily="@font/pretendard_medium"
-            android:singleLine="true"
+
             android:maxLines="1"
             android:ellipsize="end"
-            android:text=""/>
+
+            app:layout_constraintStart_toEndOf="@id/storeDistance"
+            app:layout_constraintEnd_toStartOf="@id/btnMore"
+            app:layout_constraintBottom_toBottomOf="@id/storeName"/>
+
+        <!-- 더보기 -->
         <TextView
             android:id="@+id/btnMore"
             android:layout_width="52dp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="4dp"
+
             android:textSize="12sp"
-            android:layout_marginRight="4dp"
             android:textColor="#A6A6A6"
-            android:gravity="center"
             android:fontFamily="@font/pretendard_medium"
-            android:text="더보기"/>
-    </LinearLayout>
+            android:gravity="center"
+            android:text="더보기"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="145dp"

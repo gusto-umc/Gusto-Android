@@ -47,6 +47,7 @@ class MyListFragment : Fragment() {
             mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
             mCategoryAdapter.viewModel = gustoViewModel
             mCategoryAdapter.mContext = context
+
             binding.rvMyCategory.adapter = mCategoryAdapter
             binding.rvMyCategory.layoutManager = LinearLayoutManager(this.requireActivity())
 
@@ -58,6 +59,7 @@ class MyListFragment : Fragment() {
                     1 -> {
                         //success
                         mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
+                        binding.tvAllPinCnt.text = gustoViewModel.myAllPinCnt.toString()+"개"
                         hasNext = getHasNext
                         mCategoryAdapter.notifyDataSetChanged()
                     }
@@ -116,6 +118,7 @@ class MyListFragment : Fragment() {
                     1 -> {
                         //success
                         mCategoryAdapter.submitList(gustoViewModel.myAllCategoryList)
+                        binding.tvAllPinCnt.text = gustoViewModel.myAllPinCnt.toString()+"개"
                         hasNext = getHasNext
                         mCategoryAdapter.notifyDataSetChanged()
                     }

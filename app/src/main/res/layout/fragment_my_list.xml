@@ -13,13 +13,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_allPinCnt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="40dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:textSize="10sp"
+                android:textColor="@color/main_C"
+                android:text="0개" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_my_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="37dp"
-                android:layout_marginEnd="19.03dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
                 />
 
             <View
